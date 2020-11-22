@@ -83,6 +83,7 @@ class CreateOrdersTable extends Migration
             $table->decimal('total_amount', 8, 2)->nullable();
             $table->decimal('delivery_fee', 8, 2)->nullable();
             $table->decimal('tax', 8, 2)->nullable();
+
             $table->tinyInteger('order_status')->comment('1-failed,
                                                     2-user_cancel,
                                                     3-pending,
