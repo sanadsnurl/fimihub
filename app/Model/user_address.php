@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class user_address extends Model
 {
+    protected $table = 'user_address';
     public function makeAddress($data)
     {
         $data['updated_at'] = now();
@@ -63,5 +64,10 @@ class user_address extends Model
             ->update(['default_status'=> 1]);
 
         return $query_data;
+    }
+
+    public function userDetails()
+    {
+        return $this->belongsTo('App\User', 'user_id',);
     }
 }

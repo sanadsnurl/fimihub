@@ -5,9 +5,11 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Model;
 //custom import
 use Illuminate\Support\Facades\DB;
+use App\Model\cart_submenu as subCart;
 
 class cart extends Model
 {
+    // protected $table = 'carts';
     public function makeCart($data)
     {
         $data['updated_at'] = now();
@@ -57,5 +59,16 @@ class cart extends Model
                     ->where('user_id', $cart_delete['user_id'])
                     ->update(['visibility'=>2]);
         $query_type="update";
+    }
+
+
+    public function cartItems()
+    {
+        return $this->hasMany(subCart::class, 'cart_id');
+    }
+
+    public function menuItems()
+    {
+        return $this->hasMany(subCart::class, 'menu_id');
     }
 }

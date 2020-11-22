@@ -18,7 +18,7 @@ class vehicle_detail extends Model
             unset($data['_token']);
             $query_data = DB::table('vehicle_details')->insert($data);
             $query_type="insert";
-            
+
         }
         else
         {
@@ -28,7 +28,7 @@ class vehicle_detail extends Model
                         ->where('user_id', $data['user_id'])
                         ->update($data);
         }
-        
+
         return $query_data;
     }
 
@@ -38,8 +38,8 @@ class vehicle_detail extends Model
             $user_address=DB::table('vehicle_details')
                 ->where('visibility', 0)
                 ->where('user_id', $userid)
-                ->get();
-            
+                ->first();
+
             return $user_address;
         }
         catch (Exception $e) {

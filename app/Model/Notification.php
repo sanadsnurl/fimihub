@@ -20,40 +20,6 @@ class Notification extends Model
         return $query_data;
     }
 
-    public function getAllUnReadNotification($user_id)
-    {
-        try
-        {
-            $notification_data=DB::table('notifications')
-                    ->where('user_id', $user_id)
-                    ->where('visibility',0)
-                    ->orderBy('created_at','desc')
-                    ->paginate(8);
-
-            return $notification_data;
-        }
-        catch (Exception $e) {
-            dd($e);
-        }
-    }
-
-    public function getAllReadNotification($user_id)
-    {
-        try
-        {
-            $notification_data=DB::table('notifications')
-                    ->where('user_id', $user_id)
-                    ->where('visibility',1)
-                    ->orderBy('created_at','desc')
-                    ->paginate(8);
-
-            return $notification_data;
-        }
-        catch (Exception $e) {
-            dd($e);
-        }
-    }
-
     public function getNotificationById($user_id, $id)
     {
         try
@@ -70,14 +36,53 @@ class Notification extends Model
             dd($e);
         }
     }
-    public function getAllNotifications($user_id)
+    public function getAllNotifications($user_id, $type)
     {
         try
         {
-            $notification_data=DB::table('notifications')
+            if ($type == 1) {
+                $notification_data=DB::table('notifications')
                     ->where('user_id', $user_id)
+                    ->where('visibility',1)
+                    ->whereNull('deleted_at')
                     ->orderBy('created_at','desc')
                     ->paginate(8);
+            } else if ($type == 2) {
+                    $notification_data=DB::table('notifications')
+                    ->where('user_id', $user_id)
+                    ->where('visibility',0)
+                    ->whereNull('deleted_at')
+                    ->orderBy('created_at','desc')
+                    ->paginate(8);
+            } else {
+                $notification_data=DB::table('notifications')
+                    ->where('user_id', $user_id)
+                    ->whereNull('deleted_at')
+                    ->orderBy('created_at','desc')
+                    ->paginate(8);
+            }
+
+            return $notification_data;
+        }
+        catch (Exception $e) {
+            dd($e);
+        }
+    }
+
+    public function markAsRead($user_id, $id = false)
+    {
+        try
+        {
+            if ($id) {
+                $notification_data=DB::table('notifications')
+                        ->where('user_id', $user_id)
+                        ->where('id', $id)
+                        ->update(['visibility' => 1]);
+            } else {
+                $notification_data=DB::table('notifications')
+                ->where('user_id', $user_id)
+                ->update(['visibility' => 1]);
+            }
 
             return $notification_data;
         }

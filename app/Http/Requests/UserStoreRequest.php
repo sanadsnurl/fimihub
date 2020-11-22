@@ -26,19 +26,19 @@ class UserStoreRequest extends FormRequest
      */
     public function rules()
     {
-    
+
         $validator = [
             'name' => 'required|string|max:150',
             'password' => 'required|string|min:6',
-            'mobile' => 'required|numeric|unique:users|digits:10',
-            'country_code' => 'string|nullable',	
+            'mobile' => 'required|numeric|unique:users',
+            'country_code' => 'string|nullable',
             'email' => 'email|unique:users|nullable',
             'device_token' => 'required|string',
             'vehicle_number' => 'required|string',
             'model_name' => 'required|string',
             'vehicle_image' => 'mimes:png,jpg,jpeg|max:3072|nullable',
             'color' => 'required|string',
-            'id_proof' => 'required|mimes:pdf|max:3072|nullable',
+            'id_proof' => 'required|mimes:png,jpg,jpeg|max:3072|nullable',
             'address' => 'required|string',
             'pincode' => 'required|digits:6',
             'driving_license' => 'required|mimes:png,jpg,jpeg|max:3072|nullable',
@@ -50,12 +50,11 @@ class UserStoreRequest extends FormRequest
             'holder_name' => 'required|string|max:150',
             'branch_name' => 'required|string|max:150',
             'ifsc_code' => 'required|string',
-                    
+
         ];
         return $validator;
 
-        
     }
-    
-    
+
+
 }

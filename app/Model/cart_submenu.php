@@ -5,6 +5,7 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Model;
 //custom import
 use Illuminate\Support\Facades\DB;
+use App\Model\menu_list as menuList;
 
 class cart_submenu extends Model
 {
@@ -123,5 +124,10 @@ class cart_submenu extends Model
         catch (Exception $e) {
             dd($e);
         }
+    }
+
+    public function menuItems()
+    {
+        return $this->belongsTo(menuList::class, 'menu_id');
     }
 }

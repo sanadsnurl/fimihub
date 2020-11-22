@@ -28,7 +28,7 @@ class LoginRegisterController extends Controller
     use OtpGenerationTrait;
     public function register(UserStoreRequest $request)
     {
-    
+
         try {
             $data=$request->toArray();
 
@@ -37,10 +37,10 @@ class LoginRegisterController extends Controller
             $user_insert_data['name'] = $data['name'];
             $user_insert_data['password'] = $data['password'];
             $user_insert_data['country_code'] = $data['country_code'];
-            $user_insert_data['user_type']=2; 
+            $user_insert_data['user_type']=2;
 
             $user = User::create($user_insert_data);
-            
+
             $user_ins = new user();
             $user_data = $user_ins->userByIdData($user->id);
             unset($user_data->password);
@@ -58,18 +58,18 @@ class LoginRegisterController extends Controller
 
                 $path = public_path('uploads/'.$id.'/images');
                 File::makeDirectory($path, $mode = 0777, true, true);
-                                
+
                 $destinationPath = 'uploads/'.$id.'/images'.'/';
                 if($profile_pic->move($destinationPath, $input['imagename']))
                 {
                     $file_url=url($destinationPath.$input['imagename']);
                     $vehicle_data['vehicle_image']=$file_url;
-                
+
                 }else{
                     $error_file_not_required[]="Vehicle Picture Have Some Issue";
                     $vehicle_data['vehicle_image']="";
                 }
-                
+
             }
             $vehicle_data['color'] = $data['color'];
 
@@ -78,20 +78,20 @@ class LoginRegisterController extends Controller
                 $profile_pic = $request->file('id_proof');
                 $input['imagename'] = 'IDProof'.time().'.'.$profile_pic->getClientOriginalExtension();
 
-                $path = public_path('uploads/'.$id.'/documents');
+                $path = public_path('uploads/'.$id.'/images');
                 File::makeDirectory($path, $mode = 0777, true, true);
-                                
-                $destinationPath = 'uploads/'.$id.'/documents'.'/';
+
+                $destinationPath = 'uploads/'.$id.'/images'.'/';
                 if($profile_pic->move($destinationPath, $input['imagename']))
                 {
                     $file_url=url($destinationPath.$input['imagename']);
                     $vehicle_data['id_proof']=$file_url;
-                
+
                 }else{
                     $error_file_not_required[]="ID Proof Have Some Issue";
                     $vehicle_data['id_proof']="";
                 }
-                
+
             }
             $vehicle_data['address'] = $data['address'];
             $vehicle_data['pincode'] = $data['pincode'];
@@ -103,18 +103,18 @@ class LoginRegisterController extends Controller
 
                 $path = public_path('uploads/'.$id.'/images');
                 File::makeDirectory($path, $mode = 0777, true, true);
-                                
+
                 $destinationPath = 'uploads/'.$id.'/images'.'/';
                 if($profile_pic->move($destinationPath, $input['imagename']))
                 {
                     $file_url=url($destinationPath.$input['imagename']);
                     $vehicle_data['driving_license']=$file_url;
-                
+
                 }else{
                     $error_file_not_required[]="ID Proof Have Some Issue";
                     $vehicle_data['driving_license']="";
                 }
-                
+
             }
             $vehicle_data['dl_start_date'] = $data['dl_start_date'];
             $vehicle_data['dl_end_date'] = $data['dl_end_date'];
@@ -161,29 +161,29 @@ class LoginRegisterController extends Controller
                 $response = ['status'=>false,'message'=>'Please Contact Admin (Temporary Blocked)'];
                 return response()->json($response, $this->failureStatus);
             }
-            
-            
+
+
         } catch (\Throwable $th) {
             report($th);
-            
+
             return response()->json(['message'=> $th->getMessage(),'status'=>false], $this->invalidStatus);
 
         }
 
-        
+
     }
 
     public function login(UserLoginRequest $request)
     {
-        try 
+        try
         {
 
             $user_id = $request->input('userid');
             $password = $request->input('password');
             $mobile_set = "";
             $email_set = "";
-            
-            
+
+
             if(is_numeric($user_id))
             {
                 $loginData =["mobile"=>$user_id,"password"=>$password];
@@ -193,13 +193,13 @@ class LoginRegisterController extends Controller
                 $loginData =["email"=>$user_id,"password"=>$password];
                 $email_set = $user_id;
             }
-            
-        
+
+
             if(!auth()->attempt($loginData))
             {
                 return response()->json(['message'=>'Invalid Credentials','status'=>false],$this->failureStatus);
             }
-            
+
             //CHECK VERIFICATION DONE OR NOT
             $accessToken = auth()->user()->createToken('teckzy')->accessToken;
             if($mobile_set != NULL)
@@ -231,6 +231,7 @@ class LoginRegisterController extends Controller
                                             'data'=>$user_data ,
                                             'bank_data'=>$bank_data,
                                             'vehicle_data'=>$vehicle_datas,
+                                            'message' => 'success',
                                             'status'=>true], $this->successStatus);
                 }
             }
@@ -245,7 +246,7 @@ class LoginRegisterController extends Controller
 
                 $vehicle_detail = new vehicle_detail;
                 $vehicle_datas = $vehicle_detail->getVehicleData($user_data->id);
-                
+
                 if($user_data->email_verified_at == NULL)
                 {
                     $user_data->access_token=$accessToken;
@@ -266,28 +267,28 @@ class LoginRegisterController extends Controller
                 }
             }
         }
-            catch (\Throwable $th) 
+            catch (\Throwable $th)
         {
             report($th);
-        
+
             return response()->json(['message'=> $th->getMessage(),'status'=>false], $this->invalidStatus);
 
         }
-    
+
     }
 
 
     public function details()
-    {   
+    {
         $user = Auth::user();
         unset($user->password);
-        
+
         $rider_bank_detail = new rider_bank_detail;
         $bank_data = $rider_bank_detail->getBankData($user->id);
 
         $vehicle_detail = new vehicle_detail;
         $vehicle_datas = $vehicle_detail->getVehicleData($user->id);
-    
+
         return response()->json(['data' => $user,
                                 'bank_data'=>$bank_data,
                                 'vehicle_data'=>$vehicle_datas,
@@ -302,14 +303,14 @@ class LoginRegisterController extends Controller
 
     public function forgetPassword(UserForgetPasswordRequest $request)
     {
-        try 
+        try
         {
             $userid = $request->input('userid');
             $verification_code = $request->input('verification_code');
             $password = $request->input('password');
             $user = new User();
             $user_data = $user->userData($userid);
-            
+
             $data=['userid'=>$userid,'password'=>$password];
             if($user_data != NULL ){
                 if($user_data->verification_code == $verification_code){
@@ -328,16 +329,16 @@ class LoginRegisterController extends Controller
 
             }
         }
-        catch (\Throwable $th) 
+        catch (\Throwable $th)
         {
             report($th);
-        
+
             return response()->json(['message'=> $th->getMessage(),'status'=>false], $this->invalidStatus);
 
         }
     }
 
-    
+
     public function updateLogin(UpdateLoginRequest $request)
     {
         try {
@@ -345,7 +346,7 @@ class LoginRegisterController extends Controller
             $id = $user->id;
             $data = $request->toarray();
             $data['id']= $id;
-            
+
             $user_update_data=array();
             $user_update_data['id']=$id;
             if($request->has('password'))
@@ -372,12 +373,12 @@ class LoginRegisterController extends Controller
             if($request->has('name')){
                 $user_update_data['name']=$data['name'];
             }
-            
+
             $user_inst = new user;
             $user_up = $user_inst->UpdateLogin($user_update_data);
             $user_data = auth()->user()->userByIdData($user->id);
             unset($user_data->password);
-            
+
             $vehicle_update_data=array();
             $vehicle_update_data['user_id']=$id;
             if($request->has('vehicle_number')){
@@ -394,18 +395,18 @@ class LoginRegisterController extends Controller
 
                 $path = public_path('uploads/'.$id.'/images');
                 File::makeDirectory($path, $mode = 0777, true, true);
-                                
+
                 $destinationPath = 'uploads/'.$id.'/images'.'/';
                 if($profile_pic->move($destinationPath, $input['imagename']))
                 {
                     $file_url=url($destinationPath.$input['imagename']);
                     $vehicle_update_data['vehicle_image']=$file_url;
-                
+
                 }else{
                     $error_file_not_required[]="Vehicle Picture Have Some Issue";
                     $vehicle_update_data['vehicle_image']="";
                 }
-                
+
             }
             if($request->has('color')){
                 $vehicle_update_data['color']=$data['color'];
@@ -418,18 +419,18 @@ class LoginRegisterController extends Controller
 
                 $path = public_path('uploads/'.$id.'/documents');
                 File::makeDirectory($path, $mode = 0777, true, true);
-                                
+
                 $destinationPath = 'uploads/'.$id.'/documents'.'/';
                 if($profile_pic->move($destinationPath, $input['imagename']))
                 {
                     $file_url=url($destinationPath.$input['imagename']);
                     $vehicle_update_data['id_proof']=$file_url;
-                
+
                 }else{
                     $error_file_not_required[]="ID Proof Have Some Issue";
                     $vehicle_update_data['id_proof']="";
                 }
-                
+
             }
             if($request->has('address')){
                 $vehicle_update_data['address']=$data['address'];
@@ -445,18 +446,18 @@ class LoginRegisterController extends Controller
 
                 $path = public_path('uploads/'.$id.'/images');
                 File::makeDirectory($path, $mode = 0777, true, true);
-                                
+
                 $destinationPath = 'uploads/'.$id.'/images'.'/';
                 if($profile_pic->move($destinationPath, $input['imagename']))
                 {
                     $file_url=url($destinationPath.$input['imagename']);
                     $vehicle_update_data['driving_license']=$file_url;
-                
+
                 }else{
                     $error_file_not_required[]="DL Have Some Issue";
                     $vehicle_update_data['driving_license']="";
                 }
-                
+
             }
             if($request->has('dl_start_date')){
                 $vehicle_update_data['dl_start_date']=$data['dl_start_date'];
@@ -470,12 +471,12 @@ class LoginRegisterController extends Controller
             if($request->has('registraion_end_date')){
                 $vehicle_update_data['registraion_end_date']=$data['registraion_end_date'];
             }
-            
+
             $vehicle_detail = new vehicle_detail;
             $vehicle_datas = $vehicle_detail->insertUpdateVehicleData($vehicle_update_data);
-            
+
             $vehicle_datas = $vehicle_detail->getVehicleData($user->id);
-            
+
             $bank_details = array();
             $bank_details['user_id'] = $user->id;
             if($request->has('account_number')){
@@ -501,12 +502,12 @@ class LoginRegisterController extends Controller
                                     'status'=>true], $this->successStatusCreated);
         } catch (\Throwable $th) {
             report($th);
-            
+
             return response()->json(['message'=> $th->getMessage(),'status'=>false], $this->invalidStatus);
 
         }
 
-        
+
     }
 
     public function updateDeviceToken(UpdateDeviceTokenRequest $request)
@@ -519,7 +520,7 @@ class LoginRegisterController extends Controller
             $email = $mobile = "";
             $user_update_data=array();
             $user_update_data['id']=$id;
-            
+
             if($request->has('device_token')){
                 $user_update_data['device_token']=$data['device_token'];
             }
@@ -527,23 +528,23 @@ class LoginRegisterController extends Controller
             $user_data = auth()->user()->userByIdData($id);
             unset($user_data->password);
 
-            
-            
+
+
             return response()->json(['data' =>$user_data,
                                     'message' =>'Token Updated !',
                                     'status'=>true], $this->successStatusCreated);
         } catch (\Throwable $th) {
             report($th);
-            
+
             return response()->json(['message'=> $th->getMessage(),'status'=>false], $this->invalidStatus);
 
         }
-        
+
     }
 
     public function changePassword(UpdatePasswordRequest $request)
     {
-       
+
         try {
             $user = Auth::user();
 
@@ -561,15 +562,15 @@ class LoginRegisterController extends Controller
                 return response()->json(['message'=>'Password Changed !','status'=>true], $this->successStatusCreated);
             }
 
-           
+
         } catch (\Throwable $th) {
              report($th);
-            
+
              return response()->json(['custom_error'=> $th->getMessage(),'status'=>false], $this->invalidStatus);
 
         }
 
-        
+
     }
 
 

@@ -46,6 +46,8 @@ class CreateUsersTable extends Migration
             $table->text('address');
             $table->string('flat_no');
             $table->string('landmark');
+            $table->string('latitude')->nullable();
+            $table->string('longitude')->nullable();
             $table->tinyInteger('default_status')->comment('1-default,2-non_default')->default(2);
             $table->tinyInteger('visibility')->default('0');
             $table->timestamp('deleted_at', 0)->nullable();

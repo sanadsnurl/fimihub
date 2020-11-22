@@ -52,20 +52,21 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
 
         // Notifications
         //Get all Read and Unread notification
-        Route::get('/getallnotification', 'Api\NotificationController@getAllNotifications');
-        //Get all Unread notification
-        Route::get('/getallunreadnotification', 'Api\NotificationController@getAllUnReadNotification');
-        //Get all Readed notification
-        Route::get('/getallreadnotification', 'Api\NotificationController@getAllReadNotification');
+        Route::get('/getnotifications/{type?}', 'Api\NotificationController@getAllNotifications');
         //Get singale notification
         Route::get('/getnotificationbyid/{id}', 'Api\NotificationController@getNotificationById');
+        //Mark as read notification
+        Route::get('/markasread/{id?}', 'Api\NotificationController@markAsRead');
+        // get resions
+        Route::get('/getresions/{id}', 'Api\CmsController@getResions');
 
     });
 
     Route::group(['middleware' => 'auth:api', 'prefix'=>'rider'], function() {
         //Rider Details
-        Route::get('/testingnotification', 'Api\Rider\OrderController@TestingNotification');
-        // Route::get('/getnotification', 'Api\Rider\OrderController@TestingNotification');
+        Route::get('/testingnotification', 'Api\Rider\OrderController@testingNotification');
+        Route::get('/getorders/{id?}', 'Api\Rider\OrderController@getOrders');
+        Route::post('/updatestatus', 'Api\Rider\OrderController@updateEventOrderStatus');
 
     });
     // ...

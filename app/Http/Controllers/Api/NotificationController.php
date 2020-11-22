@@ -14,25 +14,11 @@ class NotificationController extends Controller
         $this->notification = $notification;
     }
 
-    public function getAllNotifications()
+    public function getAllNotifications($type = false)
     {
         $userId = Auth::id();
-        $data = $this->notification->getAllNotifications($userId);
+        $data = $this->notification->getAllNotifications($userId, $type);
 
-        return response()->json(['message'=> 'Success','status' =>true, 'data' => $data], $this->successStatus);
-    }
-
-    public function getAllUnReadNotification()
-    {
-        $userId = Auth::id();
-        $data = $this->notification->getAllUnReadNotification($userId);
-        return response()->json(['message'=> 'Success','status' =>true, 'data' => $data], $this->successStatus);
-    }
-
-    public function getAllReadNotification()
-    {
-        $userId = Auth::id();
-        $data = $this->notification->getAllReadNotification($userId);
         return response()->json(['message'=> 'Success','status' =>true, 'data' => $data], $this->successStatus);
     }
 
@@ -41,5 +27,12 @@ class NotificationController extends Controller
         $userId = Auth::id();
         $data = $this->notification->getNotificationById($userId, $id);
         return response()->json(['message'=> 'Success','status' =>true, 'data' => $data], $this->successStatus);
+    }
+
+    public function markAsRead($id = false)
+    {
+        $userId = Auth::id();
+        $data = $this->notification->markAsRead($userId, $id);
+        return response()->json(['message'=> 'Success','status' => true, 'data' => $data], $this->successStatus);
     }
 }
