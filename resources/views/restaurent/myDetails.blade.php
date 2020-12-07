@@ -148,17 +148,32 @@
                                     @endif
                                 </div>
                             </div>
-                            <div class="form-group row">
-                                <label for="input-3" class="col-sm-2 col-form-label">Address</label>
-                                <div class="col-sm-10">
-                                    <textarea name="address" class="form-control" cols="100"
-                                        rows="3">{{$resto_data->address ?? ''}}</textarea>
 
-                                    @if($errors->has('address'))
+                            <div class="form-group row">
+                                <label for="input-4 address_address" class="col-sm-2 col-form-label">Address</label>
+                                <div class="col-sm-8">
+                                    <input type="text" id="address-input" name="address_address" placeholder="Address"
+                                        class="map-input form-control" value="{{$resto_add->address ?? ''}}">
+
+                                    <input type="hidden" name="address_latitude" id="address-latitude"
+                                        value="{{$resto_add->latitude ?? '0'}}" />
+                                    <input type="hidden" name="address_longitude" id="address-longitude"
+                                        value="{{$resto_add->longitude ?? '0'}}" />
+                                    @if($errors->has('address_address'))
                                     <div class="error">{{ $errors->first('address') }}</div>
                                     @endif
+                                    @if(Session::has('address_error'))
+                                    <div class="error">{{ Session::get('address_error') }}</div>
+                                    @endif
+                                </div>
+                                <div class="col-sm-6">
+                                    <div id="address-map-container"
+                                        style="width:0%;height:0px; margin-bottom: -115px;">
+                                        <div style="width: 100%; height: 60%;" id="address-map"></div>
+                                    </div>
                                 </div>
                             </div>
+
                             <div class="form-group row">
                                 <label for="input-4" class="col-sm-2 col-form-label">Pincode</label>
                                 <div class="col-sm-10">
@@ -197,3 +212,9 @@
 </div>
 <!--End content-wrapper-->
 @include('restaurent.include.footer')
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script type="text/javascript" src="{{url('asset/customer/assets/scripts/mapInput.js')}}"></script>
+<script
+    src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}&libraries=places&callback=initialize"
+    async defer></script>

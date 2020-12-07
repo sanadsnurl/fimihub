@@ -4,6 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Session;
+use Auth;
+
 class RestaurentAuth
 {
     /**
@@ -20,21 +22,35 @@ class RestaurentAuth
             Session::flash('message', 'Please Login First!'); 
             return redirect('Restaurent/login');
         }
-        elseif(session('restaurent')->user_type !=4){
+        else{
+            if($request->session()->exists('user') || $request->session()->exists('admin_data'))
+            {
+                Auth::logout();
+                Session::flush();
+                Session::flash('message', 'Service Violation (Please Try Again)!'); 
+                return redirect('Restaurent/login');
+            }
+            else
+            {           
+                if(session('restaurent')->user_type !=4){
             
-            Session::flash('message', 'User Type Invalid !'); 
-            return redirect('Restaurent/login');
-        }
-        elseif(session('restaurent')->visibility ==1){
+                    Session::flash('message', 'User Type Invalid !'); 
+                    return redirect('Restaurent/login');
+                }
+                elseif(session('restaurent')->visibility ==1){
+                    
+                    Session::flash('message', 'Account Not Activated , Admin Approval Needed !'); 
+                    return redirect('Restaurent/login');
+                }
+                elseif(session('restaurent')->mobile_verified_at ==NULL){
+                    Session::flash('message', 'Please verify your account!'); 
+                    return redirect('Restaurent/login');
+                }
+            }
             
-            Session::flash('message', 'Account Not Activated , Admin Approval Needed !'); 
-            return redirect('Restaurent/login');
         }
-        elseif(session('restaurent')->mobile_verified_at ==NULL){
-            Session::flash('message', 'Please verify your account!'); 
-            return redirect('Restaurent/login');
-
-        }
+        
+        
 
         return $next($request);
     }

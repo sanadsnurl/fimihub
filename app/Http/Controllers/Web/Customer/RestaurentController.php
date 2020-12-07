@@ -40,7 +40,7 @@ class RestaurentController extends Controller
             $service_data = $ServiceCategories->getServiceById(1);
             $percentage = $service_data->commission;
 
-            $m_data->price = $m_data->price + round(($percentage / 100) * $m_data->price);
+            $m_data->price = $m_data->price + (($percentage / 100) * $m_data->price);
             if(!isset($m_data->quantity)){
                 $m_data->quantity=NULL;
             }

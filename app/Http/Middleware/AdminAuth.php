@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Session;
+use Auth;
 
 class AdminAuth
 {
@@ -21,10 +22,23 @@ class AdminAuth
             Session::flash('message', 'Please Login!'); 
             return redirect('/adminfimihub/login');
         }
-        elseif(session('admin_data')->user_type !=1){
-            Session::flash('message', 'User Type Invalid !'); 
-            return redirect('/adminfimihub/login');
+        else{
+            if($request->session()->exists('restaurent') || $request->session()->exists('user'))
+            {
+                Auth::logout();
+                Session::flush();
+                Session::flash('message', 'Service Violation (Please Try Again)!'); 
+                return redirect('adminfimihub/login');
+            }
+            else
+            {  
+                if(session('admin_data')->user_type !=1){
+                    Session::flash('message', 'User Type Invalid !'); 
+                    return redirect('/adminfimihub/login');
+                }
+            }
         }
+        
 
         return $next($request);
     }

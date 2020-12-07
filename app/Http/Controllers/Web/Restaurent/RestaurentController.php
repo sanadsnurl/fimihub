@@ -9,6 +9,7 @@ use App\User;
 use App\Model\restaurent_detail;
 use App\Model\menu_categories;
 use App\Model\menu_list;
+use App\Model\user_address;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -27,8 +28,11 @@ class RestaurentController extends Controller
         $user = Auth::user();
         $restaurent_detail = new restaurent_detail;
         $resto_data = $restaurent_detail->getRestoData($user->id);
-        
-        return view('restaurent.myDetails')->with(['data'=>$user,'resto_data'=>$resto_data]);
+        $user_address = new user_address;
+        $resto_add = $user_address->getUserAddress($user->id);
+        return view('restaurent.myDetails')->with(['data'=>$user,
+                                                'resto_data'=>$resto_data,
+                                                'resto_add'=> $resto_add[0]]);
         
     }
 
@@ -44,7 +48,7 @@ class RestaurentController extends Controller
             'avg_time' => 'string|nullable',    
             'open_time' => 'string|nullable',    
             'close_time' => 'string|nullable',    
-            'address' => 'string|nullable',    
+            'address_address' => 'required|string',   
             'delivery_charge' => 'string|nullable',    
             'pincode' => 'string|nullable',    
             'resto_type' => 'in:1,2,3|nullable',    
@@ -79,11 +83,34 @@ class RestaurentController extends Controller
             else{
                 unset($data['picture']);
             }
-        
-            $resto_id = $restaurent_detail->insertUpdateRestoData($data);
-            Session::flash('message', 'Restaurent Data Updated !');
 
-            return redirect()->back();
+
+            if($request->has('address_address')){
+                $add_data =array();
+                if($data['address_latitude'] == 0 || $data['address_longitude'] == 0){
+                    Session::flash('message', 'Invalid Address !');
+                    return redirect()->back();
+                }
+                else{
+                    $add_data['user_id']=$user->id;
+                    $add_data['address']=$data['address_address'];                    
+                    $add_data['latitude']=$data['address_latitude'];
+                    $add_data['longitude']=$data['address_longitude'];
+                    $user_address = new user_address;
+                    $subscribe = $user_address->insertUpdateAddress($add_data);
+
+                    $data['address'] = $data['address_address'];
+                    unset($data['address_address']);
+                    unset($data['address_latitude']);
+                    unset($data['address_longitude']);
+                    $resto_id = $restaurent_detail->insertUpdateRestoData($data);
+                    Session::flash('message', 'Restaurent Data Updated !');
+
+                    return redirect()->back();
+                    
+                }
+            }
+            
 
         }
         else{

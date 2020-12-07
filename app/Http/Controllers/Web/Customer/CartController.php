@@ -58,7 +58,7 @@ class CartController extends Controller
                 $service_data = $ServiceCategories->getServiceById(1);
                 $percentage = $service_data->commission;
                 
-                $m_data->price = $m_data->price + round(($percentage / 100) * $m_data->price);
+                $m_data->price = $m_data->price + (($percentage / 100) * $m_data->price);
 
                 if($m_data->quantity != NULL){
                     $item = $item + $m_data->quantity;
@@ -68,7 +68,7 @@ class CartController extends Controller
             //add delivery charge and tax in total amount
             $ServiceCategories = new ServiceCategory;
             $service_data = $ServiceCategories->getServiceById(1);
-            $service_tax = round(($service_data->tax / 100) * $total_amount) ;
+            $service_tax = (($service_data->tax / 100) * $total_amount) ;
             $service_data->service_tax = $service_tax;
             $sub_total = $total_amount;
             $total_amount = ($total_amount - $resto_data->discount) + $resto_data->delivery_charge + $resto_data->tax + $service_tax;
@@ -160,7 +160,7 @@ class CartController extends Controller
                     $ServiceCategories = new ServiceCategory;
                     $service_data = $ServiceCategories->getServiceById(1);
                     $percentage = $service_data->commission;
-                    $m_data->price = $m_data->price + round(($percentage / 100) * $m_data->price);
+                    $m_data->price = $m_data->price + (($percentage / 100) * $m_data->price);
                     if($m_data->quantity != NULL){
                         $item = $item + $m_data->quantity;
                         $total_amount = $total_amount + ($m_data->quantity * $m_data->price);
@@ -168,11 +168,17 @@ class CartController extends Controller
                 }
                 $ServiceCategories = new ServiceCategory;
                 $service_data = $ServiceCategories->getServiceById(1);
-                $service_tax = round(($service_data->tax / 100) * $total_amount) ;
+                $service_tax = (($service_data->tax / 100) * $total_amount) ;
+                // $service_tax = number_format((float) $service_tax, 2);
                 $service_data->service_tax = $service_tax;
                 $sub_total = $total_amount;
                 $total_amount = ($total_amount - $resto_data->discount) + $resto_data->delivery_charge + $resto_data->tax;
-            
+                // dd($total_amount);
+                // $total_amount = number_format((float) $total_amount, 2);
+                // $sub_total = number_format((float) $sub_total, 2);
+
+                // $total_amount = (float)number_format($total_amount, 2, '.', ',');
+                // $sub_total = (float)number_format($sub_total, 2, '.', ',');
                 $response = ['quantity'=>$cart_sub_menu->quantity,
                             'items'=>$item,
                             'service_data'=>$service_data,
@@ -251,7 +257,7 @@ class CartController extends Controller
                         $ServiceCategories = new ServiceCategory;
                         $service_data = $ServiceCategories->getServiceById(1);
                         $percentage = $service_data->commission;
-                        $m_data->price = $m_data->price + round(($percentage / 100) * $m_data->price);
+                        $m_data->price = $m_data->price + (($percentage / 100) * $m_data->price);
 
                         if($m_data->quantity != NULL){
                             $item = $item + $m_data->quantity;
@@ -260,7 +266,7 @@ class CartController extends Controller
                     }
                     $ServiceCategories = new ServiceCategory;
                     $service_data = $ServiceCategories->getServiceById(1);
-                    $service_tax = round(($service_data->tax / 100) * $total_amount) ;
+                    $service_tax = (($service_data->tax / 100) * $total_amount) ;
                     $service_data->service_tax = $service_tax;
                     $sub_total = $total_amount;
                     $total_amount = ($total_amount - $resto_data->discount) + $resto_data->delivery_charge + $resto_data->tax ;
@@ -289,7 +295,7 @@ class CartController extends Controller
                         $ServiceCategories = new ServiceCategory;
                         $service_data = $ServiceCategories->getServiceById(1);
                         $percentage = $service_data->commission;
-                        $m_data->price = $m_data->price + round(($percentage / 100) * $m_data->price);
+                        $m_data->price = $m_data->price + (($percentage / 100) * $m_data->price);
 
                         if($m_data->quantity != NULL){
                             $item = $item + $m_data->quantity;
@@ -298,7 +304,7 @@ class CartController extends Controller
                     }
                     $ServiceCategories = new ServiceCategory;
                     $service_data = $ServiceCategories->getServiceById(1);
-                    $service_tax = round(($service_data->tax / 100) * $total_amount) ;
+                    $service_tax = (($service_data->tax / 100) * $total_amount) ;
                     $service_data->service_tax = $service_tax;
                     $sub_total = $total_amount;
                     $total_amount = ($total_amount - $resto_data->discount) + $resto_data->delivery_charge + $resto_data->tax;

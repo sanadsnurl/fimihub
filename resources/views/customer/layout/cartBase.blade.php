@@ -84,7 +84,7 @@
                             </div>
                             <div class="total_item pb-1">
                                 <span> Item Sub-Total </span>
-                                <span>{{$user_data->currency ?? ''}} <span id="sub_total">{{$sub_total ?? '0'}}</span></span>
+                                <span>{{$user_data->currency ?? ''}} <span id="sub_total">{{number_format((float)$sub_total, 2) ?? '0'}}</span></span>
                             </div>
                             @if($resto_data->discount != 0 || $resto_data->discount != Null)
 
@@ -107,7 +107,7 @@
                                 <span> Tax ({{$service_data->tax}} %)&nbsp;&nbsp;<img
                                         src="{{url('asset/customer/assets/images/info_icon.svg')}}" alt="info"></span>
                                 <span>{{$user_data->currency ?? ''}} <span
-                                        id="service_tax">{{$service_data->service_tax ?? '0'}}</span></span>
+                                        id="service_tax">{{number_format((float)$service_data->service_tax, 2) ?? '0'}}</span></span>
                             </div>
                             @endif
                             <div class="charges_tax">
@@ -124,14 +124,14 @@
                             <div class="to_pay_box d-flex align-items-center">
                                 <span>To pay</span>
                                 <span>{{$user_data->currency ?? ''}} <span
-                                        id="total_amount">{{$total_amount ?? '0'}}</span></span>
+                                        id="total_amount">{{number_format((float)$total_amount, 2) ?? '0'}}</span></span>
                             </div>
                         </a>
                         @else
                         <div class="to_pay_box d-flex align-items-center">
                             <span>Total</span>
                             <span>{{$user_data->currency ?? ''}} <span
-                                    id="total_amount">{{$total_amount ?? '0'}}</span></span>
+                                    id="total_amount">{{number_format((float)$total_amount, 2) ?? '0'}}</span></span>
                         </div>
                         @endif
 
@@ -162,12 +162,16 @@ function increment_quantity(menu_id) {
             $("#loading-overlay").show();
         },
         success: function(response) {
-            var total_amnt = response.total_amount + response.service_data.service_tax;
+            var total_amnt = (response.total_amount + response.service_data.service_tax);
+            total_amnt = total_amnt.toFixed(2);
+            var service_taxs = response.service_data.service_tax.toFixed(2);
+            var sub_totals = response.sub_total.toFixed(2);
+
             $(inputQuantityElement).val(response.quantity);
             $(item_count).html(response.items);
-            $(sub_total).html(response.sub_total);
+            $(sub_total).html(sub_totals);
             $(total_amount).html(total_amnt);
-            $(service_tax).html(response.service_data.service_tax);
+            $(service_tax).html(service_taxs);
             $("#loading-overlay").hide();
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -194,12 +198,16 @@ function decrement_quantity(menu_id) {
             $("#loading-overlay").show();
         },
         success: function(response) {
-            var total_amnt = response.total_amount + response.service_data.service_tax;
+            var total_amnt = (response.total_amount + response.service_data.service_tax);
+            total_amnt = total_amnt.toFixed(2);
+            var service_taxs = response.service_data.service_tax.toFixed(2);
+            var sub_totals = response.sub_total.toFixed(2);
+
             $(inputQuantityElement).val(response.quantity);
             $(item_count).html(response.items);
+            $(sub_total).html(sub_totals);
             $(total_amount).html(total_amnt);
-            $(sub_total).html(response.sub_total);
-            $(service_tax).html(response.service_data.service_tax);
+            $(service_tax).html(service_taxs);
             $("#loading-overlay").hide();
         },
         error: function(jqXHR, textStatus, errorThrown) {

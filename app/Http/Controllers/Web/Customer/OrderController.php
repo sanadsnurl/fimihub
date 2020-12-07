@@ -67,7 +67,7 @@ class OrderController extends Controller
                         $ServiceCategories = new ServiceCategory;
                         $service_data = $ServiceCategories->getServiceById(1);
                         $percentage = $service_data->commission;
-                        $m_data->price = $m_data->price + round(($percentage / 100) * $m_data->price);
+                        $m_data->price = $m_data->price + (($percentage / 100) * $m_data->price);
 
                         if($m_data->quantity != NULL){
                             $item = $item + $m_data->quantity;
@@ -76,7 +76,7 @@ class OrderController extends Controller
                     }
                     $ServiceCategories = new ServiceCategory;
                     $service_data = $ServiceCategories->getServiceById(1);
-                    $service_tax = round(($service_data->tax / 100) * $total_amount) ;
+                    $service_tax = (($service_data->tax / 100) * $total_amount) ;
                     $service_data->service_tax = $service_tax;
                     //add delivery charge and tax in total amount
                     $sub_total = $total_amount;
@@ -140,7 +140,7 @@ class OrderController extends Controller
                     $ServiceCategories = new ServiceCategory;
                     $service_data = $ServiceCategories->getServiceById(1);
                     $percentage = $service_data->commission;
-                    $m_data->price = $m_data->price + round(($percentage / 100) * $m_data->price);
+                    $m_data->price = $m_data->price + (($percentage / 100) * $m_data->price);
                     if($m_data->quantity != NULL){
                         $item = $item + $m_data->quantity;
                         $total_amount = $total_amount + ($m_data->quantity * $m_data->price);
@@ -149,7 +149,7 @@ class OrderController extends Controller
                 //add delivery charge and tax in total amount
                 $ServiceCategories = new ServiceCategory;
                 $service_data = $ServiceCategories->getServiceById(1);
-                $service_tax = round(($service_data->tax / 100) * $total_amount) ;
+                $service_tax = (($service_data->tax / 100) * $total_amount) ;
                 $service_data->service_tax = $service_tax;
 
                 $total_amount = ($total_amount - $resto_data->discount) + $resto_data->delivery_charge + $resto_data->tax + $service_tax;
