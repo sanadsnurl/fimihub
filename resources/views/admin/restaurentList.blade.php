@@ -24,8 +24,15 @@
                                         <!-- <th>S.no</th> -->
                                         <th>S.No.</th>
                                         <th>Properietor Name</th>
+                                        <th>Restaurant Name</th>
+                                        <th>About</th>
                                         <th>Email</th>
                                         <th>Contact Number</th>
+                                        <th>Address</th>
+                                        <th>Open Time</th>
+                                        <th>Close Time</th>
+                                        <th>Delivery Charge </th>
+                                        <th>Discount</th>
                                         <th>Create At</th>
                                         <!-- <th>Action</th> -->
 
@@ -80,21 +87,48 @@
                     name: 'id'
                 },
                 {
+                    data: 'prop_name',
+                    name: 'prop_name'
+                },
+                {
                     data: 'name',
                     name: 'name'
                 },
                 {
-                    data: 'email',
-                    name: 'email'
+                    data: 'about',
+                    name: 'about'
                 },
                 {
-                    data: 'mobile',
-                    name: 'mobile'
+                    data: 'user_email',
+                    name: 'user_email'
                 },
-
                 {
-                    data: 'created_at',
-                    name: 'created_at'
+                    data: 'user_mobile',
+                    name: 'user_mobile'
+                },
+                {
+                    data: 'address',
+                    name: 'address'
+                },
+                {
+                    data: 'open_time',
+                    name: 'open_time'
+                },
+                {
+                    data: 'close_time',
+                    name: 'close_time'
+                },
+                {
+                    data: 'delivery_charge',
+                    name: 'delivery_charge'
+                },
+                {
+                    data: 'discount',
+                    name: 'discount'
+                },
+                {
+                    data: 'user_created_at',
+                    name: 'user_created_at'
                 },
 
             

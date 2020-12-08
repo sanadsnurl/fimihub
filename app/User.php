@@ -161,6 +161,30 @@ class User extends Authenticatable
         }
     }
 
+
+    public function allUserPaginateListRestoData($user_type)
+    {
+        try {
+            $user_data=DB::table('users')
+                ->leftJoin('restaurent_details', function($join) use ($user_type)
+                         {
+                            $join->on('restaurent_details.user_id', '=', 'users.id');
+                            $join->where('restaurent_details.visibility', 0);
+                            
+                         })
+                ->where('users.visibility', 0)
+                ->where('users.user_type', $user_type)
+                ->select('restaurent_details.*','users.name as prop_name','users.email as user_email','users.mobile as user_mobile','users.created_at as user_created_at')
+                ->orderBy('users.created_at','DESC');
+            
+            
+            return $user_data;
+        }
+        catch (Exception $e) {
+            dd($e);
+        }
+    }
+    
     public function pendingUserPaginateList($user_type)
     {
         try {

@@ -25,7 +25,7 @@ class RestaurentController extends Controller
         // $restaurent_details = new restaurent_detail;
         // $resto_data = $restaurent_details->getallRestaurant();
         $users = new user;
-        $user_list = $users->allUserPaginateList(4);
+        $user_list = $users->allUserPaginateListRestoData(4);
         if ($request->ajax()) {
             return Datatables::of($user_list)
                 ->addIndexColumn()
