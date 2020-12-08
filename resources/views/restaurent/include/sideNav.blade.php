@@ -65,7 +65,7 @@
                     </a>
                     <ul class="sidebar-submenu">
                         <li><a href="{{url('Restaurent/myDetails')}}"><i class="fa fa-circle-o"></i> Details</a></li>
-                        <!-- <li><a href="{{url('Restaurent/menuCategory')}}"><i class="fa fa-circle-o"></i> Category</a></li> -->
+                        <li><a href="{{url('Restaurent/menuCategory')}}"><i class="fa fa-circle-o"></i> Category</a></li>
                         <li><a href="{{url('Restaurent/menuList')}}"><i class="fa fa-circle-o"></i> Menu</a></li>
 
 

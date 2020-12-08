@@ -96,7 +96,7 @@ class RestaurentController extends Controller
                 ->addIndexColumn()
                 // ->addColumn('action', function($row){
                 //     $btn = ' 
-                //         <a href="?id='.base64_encode($row->id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Delete</a>';
+                //         <a href="deleteCat?cat_id='.base64_encode($row->id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Delete</a>';
                 //     return $btn;
                 // })
                 ->addColumn('service_catagory_id', function($row){
@@ -195,5 +195,7 @@ class RestaurentController extends Controller
         return redirect()->back();
         
     }
+
+
 
 }

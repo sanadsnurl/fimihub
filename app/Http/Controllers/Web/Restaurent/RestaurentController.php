@@ -127,17 +127,17 @@ class RestaurentController extends Controller
         $restaurent_detail = new restaurent_detail;
         $resto_data = $restaurent_detail->getRestoData($user->id);
         $menu_categories = new menu_categories;
-        $cat_data = $menu_categories->restaurentCategoryPaginationData($resto_data->id);
+        $cat_data = $menu_categories->restaurentCategoryPaginationData()->where('service_catagory_id',1);
         if ($request->ajax()) {
             // dd($user_data);
             // date('d F Y')
             return Datatables::of($cat_data)
                 ->addIndexColumn()
-                ->addColumn('action', function($row){
-                    $btn = '<a href="userDetails?id='.base64_encode($row->id).'" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Details</a> 
-                        <a href="?id='.base64_encode($row->id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Block</a>';
-                    return $btn;
-                })
+                // ->addColumn('action', function($row){
+                //     $btn = '<a href="userDetails?id='.base64_encode($row->id).'" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Details</a> 
+                //         <a href="?id='.base64_encode($row->id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Block</a>';
+                //     return $btn;
+                // })
                 ->addColumn('created_at', function($row){
                     
                     return date('d F Y', strtotime($row->created_at));
@@ -155,17 +155,18 @@ class RestaurentController extends Controller
     public function addCategoryProcess(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|nullable|unique:menu_categories,name,'.auth()->user()->id.',restaurent_id',
+            // 'name' => 'required|string|nullable|unique:menu_categories,name,'.auth()->user()->id.',restaurent_id',
             'about' => 'string|nullable',
-            'discount' => 'numeric|nullable',       
+            'discount' => 'numeric|nullable',  
+            'name' => 'required|string',     
             
         ]);
         if(!$validator->fails()){
             $user = Auth::user();
-            $restaurent_detail = new restaurent_detail;
-            $resto_data = $restaurent_detail->getRestoData($user->id);
+            // $restaurent_detail = new restaurent_detail;
+            // $resto_data = $restaurent_detail->getRestoData($user->id);
             $data = $request->toarray();
-            $data['restaurent_id'] =$resto_data->id;
+            $data['service_catagory_id'] = 1;
             $menu_categories = new menu_categories;
         
             $cate_id = $menu_categories->makeMenuCategory($data);
@@ -188,7 +189,7 @@ class RestaurentController extends Controller
         $restaurent_detail = new restaurent_detail;
         $resto_data = $restaurent_detail->getRestoData($user->id);
         $menu_categories = new menu_categories;
-        $cat_data = $menu_categories->restaurentCategoryPaginationData();
+        $cat_data = $menu_categories->restaurentCategoryPaginationData()->where('service_catagory_id',1);
         $menu_list = new menu_list;
         $menu_data = $menu_list->menuPaginationData($resto_data->id);
         if ($request->ajax()) {

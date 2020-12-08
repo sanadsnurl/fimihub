@@ -52,7 +52,7 @@
                                 </div>
 
                             </div>
-                            <div class="form-group row">
+                            <!-- <div class="form-group row">
                                 <label for="input-1" class="col-sm-2 col-form-label">Discount (%)</label>
                                 <div class="col-sm-10">
                                     <input type="number" class="form-control" id="input-1" name="discount"
@@ -62,7 +62,7 @@
                                     @endif
                                 </div>
 
-                            </div>
+                            </div> -->
 
                             <div class="form-footer">
                                 <input type="submit" class="btn btn-primary" value="Save category"></input>
@@ -87,9 +87,8 @@
                                         <th>S.No.</th>
                                         <th>Category Name</th>
                                         <th>About</th>
-                                        <th>Discount (%)</th>
+                                        <!-- <th>Discount (%)</th> -->
                                         <th>Create At</th>
-                                        <th>Action</th>
 
                                     </tr>
                                 </thead>
@@ -156,22 +155,18 @@ $(document).ready(function() {
                 data: 'about',
                 name: 'about'
             },
-            {
-                data: 'discount',
-                name: 'discount'
-            },
-
+            
             {
                 data: 'created_at',
                 name: 'created_at'
             },
 
-            {
-                data: 'action',
-                name: 'action',
-                orderable: true,
-                searchable: false
-            },
+            // {
+            //     data: 'action',
+            //     name: 'action',
+            //     orderable: true,
+            //     searchable: false
+            // },
 
 
         ]
