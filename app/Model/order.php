@@ -52,11 +52,12 @@ class order extends Model
             })
             ->leftjoin('order_events as oe',function($query){
                 $query->on('orders.id', '=', 'oe.order_id')
-                ->where('oe.user_type', 1)
-                ->where('oe.user_id', Auth::id());
+                ->where('oe.user_type', 1);
+                // ->where('oe.user_id', Auth::id());
             })->select('orders.*')
-            ->whereNull('oe.order_id')->orderBy('orders.order_id', 'DESC')->groupBy('orders.id');
+            ->whereNull('oe.order_id')->orderBy('orders.id', 'DESC')->groupBy('orders.id');
         }
+        // dd($query->toSql());
         return $query;
     }
 
@@ -80,7 +81,7 @@ class order extends Model
                 ->orWhere('oe.order_status', 4);
             })
             ->where('oe.user_id', Auth::id())
-            ->orderBy('orders.order_id', 'DESC')->groupBy('orders.id');
+            ->orderBy('orders.id', 'DESC')->groupBy('orders.id');
         }
         return $query;
     }
@@ -104,7 +105,7 @@ class order extends Model
                 $query->orWhere('orders.order_status', 8)
                 ->orWhere('orders.order_status', 9);
             })
-            ->orderBy('orders.order_id', 'DESC')->groupBy('orders.id');
+            ->orderBy('orders.id', 'DESC')->groupBy('orders.id');
         }
         return $query;
     }
