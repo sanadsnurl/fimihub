@@ -62,19 +62,36 @@ trait OtpGenerationTrait {
             // $auth_token = $_ENV["TWILIO_AUTH_TOKEN"]
 
             // A Twilio number you own with SMS capabilities
-            $twilio_number = "+15017122661";
-            $messageMsg = urlencode("<#>Your OTP is : $otp ");
-            $client = new Client($account_sid, $auth_token);
-            $client->messages->create(
-                // Where to send a text message (your cell phone?)
-                "+18768454365",
-                array(
-                    'from' => $twilio_number,
-                    'body' => $messageMsg
-                )
-            );
+            // $twilio_number = "+15017122661";
+            // $messageMsg = urlencode("<#>Your OTP is : $otp ");
+            // $client = new Client($account_sid, $auth_token);
+            // $client->messages->create(
+            //     // Where to send a text message (your cell phone?)
+            //     "+18768454365",
+            //     array(
+            //         'from' => $twilio_number,
+            //         'body' => $messageMsg
+            //     )
+            // );
 
-            if($client){
+            // Find your Account Sid and Auth Token at twilio.com/console
+            // and set the environment variables. See http://twil.io/secure
+            $sid = 'AC513ef57c0a0b86c0fca05473ad711c2a';
+            $token = '7caab498f7426d5185d2c89a7c34ac5b';
+            
+            $twilio = new Client($sid, $token);
+
+            $message = $twilio->messages
+                            ->create("+18768454365", // to
+                                    [
+                                        "body" => "All in the game, yo",
+                                        "from" => "+15017122661"
+                                    ]
+                            );
+            
+            // print($incoming_phone_number->sid);
+
+            if($message){
                 return 1;
             }else{
                 return 2;
