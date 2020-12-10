@@ -50,7 +50,7 @@ class OrderController extends Controller
             ->first();
         } else {
 
-            $order = $this->order->getOrder($orderId)
+            $order = $this->order->getOrder()
             ->with('restroAddress','userAddress.userDetails')
             // to do
             // ->with(array('restroAddress' => function($query){
