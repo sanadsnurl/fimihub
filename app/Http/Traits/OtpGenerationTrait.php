@@ -67,7 +67,7 @@ trait OtpGenerationTrait {
             $client = new Client($account_sid, $auth_token);
             $client->messages->create(
                 // Where to send a text message (your cell phone?)
-                "+918840212040",
+                "+18768454365",
                 array(
                     'from' => $twilio_number,
                     'body' => $messageMsg
