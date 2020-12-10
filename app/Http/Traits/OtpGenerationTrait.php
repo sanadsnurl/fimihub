@@ -57,7 +57,7 @@ trait OtpGenerationTrait {
             
             // Your Account SID and Auth Token from twilio.com/console
             $account_sid = 'AC513ef57c0a0b86c0fca05473ad711c2a';
-            $auth_token = 'ed2791483e85d10708e924114965f0b1';
+            $auth_token = '7caab498f7426d5185d2c89a7c34ac5b';
             // In production, these should be environment variables. E.g.:
             // $auth_token = $_ENV["TWILIO_AUTH_TOKEN"]
 
