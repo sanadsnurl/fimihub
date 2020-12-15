@@ -27,6 +27,7 @@
                                         <th>Dish</th>
                                         <th>Total Amount</th>
                                         <th>Payment Method</th>
+                                        <th>Order Status</th>
                                         <th>Create At</th>
                                         <th>Action</th>
 
@@ -107,7 +108,10 @@ $(document).ready(function() {
                 data: 'payment_type',
                 name: 'payment_type'
             },
-
+            {
+                data: 'order_status',
+                name: 'order_status'
+            },
             {
                 data: 'created_at',
                 name: 'created_at'

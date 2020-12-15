@@ -5,6 +5,7 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Model;
 //custom import
 use Illuminate\Support\Facades\DB;
+use App\User;
 
 class vehicle_detail extends Model
 {
@@ -46,6 +47,5 @@ class vehicle_detail extends Model
             dd($e);
         }
     }
-
 
 }

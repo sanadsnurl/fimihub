@@ -3,7 +3,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Log;
-
+use Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,149 +22,149 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
 
 //========================================== Customer Routes ===================================================
 
-      // Customer Root Page
-      Route::get('/', function () {
-         return view('customer.index');
-      });
-      // Customer Login
-      Route::get('/login', function () {
-         return view('customer.auth.login');
-      });
-      // Customer Register
-      Route::get('/register', function () {
-         return view('customer.auth.register');
-      });
-      // Partner with us page
-      Route::get('/partnerWithUs', function () {
-         return view('customer.auth.partnerRegister');
-      });
-      // Partner with us Process
-      Route::post('/partnerRegisterProcess', 'Web\Customer\DashboardController@partnerRegister');
-      // Customer Login Process
-      Route::post('/loginProcess', 'Web\Customer\LoginRegisterController@login');
-      // Customer Register Process
-      Route::post('/registerProcess', 'Web\Customer\LoginRegisterController@register');
-      // Resend OTP
-      Route::get('/resendOTP', 'Web\Customer\LoginRegisterController@resendOtp');
-      // Signup Otp Verification
-      Route::post('/verifyOtp', 'Web\Customer\LoginRegisterController@verifyOtp');
-      // Send OTP
-      Route::post('/getOTP', 'Web\Customer\LoginRegisterController@sendOtp');
-      // Signup Otp Verification
-      Route::post('/verifyAccount', 'Web\Customer\LoginRegisterController@verifyForgetPasswordOtp');
-      // Customer Forget Password Process
-      Route::post('/forgetPasswordProcess', 'Web\Customer\LoginRegisterController@forgetPassword');
-      // Signin Otp Verification
-      Route::post('/verifyOtpLogin', 'Web\Customer\LoginRegisterController@verifyOtpLogin');
-      // Customer Logout
-      Route::get('logout', 'Web\Customer\LoginRegisterController@logout');
-      // Customer Subscribed
-      Route::post('subscribeProcess', 'Web\Customer\DashboardController@subscribe');
-      
+    // Customer Root Page
+    Route::get('/', function () {
+        return view('customer.index');
+    });
+    // Customer Login
+    Route::get('/login', function () {
+        return view('customer.auth.login');
+    });
+    // Customer Register
+    Route::get('/register', function () {
+        return view('customer.auth.register');
+    });
+    // Partner with us page
+    Route::get('/partnerWithUs', function () {
+        return view('customer.auth.partnerRegister');
+    });
+    // Partner with us Process
+    Route::post('/partnerRegisterProcess', 'Web\Customer\DashboardController@partnerRegister');
+    // Customer Login Process
+    Route::post('/loginProcess', 'Web\Customer\LoginRegisterController@login');
+    // Customer Register Process
+    Route::post('/registerProcess', 'Web\Customer\LoginRegisterController@register');
+    // Resend OTP
+    Route::get('/resendOTP', 'Web\Customer\LoginRegisterController@resendOtp');
+    // Signup Otp Verification
+    Route::post('/verifyOtp', 'Web\Customer\LoginRegisterController@verifyOtp');
+    // Send OTP
+    Route::post('/getOTP', 'Web\Customer\LoginRegisterController@sendOtp');
+    // Signup Otp Verification
+    Route::post('/verifyAccount', 'Web\Customer\LoginRegisterController@verifyForgetPasswordOtp');
+    // Customer Forget Password Process
+    Route::post('/forgetPasswordProcess', 'Web\Customer\LoginRegisterController@forgetPassword');
+    // Signin Otp Verification
+    Route::post('/verifyOtpLogin', 'Web\Customer\LoginRegisterController@verifyOtpLogin');
+    // Customer Logout
+    Route::get('logout', 'Web\Customer\LoginRegisterController@logout');
+    // Customer Subscribed
+    Route::post('subscribeProcess', 'Web\Customer\DashboardController@subscribe');
 
-      //========================================== Session Customer Auth Routes ===================================================
 
-      Route::group(['middleware' => 'customerauth'], function () {
+    //========================================== Session Customer Auth Routes ===================================================
 
-         //Customer dashboard
-         Route::get('/home', 'Web\Customer\DashboardController@index');
-         //Cart Page
-         Route::get('/cart', 'Web\Customer\CartController@index');
-         // Save Addresss
-         Route::post('saveAddress', 'Web\Customer\AddressController@insertAddress');
-         // Save Addresss
-         Route::get('myAccount', 'Web\Customer\UserController@index');
-         //Update Profile
-         Route::post('updateProfile', 'Web\Customer\UserController@updateProfile');
-         //Change password Page
-         Route::get('changePassword', 'Web\Customer\UserController@getChangePasswordPage');
-         //Change password Process
-         Route::post('changePassword', 'Web\Customer\UserController@changePassword');
-         //Contact Us Page
-         Route::get('contactUs', 'Web\Customer\UserController@getContactUsPage');
-         //Contact Us Process
-         Route::post('contactUs', 'Web\Customer\UserController@contactUs');
-         //Saved Address Page
-         Route::get('saveaddress', 'Web\Customer\UserController@getSaveAddressPage');
-         //My Order Page
-         Route::get('myOrder', 'Web\Customer\UserController@getMyOrderPage');
-         //Terms and condition Page
-         Route::get('termsCondition', 'Web\Customer\UserController@getTermsConditionPage');
-         //Terms and condition Page
-         Route::get('FAQ', 'Web\Customer\UserController@getFaqPage');
-         //Legal Information Page
-         Route::get('legalInformation', 'Web\Customer\UserController@getLegalInformationPage');
-         //AboutUs Page
-         Route::get('aboutUs', 'Web\Customer\UserController@getAboutUsPage');
-         //AboutUs Page
-         Route::get('restaurentDetails', 'Web\Customer\RestaurentController@getRestaurentDetails');
-         //Add Menu Item To Cart
-         Route::get('addMenuItem', 'Web\Customer\CartController@addToCart');
-         //Subtract Menu Item To Cart
-         Route::get('subtractMenuItem', 'Web\Customer\CartController@removeFromCart');
-         //Add default address
-         Route::get('addDefaultAddress', 'Web\Customer\AddressController@addToDefault');
-         //Delete address
-         Route::get('deleteAddress', 'Web\Customer\AddressController@deleteAddress');
-         //Checkout Page -- Payment Page 
-         Route::get('checkoutPage', 'Web\Customer\OrderController@getPaymentPage');
-         //Add Payment Method
-         Route::post('addPaymentMethod', 'Web\Customer\OrderController@addPaymentType');
-         //Track Order
-         Route::get('trackOrder', 'Web\Customer\OrderController@trackOrder');
+    Route::group(['middleware' => 'customerauth'], function () {
 
-      });
+        //Customer dashboard
+        Route::get('/home', 'Web\Customer\DashboardController@index');
+        //Cart Page
+        Route::get('/cart', 'Web\Customer\CartController@index');
+        // Save Addresss
+        Route::post('saveAddress', 'Web\Customer\AddressController@insertAddress');
+        // Save Addresss
+        Route::get('myAccount', 'Web\Customer\UserController@index');
+        //Update Profile
+        Route::post('updateProfile', 'Web\Customer\UserController@updateProfile');
+        //Change password Page
+        Route::get('changePassword', 'Web\Customer\UserController@getChangePasswordPage');
+        //Change password Process
+        Route::post('changePassword', 'Web\Customer\UserController@changePassword');
+        //Contact Us Page
+        Route::get('contactUs', 'Web\Customer\UserController@getContactUsPage');
+        //Contact Us Process
+        Route::post('contactUs', 'Web\Customer\UserController@contactUs');
+        //Saved Address Page
+        Route::get('saveaddress', 'Web\Customer\UserController@getSaveAddressPage');
+        //My Order Page
+        Route::get('myOrder', 'Web\Customer\UserController@getMyOrderPage');
+        //Terms and condition Page
+        Route::get('termsCondition', 'Web\Customer\UserController@getTermsConditionPage');
+        //Terms and condition Page
+        Route::get('FAQ', 'Web\Customer\UserController@getFaqPage');
+        //Legal Information Page
+        Route::get('legalInformation', 'Web\Customer\UserController@getLegalInformationPage');
+        //AboutUs Page
+        Route::get('aboutUs', 'Web\Customer\UserController@getAboutUsPage');
+        //AboutUs Page
+        Route::get('restaurentDetails', 'Web\Customer\RestaurentController@getRestaurentDetails');
+        //Add Menu Item To Cart
+        Route::get('addMenuItem', 'Web\Customer\CartController@addToCart');
+        //Subtract Menu Item To Cart
+        Route::get('subtractMenuItem', 'Web\Customer\CartController@removeFromCart');
+        //Add default address
+        Route::get('addDefaultAddress', 'Web\Customer\AddressController@addToDefault');
+        //Delete address
+        Route::get('deleteAddress', 'Web\Customer\AddressController@deleteAddress');
+        //Checkout Page -- Payment Page
+        Route::get('checkoutPage', 'Web\Customer\OrderController@getPaymentPage');
+        //Add Payment Method
+        Route::post('addPaymentMethod', 'Web\Customer\OrderController@addPaymentType');
+        //Track Order
+        Route::get('trackOrder', 'Web\Customer\OrderController@trackOrder');
+
+    });
 
 
 //========================================== Restaurent Routes ===================================================
 
-      //Restaurent Login
-      Route::get('/Restaurent/login', function () {
-         return view('restaurent.auth.login');
-      });
-      // Restaurent Login Process
-      Route::post('Restaurent/login', 'Web\Restaurent\LoginRegisterController@login');
-      // Restaurent Logout
-      Route::get('Restaurent/logout', 'Web\Restaurent\LoginRegisterController@logout');
-      // Signin Otp Verification
-      Route::post('Restaurent/verifyOtp', 'Web\Restaurent\LoginRegisterController@verifyOtp');
-      // Resend Otp
-      Route::get('/resendOtp', 'Web\Restaurent\LoginRegisterController@resendOtp');
-      
-      //========================================== Session RestaurentAuth Routes ===================================================
+    //Restaurent Login
+    Route::get('/Restaurent/login', function () {
+        return view('restaurent.auth.login');
+    });
+    // Restaurent Login Process
+    Route::post('Restaurent/login', 'Web\Restaurent\LoginRegisterController@login');
+    // Restaurent Logout
+    Route::get('Restaurent/logout', 'Web\Restaurent\LoginRegisterController@logout');
+    // Signin Otp Verification
+    Route::post('Restaurent/verifyOtp', 'Web\Restaurent\LoginRegisterController@verifyOtp');
+    // Resend Otp
+    Route::get('/resendOtp', 'Web\Restaurent\LoginRegisterController@resendOtp');
 
-      Route::group(['middleware' => 'restaurentauth', 'prefix'=>'Restaurent'],function () {
-         
-         // Restaurent Dasboard
-         Route::get('dashboard', 'Web\Restaurent\DashboardController@dashboardDetails');
-         // Restaurent Details
-         Route::get('myDetails', 'Web\Restaurent\RestaurentController@accountDetails');
-         // Restaurent Details update or insert
-         Route::post('addRestaurentDetails', 'Web\Restaurent\RestaurentController@addRestaurentDetails');
-         // Menu Category
-         Route::get('menuCategory', 'Web\Restaurent\RestaurentController@categoryDetails');
-         // Menu Category update or insert
-         Route::post('addCategory', 'Web\Restaurent\RestaurentController@addCategoryProcess');
-         // Menu List
-         Route::get('menuList', 'Web\Restaurent\RestaurentController@getMenuList');
-         // Menu Category update or insert
-         Route::post('addMenu', 'Web\Restaurent\RestaurentController@menuListProcess');
-         // Customer Order List
-         Route::get('customerOrder', 'Web\Restaurent\OrderController@getCustomerOrderList');
-         //Accept Customer Order
-         Route::get('acceptOrder', 'Web\Restaurent\OrderController@acceptOrder');
-         //Reject Customer Order
-         Route::get('rejectOrder', 'Web\Restaurent\OrderController@rejectOrder');
-         //Packed Customer Order
-         Route::get('packedOrder', 'Web\Restaurent\OrderController@packedOrder');
-         //Delete Dish
-         Route::get('deleteDish', 'Web\Restaurent\RestaurentController@deleteMenuList');
-         //Edit Dish
-         Route::get('editDish', 'Web\Restaurent\RestaurentController@editMenu');
-         //Edit Dish Prcoess
-         Route::post('editDishProcess', 'Web\Restaurent\RestaurentController@editMenuProcess');
-         
-      });
+    //========================================== Session RestaurentAuth Routes ===================================================
+
+    Route::group(['middleware' => 'restaurentauth', 'prefix'=>'Restaurent'],function () {
+
+        // Restaurent Dasboard
+        Route::get('dashboard', 'Web\Restaurent\DashboardController@dashboardDetails');
+        // Restaurent Details
+        Route::get('myDetails', 'Web\Restaurent\RestaurentController@accountDetails');
+        // Restaurent Details update or insert
+        Route::post('addRestaurentDetails', 'Web\Restaurent\RestaurentController@addRestaurentDetails');
+        // Menu Category
+        Route::get('menuCategory', 'Web\Restaurent\RestaurentController@categoryDetails');
+        // Menu Category update or insert
+        Route::post('addCategory', 'Web\Restaurent\RestaurentController@addCategoryProcess');
+        // Menu List
+        Route::get('menuList', 'Web\Restaurent\RestaurentController@getMenuList');
+        // Menu Category update or insert
+        Route::post('addMenu', 'Web\Restaurent\RestaurentController@menuListProcess');
+        // Customer Order List
+        Route::get('customerOrder', 'Web\Restaurent\OrderController@getCustomerOrderList');
+        //Accept Customer Order
+        Route::get('acceptOrder', 'Web\Restaurent\OrderController@acceptOrder');
+        //Reject Customer Order
+        Route::get('rejectOrder', 'Web\Restaurent\OrderController@rejectOrder');
+        //Packed Customer Order
+        Route::get('packedOrder', 'Web\Restaurent\OrderController@packedOrder');
+        //Delete Dish
+        Route::get('deleteDish', 'Web\Restaurent\RestaurentController@deleteMenuList');
+        //Edit Dish
+        Route::get('editDish', 'Web\Restaurent\RestaurentController@editMenu');
+        //Edit Dish Prcoess
+        Route::post('editDishProcess', 'Web\Restaurent\RestaurentController@editMenuProcess');
+
+    });
 
 
 
@@ -179,49 +179,51 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
 
    //========================================== Admin Routes ===================================================
 
-      //Admin Login
-      Route::get('/adminfimihub/login', function () {
-         return view('admin.auth.login');
-      });
-      // Admin Login Process
-      Route::post('adminfimihub/login', 'Web\Admin\LoginRegisterController@login');
-      // Admin Logout
-      Route::get('adminfimihub/logout', 'Web\Admin\LoginRegisterController@logout');
+    //Admin Login
+    Route::get('/adminfimihub/login', function () {
+        return view('admin.auth.login');
+    });
+    // Admin Login Process
+    Route::post('adminfimihub/login', 'Web\Admin\LoginRegisterController@login');
+    // Admin Logout
+    Route::get('adminfimihub/logout', 'Web\Admin\LoginRegisterController@logout');
 
-      //========================================== Session AdminAuth Routes ===================================================
+    //========================================== Session AdminAuth Routes ===================================================
 
-      Route::group(['middleware' => 'adminauth', 'prefix'=>'adminfimihub'], function () {
-         
+    Route::group(['middleware' => 'adminauth', 'prefix'=>'adminfimihub'], function () {
+
          // Admin Dasboard
-         Route::get('dashboard', 'Web\Admin\DashboardController@dashboardDetails');
+        Route::get('dashboard', 'Web\Admin\DashboardController@dashboardDetails');
 
-         // Admin Restaurant List
-         Route::get('retaurantList', 'Web\Admin\RestaurentController@RestaurentListDetails');
-         // Add Restaurent page
-         Route::get('addRestaurent', 'Web\Admin\RestaurentController@addRestaurent');
-         // Add Restaurent page Process
-         Route::post('addRestaurent', 'Web\Admin\RestaurentController@addRestaurentProcess');
-         // Menu Category
-         Route::get('menuCategory', 'Web\Admin\RestaurentController@categoryDetails');
-         // Menu Category update or insert
-         Route::post('addCategory', 'Web\Admin\RestaurentController@addCategoryProcess');
-         // Service List
-         Route::get('serviceList', 'Web\Admin\ServiceController@serviceListDetails');
-         // Edit Service
-         Route::get('editService', 'Web\Admin\ServiceController@editService');
-         // Edit Service Process
-         Route::post('editServiceProcess', 'Web\Admin\ServiceController@editServiceProcess');
-         // Pending Restaurent Partner Requests
-         Route::get('pendingRetaurant', 'Web\Admin\RestaurentController@pendingRetaurant');
-         // Approve Pending Restaurent Partner Requests
-         Route::get('approveResto', 'Web\Admin\RestaurentController@approveRetaurant');
-         // Edit Restaurant Details
-         Route::get('editResto', 'Web\Admin\RestaurentController@editRestaurant');
-         // Edit Restaurant Details Process
-         Route::post('editRestoProcess', 'Web\Admin\RestaurentController@editRestaurantProcess');
-         //Delete Restaurant
-         Route::get('deleteResto', 'Web\Admin\RestaurentController@deleteRestaurent');
-      });
+        // Admin Restaurant List
+        Route::get('retaurantList', 'Web\Admin\RestaurentController@RestaurentListDetails');
+        // Add Restaurent page
+        Route::get('addRestaurent', 'Web\Admin\RestaurentController@addRestaurent');
+        // Add Restaurent page Process
+        Route::post('addRestaurent', 'Web\Admin\RestaurentController@addRestaurentProcess');
+        // Menu Category
+        Route::get('menuCategory', 'Web\Admin\RestaurentController@categoryDetails');
+        // Menu Category update or insert
+        Route::post('addCategory', 'Web\Admin\RestaurentController@addCategoryProcess');
+        // Service List
+        Route::get('serviceList', 'Web\Admin\ServiceController@serviceListDetails');
+        // Edit Service
+        Route::get('editService', 'Web\Admin\ServiceController@editService');
+        // Edit Service Process
+        Route::post('editServiceProcess', 'Web\Admin\ServiceController@editServiceProcess');
+        // Pending Restaurent Partner Requests
+        Route::get('pendingRetaurant', 'Web\Admin\RestaurentController@pendingRetaurant');
+        // Approve Pending Restaurent Partner Requests
+        Route::get('approveResto', 'Web\Admin\RestaurentController@approveRetaurant');
+        // Edit Restaurant Details
+        Route::get('editResto', 'Web\Admin\RestaurentController@editRestaurant');
+        // Edit Restaurant Details Process
+        Route::post('editRestoProcess', 'Web\Admin\RestaurentController@editRestaurantProcess');
+        //Delete Restaurant
+        Route::get('deleteResto', 'Web\Admin\RestaurentController@deleteRestaurent');
+        // Admin Rider List
+        Route::get('riderList', 'Web\Admin\RiderController@RiderListDetails');
+    });
 
 });
 

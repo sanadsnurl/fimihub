@@ -7,7 +7,10 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Support\Facades\DB;
+use App\Model\rider_bank_detail;
+use App\Model\vehicle_detail;
 
+use Exception;
 
 class User extends Authenticatable
 {
@@ -45,7 +48,7 @@ class User extends Authenticatable
     {
         if( \Hash::needsRehash($value) ) {
             $value = \Hash::make($value);
-            
+
         }
     $this->attributes['password'] = $value;
     }
@@ -65,7 +68,7 @@ class User extends Authenticatable
         }
     }
 
-    
+
 
     public function generateOTP($userid)
     {
@@ -75,7 +78,7 @@ class User extends Authenticatable
             ->where('mobile', $userid)
             ->orWhere('email',$userid)
             ->update($data);
-        
+
         return $otp;
     }
     public function changePassword($data)
@@ -87,32 +90,32 @@ class User extends Authenticatable
             ->where('mobile', $data['userid'])
             ->orWhere('email',$data['userid'])
             ->update($pass);
-        
+
         return $result;
     }
 
     public function UpdateLogin($data)
     {
-       
+
         $value=DB::table('users')->where('id', $data['id'])->get();
-        
+
         if($value->count() == 0)
         {
             return 0;
-            
+
         }
         else
         {
-            
+
             $data['updated_at'] = now();
-            
+
             $query_data = DB::table('users')
                         ->where('id', $data['id'])
                         ->update($data);
             $query_type="update";
-            
+
         }
-        
+
         return $query_data;
     }
 
@@ -137,7 +140,7 @@ class User extends Authenticatable
                 ->where('visibility', 0)
                 ->where('user_type', $user_type)
                 ->get();
-            
+
             return $user_data;
         }
         catch (Exception $e) {
@@ -152,8 +155,8 @@ class User extends Authenticatable
                 ->where('visibility', 0)
                 ->where('user_type', $user_type)
                 ->orderBy('created_at','DESC');
-            
-            
+
+
             return $user_data;
         }
         catch (Exception $e) {
@@ -170,21 +173,21 @@ class User extends Authenticatable
                         {
                         $join->on('restaurent_details.user_id', '=', 'users.id');
                         $join->where('restaurent_details.visibility', 0);
-                        
+
                         })
                 ->where('users.visibility', 0)
                 ->where('users.user_type', $user_type)
                 ->select('restaurent_details.*','users.name as prop_name','users.email as user_email','users.mobile as user_mobile','users.created_at as user_created_at','users.id as resto_user_id')
                 ->orderBy('users.created_at','DESC');
-            
-            
+
+
             return $user_data;
         }
         catch (Exception $e) {
             dd($e);
         }
     }
-    
+
     public function pendingUserPaginateList($user_type)
     {
         try {
@@ -192,8 +195,8 @@ class User extends Authenticatable
                 ->where('visibility', 1)
                 ->where('user_type', $user_type)
                 ->orderBy('created_at','DESC');
-            
-            
+
+
             return $user_data;
         }
         catch (Exception $e) {
@@ -228,4 +231,31 @@ class User extends Authenticatable
 
         return $query_data;
     }
+
+    public function allUserPaginateListRiderData($user_type)
+    {
+        try {
+            $user_data=$this
+                ->where('users.visibility', 0)
+                ->where('users.user_type', $user_type)
+                ->orderBy('users.created_at','DESC');
+
+
+            return $user_data;
+        }
+        catch (Exception $e) {
+            dd($e);
+        }
+    }
+    public function riderBankDetails()
+    {
+        return $this->hasOne(rider_bank_detail::class, 'user_id');
+    }
+
+
+    public function vehicleDetails()
+    {
+        return $this->hasOne(vehicle_detail::class, 'user_id');
+    }
+
 }
