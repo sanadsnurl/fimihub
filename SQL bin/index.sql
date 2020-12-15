@@ -3,11 +3,26 @@
 --
 
 INSERT INTO `users` (`id`, `name`, `verification_code`, `email`, `email_verified_at`, `country_code`, `mobile`, `mobile_verified_at`, `password`, `picture`, `user_type`, `device_token`, `visibility`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, 'hdgfcfgfdddddddddddddddd', NULL, 'acfgcsgf@agss.ccc', NULL, '+91', '8840212084', '2020-11-20 11:08:26', '$2y$10$CchqzTkM69C8P/V.UmVvG.ka688HYocr9w58MpYEK35ia7ImfeYeq', NULL, 3, 'dfdsfdfd', 0, NULL, '2020-11-15 04:29:20', '2020-11-20 11:08:26'),
-(2, 'dsdsds', NULL, 'admin@fimihub.com', NULL, NULL, '8888888888', NULL, '$2y$10$15QH4drj.ed7eaakKyVGq.lxfYQ6JWA7pPbvMS25CYPQZ8AkTdo6O', NULL, 1, NULL, 0, NULL, NULL, NULL),
-(3, 'Dominos', NULL, 'abc@fimihub.com', NULL, NULL, '8840212041', '2020-11-15 04:50:13', '$2y$10$WHuMAP6NNcZtNJjjoMN3O.0YgGnSa4Aoyhkcd.ogFCOWKnl98xNpe', NULL, 4, NULL, 0, NULL, '2020-11-15 04:34:33', '2020-11-15 04:50:13'),
-(8, 'hdgfcfgf', '5674', NULL, NULL, '+91', '8840212081', NULL, '$2y$10$29cdj1BBtC83DBsfetonMu5wheP.hJF.XCwXcDRzMgE0kXQGInyp6', NULL, 2, NULL, 0, NULL, '2020-11-17 10:29:38', '2020-11-17 10:29:38'),
-(9, 'hdgfcfgf', '2874', NULL, NULL, '+91', '8840212082', NULL, '$2y$10$lqB6QopY.g.X9mt9Mo8D9ucZchOys76Pa/kSiNN/RzvQGxcAKSptq', NULL, 2, NULL, 0, NULL, '2020-11-18 03:26:57', '2020-11-18 03:26:57');
+(1, 'Tushar Seth', '2639', NULL, NULL, NULL, '8840212040', NULL, '$2y$10$4OJEfTXdAJBFQxkifipcKechLWBdllkZKLkzK8mG/VfAY3xj3uzoG', NULL, 3, NULL, 0, NULL, '2020-11-18 12:44:12', '2020-11-26 15:52:30'),
+(2, 'hdgfcfgf', '3237', NULL, NULL, '+91', '8840212081', NULL, '$2y$10$6YJNoLZ4Ya5/TImgHeGsMOB79zrTuveBCdxAyIyu8fPLMVbuUWAPi', NULL, 2, NULL, 0, NULL, '2020-11-18 12:47:14', '2020-11-20 11:18:50'),
+(3, 'Tushar Seth', NULL, NULL, NULL, '+91', '8840212082', NULL, '$2y$10$3hhkg2U7QvGkmQEfnY/4GeaavH93O7XBWSIoggO6qSpmS5jwuNcYu', NULL, 4, NULL, 0, NULL, '2020-11-18 16:46:18', '2020-11-18 16:46:18'),
+(4, 'hdgfcfgf', '2556', NULL, NULL, '+91', '8840212083', '2020-11-20 00:00:00', '$2y$10$.t78m12WIsKTRCoZZfZ6zOW4tFQGG80PHtd4IaddcsXV55mqoJUHS', NULL, 2, NULL, 0, NULL, '2020-11-18 16:47:45', '2020-11-18 16:47:45'),
+(5, 'Pagnc F', '4401', NULL, NULL, '+376', '8595980', NULL, '$2y$10$D2munyR5fEJgso/k2tmZQO/LXo03VjxgOObyRAqNCQKCAANr4SY..', NULL, 2, NULL, 0, NULL, '2020-11-21 13:39:03', '2020-11-21 13:39:03'),
+(6, 'vijay', '2753', NULL, NULL, '+91', '87437484', NULL, '$2y$10$VaLU58qxpnjgyoeBwWOhf.7aD7XUZzM8PRmx8ZxG1uvkjvFjgS8C.', NULL, 2, NULL, 0, NULL, '2020-11-21 13:44:17', '2020-11-21 13:44:17'),
+(7, 'Dhdhfjfnf', '9670', NULL, NULL, 'IN', '56598989', NULL, '$2y$10$nThLXwycpl5Tklrwik2mNetYPzrEF8xvCCtpd214I87u9Den04GLS', NULL, 2, NULL, 0, NULL, '2020-11-21 13:47:14', '2020-11-21 13:47:14'),
+(8, 'Fjfjfjfk', NULL, NULL, NULL, 'IN', '886797', '2020-11-21 15:08:59', '$2y$10$yvY9tKBU/MIpzHFGGDl7N.7zLqGkBBFj819Pz6ozYKvY39qFehA0e', NULL, 2, NULL, 0, NULL, '2020-11-21 15:06:19', '2020-11-21 15:08:59'),
+(9, 'Fifkgkgkf', NULL, NULL, NULL, '+91', '26598989', '2020-11-21 15:12:44', '$2y$10$KO6gH2nmixfY8Qm6UbLoAe/phWwWsOslcrVNP5YltgB977.8hp/pi', NULL, 2, NULL, 0, NULL, '2020-11-21 15:12:32', '2020-11-21 15:12:44'),
+(10, 'Pankaj Mangal', '3715', NULL, NULL, '+91', '8920547478', '2020-11-21 15:47:16', '$2y$10$Md0/XuByvX3Mv6eBkCOjw.1/NUF0jOrnF8KvTRJ6NzHEN8VulmYTa', 'http://fimihub.herokuapp.com/uploads/10/images/DL1606486281.jpg', 2, NULL, 0, NULL, '2020-11-21 15:47:04', '2020-11-30 13:14:57'),
+(11, 'Sumit Kumar', '5123', 'mangal.pankaj5@gmail.com', NULL, '+91', '7206407561', NULL, '$2y$10$ci1u5sZ9KvXKJqyBkicUmuaufEPcG32X2BUDiXf7AbU2fw5OvGDRW', NULL, 2, NULL, 0, NULL, '2020-11-25 13:24:32', '2020-11-25 13:37:40'),
+(12, 'vijay', '3229', 'vijay1@gmail.com', NULL, '+91', '4512451211', NULL, '$2y$10$uo8eaiEd6Tnw4CIWnhNLvu4NoOGIYvCD1MA3y4f8rbOcQqCAafVym', NULL, 2, NULL, 0, NULL, '2020-11-26 11:36:06', '2020-11-26 11:36:06'),
+(13, 'fimihub', '2770', 'admin@fimihub.com', NULL, NULL, '8888888888', NULL, '$2y$10$15QH4drj.ed7eaakKyVGq.lxfYQ6JWA7pPbvMS25CYPQZ8AkTdo6O', NULL, 1, NULL, 0, NULL, NULL, NULL),
+(14, 'Tintin', NULL, 'abc@fimihub.com', NULL, NULL, '8840212041', '2020-11-15 04:50:13', '$2y$10$WHuMAP6NNcZtNJjjoMN3O.0YgGnSa4Aoyhkcd.ogFCOWKnl98xNpe', NULL, 4, NULL, 0, NULL, '2020-11-15 04:34:33', '2020-11-30 16:28:55'),
+(15, 'KFC St. Ann\'s Bay', NULL, 'fimihub1@gmail.com', NULL, NULL, '8765732017', '2020-12-07 00:00:00', '$2y$10$4L3WDQrLIwTAu9qx.QHK/O60ttWWZ7HL1hU94AOArCv72be4NZu7.', NULL, 4, NULL, 0, NULL, '2020-11-30 09:22:48', '2020-11-30 09:22:48'),
+(16, 'Tintin', NULL, NULL, NULL, NULL, '9873256671', '2020-11-30 16:34:20', '$2y$10$pzsXcu9QjqV0jLJZiEGAWu8eGeTHCmKHzgQMavxGZx5hRxAcaHhT2', NULL, 3, NULL, 0, NULL, '2020-11-30 16:33:05', '2020-11-30 16:40:39'),
+(17, 'Ryan', NULL, NULL, NULL, NULL, '8768454365', '2020-11-30 17:52:01', '$2y$10$ld4z0zg2apXLgYY50DUmNufmsB/W/TUQNeUc/WhnDlF/Xsx3ixoe.', NULL, 3, NULL, 0, NULL, '2020-11-30 17:50:02', '2020-11-30 17:52:01'),
+(18, 'Lisa marsh', '5590', NULL, NULL, NULL, '8768161770', '2020-12-01 00:00:00', '$2y$10$H6pfHxHN61yHfic24o.RWOB.ZpK82lNh5DLS/HzvQQCfMqdxWn0ue', NULL, 3, NULL, 0, NULL, '2020-12-01 02:49:04', '2020-12-01 02:49:04'),
+(19, 'Shivam Singh', NULL, 'shivam.singh@adsandurl.com', NULL, '+91', '9871996759', '2020-12-01 00:00:00', '$2y$10$qD9jErrFfjlV7qTS5CvtNuevkAiYnp/lV1/2uLi9zSGolX1uHkBPa', NULL, 2, NULL, 0, NULL, '2020-12-03 11:09:21', '2020-12-03 11:17:30'),
+(20, 'Quinto McNeal', '8502', 'clergio1@gmail.com', NULL, NULL, '9783447895', NULL, '$2y$10$P4vpTAbTIPdVoi4q.T8cNOcHb4Unan2EUZdU/JHyIuVZEP3I9zqtK', NULL, 4, NULL, 0, NULL, '2020-12-09 04:51:52', '2020-12-09 04:51:52');
 
 -- --------------------------------------------------------
 
@@ -15,11 +30,16 @@ INSERT INTO `users` (`id`, `name`, `verification_code`, `email`, `email_verified
 -- Dumping data for table `user_address`
 --
 
-INSERT INTO `user_address` (`id`, `user_id`, `address`, `flat_no`, `landmark`, `latitude`, `longitude`, `default_status`, `visibility`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, 1, 'delhi', '11/24', 'bank', NULL, NULL, 2, 0, NULL, '2020-11-16 04:52:38', '2020-11-16 04:52:38'),
-(2, 1, 'delhi', '222ssa assa', 'bank', NULL, NULL, 1, 0, NULL, '2020-11-16 08:05:42', '2020-11-16 08:27:21'),
-(3, 1, 'Block 11, Moti Nagar, New Delhi, Delhi, India', '11/24', 'school', '28.6600792', '77.1386294', 2, 0, NULL, '2020-11-21 14:59:51', '2020-11-21 14:59:51'),
-(4, 1, 'sdds', '11/24', 'bank', '0', '0', 2, 0, NULL, '2020-11-21 15:02:00', '2020-11-21 15:02:00');
+INSERT INTO `user_address` (`id`, `user_id`, `address`, `flat_no`, `landmark`, `default_status`, `visibility`, `deleted_at`, `created_at`, `updated_at`, `latitude`, `longitude`) VALUES
+(1, 1, 'delhi', '11/24', 'bank', 1, 0, NULL, '2020-11-16 04:52:38', '2020-11-16 04:52:38', '28.6600792', '77.1386294'),
+(2, 1, 'delhi', '222ssa assa', 'bank', 2, 0, NULL, '2020-11-16 08:05:42', '2020-11-16 08:27:21', '28.6600792', '77.1386294\n'),
+(3, 14, 'Fern Court Apartment, Jamaica', 'I301', 'Country Store', 1, 0, NULL, '2020-11-27 12:27:43', '2020-11-27 12:27:43', '18.4512188', '-77.2441534'),
+(4, 14, 'Prateek Stylome, Sadarpur, Sector-45, Noida, Uttar Pradesh, India', 'house 5', 'near grand land', 2, 2, NULL, '2020-11-30 16:31:11', '2020-11-30 16:31:11', '28.5475265', '77.3537595'),
+(5, 16, 'Prateek Laurel Gym, Sector 120, Noida, Uttar Pradesh, India', 'house 5', 'near grand land', 2, 2, NULL, '2020-11-30 16:34:39', '2020-11-30 16:34:39', '28.5864027', '77.3954047'),
+(6, 13, 'Prateek Laurel, Sector 120, Noida, Uttar Pradesh, India', 'house 5', 'near grand land', 1, 0, NULL, '2020-11-30 17:31:20', '2020-11-30 17:31:20', '28.5871725', '77.39524109999999'),
+(7, 17, 'Richmond Estates St Ann, Jamaica', 'I301 Fern Court Apartments', 'Country Store', 1, 0, NULL, '2020-11-30 18:03:38', '2020-11-30 18:03:38', '18.4490849', '-77.2419522'),
+(8, 16, 'Prateek Laurel, Sector 120, Noida, Uttar Pradesh, India', 'house 5', 'near grand land', 1, 0, NULL, '2020-12-01 15:12:55', '2020-12-01 15:12:55', '28.5871725', '77.39524109999999'),
+(9, 17, '22 Pitts Bay Road, Pembroke, Bermuda', 'Delegal', 'Near the Nursing Home', 2, 0, NULL, '2020-12-15 09:43:26', '2020-12-15 09:43:26', '32.2968253', '-64.797028');
 
 -- --------------------------------------------------------
 
@@ -50,8 +70,9 @@ INSERT INTO `rider_bank_details` (`id`, `user_id`, `account_number`, `holder_nam
 --
 
 INSERT INTO `restaurent_details` (`id`, `user_id`, `resto_id`, `name`, `about`, `other_details`, `official_number`, `picture`, `avg_cost`, `avg_time`, `open_time`, `close_time`, `address`, `delivery_charge`, `discount`, `tax`, `pincode`, `payment_method_type`, `resto_type`, `visibility`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, 3, 'FIMIRESTO100001', 'Dominos', 'cdfvdf', 'dvsdcvsdvsdvsdvdsvsdv', NULL, 'http://127.0.0.1:8000/uploads/3/images/RestaurentProfilePicture1605435749.png', '850.00', '35', NULL, NULL, 'newyork', '2.00', '2.00', NULL, NULL, NULL, 2, 0, NULL, '2020-11-15 04:52:29', '2020-11-15 04:52:29');
-
+(1, 3, 'FIMIRESTO100001', 'Dominos', 'cdfvdf', 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore', NULL, NULL, '850.00', '35', NULL, NULL, 'newyork', '2.00', '2.00', NULL, NULL, NULL, 2, 0, NULL, '2020-11-15 04:52:29', '2020-11-15 04:52:29'),
+(2, 14, 'FIMIRESTO100002', 'Burger King', 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore', 'Lorem ipsum dolor sit amet, consetetur', '8840212041', 'http://fimihub.herokuapp.com/asset/customer/assets/images/veg2.png', '25.00', '10', '01:00', '04:59', '', '450.00', NULL, NULL, '123456', NULL, 2, 0, NULL, '2020-11-26 16:46:01', '2020-12-05 01:20:08'),
+(3, 17, 'FIMIRESTO100003', 'Burger King', 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore', 'Lorem ipsum dolor sit amet, consetetur', '8840212041', 'http://fimihub.herokuapp.com/uploads/17/images/RestaurentProfilePicture1607048086.jpg', '25.00', '10', '01:00', '04:59', 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore', '1.00', NULL, NULL, '123456', NULL, 3, 2, NULL, '2020-12-04 07:30:28', '2020-12-04 07:44:46');
 
 -- --------------------------------------------------------
 

@@ -22,7 +22,8 @@ class DashboardController extends Controller
         $user=Auth::user();
         $user_data = auth()->user()->userByIdData($user->id);
         $restaurent_detail = new restaurent_detail;
-        $resto_data = $restaurent_detail->getallRestoData();
+        $resto_data = $restaurent_detail->getallRestaurantWithMenu();
+                                        
         return view('customer.home')->with(['user_data'=>$user_data,'resto_data'=>$resto_data]);
     }
 

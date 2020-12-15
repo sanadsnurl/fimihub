@@ -84,8 +84,9 @@ class restaurent_detail extends Model
     {
         try {
             $restaurent_details=DB::table('restaurent_details')
-                ->where('visibility', 0);
-            
+                ->where('visibility', 0)
+                ->orderBy('name');
+
             return $restaurent_details;
         }
         catch (Exception $e) {
@@ -103,5 +104,31 @@ class restaurent_detail extends Model
             ->update(['visibility'=> 2,'deleted_at' => $data['deleted_at']]);
 
         return $query_data;
+    }
+
+    public function getallRestaurantWithMenu()
+    {
+        try {
+            $restaurent_details=DB::table('restaurent_details')
+                                ->leftJoin('menu_list', function($join)
+                                                {
+                                                $join->on('menu_list.restaurent_id', '=', 'restaurent_details.id');
+                                                $join->where('menu_list.visibility', 0);
+                                                
+                                                })
+                                ->limit(6)
+                                ->select('restaurent_details.*', DB::raw('COUNT(menu_list.restaurent_id) AS dish_count'))
+                                ->where('restaurent_details.visibility', 0)
+                                ->orderBy('restaurent_details.name')
+                                ->having('dish_count', '>', 0)
+                                ->groupBy('menu_list.restaurent_id')
+                                ->get();
+                                
+
+            return $restaurent_details;
+        }
+        catch (Exception $e) {
+            dd($e);
+        }
     }
 }
