@@ -25,10 +25,15 @@ class menu_list extends Model
     public function menuPaginationData($data)
     {
         $menu_list=DB::table('menu_list')
-        ->join('menu_categories as mc', 'mc.id', '=', 'menu_list.menu_category_id')
+        ->join('resto_menu_categories as mc', 'mc.id', '=', 'menu_list.menu_category_id')
+        ->leftJoin('menu_categories', function($join) use ($data)
+                        {
+                            $join->on('menu_categories.id', '=', 'mc.menu_category_id');
+                        
+                        })
         ->where('menu_list.visibility', 0)
         ->where('menu_list.restaurent_id', $data)
-        ->select('menu_list.*','mc.name as cat_name','mc.discount as cat_discount')
+        ->select('menu_list.*','menu_categories.name as cat_name','menu_categories.discount as cat_discount')
         ->orderBy('name');
         
         return $menu_list;
@@ -38,11 +43,16 @@ class menu_list extends Model
     public function menuCategory($data)
     {
         $menu_list=DB::table('menu_list')
-        ->join('menu_categories as mc', 'mc.id', '=', 'menu_list.menu_category_id')
+        ->join('resto_menu_categories as mc', 'mc.id', '=', 'menu_list.menu_category_id')
+        ->leftJoin('menu_categories', function($join) use ($data)
+                        {
+                            $join->on('menu_categories.id', '=', 'mc.menu_category_id');
+                        
+                        })
         ->distinct('menu_list.menu_category_id')
         ->where('menu_list.visibility', 0)
         ->where('menu_list.restaurent_id', $data)
-        ->select('mc.id as cat_id','mc.name as cat_name','mc.discount as cat_discount')
+        ->select('mc.id as cat_id','menu_categories.name as cat_name','menu_categories.discount as cat_discount')
         ->orderBy('cat_name')
         ->get();
         
@@ -53,10 +63,15 @@ class menu_list extends Model
     public function menuList($data)
     {
         $menu_list=DB::table('menu_list')
-        ->join('menu_categories as mc', 'mc.id', '=', 'menu_list.menu_category_id')
+        ->join('resto_menu_categories as mc', 'mc.id', '=', 'menu_list.menu_category_id')
+        ->leftJoin('menu_categories', function($join) use ($data)
+                        {
+                            $join->on('menu_categories.id', '=', 'mc.menu_category_id');
+                        
+                        })
         ->where('menu_list.visibility', 0)
         ->where('menu_list.restaurent_id', $data)
-        ->select('menu_list.*','mc.name as cat_name','mc.discount as cat_discount')
+        ->select('menu_list.*','menu_categories.name as cat_name','menu_categories.discount as cat_discount')
         ->orderBy('cat_name')
         ->get();
         
@@ -67,10 +82,15 @@ class menu_list extends Model
     public function menuListById($data)
     {
         $menu_list=DB::table('menu_list')
-        ->join('menu_categories as mc', 'mc.id', '=', 'menu_list.menu_category_id')
+        ->join('resto_menu_categories as mc', 'mc.id', '=', 'menu_list.menu_category_id')
+        ->leftJoin('menu_categories', function($join) use ($data)
+                        {
+                            $join->on('menu_categories.id', '=', 'mc.menu_category_id');
+                        
+                        })
         ->where('menu_list.visibility', 0)
         ->where('menu_list.id', $data)
-        ->select('menu_list.*','mc.name as cat_name','mc.discount as cat_discount','mc.id as cat_id')
+        ->select('menu_list.*','menu_categories.name as cat_name','menu_categories.discount as cat_discount','mc.id as cat_id')
         ->orderBy('cat_name')
         ->first();
         
@@ -81,9 +101,14 @@ class menu_list extends Model
     public function orderMenuListById($data)
     {
         $menu_list=DB::table('menu_list')
-        ->join('menu_categories as mc', 'mc.id', '=', 'menu_list.menu_category_id')
+        ->join('resto_menu_categories as mc', 'mc.id', '=', 'menu_list.menu_category_id')
+        ->leftJoin('menu_categories', function($join) use ($data)
+                        {
+                            $join->on('menu_categories.id', '=', 'mc.menu_category_id');
+                        
+                        })
         ->where('menu_list.id', $data)
-        ->select('menu_list.*','mc.name as cat_name','mc.discount as cat_discount')
+        ->select('menu_list.*','menu_categories.name as cat_name','menu_categories.discount as cat_discount')
         ->orderBy('cat_name')
         ->first();
         
@@ -101,10 +126,15 @@ class menu_list extends Model
         if($cart_exist->count() == 0)
         {
             $menu_list=DB::table('menu_list')
-                    ->join('menu_categories as mc', 'mc.id', '=', 'menu_list.menu_category_id')
+            ->join('resto_menu_categories as mc', 'mc.id', '=', 'menu_list.menu_category_id')
+            ->leftJoin('menu_categories', function($join) use ($data)
+                            {
+                                $join->on('menu_categories.id', '=', 'mc.menu_category_id');
+                            
+                            })
                     ->where('menu_list.visibility', 0)
                     ->where('menu_list.restaurent_id', $data['restaurent_id'])
-                    ->select('menu_list.*','mc.name as cat_name','mc.discount as cat_discount')
+                    ->select('menu_list.*','menu_categories.name as cat_name','menu_categories.discount as cat_discount')
                     ->orderBy('cat_name')
                     ->get();
         }
@@ -115,20 +145,25 @@ class menu_list extends Model
             // dd($data['cart_exist_id']);
             $menu_list = DB::table('menu_list')
                     ->leftJoin('cart_submenus', function($join) use ($data)
-                         {
-                             $join->on('cart_submenus.menu_id', '=', 'menu_list.id');
-                             $join->where('cart_submenus.user_id', $data['user_id']);
-                             $join->where('cart_submenus.cart_id',  $data['cart_exist_id']);
-                             $join->where('cart_submenus.visibility', 0);
-                            
-                         })
+                        {
+                            $join->on('cart_submenus.menu_id', '=', 'menu_list.id');
+                            $join->where('cart_submenus.user_id', $data['user_id']);
+                            $join->where('cart_submenus.cart_id',  $data['cart_exist_id']);
+                            $join->where('cart_submenus.visibility', 0);
+                        
+                        })
                     ->where('menu_list.restaurent_id', $data['restaurent_id'])
-                    ->join('menu_categories as mc', 'mc.id', '=', 'menu_list.menu_category_id')
+                    ->join('resto_menu_categories as mc', 'mc.id', '=', 'menu_list.menu_category_id')
+                    ->leftJoin('menu_categories', function($join) use ($data)
+                        {
+                            $join->on('menu_categories.id', '=', 'mc.menu_category_id');
+                        
+                        })
                     ->where('menu_list.visibility', 0)
-                    ->select('menu_list.*','cart_submenus.quantity as quantity','mc.name as cat_name','mc.discount as cat_discount')
+                    ->select('menu_list.*','cart_submenus.quantity as quantity','menu_categories.name as cat_name','menu_categories.discount as cat_discount')
                     ->get();
         }
-       
+    
         return $menu_list;
     
     }
@@ -140,7 +175,7 @@ class menu_list extends Model
 
         $query_data = DB::table('menu_list')
             ->where('id', $data['id'])
-            ->update(['visibility'=> 2]);
+            ->update(['visibility'=> 2,'deleted_at' => $data['deleted_at']]);
 
         return $query_data;
     }

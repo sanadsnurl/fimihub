@@ -92,4 +92,16 @@ class restaurent_detail extends Model
             dd($e);
         }
     }
+
+    public function deleteRestaurent($data)
+    {
+        $data['deleted_at'] = now();
+        unset($data['_token']);
+
+        $query_data = DB::table('restaurent_details')
+            ->where('id', $data['id'])
+            ->update(['visibility'=> 2,'deleted_at' => $data['deleted_at']]);
+
+        return $query_data;
+    }
 }

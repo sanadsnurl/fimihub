@@ -9,6 +9,7 @@ use App\User;
 use App\Model\restaurent_detail;
 use App\Model\menu_categories;
 use App\Model\ServiceCategory;
+use App\Model\user_address;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -16,6 +17,7 @@ use Illuminate\Support\Str;
 use Response;
 use Session;
 use DataTables;
+use File;
 
 class RestaurentController extends Controller
 {
@@ -29,11 +31,12 @@ class RestaurentController extends Controller
         if ($request->ajax()) {
             return Datatables::of($user_list)
                 ->addIndexColumn()
-                // ->addColumn('action', function($row){
-                //     $btn = '<a href="userDetails?id='.base64_encode($row->id).'" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Details</a> 
-                //         <a href="?id='.base64_encode($row->id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Block</a>';
-                //     return $btn;
-                // })
+                ->addColumn('action', function($row){
+                    $btn = '<a href="editResto?resto_user_id='.base64_encode($row->resto_user_id).'" class="btn btn-outline-secondary btn-sm btn-round waves-effect waves-light m-0">Edit</a>
+                    <a href="deleteResto?resto_user_id='.base64_encode($row->resto_user_id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light mt-1">Delete</a>
+                    ';
+                    return $btn;
+                })
                 ->addColumn('created_at', function($row){
                     
                     return date('d F Y', strtotime($row->created_at));
@@ -195,7 +198,130 @@ class RestaurentController extends Controller
         return redirect()->back();
         
     }
+    public function editRestaurant()
+    {
+        $user = Auth::user();
+        $restaurent_detail = new restaurent_detail;
+        $resto_add = NULL;
+        $resto_user_id = base64_decode(request('resto_user_id'));
+        $resto_data = $restaurent_detail->getRestoData($resto_user_id);
+// dd($resto_user_id);
+        $user_address = new user_address;
+        $resto_add = $user_address->getUserAddress($resto_user_id);
+        
+        // dd($resto_data->user_id );
+        if($resto_add == NULL || $resto_add->isEmpty()){
+            return view('admin.editRestaurant')->with(['data'=>$user,
+            'resto_data'=>$resto_data,
+            'resto_add'=> null,
+            'resto_user_id'=>$resto_user_id]);
+        }
+        else{
+            return view('admin.editRestaurant')->with(['data'=>$user,
+                                                'resto_data'=>$resto_data,
+                                                'resto_user_id'=>$resto_user_id,
+                                                'resto_add'=> $resto_add[0]]);
+        }
+        
+        
+    }
+
+    public function editRestaurantProcess(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'string|nullable',
+            'user_id' => 'required|exists:users,id',
+            'about' => 'string|nullable',
+            'other_details' => 'string|nullable',    
+            'picture' => 'mimes:png,jpg,jpeg|max:3072|nullable',    
+            'official_number' => 'numeric|nullable',    
+            'avg_cost' => 'numeric|nullable',    
+            'avg_time' => 'string|nullable',    
+            'open_time' => 'string|nullable',    
+            'close_time' => 'string|nullable',    
+            'address_address' => 'required|string',   
+            'delivery_charge' => 'string|nullable',    
+            'pincode' => 'string|nullable',    
+            'resto_type' => 'in:1,2,3|nullable',    
+            
+        ]);
+        if(!$validator->fails()){
+            $resto_id = base64_decode(request('resto_id'));
+            $user = Auth::user();
+            $id = $user->id;
+            $data = $request->toarray();
+            $restaurent_detail = new restaurent_detail;
+            if($request->hasfile('picture'))
+            {
+                $profile_pic = $request->file('picture');
+                $input['imagename'] = 'RestaurentProfilePicture'.time().'.'.$profile_pic->getClientOriginalExtension();
+
+                $path = public_path('uploads/'.$data['user_id'].'/images');
+                File::makeDirectory($path, $mode = 0777, true, true);
+                                
+                $destinationPath = 'uploads/'.$data['user_id'].'/images'.'/';
+                if($profile_pic->move($destinationPath, $input['imagename']))
+                {
+                    $file_url=url($destinationPath.$input['imagename']);
+                    $data['picture']=$file_url;
+                
+                }else{
+                    $error_file_not_required[]="Profile Picture Have Some Issue";
+                    unset($data['picture']);
+                }
+                
+            }
+            else{
+                unset($data['picture']);
+            }
 
 
+            if($request->has('address_address')){
+                $add_data =array();
+                if($data['address_latitude'] == 0 || $data['address_longitude'] == 0){
+                    Session::flash('message', 'Invalid Address !');
+                    return redirect()->back();
+                }
+                else{
+                    $add_data['user_id']=$data['user_id'];
+                    $add_data['address']=$data['address_address'];                    
+                    $add_data['latitude']=$data['address_latitude'];
+                    $add_data['longitude']=$data['address_longitude'];
+                    $user_address = new user_address;
+                    $subscribe = $user_address->insertUpdateAddress($add_data);
 
+                    $data['address'] = $data['address_address'];
+                    unset($data['address_address']);
+                    unset($data['address_latitude']);
+                    unset($data['address_longitude']);
+                    $resto_id = $restaurent_detail->insertUpdateRestoData($data);
+                    Session::flash('message', 'Restaurent Data Updated !');
+
+                    return redirect()->back();
+                    
+                }
+            }
+            
+
+        }
+        else{
+            // dd($validator->messages());
+        	return redirect()->back()->withInput()->withErrors($validator);  
+        }
+        
+    }
+
+    public function deleteRestaurent(Request $request){  
+        $user = Auth::user();
+        $resto_user_id = base64_decode(request('resto_user_id'));
+        
+        $users = new User;
+        $delete_resto = array();
+        $delete_resto['id'] = $resto_user_id;
+
+        $delete_resto = $users->deleteUser($delete_resto);
+        Session::flash('message', 'Restaurant Deleted Successfully !');
+
+        return redirect()->back();
+    }
 }

@@ -167,14 +167,14 @@ class User extends Authenticatable
         try {
             $user_data=DB::table('users')
                 ->leftJoin('restaurent_details', function($join) use ($user_type)
-                         {
-                            $join->on('restaurent_details.user_id', '=', 'users.id');
-                            $join->where('restaurent_details.visibility', 0);
-                            
-                         })
+                        {
+                        $join->on('restaurent_details.user_id', '=', 'users.id');
+                        $join->where('restaurent_details.visibility', 0);
+                        
+                        })
                 ->where('users.visibility', 0)
                 ->where('users.user_type', $user_type)
-                ->select('restaurent_details.*','users.name as prop_name','users.email as user_email','users.mobile as user_mobile','users.created_at as user_created_at')
+                ->select('restaurent_details.*','users.name as prop_name','users.email as user_email','users.mobile as user_mobile','users.created_at as user_created_at','users.id as resto_user_id')
                 ->orderBy('users.created_at','DESC');
             
             
@@ -209,6 +209,22 @@ class User extends Authenticatable
         $query_data = DB::table('users')
             ->where('id', $id)
             ->update(['visibility'=>0]);
+
+        return $query_data;
+    }
+
+    public function deleteUser($data)
+    {
+        $data['deleted_at'] = now();
+        unset($data['_token']);
+
+        $query_data = DB::table('users')
+            ->where('id', $data['id'])
+            ->update(['visibility'=> 2,'deleted_at' => $data['deleted_at']]);
+
+        $query_data = DB::table('restaurent_details')
+            ->where('user_id', $data['id'])
+            ->update(['visibility'=> 2,'deleted_at' => $data['deleted_at']]);
 
         return $query_data;
     }

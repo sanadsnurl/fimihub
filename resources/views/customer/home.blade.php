@@ -78,7 +78,7 @@
                             </div>
                             <div class="text-wrap">
                                 <h6>{{$r_data->name ?? ''}}</h6>
-                                <span class="eta">{{$r_data->avg_time ?? '--'}}</span>
+                                <span class="eta">{{$r_data->avg_time ?? '--'}} Min</span>
                                 <p>{{$r_data->about ?? ''}}</p>
                             </div>
                         </a>
@@ -96,7 +96,7 @@
                         <h3>Vegetarian Options</h3>
                         <h5>Fresh Food Gurantee</h5>
                     </div>
-                    <span class="filter-btn">Filter</span>
+                    <!-- <span class="filter-btn">Filter</span> -->
                 </div>
                 <div class="row-wrap">
                     <div class="col-wrap">
@@ -206,7 +206,7 @@
                         <h3>Offers Near You</h3>
                         <h5>Fresh Food Gurantee</h5>
                     </div>
-                    <span class="filter-btn">Filter</span>
+                    <!-- <span class="filter-btn">Filter</span> -->
                 </div>
                 <div class="row-wrap">
                     <div class="col-wrap">

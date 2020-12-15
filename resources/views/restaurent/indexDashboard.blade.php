@@ -13,7 +13,7 @@
                     <div class="card-body">
                         <div class="media">
                             <div class="media-body text-left">
-                                <h4 class="text-white">{{$data->user_count}}</h4>
+                                <h4 class="text-white">{{$order_stats->order_count ?? '0'}}</h4>
                                 <span class="text-white">Total Order's</span>
                             </div>
                             <div class="align-self-center w-circle-icon rounded-circle bg-contrast">
@@ -28,7 +28,7 @@
                     <div class="card-body">
                         <div class="media">
                             <div class="media-body text-left">
-                                <h4 class="text-white">{{$data->merchant_count}}</h4>
+                                <h4 class="text-white">{{$order_stats->pending_order_count ?? '0'}}</h4>
                                 <span class="text-white">Pending Order's</span>
                             </div>
                             <div class="align-self-center w-circle-icon rounded-circle bg-contrast">
@@ -58,7 +58,7 @@
                     <div class="card-body">
                         <div class="media">
                             <div class="media-body text-left">
-                                <h4 class="text-white">11</h4>
+                                <h4 class="text-white">{{$order_stats->dish_count ?? '0'}}</h4>
                                 <span class="text-white">Total Dish</span>
                             </div>
                             <div class="align-self-center w-circle-icon rounded-circle bg-contrast">

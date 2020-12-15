@@ -215,7 +215,12 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
          Route::get('pendingRetaurant', 'Web\Admin\RestaurentController@pendingRetaurant');
          // Approve Pending Restaurent Partner Requests
          Route::get('approveResto', 'Web\Admin\RestaurentController@approveRetaurant');
-        
+         // Edit Restaurant Details
+         Route::get('editResto', 'Web\Admin\RestaurentController@editRestaurant');
+         // Edit Restaurant Details Process
+         Route::post('editRestoProcess', 'Web\Admin\RestaurentController@editRestaurantProcess');
+         //Delete Restaurant
+         Route::get('deleteResto', 'Web\Admin\RestaurentController@deleteRestaurent');
       });
 
 });
