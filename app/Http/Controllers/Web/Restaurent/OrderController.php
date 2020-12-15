@@ -26,16 +26,22 @@ class OrderController extends Controller
 
         $restaurent_detail = new restaurent_detail;
         $resto_data = $restaurent_detail->getRestoData($user->id);
-
-        $orders = new order;
-        $order_data = $orders->customerOrderPaginationData($resto_data->id);
+        if($resto_data == NULL){
+            $orders = new order;
+        $order_data = $orders->customerOrderPaginationData(0);
+        }
+        else{
+            $orders = new order;
+            $order_data = $orders->customerOrderPaginationData($resto_data->id);
+        }
+        
 
         if ($request->ajax()) {      
             return Datatables::of($order_data)
                 ->addIndexColumn()
                 ->addColumn('action', function($row){
                     if($row->order_status == 5){
-                        $btn = '<a href="packedOrder?odr_id='.base64_encode($row->id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Paceked</a>';
+                        $btn = '<a href="packedOrder?odr_id='.base64_encode($row->id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Ready For Pick-Up</a>';
                     }
                     elseif($row->order_status == 3){
                         $btn = '<a href="acceptOrder?odr_id='.base64_encode($row->id).'" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Accept</a> 

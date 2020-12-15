@@ -13,8 +13,8 @@
                     <div class="card-body">
                         <div class="media">
                             <div class="media-body text-left">
-                                <h4 class="text-white">{{$data->user_count}}</h4>
-                                <span class="text-white">Total Users</span>
+                                <h4 class="text-white">{{$data->user_count ?? '0'}}</h4>
+                                <span class="text-white">Total User's</span>
                             </div>
                             <div class="align-self-center w-circle-icon rounded-circle bg-contrast">
                                 <i class="icon-people text-white"></i>
@@ -28,8 +28,8 @@
                     <div class="card-body">
                         <div class="media">
                             <div class="media-body text-left">
-                                <h4 class="text-white">{{$data->merchant_count}}</h4>
-                                <span class="text-white">Total Merchants</span>
+                                <h4 class="text-white">{{$data->merchant_count ?? '0'}}</h4>
+                                <span class="text-white">Total Partner's</span>
                             </div>
                             <div class="align-self-center w-circle-icon rounded-circle bg-contrast">
                                 <i class="icon-user-following text-white"></i>
@@ -43,8 +43,8 @@
                     <div class="card-body">
                         <div class="media">
                             <div class="media-body text-left">
-                                <h4 class="text-white">{{$data->merchant_count}}</h4>
-                                <span class="text-white">Total Riders</span>
+                                <h4 class="text-white">{{$data->rider_count ?? '0'}}</h4>
+                                <span class="text-white">Total Rider's</span>
                             </div>
                             <div class="align-self-center w-circle-icon rounded-circle bg-contrast">
                                 <i class="icon-user-following text-white"></i>
@@ -73,7 +73,7 @@
                     <div class="card-body">
                         <div class="media">
                             <div class="media-body text-left">
-                                <h4 class="text-white">84</h4>
+                                <h4 class="text-white">{{$data->order_count ?? '0'}}</h4>
                                 <span class="text-white">Total Order's</span>
                             </div>
                             <div class="align-self-center w-circle-icon rounded-circle bg-contrast">

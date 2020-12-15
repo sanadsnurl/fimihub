@@ -22,6 +22,11 @@
                             <h4 class="form-header text-uppercase">
                                 <i class="fa fa-cutlery"></i>
                                 Add Dish
+                                <a href="{{url('Restaurent/menuCategory')}}" class="" target="_blank">
+                                    <span class="btn btn-danger" style="float: right;">+ Add Food Category</span>
+
+                                </a>
+
                             </h4>
                             @if(Session::has('message'))
                             <div class="error" style="text-align:center;">
@@ -56,7 +61,7 @@
                                     <select name="menu_category_id" id="" class="form-control">
                                         <option value="">-- Select Food Category --</option>
                                         @foreach($cat_data as $c_data)
-                                        <option value="{{$c_data->id}}">{{$c_data->name}}</option>
+                                        <option value="{{$c_data->id}}">{{$c_data->cat_name}}</option>
                                         @endforeach
                                     </select>
 
@@ -102,7 +107,7 @@
                                 </div>
 
                             </div>
-                            <div class="form-group row">
+                            <!-- <div class="form-group row">
                                 <label for="input-1" class="col-sm-2 col-form-label">Discount (%)</label>
                                 <div class="col-sm-10">
                                     <input type="number" class="form-control" id="input-1" name="discount">
@@ -111,7 +116,7 @@
                                     @endif
                                 </div>
 
-                            </div>
+                            </div> -->
                             <div class="form-footer">
                                 <input type="submit" class="btn btn-primary" value="Save Dish"></input>
 
@@ -126,10 +131,11 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-header"><i class="fa fa-table"></i> Menu List
-                    @if(Session::has('menu_message'))
-                    <span class="error" style="text-align:center;font-size:16px;">
-                        -> {{ Session::get('menu_message') }}</span>
-                    @endif</div>
+                        @if(Session::has('menu_message'))
+                        <span class="error" style="text-align:center;font-size:16px;">
+                            -> {{ Session::get('menu_message') }}</span>
+                        @endif
+                    </div>
                     <div class="card-body">
                         <div class="table-responsive">
                             <table id="example" class="table table-bordered">
@@ -142,7 +148,7 @@
                                         <th>Price</th>
                                         <th>About</th>
                                         <th>Dish Type</th>
-                                        <th>Discount (%)</th>
+                                        <!-- <th>Discount (%)</th> -->
                                         <th>Create At</th>
                                         <th>Action</th>
 
@@ -190,7 +196,6 @@
 $(document).ready(function() {
     //Default data table
     $('#default-datatable').DataTable();
-
     var table = $('#example').DataTable({
         lengthChange: true,
         processing: true,
@@ -223,30 +228,21 @@ $(document).ready(function() {
                 data: 'dish_type',
                 name: 'dish_type'
             },
-            {
-                data: 'discount',
-                name: 'discount'
-            },
-
+            
             {
                 data: 'created_at',
                 name: 'created_at'
             },
-
             {
                 data: 'action',
                 name: 'action',
                 orderable: true,
                 searchable: false
             },
-
-
         ]
     });
-
     table.buttons().container()
         .appendTo('#example_wrapper .col-md-6:eq(0)');
-
 });
 </script>
 <!--End content-wrapper-->

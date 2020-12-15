@@ -77,17 +77,37 @@ class CreateRestaurentManagementTable extends Migration
             $table->timestamps();
         });
 
+        Schema::create('resto_menu_categories', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
+            $table->charset = 'utf16';
+            $table->collation = 'utf16_general_ci';
+            $table->increments('id');
+            // foreign key of menu_categories table
+            $table->integer('menu_category_id')->unsigned();
+            $table->foreign('menu_category_id')->references('id')->on('menu_categories')->onDelete('cascade')->onUpdate('cascade');
+            // foreign key of users table
+            $table->integer('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            // foreign key of restaurent_details table
+            $table->integer('restaurent_id')->nullable()->unsigned();
+            $table->foreign('restaurent_id')->references('id')->on('restaurent_details')->onDelete('cascade')->onUpdate('cascade');
+            //rest attributes
+            $table->tinyInteger('visibility')->default('0');
+            $table->timestamp('deleted_at', 0)->nullable();
+            $table->timestamps();
+        });
+
         Schema::create('menu_list', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->charset = 'utf16';
             $table->collation = 'utf16_general_ci';
             $table->increments('id');
-            // foreign key of users table
+            // foreign key of restaurent_details table
             $table->integer('restaurent_id')->unsigned();
             $table->foreign('restaurent_id')->references('id')->on('restaurent_details')->onDelete('cascade')->onUpdate('cascade');
-            // foreign key of users table
+            // foreign key of menu_categories table
             $table->integer('menu_category_id')->unsigned();
-            $table->foreign('menu_category_id')->references('id')->on('menu_categories')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('menu_category_id')->references('id')->on('resto_menu_categories')->onDelete('cascade')->onUpdate('cascade');
             //rest attributes
             $table->string('name');
             $table->string('picture')->nullable();

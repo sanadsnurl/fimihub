@@ -23,79 +23,39 @@ trait OtpGenerationTrait {
             //Integrate SMS API here
             $mobile = $user_data->mobile;
             $otp = $user_data->verification_code;
-            // $authKey = "309952Aq8MczyMxu5e03001fP1";
-            // $senderId = "ADSURL";
-            // $messageMsg = urlencode("<#>Your OTP is: $otp ");
-            // $postData = array(
-            //     'authkey' => $authKey,
-            //     'mobiles' => $mobile,
-            //     'message' => $messageMsg,
-            //     'sender' => $senderId,
-            //     'route' => 4,
-            //     'country' => 91
-            // );
-            // $url = "https://api.msg91.com/api/sendhttp.php";
-            // $ch = curl_init();
-            // curl_setopt_array($ch, array(
-            //     CURLOPT_URL => $url,
-            //     CURLOPT_RETURNTRANSFER => true,
-            //     CURLOPT_POST => true,
-            //     CURLOPT_POSTFIELDS => $postData
-            // ));
-            // curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-            // $output = curl_exec($ch);
-            // if (curl_errno($ch)) {
-            //     echo 'error:' . curl_error($ch);
-            // }
-            // curl_close($ch);
-            // if (strlen($output) == 24) {
-            //     return 1;
-            // }else{
-            //     return 2;
-            // }
-
-            
-            // Your Account SID and Auth Token from twilio.com/console
-            $account_sid = 'AC513ef57c0a0b86c0fca05473ad711c2a';
-            $auth_token = '7caab498f7426d5185d2c89a7c34ac5b';
-            // In production, these should be environment variables. E.g.:
-            // $auth_token = $_ENV["TWILIO_AUTH_TOKEN"]
-
-            // A Twilio number you own with SMS capabilities
-            // $twilio_number = "+15017122661";
-            // $messageMsg = urlencode("<#>Your OTP is : $otp ");
-            // $client = new Client($account_sid, $auth_token);
-            // $client->messages->create(
-            //     // Where to send a text message (your cell phone?)
-            //     "+18768454365",
-            //     array(
-            //         'from' => $twilio_number,
-            //         'body' => $messageMsg
-            //     )
-            // );
-
-            // Find your Account Sid and Auth Token at twilio.com/console
-            // and set the environment variables. See http://twil.io/secure
-            $sid = 'AC513ef57c0a0b86c0fca05473ad711c2a';
-            $token = '7caab498f7426d5185d2c89a7c34ac5b';
-            
-            $twilio = new Client($sid, $token);
-
-            $message = $twilio->messages
-                            ->create("+18768454365", // to
-                                    [
-                                        "body" => "All in the game, yo",
-                                        "from" => "+15017122661"
-                                    ]
-                            );
-            
-            // print($incoming_phone_number->sid);
-
-            if($message){
+            $authKey = "309952Aq8MczyMxu5e03001fP1";
+            $senderId = "ADSURL";
+            $messageMsg = urlencode("<#>Your OTP is: $otp ");
+            $postData = array(
+                'authkey' => $authKey,
+                'mobiles' => $mobile,
+                'message' => $messageMsg,
+                'sender' => $senderId,
+                'route' => 4,
+                'country' => 91
+            );
+            $url = "https://api.msg91.com/api/sendhttp.php";
+            $ch = curl_init();
+            curl_setopt_array($ch, array(
+                CURLOPT_URL => $url,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_POST => true,
+                CURLOPT_POSTFIELDS => $postData
+            ));
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+            $output = curl_exec($ch);
+            if (curl_errno($ch)) {
+                echo 'error:' . curl_error($ch);
+            }
+            curl_close($ch);
+            if (strlen($output) == 24) {
                 return 1;
             }else{
                 return 2;
             }
+
+            
+            
 
         } catch (Exception $e) {
             return response()->json(['custom_error'=> $e->getMessage()], $this->invalidStatus);

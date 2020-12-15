@@ -55,8 +55,8 @@
                                         <option value="">-- Select Food Category --</option>
                                         @foreach($cat_data as $c_data)
                                         <option value="{{$c_data->id}}"
-                                            {{ ( $menu_data->menu_category_id == $c_data->id ) ? 'selected' : '' }}>
-                                            {{$c_data->name}}</option>
+                                            {{ ( $menu_data->menu_category_id == $c_data->cats_id ) ? 'selected' : '' }}>
+                                            {{$c_data->cat_name}}</option>
                                         @endforeach
                                     </select>
 

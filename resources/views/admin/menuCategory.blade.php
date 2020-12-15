@@ -68,7 +68,7 @@
                                 </div>
 
                             </div>
-                            <div class="form-group row">
+                            <!-- <div class="form-group row">
                                 <label for="input-1" class="col-sm-2 col-form-label">Discount (%)</label>
                                 <div class="col-sm-10">
                                     <input type="number" class="form-control" id="input-1" name="discount"
@@ -78,7 +78,7 @@
                                     @endif
                                 </div>
 
-                            </div>
+                            </div> -->
 
                             <div class="form-footer">
                                 <input type="submit" class="btn btn-primary" value="Save category"></input>
@@ -103,7 +103,7 @@
                                         <th>Category Name</th>
                                         <th>About</th>
                                         <th>Service</th>
-                                        <th>Discount (%)</th>
+                                        <!-- <th>Discount (%)</th> -->
                                         <th>Create At</th>
                                         <!-- <th>Action</th> -->
 
@@ -175,10 +175,6 @@ $(document).ready(function() {
             {
                 data: 'service_catagory_id',
                 name: 'service_catagory_id'
-            },
-            {
-                data: 'discount',
-                name: 'discount'
             },
 
             {

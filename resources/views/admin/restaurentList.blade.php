@@ -21,7 +21,7 @@
                             <table id="example" class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <!-- <th>S.no</th> -->
+                                        <th>Action</th>
                                         <th>S.No.</th>
                                         <th>Properietor Name</th>
                                         <th>Restaurant Name</th>
@@ -34,7 +34,6 @@
                                         <th>Delivery Charge </th>
                                         <th>Discount</th>
                                         <th>Create At</th>
-                                        <!-- <th>Action</th> -->
 
                                     </tr>
                                 </thead>
@@ -76,13 +75,19 @@
 
         var table = $('#example').DataTable({
             lengthChange: true,
-            processing:true,
-            serverSide:true,
+            processing: true,
+            serverSide: true,
             paging: true,
             dom: 'lBfrtip',
             buttons: ['copy', 'excel', 'pdf', 'print'],
             ajax: "{{url('adminfimihub/retaurantList')}}",
             columns: [{
+                    data: 'action',
+                    name: 'action',
+                    orderable: true,
+                    searchable: false
+                },
+                {
                     data: 'DT_RowIndex',
                     name: 'id'
                 },
@@ -131,7 +136,7 @@
                     name: 'user_created_at'
                 },
 
-            
+
 
             ]
         });

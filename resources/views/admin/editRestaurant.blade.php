@@ -1,5 +1,5 @@
-@include('restaurent.include.sideNav')
-@include('restaurent.include.header')
+@include('admin.include.sideNav')
+@include('admin.include.header')
 <div class="clearfix"></div>
 
 <div class="content-wrapper">
@@ -10,7 +10,7 @@
             <div class="col-lg-10">
                 <div class="card">
                     <div class="card-body">
-                        <form role="form" method="POST" action="{{ url('Restaurent/addRestaurentDetails')}}"
+                        <form role="form" method="POST" action="{{ url('adminfimihub/editRestoProcess')}}"
                             id="personal-info" enctype="multipart/form-data">
                             @csrf
                             <h4 class="form-header text-uppercase">
@@ -38,8 +38,13 @@
                                 <div class="col-sm-10">
                                     <input type="text" class="form-control" id="input-1" name="name"
                                         value="{{$resto_data->name ?? ''}}">
+                                        <input type="hidden" class="form-control" id="input-1" name="user_id"
+                                        value="{{$resto_user_id ?? ''}}">
                                     @if($errors->has('name'))
                                     <div class="error">{{ $errors->first('name') }}</div>
+                                    @endif
+                                    @if($errors->has('user_id'))
+                                    <div class="error">{{ $errors->first('user_id') }}</div>
                                     @endif
                                 </div>
 
@@ -211,7 +216,7 @@
 
 </div>
 <!--End content-wrapper-->
-@include('restaurent.include.footer')
+@include('admin.include.footer')
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 <script type="text/javascript" src="{{url('asset/customer/assets/scripts/mapInput.js')}}"></script>

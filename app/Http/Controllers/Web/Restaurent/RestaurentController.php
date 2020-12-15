@@ -10,6 +10,7 @@ use App\Model\restaurent_detail;
 use App\Model\menu_categories;
 use App\Model\menu_list;
 use App\Model\user_address;
+use App\Model\resto_menu_categorie;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -30,9 +31,17 @@ class RestaurentController extends Controller
         $resto_data = $restaurent_detail->getRestoData($user->id);
         $user_address = new user_address;
         $resto_add = $user_address->getUserAddress($user->id);
-        return view('restaurent.myDetails')->with(['data'=>$user,
+        if($resto_add == NULL){
+            return view('restaurent.myDetails')->with(['data'=>$user,
+            'resto_data'=>$resto_data,
+            'resto_add'=> null]);
+        }
+        else{
+            return view('restaurent.myDetails')->with(['data'=>$user,
                                                 'resto_data'=>$resto_data,
                                                 'resto_add'=> $resto_add[0]]);
+        }
+        
         
     }
 
@@ -123,15 +132,34 @@ class RestaurentController extends Controller
     {
         $user = Auth::user();
         
-       
+    
         $restaurent_detail = new restaurent_detail;
         $resto_data = $restaurent_detail->getRestoData($user->id);
         $menu_categories = new menu_categories;
-        $cat_data = $menu_categories->restaurentCategoryPaginationData()->where('service_catagory_id',1);
+        $cat_data = $menu_categories->restaurentCategoryPaginationData()->where('service_catagory_id',1)->get();
+        if($resto_data == NULL){
+            $resto_add = NULL;
+            Session::flash('message', 'Please add Restaurant Details!');
+
+            if($resto_add == NULL){
+                return view('restaurent.myDetails')->with(['data'=>$user,
+                'resto_data'=>$resto_data,
+                'resto_add'=> null]);
+            }
+            else{
+                return view('restaurent.myDetails')->with(['data'=>$user,
+                                                    'resto_data'=>$resto_data,
+                                                    'resto_add'=> $resto_add[0]]);
+            }
+            
+        }else{
+            $resto_menu_categories = new resto_menu_categorie;
+            $resto_cate_data = $resto_menu_categories->restaurentCategoryData($resto_data->id);
+            $resto_cate_datas = $resto_cate_data->get();
+        }
+        
         if ($request->ajax()) {
-            // dd($user_data);
-            // date('d F Y')
-            return Datatables::of($cat_data)
+            return Datatables::of($resto_cate_data)
                 ->addIndexColumn()
                 // ->addColumn('action', function($row){
                 //     $btn = '<a href="userDetails?id='.base64_encode($row->id).'" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Details</a> 
@@ -144,10 +172,10 @@ class RestaurentController extends Controller
                 })
                 ->rawColumns(['action'])
                 ->make(true);
-                //dd($user_data);
         }
         $user['currency']=$this->currency;
-        $cat_data = $cat_data->get();
+
+        // dd($resto_cate_data);
         return view('restaurent.menuCategory')->with(['data'=>$user,'cat_data'=>$cat_data]);
         
     }
@@ -156,26 +184,51 @@ class RestaurentController extends Controller
     {
         $validator = Validator::make($request->all(), [
             // 'name' => 'required|string|nullable|unique:menu_categories,name,'.auth()->user()->id.',restaurent_id',
-            'about' => 'string|nullable',
-            'discount' => 'numeric|nullable',  
-            'name' => 'required|string',     
+            'menu_category_id' => 'required|numeric|unique:resto_menu_categories,menu_category_id,'.auth()->user()->id.',restaurent_id',  
+            'cat_name' => 'unique:menu_categories,name|string|nullable',     
             
         ]);
         if(!$validator->fails()){
             $user = Auth::user();
-            // $restaurent_detail = new restaurent_detail;
-            // $resto_data = $restaurent_detail->getRestoData($user->id);
             $data = $request->toarray();
-            $data['service_catagory_id'] = 1;
-            $menu_categories = new menu_categories;
-        
-            $cate_id = $menu_categories->makeMenuCategory($data);
+
+            $menu_categories = new menu_categories; 
+            $resto_menu_categories = new resto_menu_categorie;
+
+            $restaurent_detail = new restaurent_detail;
+            $resto_data = $restaurent_detail->getRestoData($user->id);
+
+
+            if($data['menu_category_id'] == -1){
+                $menu_data = array();
+                $menu_data['name']=$data['cat_name'];
+                $menu_data['service_catagory_id']=1;
+
+                $cat_id = $menu_categories->makeMenuCategory($menu_data);
+
+                $resto_menu_cat = array();
+                $resto_menu_cat['menu_category_id']=$cat_id;
+                $resto_menu_cat['user_id']=$user->id;
+                $resto_menu_cat['restaurent_id']=$resto_data->id;
+
+                $resto_cate_id = $resto_menu_categories->makeRestoMenuCategory($resto_menu_cat);
+
+            }
+            else{
+                $resto_menu_cat = array();
+                $resto_menu_cat['menu_category_id']=$data['menu_category_id'];
+                $resto_menu_cat['user_id']=$user->id;
+                $resto_menu_cat['restaurent_id']=$resto_data->id;
+                $resto_cate_id = $resto_menu_categories->makeRestoMenuCategory($resto_menu_cat);
+
+            }
             Session::flash('message', 'Category Added Successfully!');
 
             return redirect()->back();
 
         }
         else{
+            // dd($validator->messages());
         	return redirect()->back()->withInput()->withErrors($validator);  
         }
         
@@ -188,8 +241,27 @@ class RestaurentController extends Controller
     
         $restaurent_detail = new restaurent_detail;
         $resto_data = $restaurent_detail->getRestoData($user->id);
+        if($resto_data == NULL){
+            $resto_add = NULL;
+            Session::flash('message', 'Please add Restaurant Details!');
+
+            if($resto_add == NULL){
+                return view('restaurent.myDetails')->with(['data'=>$user,
+                'resto_data'=>$resto_data,
+                'resto_add'=> null]);
+            }
+            else{
+                return view('restaurent.myDetails')->with(['data'=>$user,
+                                                    'resto_data'=>$resto_data,
+                                                    'resto_add'=> $resto_add[0]]);
+            }
+            
+        }
+        
         $menu_categories = new menu_categories;
         $cat_data = $menu_categories->restaurentCategoryPaginationData()->where('service_catagory_id',1);
+        $resto_menu_categories = new resto_menu_categorie;
+        $resto_cate_data = $resto_menu_categories->restaurentCategoryData($resto_data->id)->get();
         $menu_list = new menu_list;
         $menu_data = $menu_list->menuPaginationData($resto_data->id);
         if ($request->ajax()) {
@@ -217,7 +289,8 @@ class RestaurentController extends Controller
                 //dd($user_data);
         }
         $cat_data = $cat_data->get();
-        return view('restaurent.menuList')->with(['data'=>$user,'cat_data'=>$cat_data]);
+        // dd($resto_cate_data);
+        return view('restaurent.menuList')->with(['data'=>$user,'cat_data'=>$resto_cate_data]);
         
     }
 
@@ -242,10 +315,15 @@ class RestaurentController extends Controller
         $menu_categories = new menu_categories;
         $cat_data = $menu_categories->restaurentCategoryPaginationData()->get();
 
+        $restaurent_detail = new restaurent_detail;
+        $resto_data = $restaurent_detail->getRestoData($user->id);
+
+        $resto_menu_categories = new resto_menu_categorie;
+        $resto_cate_data = $resto_menu_categories->restaurentCategoryData($resto_data->id);
+
         $menu_lists = new menu_list;
         $menu_data = $menu_lists->menuListById($dish_id);
-
-        return view('restaurent.editMenu')->with(['data'=>$user,'menu_data'=>$menu_data,'cat_data'=>$cat_data]);
+        return view('restaurent.editMenu')->with(['data'=>$user,'menu_data'=>$menu_data,'cat_data'=>$resto_cate_data->get()]);
 
     }
 
@@ -257,7 +335,7 @@ class RestaurentController extends Controller
             'discount' => 'numeric|nullable',       
             'price' => 'required|numeric|not_in:0',       
             'dish_type' => 'required|in:1,2|nullable',       
-            'menu_category_id' => 'required|exists:menu_categories,id|nullable',       
+            'menu_category_id' => 'required|exists:resto_menu_categories,id|nullable',       
             
         ]);
         if(!$validator->fails()){
@@ -313,7 +391,7 @@ class RestaurentController extends Controller
             'discount' => 'numeric|nullable',       
             'price' => 'required|numeric|not_in:0',       
             'dish_type' => 'required|in:1,2|nullable',       
-            'menu_category_id' => 'required|exists:menu_categories,id|nullable',       
+            'menu_category_id' => 'required|exists:resto_menu_categories,id|nullable',       
             
         ]);
         if(!$validator->fails()){
