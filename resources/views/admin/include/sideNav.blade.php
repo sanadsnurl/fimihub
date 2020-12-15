@@ -12,7 +12,7 @@
     <title>Fimihub - Admin</title>
     <!--favicon-->
     <link rel="icon" href="{{url('asset/customer/assets/images/logo.png')}}">
-    
+
     <!-- Vector CSS -->
     <link href="{{url('asset/admin/assets/plugins/vectormap/jquery-jvectormap-2.0.2.css')}}" rel="stylesheet" />
     <!-- simplebar CSS-->
@@ -39,8 +39,8 @@
         <div id="sidebar-wrapper" data-simplebar="" data-simplebar-auto-hide="true">
             <div class="brand-logo">
                 <a href="{{url('adminfimihub/dashboard')}}">
-                    <img src="{{url('asset/customer/assets/images/logo.png')}}" class="logo-icon" alt="logo icon" height="35px"
-                        width="25px">
+                    <img src="{{url('asset/customer/assets/images/logo.png')}}" class="logo-icon" alt="logo icon"
+                        height="35px" width="25px">
                     <h5 class="logo-text">Fimihub Admin</h5>
                 </a>
             </div>
@@ -52,26 +52,32 @@
 
                     </a>
                 </li>
-                <!-- <li>
-                    <a href="#" class="waves-effect">
-                        <i class="icon-people"></i> <span>User </span> <i class="fa fa-angle-right pull-right"></i>
-                    </a>
-                    <ul class="sidebar-submenu">
-                        <li><a href="{{url('adminfimihub/userList')}}"><i class="fa fa-circle-o"></i> User List</a></li>
-                        <li><a href="{{url('adminfimihub/userWalletList')}}"><i class="fa fa-circle-o"></i> User Wallet</a></li>
 
-                    </ul>
-                </li> -->
                 <li>
                     <a href="#" class="waves-effect">
                         <i class="icon-user-following"></i> <span>Restaurant </span> <i
                             class="fa fa-angle-right pull-right"></i>
                     </a>
                     <ul class="sidebar-submenu">
-                        <li><a href="{{url('adminfimihub/addRestaurent')}}"><i class="fa fa-circle-o"></i>Add Restaurant</a></li>
-                        <li><a href="{{url('adminfimihub/retaurantList')}}"><i class="fa fa-circle-o"></i>Restaurant List</a></li>            
-                        <li><a href="{{url('adminfimihub/pendingRetaurant')}}"><i class="fa fa-circle-o"></i>New Request</a></li>
-                        <li><a href="{{url('adminfimihub/menuCategory')}}"><i class="fa fa-circle-o"></i>Category</a></li>
+                        <li><a href="{{url('adminfimihub/addRestaurent')}}"><i class="fa fa-circle-o"></i>Add
+                                Restaurant</a></li>
+                        <li><a href="{{url('adminfimihub/retaurantList')}}"><i class="fa fa-circle-o"></i>Restaurant
+                                List</a></li>
+                        <li><a href="{{url('adminfimihub/pendingRetaurant')}}"><i class="fa fa-circle-o"></i>New
+                                Request</a></li>
+                        <li><a href="{{url('adminfimihub/menuCategory')}}"><i class="fa fa-circle-o"></i>Category</a>
+                        </li>
+
+                    </ul>
+                </li>
+                <li>
+                    <a href="#" class="waves-effect">
+                        <i class="icon-disc"></i> <span>Rider </span> <i
+                            class="fa fa-angle-right pull-right"></i>
+                    </a>
+                    <ul class="sidebar-submenu">
+                        <li><a href="{{url('adminfimihub/riderList')}}"><i class="fa fa-circle-o"></i>Rider
+                                List</a></li>
 
                     </ul>
                 </li>
@@ -81,40 +87,17 @@
 
                     </a>
                 </li>
-                <!-- <li>
-                    <a href="{{url('adminfimihub/userList')}}" class="waves-effect">
-                        <i class="icon-home"></i> <span>User List</span>
-
-                    </a>
-                </li> -->
-                <!-- <li>
+                {{-- <li>
                     <a href="#" class="waves-effect">
-                        <i class="icon-notebook"></i> <span>Voucher </span> <i class="fa fa-angle-right pull-right"></i>
+                        <i class="icon-magic-wand"></i> <span>CMS </span> <i
+                            class="fa fa-angle-right pull-right"></i>
                     </a>
                     <ul class="sidebar-submenu">
-                        <li><a href="{{url('adminQbeez/voucherList')}}"><i class="fa fa-circle-o"></i> Voucher List</a></li>
-                        
-                    </ul>
-                </li>
-                <li>
-                    <a href="#" class="waves-effect">
-                        <i class="icon-wrench"></i> <span>Transactions </span> <i class="fa fa-angle-right pull-right"></i>
-                    </a>
-                    <ul class="sidebar-submenu">
-                        <li><a href="{{url('adminQbeez/userList')}}"><i class="fa fa-circle-o"></i> User List</a></li>
-                        <li><a href="{{url('adminQbeez/userList')}}"><i class="fa fa-circle-o"></i> User Wallet</a></li>
+                        <li><a href="{{url('adminfimihub/ridList')}}"><i class="fa fa-circle-o"></i>FAQ's</a></li>
 
                     </ul>
-                </li>
-                <li>
-                    <a href="#" class="waves-effect">
-                        <i class="icon-user"></i> <span>Admin </span> <i class="fa fa-angle-right pull-right"></i>
-                    </a>
-                    <ul class="sidebar-submenu">
-                        <li><a href="#"><i class="fa fa-circle-o"></i> Change Password</a></li>
+                </li> --}}
 
-                    </ul>
-                </li> -->
                 <li>
                     <a href="{{url('adminfimihub/logout')}}" class="waves-effect">
                         <i class="icon-logout"></i> <span>Logout</span>
