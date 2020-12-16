@@ -35,7 +35,7 @@
                 @if($user_add->default_status == 1)
                 <div class="col-md-6 address_pad">
                     <div class="addrs_box saved_addrs address_border">
-                        <h4>{{$user_data->name}}</h4>
+                        <h4>{{$user_data->name}} <i>(Default)</i></h4>
                         <p>{{$user_add->flat_no ?? ''}} {{$user_add->address ?? ''}}</p>
                         <p>{{$user_add->landmark ?? ''}}</p>
                         <br>
@@ -44,7 +44,6 @@
                             <a href="{{url('deleteAddress')}}{{'?add_id='}}{{base64_encode($user_add->id)}}" class="f">
                                 <button type="button" class="btn_purple edit_btn mr-2 hover_effect1">Delete</button>
                             </a>
-
                         </div>
                     </div>
                 </div>
@@ -57,7 +56,7 @@
                         <br>
                         <!-- <span><img src="{{url('asset/customer/assets/images/watch.svg')}}" alt="watch">20 Min</span> -->
                         <div class="addrs_action_btns">
-                            <a href="{{url('deleteAddress')}}{{'?add_id='}}{{base64_encode($user_add->id)}}" class="f">
+                            <a href="{{url('deleteAddh-100ress')}}{{'?add_id='}}{{base64_encode($user_add->id)}}" class="f">
                                 <button type="button" class="btn_purple edit_btn mr-2 hover_effect1">Delete</button>
                             </a>
                             <a href="{{url('addDefaultAddress')}}{{'?add_id='}}{{base64_encode($user_add->id)}}"

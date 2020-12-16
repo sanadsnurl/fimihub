@@ -1,4 +1,24 @@
 @include('customer.include.header')
+<style>
+
+    .rating_star .fa {
+      position: relative;
+      font-size: 32px;
+      color: #7d3b8a;
+    }
+
+    .rating_star .fa-star-percentage {
+      position: absolute;
+      left: 0;
+      top: 0;
+      overflow: hidden;
+    }
+
+    .rating_star .fa-star {
+        color: #7d3b8a;
+    }
+
+    </style>
 <section class="banner restaurant-detail food-banner no-padding">
     <div class="slider-wrap">
         <div class="slide-item">
@@ -35,7 +55,14 @@
                 <div class="col-wrap">
                     <h5>80 rating</h5>
                     <div class="img-wrap">
-                        <img src="{{url('asset/customer/assets/images/rating-star.svg')}}" alt="rating star">
+                        {{-- <img src="{{url('asset/customer/assets/images/rating-star.svg')}}" alt="rating star"> --}}
+                        <span class="js-star-rating rating_star" data-rating="4.5">
+                            <span class="fa fa-star-o"></span>
+                            <span class="fa fa-star-o"></span>
+                            <span class="fa fa-star-o"></span>
+                            <span class="fa fa-star-o"></span>
+                            <span class="fa fa-star-o"></span>
+                        </span>
                     </div>
                 </div>
                 <div class="col-wrap">
@@ -74,10 +101,15 @@
             <div class="col-order">
                 <div class="filter-row">
                     <div class="btn-grp">
-                        <a href="#" class="btn btn-purple"><img src="{{url('asset/customer/assets/images/check.svg')}}"
-                                alt=""> Veg Only</a>
-                        <a href="#" class="btn btn-purple"><img src="{{url('asset/customer/assets/images/check.svg')}}"
-                                alt=""> NonVeg Only</a>
+                        <span class="cstm_box cstm_checkbox mr-4">
+                            <input type="checkbox" id="veg" checked>
+                            <label for="veg">Veg Only</label>
+                        </span>
+                        <span class="cstm_box cstm_checkbox">
+                            <input type="checkbox" id="NonVeg_veg" checked>
+                            <label for="NonVeg_veg">NonVeg Only</label>
+                        </span>
+
                     </div>
                     <span class="filter-btn show-sidepanel" id="filterPanel">Apply Filter</span>
                 </div>
@@ -94,7 +126,13 @@
                         </div>
                         <div class="text-wrap">
                             <h6> {{$user_data->currency ?? ''}} {{$m_data->price ?? ''}}</h6>
-                            <h5>{{$m_data->name ?? ''}}</h5>
+                            @if($m_data->dish_type == 2)
+                            <h4 class="green_dot"><i class="fa fa-stop-circle-o" style="font-size:18px;color:green"></i>
+                                {{$m_data->name ?? ''}}</h5>
+                            @else
+                            <h5 class="red_dot"><i class="fa fa-stop-circle-o" style="font-size:18px;color:red"></i>
+                                {{$m_data->name ?? ''}}</h5>
+                            @endif
                             <p>{{$m_data->about ?? ''}}</p>
                         </div>
                         <ul class="add-to-cart">
@@ -202,4 +240,34 @@ function decrement_quantity(menu_id) {
         }
     });
 }
+
+
+/* display rating in form of stars */
+$.fn.makeStars = function() {
+    $(this).each( function() {
+        var rating       = $(this).data('rating'),
+            starNumber   = $(this).children().length,
+            fullStars    = Math.floor(rating),
+            halfStarPerc = (rating - fullStars) * 100;
+
+        if(rating > 0) {
+            $(this).children().each(function (index) {
+                $(this).addClass('fa-star');
+                $(this).removeClass('fa-star-o');
+                return ( (index + 1) < fullStars );
+            });
+        }
+
+        if ( halfStarPerc !== 0 && fullStars < starNumber ) {
+            var halfStar = $(this).children(":nth-child(" + parseInt(fullStars+1, 10) + ")");
+
+            $('<span class="fa fa-star fa-star-percentage"></span>').width(halfStarPerc + '%').appendTo(halfStar);
+        }
+
+    });
+};
+
+$(document).ready( function() {
+    $('.js-star-rating').makeStars();
+});
 </script>

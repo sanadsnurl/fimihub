@@ -79,3 +79,86 @@ function setLocationCoordinates(key, lat, lng) {
     latitudeField.value = lat;
     longitudeField.value = lng;
 }
+
+function getReverseGeocodingData(lat, lng) {
+    var latlng = new google.maps.LatLng(lat, lng);
+    // This is making the Geocode request
+    var geocoder = new google.maps.Geocoder();
+    geocoder.geocode({ 'latLng': latlng },  (results, status) =>{
+        if (status !== google.maps.GeocoderStatus.OK) {
+            alert(status);
+        }
+        // This is checking to see if the Geoeode Status is OK before proceeding
+        if (status == google.maps.GeocoderStatus.OK) {
+            console.log(results);
+            var address = (results[0].formatted_address);
+        }
+    });
+}
+
+
+
+// jfldsk===
+
+
+function showPosition() {
+    if(navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+
+            var latitude = position.coords.latitude;
+            var longitude = position.coords.longitude;
+            var loc = geocodeLatLng(latitude , longitude)
+        });
+    } else {
+        let str = 'location not found';
+        document.getElementById('result').setAttribute('title',str);
+    }
+}
+
+let latVal;
+let longVal;
+
+function geocodeLatLng(latitude , longitude) {
+    const geocoder = new google.maps.Geocoder();
+    const infowindow = new google.maps.InfoWindow();
+    const latlng = {
+        lat: latitude,
+        lng: longitude,
+    };
+
+    latVal = latlng.lat;
+    longVal = latlng.lng;
+
+    geocoder.geocode({ location: latlng }, (results, status) => {
+        if (status === "OK") {
+        if (results[0]) {
+            infowindow.setContent(results[0].formatted_address);
+            let str = results[0].formatted_address;
+            let strRes = str.slice(0,22) + '...';
+            document.getElementById('result').innerHTML = strRes;
+            document.getElementById('result').setAttribute('title',str);
+            console.log(results[0])
+        } else {
+            let str = 'location not found';
+            document.getElementById('result').setAttribute('title',str);
+        }
+        } else {
+            let str = 'location not found';
+            document.getElementById('result').setAttribute('title',str);
+        }
+    });
+}
+
+$('.show_address').click(function() {
+    let res = $('#result').attr('title');
+    if(latVal && longVal && res) {
+        $('#address-input').val(res);
+        $('#address-latitude').val(latVal);
+        $('#address-longitude').val(longVal);
+        initialize();
+    }else {
+        alert('Location not find')
+    }
+
+
+})

@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
         integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{{url('asset/customer/dist/main.css')}}">
     <link rel="icon" href="{{url('asset/customer/assets/images/logo.png')}}">
     <title>Fimihub</title>
@@ -15,6 +16,12 @@
     <div id="loading-overlay">
         <div class="loading-icon"></div>
     </div>
+    <script>
+
+window.onload = function() {
+    showPosition();
+};
+    </script>
     <header class="header">
         <div class="md_container">
             <div class="inner-wrap">
@@ -32,7 +39,8 @@
                         <li>
                             <a href="#" class="location-link show-sidepanel" id="addressPanel"><img
                                     src="{{url('asset/customer/assets/images/location.svg')}}" alt="location">
-                                <span>Location</span></a>
+                                    <span id="result" data-toggle="tooltip" title="Hooray!">Location</span>
+                                    </span></a>
                         </li>
                         @else
                         <li>
@@ -45,7 +53,8 @@
                         <li>
                             <a href="#" class="location-link show-sidepanel" id="addressPanel"><img
                                     src="{{url('asset/customer/assets/images/location.svg')}}" alt="location">
-                                <span>Location</span></a>
+                                <span id="result" data-toggle="tooltip" title="Hooray!">Location</span>
+                            </a>
                         </li>
                         @endif
 
@@ -61,13 +70,21 @@
                             </a>
                         </li>
                         <li>
-                            <a href="{{url('/cart')}}" class="icon-link">
+                            <a href="{{url('/cart')}}" class="icon-link cart_nofti">
                                 <img src="{{url('asset/customer/assets/images/cart.svg')}}" alt="cart">
+                                <span class="notfi_cart" >8
+                                    {{-- @if($item <100)
+                                    {{$item ?? '0'}}
+                                    @else
+                                    99+
+                                    @endif --}}
+                                </span>
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="icon-link">
+                            <a href="#" class="icon-link cart_nofti">
                                 <img src="{{url('asset/customer/assets/images/notification.svg')}}" alt="notification">
+                                <span>9</span>
                             </a>
                         </li>
                         <li>
@@ -98,8 +115,9 @@
                             <a href="#">Ride with us</a>
                         </li> -->
                         <li>
-                            <a href="{{url('cart')}}" class="icon-link">
+                            <a href="{{url('cart')}}" class="icon-link ">
                                 <img src="{{url('asset/customer/assets/images/cart.svg')}}" alt="cart">
+
                             </a>
                         </li>
                         <li>
@@ -122,3 +140,5 @@
             </div>
         </div>
     </header>
+
+
