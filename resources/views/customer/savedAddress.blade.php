@@ -28,7 +28,7 @@
                 @if($user_add->default_status == 1)
                 <div class="col-md-6 address_pad">
                     <div class="addrs_box saved_addrs address_border">
-                        <h4>{{$user_data->name}}</h4>
+                        <h4>{{$user_data->name}} <i>(Default)</i></h4>
                         <p>{{$user_add->flat_no ?? ''}} {{$user_add->address ?? ''}}</p>
                         <p>{{$user_add->landmark ?? ''}}</p>
                         <br>

@@ -77,18 +77,23 @@
         <div id="address-map-container" style="width:105%;height:360px; margin-bottom: -115px;">
                 <div style="width: 100%; height: 60%;" id="address-map"></div>
             </div>
-        <form role="form" method="POST" action="{{ url('/saveAddress') }}" class="form">
+        <form role="form" method="POST" action="{{ url('/saveAddress') }}" onSubmit="return checkform()" class="form save_adrs">
             @csrf
             <!-- <div class="form-group">
                 <label for="address_address">Address</label>
                 <input type="text" id="address-input" name="address_address" class="form-control map-input">
-               
+
             </div> -->
-           
+
 
             <div class="field-wrap">
                 <label for="address_address">Address</label>
-                <input type="text" id="address-input"  name="address_address" placeholder="Address" class="map-input">
+                <div class="address_box_dyn">
+                    <input type="text" id="address-input"  name="address_address" placeholder="Address" class="map-input" >
+                    <button type="button" class="show_address"><i class="fa fa-crosshairs"></i></button>
+                    <span id="add" class="errors"></span>
+
+                </div>
                 <input type="hidden" name="address_latitude" id="address-latitude" value="0" />
                 <input type="hidden" name="address_longitude" id="address-longitude" value="0" />
                 @if($errors->has('address_address'))
@@ -100,17 +105,20 @@
             </div>
             <div class="field-wrap">
                 <label>Door/ Flat No</label>
-                <input type="text" name="flat_no" placeholder="Door/ Flat No">
+                <input type="text" name="flat_no" placeholder="Door/ Flat No" id="flat">
                 @if($errors->has('flat_no'))
                 <div class="error">{{ $errors->first('flat_no') }}</div>
                 @endif
+                <span id="flaterr" class="errors"></span>
             </div>
             <div class="field-wrap">
                 <label>Landmark</label>
-                <input type="text" name="landmark" placeholder="Landmark">
+                <input type="text" name="landmark" placeholder="Landmark" id="landmrk">
                 @if($errors->has('landmark'))
                 <div class="error">{{ $errors->first('landmark') }}</div>
                 @endif
+                <span id="landmarkerr" class="errors"></span>
+
             </div>
             <input type="submit" class="btn btn-purple" value="Save Address">
             <!-- <button type="submit" class="btn btn-purple">Save Address</button> -->
@@ -230,8 +238,10 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.15.0/jquery.validate.min.js"></script>
 
 <script type="text/javascript" src="{{url('asset/customer/assets/scripts/mapInput.js')}}"></script>
+<script type="text/javascript" src="{{url('asset/customer/assets/scripts/currentLocation.js')}}"></script>
 <script
     src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}&libraries=places&callback=initialize"
     async defer></script>
@@ -246,6 +256,64 @@ $(window).on('load', function() {
 <script>
 $(window).on('load', function() {
     $('#thankyou').modal('show');
-})
+});
 </script>
 @endif
+
+<script>
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();
+});
+
+// $('.accord_btn').click(function() {
+//     $(this).next('.apply_cpn_box').slideToggle();
+//     $(this).find('span').next('img').toggleClass('rotate_icon');
+// })
+
+function checkform()
+{
+    let add = document.getElementById('address-input').value;
+    let flat = document.getElementById('flat').value;
+    let landmrk = document.getElementById('landmrk').value;
+    let lat = document.getElementById('address-latitude').value;
+    let log = document.getElementById('address-longitude').value;
+    let err = true;
+
+	if (add == ''){
+		document.getElementById('add').innerHTML = 'Address field required';
+		document.getElementById('add').style.display = 'block';
+		err = false;
+    }else if(lat == '' || lat == 0 || log == '' || log == 0) {
+        document.getElementById('add').innerHTML = 'Invalid address';
+        document.getElementById('add').style.display = 'block';
+        err = false;
+    }
+    if(flat == '') {
+        document.getElementById('flaterr').innerHTML = 'Flat field required';
+        document.getElementById('flaterr').style.display = 'block';
+		err =  false;
+    }
+
+    if(landmrk == '') {
+        document.getElementById('landmarkerr').innerHTML = 'Landmark field required';
+        document.getElementById('landmarkerr').style.display = 'block';
+		err =  false;
+    }
+
+	// If the script gets this far through all of your fields
+	// without problems, it's ok and you can submit the form
+
+	if(err == true) {
+        return true;
+    }else {
+        return false;
+    }
+}
+
+
+$('.save_adrs input').on('blur',function() {
+    $(this).nextAll('span').hide();
+})
+
+</script>
+

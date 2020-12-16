@@ -21,7 +21,7 @@
                 @yield('content')
 
                 <div class="col-md-5 padd_lft">
-                    <div class="card_rht card h-100 pb-0">
+                    <div class="card_rht card pb-0">
                         <div class="card_rht_top">
                             <div class="row">
                                 <div class="col-md-4">
@@ -42,7 +42,11 @@
                                     <div class="food_strip_lft">
                                         <h5>{{$user_data->currency ?? ''}} {{$m_data->price ?? ''}}</h5>
                                         <span class="red_dots"></span>
-                                        <h4>{{$m_data->name ?? ''}}</h4>
+                                        @if($m_data->dish_type == 2)
+                                        <h4 class="green_dot">{{$m_data->name ?? ''}}</h4>
+                                        @else
+                                        <h4 >{{$m_data->name ?? ''}}</h4>
+                                        @endif
                                         <p>{{$m_data->about ?? ''}}</p>
                                     </div>
                                 </div>
@@ -67,11 +71,24 @@
 
                         @if(request()->is('cart'))
                         <div class="aply_cupon ">
-                            <a href="#" class="d-flex">
+                            <a href="javascript:void(0)" class="d-flex accord_btn">
                                 <span><img src="{{url('asset/customer/assets/images/cuppon_icon.svg')}}" alt="icon">
                                     APPLY COUPON</span>
                                 <img src="{{url('asset/customer/assets/images/arrow_right.svg')}}" alt="arrow">
                             </a>
+                            <div class="apply_cpn_box">
+                                <form action="">
+                                    <div class="d-flex align-items-center">
+                                        <input type="text" class="form-control">
+                                        <input type="submit">
+                                    </div>
+                                    <span class="success">
+                                        <i class="fa fa-check-circle"></i>
+                                        <i class="fa fa-times-circle"></i>
+                                        Coupon applied successfully
+                                    </span>
+                                </form>
+                            </div>
                         </div>
                         @endif
 
@@ -201,7 +218,7 @@ function decrement_quantity(menu_id) {
             var total_amnt = (response.total_amount + response.service_data.service_tax);
             total_amnt = total_amnt.toFixed(2);
             var service_taxs = response.service_data.service_tax.toFixed(2);
-            var sub_totals = response.sub_total.toFixed(2);
+            accord_btnvar sub_totals = response.sub_total.toFixed(2);
 
             $(inputQuantityElement).val(response.quantity);
             $(item_count).html(response.items);
@@ -216,4 +233,5 @@ function decrement_quantity(menu_id) {
         }
     });
 }
+
 </script>
