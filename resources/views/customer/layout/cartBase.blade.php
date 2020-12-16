@@ -218,7 +218,7 @@ function decrement_quantity(menu_id) {
             var total_amnt = (response.total_amount + response.service_data.service_tax);
             total_amnt = total_amnt.toFixed(2);
             var service_taxs = response.service_data.service_tax.toFixed(2);
-            accord_btnvar sub_totals = response.sub_total.toFixed(2);
+            var sub_totals = response.sub_total.toFixed(2);
 
             $(inputQuantityElement).val(response.quantity);
             $(item_count).html(response.items);
