@@ -56,7 +56,7 @@
                         <br>
                         <!-- <span><img src="{{url('asset/customer/assets/images/watch.svg')}}" alt="watch">20 Min</span> -->
                         <div class="addrs_action_btns">
-                            <a href="{{url('deleteAddh-100ress')}}{{'?add_id='}}{{base64_encode($user_add->id)}}" class="f">
+                            <a href="{{url('deleteAddress')}}{{'?add_id='}}{{base64_encode($user_add->id)}}" class="f">
                                 <button type="button" class="btn_purple edit_btn mr-2 hover_effect1">Delete</button>
                             </a>
                             <a href="{{url('addDefaultAddress')}}{{'?add_id='}}{{base64_encode($user_add->id)}}"
