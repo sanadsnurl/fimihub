@@ -53,7 +53,7 @@ window.onload = function() {
                         <li>
                             <a href="#" class="location-link show-sidepanel" id="addressPanel"><img
                                     src="{{url('asset/customer/assets/images/location.svg')}}" alt="location">
-                                <span id="result" data-toggle="tooltip" title="Hooray!">Location</span>
+                                <span id="result" data-toggle="tooltip" title="">Location</span>
                             </a>
                         </li>
                         @endif

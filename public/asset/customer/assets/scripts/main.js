@@ -128,15 +128,15 @@
 
 
     // OTP Timer
-    var timerEl = $(".timer"), 
-    resendBtn = $(".resend_link"), 
-    minutes = 0, 
+    var timerEl = $(".timer"),
+    resendBtn = $(".resend_link"),
+    minutes = 0,
     seconds = 30;
 
     // generate url
     var getUrl = window.location.href;
     var f_url = getUrl.replace('register','').replace('login','') + 'resendOTP';
-    
+
     var timer = setInterval(function(){
       // clear Interval after two minutes
       if(minutes == 0 && seconds == 0) {
@@ -146,7 +146,7 @@
       }
 
       // countdown
-      let duration; 
+      let duration;
       if(seconds.toString().length == 1) {
         duration = minutes + ":" + "0" + seconds;
       }else {
@@ -159,7 +159,7 @@
       seconds--
       timerEl.text(duration);
     }, 1000);
-    
+
 })(jQuery);
 
 
@@ -171,7 +171,6 @@ $('.otp_verification form input').keyup(function() {
 
     if(this.value.length == '') {
         $(this).prev('input').focus();
-    } 
+    }
 })
-
 
