@@ -14,7 +14,7 @@ use App\Http\Traits\OtpGenerationTrait;
 use Response;
 use Session;
 
-class LoginRegisterController extends Controller 
+class LoginRegisterController extends Controller
 {
     use OtpGenerationTrait;
 
@@ -34,21 +34,21 @@ class LoginRegisterController extends Controller
                     $userid = $data['mobile'];
                     Session::put('userid', $userid);
                     $this->OtpGeneration($userid);
-                    Session::flash('message', 'Register Succesfully, Please Verify Now!'); 
-                    Session::flash('modal_check', 'open'); 
+                    Session::flash('message', 'Register Succesfully, Please Verify Now!');
+                    Session::flash('modal_check', 'open');
                     return redirect('/register');
-                    
+
                 }else{
-                    Session::flash('message', 'Registration Failed , Please try again!'); 
+                    Session::flash('message', 'Registration Failed , Please try again!');
                     return redirect()->back();
                 }
-            
+
         }
         else{
-        	return redirect()->back()->withInput()->withErrors($validator);  
+        	return redirect()->back()->withInput()->withErrors($validator);
         }
     }
-    
+
     public function login(Request $request)
     {
 
@@ -56,14 +56,14 @@ class LoginRegisterController extends Controller
             'password' => 'required|string|min:6',
             'user_id' => 'required',
             'terms' => 'required',
-            
+
         ]);
         if(!$validator->fails()){
             $user_id = $request->input('user_id');
             $password = $request->input('password');
             $mobile_set = "";
             $email_set = "";
-            
+
             if(is_numeric($user_id))
             {
                 $loginData =["mobile"=>$user_id,"password"=>$password];
@@ -76,7 +76,7 @@ class LoginRegisterController extends Controller
 
             if(!auth()->attempt($loginData))
             {
-                Session::flash('message', 'Invalid Credentials !'); 
+                Session::flash('message', 'Invalid Credentials !');
                 return redirect()->back()->withInput();
             }
             else{
@@ -93,7 +93,7 @@ class LoginRegisterController extends Controller
                 {
                     Session::flash('error_message', 'Please verify your Mobile Number !');
                     $this->OtpGeneration($userid);
-                    Session::flash('modal_check2', 'open'); 
+                    Session::flash('modal_check2', 'open');
                     return redirect()->back();
                 }
                 else
@@ -110,7 +110,7 @@ class LoginRegisterController extends Controller
                 {
                     Session::flash('message', 'Please verify your Email-ID !');
                     $this->OtpGeneration($userid);
-                    Session::flash('modal_check2', 'open'); 
+                    Session::flash('modal_check2', 'open');
                     return redirect()->back();
 
                 }
@@ -121,11 +121,11 @@ class LoginRegisterController extends Controller
             }
         }
         else{
-        	return redirect()->back()->withInput()->withErrors($validator);  
+        	return redirect()->back()->withInput()->withErrors($validator);
         }
     }
 
-    
+
 
     public function logout(Request $request)
     {
@@ -133,24 +133,24 @@ class LoginRegisterController extends Controller
         Session::flush();
         return redirect('/login');
     }
-    
+
     public function resendOtp(Request $request)
     {
         $userid = session('userid');
         Session::flash('message', 'Please verify your Account !');
         $this->OtpGeneration($userid);
-        Session::flash('modal_check', 'open'); 
+        Session::flash('modal_check', 'open');
         return redirect()->back();
     }
     public function verifyOtp(Request $request)
     {
-        
+
         $validator = Validator::make($request->all(), [
             'num1' => 'required|digits:1',
             'num2' => 'required|digits:1',
             'num3' => 'required|digits:1',
             'num4' => 'required|digits:1',
-            
+
         ]);
         if(!$validator->fails()){
             $otp=$request->input('num1').$request->input('num2').$request->input('num3').$request->input('num4');
@@ -159,7 +159,7 @@ class LoginRegisterController extends Controller
             //dd($data);
             $otp_verified_status=$this->OtpVerification($data);
             if($otp_verified_status==2){
-                Session::flash('modal_check', 'open'); 
+                Session::flash('modal_check', 'open');
                 Session::flash('error_message', 'Invalid OTP');
 
                 return redirect()->back();
@@ -171,29 +171,29 @@ class LoginRegisterController extends Controller
             }else{
                 return redirect('/logout');
             }
-        
+
         }
         else{
             //dd($validator);
-            Session::flash('modal_check', 'open'); 
+            Session::flash('modal_check', 'open');
 
-        	return redirect()->back()->withErrors($validator);  
+        	return redirect()->back()->withErrors($validator);
         }
-        
+
     }
 
     public function forgetPassword(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'password'=>'required|confirmed|min:6',
-            
+
         ]);
         if(!$validator->fails()){
             $userid = session('userid');
             $password = $request->input('password');
             $user = new User();
             $user_data = $user->userData($userid);
-            
+
             $data=['userid'=>$userid,'password'=>$password];
             if($user_data != NULL ){
                     $user = new User();
@@ -208,8 +208,8 @@ class LoginRegisterController extends Controller
             Session::flash('message', 'Invalid User Id');
             return redirect('/login');
         }else{
-            Session::flash('forget_pwd_modal_check', 'open'); 
-            return redirect()->back()->withInput()->withErrors($validator);  
+            Session::flash('forget_pwd_modal_check', 'open');
+            return redirect()->back()->withInput()->withErrors($validator);
         }
     }
 
@@ -217,22 +217,22 @@ class LoginRegisterController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'phone_number'=>'required|digits:10',
-        
+
         ]);
         if(!$validator->fails()){
             $userid = $request->input('phone_number');
             Session::put('userid', $userid);
-            
+
             $otp_verified_status=$this->OtpGeneration($userid);
 
             if($otp_verified_status==2){
-                Session::flash('forget_pwd_snd_otp_modal_check', 'open'); 
+                Session::flash('forget_pwd_snd_otp_modal_check', 'open');
                 Session::flash('error_message', 'Invalid Phone Number');
 
                 return redirect()->back();
             }
             elseif($otp_verified_status==1){
-                Session::flash('modal_check', 'open'); 
+                Session::flash('modal_check', 'open');
                 Session::flash('error_message', 'Please verify your Account !');
                 return redirect()->back();
             }else{
@@ -240,21 +240,21 @@ class LoginRegisterController extends Controller
                 return redirect('/login');
             }
         }else{
-            Session::flash('forget_pwd_snd_otp_modal_check', 'open'); 
+            Session::flash('forget_pwd_snd_otp_modal_check', 'open');
 
-            return redirect()->back()->withInput()->withErrors($validator);  
+            return redirect()->back()->withInput()->withErrors($validator);
         }
     }
 
     public function verifyForgetPasswordOtp(Request $request)
     {
-        
+
         $validator = Validator::make($request->all(), [
             'num1' => 'required|digits:1',
             'num2' => 'required|digits:1',
             'num3' => 'required|digits:1',
             'num4' => 'required|digits:1',
-            
+
         ]);
         if(!$validator->fails()){
             $otp=$request->input('num1').$request->input('num2').$request->input('num3').$request->input('num4');
@@ -263,49 +263,49 @@ class LoginRegisterController extends Controller
             //dd($data);
             $otp_verified_status=$this->OtpVerification($data);
             if($otp_verified_status==2){
-                Session::flash('modal_check', 'open'); 
+                Session::flash('modal_check', 'open');
                 Session::flash('error_message', 'Invalid OTP');
 
                 return redirect()->back();
             }
             elseif($otp_verified_status==1){
-                Session::flash('forget_pwd_modal_check', 'open'); 
+                Session::flash('forget_pwd_modal_check', 'open');
                 Session::flash('error_message', 'OTP Verified!');
                 return redirect()->back();
             }else{
                 Session::flash('message', 'Something went wrong !');
                 return redirect('/login');
             }
-        
+
         }
         else{
             //dd($validator);
-            Session::flash('modal_check', 'open'); 
+            Session::flash('modal_check', 'open');
 
-        	return redirect()->back()->withErrors($validator);  
+        	return redirect()->back()->withErrors($validator);
         }
-        
+
     }
 
     public function verifyOtpLogin(Request $request)
     {
-        
+
         $validator = Validator::make($request->all(), [
             'num1' => 'required|digits:1',
             'num2' => 'required|digits:1',
             'num3' => 'required|digits:1',
             'num4' => 'required|digits:1',
-            
+
         ]);
         if(!$validator->fails()){
             $otp=$request->input('num1').$request->input('num2').$request->input('num3').$request->input('num4');
             $data['otp']=$otp;
             $data['userid']=session('userid');
             $otp_verified_status=$this->OtpVerification($data);
-            
+
 
             if($otp_verified_status==2){
-                Session::flash('modal_check2', 'open'); 
+                Session::flash('modal_check2', 'open');
                 Session::flash('error_message', 'Invalid OTP');
 
                 return redirect()->back();
@@ -319,14 +319,14 @@ class LoginRegisterController extends Controller
             }else{
                 return redirect('/logout');
             }
-        
+
         }
         else{
             //dd($validator);
-            Session::flash('modal_check2', 'open'); 
-            return redirect()->back()->withErrors($validator);  
+            Session::flash('modal_check2', 'open');
+            return redirect()->back()->withErrors($validator);
         }
-        
+
     }
 
 
