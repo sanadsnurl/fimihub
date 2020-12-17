@@ -23,7 +23,7 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
 
     // Customer Root Page
     Route::get('/', function () {
-        return public_path();
+        
         return view('customer.index');
     });
     // Customer Login
