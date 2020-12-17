@@ -144,6 +144,17 @@
                                         id="total_amount">{{number_format((float)$total_amount, 2) ?? '0'}}</span></span>
                             </div>
                         </a>
+                        @elseif(request()->is('trackOrder'))
+                        <div class="total_price d-flex align-items-center">
+                            <span>Total</span>
+                            <span>{{$user_data->currency ?? ''}} <span
+                                id="total_amount">{{number_format((float)$total_amount, 2) ?? '0'}}</span></span>
+                        </div>
+
+                        <div class="to_pay_box button_box_hlp d-flex align-items-center">
+                            <button type="button">Help</button>
+                            <button type="button" data-toggle="modal" data-target="#review">Rate and Review</button>
+                        </div>
                         @else
                         <div class="to_pay_box d-flex align-items-center">
                             <span>Total</span>

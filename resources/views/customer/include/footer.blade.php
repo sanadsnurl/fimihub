@@ -1,3 +1,69 @@
+<style>
+    @charset "UTF-8";
+.star-cb-group {
+  font-size: 0;
+  unicode-bidi: bidi-override;
+  direction: rtl;
+}
+.star-cb-group * {
+  font-size: 1rem;
+}
+.star-cb-group > input {
+  display: none;
+}
+.star-cb-group > input + label {
+  /* only enough room for the star */
+  display: inline-block;
+  /* overflow: hidden; */
+  /* text-indent: 9999px; */
+  /* width: 1em; */
+  white-space: nowrap;
+  cursor: pointer;
+}
+.star-cb-group > input + label:before {
+  display: inline-block;
+  content: "☆";
+  color: #888;
+  font-size: 72px;
+}
+.star-cb-group > input:checked ~ label:before, .star-cb-group > input + label:hover ~ label:before, .star-cb-group > input + label:hover:before {
+  content: "★";
+  color: #7d3b8a;
+}
+.star-cb-group > .star-cb-clear + label {
+  text-indent: -9999px;
+  width: .5em;
+  margin-left: -.5em;
+}
+.star-cb-group > .star-cb-clear + label:before {
+  width: .5em;
+}
+.star-cb-group:hover > input + label:before {
+  content: "☆";
+  color: #888;
+  text-shadow: none;
+}
+.star-cb-group:hover > input + label:hover ~ label:before, .star-cb-group:hover > input + label:hover:before {
+  content: "★";
+  color:#7d3b8a;
+}
+
+fieldset {
+  border: 0;
+  text-align: center;
+}
+
+#log {
+  margin: 1em auto;
+  width: 5em;
+  text-align: center;
+  background: transparent;
+}
+
+
+</style>
+
+
 <footer class="footer">
     <div class="md_container">
         <div class="row-wrap">
@@ -235,6 +301,90 @@
         </form>
     </div>
 </div>
+<!-- reviews modal -->
+<div class="modal fade review_mdl" id="review">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-body">
+            <h3 class="text-center">Rate and Review</h3>
+            <div class="mdl_top">
+            <div class="row">
+                <div class="col-md-4">
+                    <img src="{{url('asset/customer/assets/images/food.png')}}" alt="image" class="w-100">
+                </div>
+                <div class="col-md-8">
+                    <h4>Woody's Low Bridge Place</h4>
+                    <p>Cuisine 1, Cuisine 2, etc.</p>
+                </div>
+            </div>
+            </div>
+            <form>
+                <fieldset>
+                  <span class="star-cb-group">
+                    <input type="radio" id="rating-5" name="rating" value="5" />
+                    <label for="rating-5"></label>
+
+                    <input type="radio" id="rating-4" name="rating" value="4" />
+                    <label for="rating-4"></label>
+
+                    <input type="radio" id="rating-3" name="rating" value="3" />
+                    <label for="rating-3"></label>
+
+                    <input type="radio" id="rating-2" name="rating" value="2" />
+                    <label for="rating-2"></label>
+
+                    <input type="radio" id="rating-1" name="rating" value="1" />
+                    <label for="rating-1"></label>
+
+                    <input type="radio" id="rating-0" name="rating" value="0" class="star-cb-clear" />
+                    <label for="rating-0" class="d-none">0</label>
+
+
+                  </span>
+                </fieldset>
+              </form>
+            <form action="">
+                {{-- <img src="{{url('asset/customer/assets/images/star_rating.svg')}}" alt="stars"> --}}
+
+
+                <input type="text" class="" placeholder="Type Your message....">
+                <h4>Rate Rider</h4>
+                <div class="rider_review">
+                    <p class="text-center"><img src="{{url('asset/customer/assets/images/user_dp.png')}}" alt="image">   Brushe soe</p>
+                </div>
+                {{-- <img src="{{url('asset/customer/assets/images/star_rating.svg')}}" alt="stars"> --}}
+                <form>
+                    <fieldset>
+                      <span class="star-cb-group">
+                        <input type="radio" id="ratings-5" name="rating" value="5" />
+                        <label for="ratings-5"></label>
+
+                        <input type="radio" id="ratings-4" name="rating" value="4" />
+                        <label for="ratings-4"></label>
+
+                        <input type="radio" id="ratings-3" name="rating" value="3" />
+                        <label for="ratings-3"></label>
+
+                        <input type="radio" id="ratings-2" name="rating" value="2" />
+                        <label for="ratings-2"></label>
+
+                        <input type="radio" id="ratings-1" name="rating" value="1" />
+                        <label for="ratings-1"></label>
+
+                        <input type="radio" id="ratings-0" name="rating" value="0" class="star-cb-clear" />
+                        <label for="ratings-0" class="d-none">0</label>
+
+
+                      </span>
+                    </fieldset>
+                  </form>
+                {{-- <button type="submit" class="btn_purple auth_btn hover_effect1 submit_btn">Submit</button> --}}
+                <input type="submit" class="btn_purple auth_btn hover_effect1 submit_btn" value="Submit">
+            </form>
+        </div>
+        </div>
+    </div>
+</div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -314,6 +464,15 @@ function checkform()
 $('.save_adrs input').on('blur',function() {
     $(this).nextAll('span').hide();
 })
+
+
+var logID = 'log',
+  log = $('<div id="'+logID+'"></div>');
+$('body').append(log);
+  $('[type*="radio"]').change(function () {
+    var me = $(this);
+    log.html(me.attr('value'));
+  });
 
 </script>
 
