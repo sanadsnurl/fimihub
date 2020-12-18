@@ -25,12 +25,12 @@ class OrderController extends Controller
 {
     public function getPaymentPage(Request $request)
     {
-        $user=Auth::user();
+        $user = Auth::user();
         $user_data = auth()->user()->userByIdData($user->id);
         $user_address = new user_address();
         $user_default_add = $user_address->getDefaultAddress($user->id);
 
-        if($user_default_add !=NULL){
+        if ($user_default_add != NULL) {
 
             $user_address = new user_address();
             $user_add = $user_address->getUserAddress($user->id);
@@ -38,75 +38,70 @@ class OrderController extends Controller
             $cart = new cart;
             $cart_avail = $cart->checkCartAvaibility($user->id);
             $upadte_cart = array();
-            $upadte_cart['id']= $cart_avail->id;
-            $upadte_cart['address_id']= $user_default_add->id;
+            $upadte_cart['id'] = $cart_avail->id;
+            $upadte_cart['address_id'] = $user_default_add->id;
             $update_cart_add = $cart->updateCart($upadte_cart);
 
-            if($cart_avail == NULL){
-                return view('customer.cart')->with(['user_data'=>$user,
-                                                'user_address'=>$user_add
-                                                ]);;
-            }
-            else
-            {
+            if ($cart_avail == NULL) {
+                return view('customer.cart')->with([
+                    'user_data' => $user,
+                    'user_address' => $user_add
+                ]);;
+            } else {
                 $restaurent_detail = new restaurent_detail;
                 $resto_data = $restaurent_detail->getRestoDataOnId($cart_avail->restaurent_id);
 
                 $cart_submenu = new cart_submenu;
                 $quant_details = array();
-                $quant_details['user_id']=$user->id;
-                $quant_details['cart_id']=$cart_avail->id;
-                $quant_details['restaurent_id']=$cart_avail->restaurent_id;
+                $quant_details['user_id'] = $user->id;
+                $quant_details['cart_id'] = $cart_avail->id;
+                $quant_details['restaurent_id'] = $cart_avail->restaurent_id;
                 $cart_menu_data = $cart_submenu->getCartMenuList($quant_details);
 
-                if($cart_menu_data != NULL){
-                    $total_amount=0;
-                    $item=0;
-                   
-                    foreach($cart_menu_data as $m_data){
+                if ($cart_menu_data != NULL) {
+                    $total_amount = 0;
+                    $item = 0;
+
+                    foreach ($cart_menu_data as $m_data) {
                         $ServiceCategories = new ServiceCategory;
                         $service_data = $ServiceCategories->getServiceById(1);
                         $percentage = $service_data->commission;
                         $m_data->price = $m_data->price + (($percentage / 100) * $m_data->price);
 
-                        if($m_data->quantity != NULL){
+                        if ($m_data->quantity != NULL) {
                             $item = $item + $m_data->quantity;
                             $total_amount = $total_amount + ($m_data->quantity * $m_data->price);
                         }
                     }
                     $ServiceCategories = new ServiceCategory;
                     $service_data = $ServiceCategories->getServiceById(1);
-                    $service_tax = (($service_data->tax / 100) * $total_amount) ;
+                    $service_tax = (($service_data->tax / 100) * $total_amount);
                     $service_data->service_tax = $service_tax;
                     //add delivery charge and tax in total amount
                     $sub_total = $total_amount;
                     $total_amount = ($total_amount - $resto_data->discount) + $resto_data->delivery_charge + $resto_data->tax + $service_tax;
-                    $user['currency']=$this->currency;
-                    return view('customer.cartPayment')->with(['user_data'=>$user,
-                                                    'menu_data'=>$cart_menu_data,
-                                                    'total_amount'=>$total_amount,
-                                                    'item'=>$item,
-                                                    'sub_total'=>$sub_total,
-                                                    'service_data'=>$service_data,
-                                                    'resto_data'=>$resto_data,
-                                                    'user_address'=>$user_add
-                                                    ]);
-                }
-                else{
-                    return view('customer.cart')->with(['user_data'=>$user,
-                    'user_address'=>$user_add
+                    $user['currency'] = $this->currency;
+                    return view('customer.cartPayment')->with([
+                        'user_data' => $user,
+                        'menu_data' => $cart_menu_data,
+                        'total_amount' => $total_amount,
+                        'item' => $item,
+                        'sub_total' => $sub_total,
+                        'service_data' => $service_data,
+                        'resto_data' => $resto_data,
+                        'user_address' => $user_add
+                    ]);
+                } else {
+                    return view('customer.cart')->with([
+                        'user_data' => $user,
+                        'user_address' => $user_add
                     ]);;
                 }
-                
             }
-        }
-        else{
+        } else {
             Session::flash('message', 'Please Select Any Address');
             return redirect()->back();
-
         }
-        
-        
     }
 
     public function addPaymentType(Request $request)
@@ -114,9 +109,9 @@ class OrderController extends Controller
 
         $validator = Validator::make($request->all(), [
             'payment' => 'required|in:1,2,3',
-                
+
         ]);
-        if(!$validator->fails()){
+        if (!$validator->fails()) {
             $user = Auth::user();
 
             $cart = new cart;
@@ -124,24 +119,24 @@ class OrderController extends Controller
 
             $cart_submenu = new cart_submenu;
             $quant_details = array();
-            $quant_details['user_id']=$user->id;
-            $quant_details['cart_id']=$cart_avail->id;
-            $quant_details['restaurent_id']=$cart_avail->restaurent_id;
+            $quant_details['user_id'] = $user->id;
+            $quant_details['cart_id'] = $cart_avail->id;
+            $quant_details['restaurent_id'] = $cart_avail->restaurent_id;
             $cart_menu_data = $cart_submenu->getCartMenuList($quant_details);
 
-            if($cart_menu_data != NULL){
-                $total_amount=0;
-                $item=0;
+            if ($cart_menu_data != NULL) {
+                $total_amount = 0;
+                $item = 0;
 
                 $restaurent_detail = new restaurent_detail;
                 $resto_data = $restaurent_detail->getRestoDataOnId($cart_avail->restaurent_id);
 
-                foreach($cart_menu_data as $m_data){
+                foreach ($cart_menu_data as $m_data) {
                     $ServiceCategories = new ServiceCategory;
                     $service_data = $ServiceCategories->getServiceById(1);
                     $percentage = $service_data->commission;
                     $m_data->price = $m_data->price + (($percentage / 100) * $m_data->price);
-                    if($m_data->quantity != NULL){
+                    if ($m_data->quantity != NULL) {
                         $item = $item + $m_data->quantity;
                         $total_amount = $total_amount + ($m_data->quantity * $m_data->price);
                     }
@@ -149,11 +144,11 @@ class OrderController extends Controller
                 //add delivery charge and tax in total amount
                 $ServiceCategories = new ServiceCategory;
                 $service_data = $ServiceCategories->getServiceById(1);
-                $service_tax = (($service_data->tax / 100) * $total_amount) ;
+                $service_tax = (($service_data->tax / 100) * $total_amount);
                 $service_data->service_tax = $service_tax;
 
                 $total_amount = ($total_amount - $resto_data->discount) + $resto_data->delivery_charge + $resto_data->tax + $service_tax;
-                $user['currency']=$this->currency;
+                $user['currency'] = $this->currency;
 
                 $orders = new order;
                 $add_order = array();
@@ -171,29 +166,23 @@ class OrderController extends Controller
                 $add_order['tax'] = $cart_avail->tax;
                 $add_order['order_status'] = 3;
                 $add_order['payment_type'] = request('payment');
-                if($add_order['payment_type'] == 3){
+                if ($add_order['payment_type'] == 3) {
                     $add_order['payment_status'] = 2;
-
-                }else{
+                } else {
                     $add_order['payment_status'] = 1;
-
                 }
                 $make_order_id = $orders->makeOrder($add_order);
                 $order_id = base64_encode($make_order_id);
                 $cart_delete = $cart->deleteCart($user->id);
 
                 Session::flash('modal_check_order', 'open');
-                Session::flash('order_id',$order_id);
+                Session::flash('order_id', $order_id);
                 return redirect('/myOrder');
+            } else {
             }
-            else{
+        } else {
 
-            }
-            
-        }
-        else{
-
-        	return redirect()->back()->withInput()->withErrors($validator);  
+            return redirect()->back()->withInput()->withErrors($validator);
         }
     }
 
@@ -206,10 +195,10 @@ class OrderController extends Controller
         $menu_order = json_decode($order_data->ordered_menu);
 
         $menu_data = array();
-        $item= 0;
-        $total_cart_value=0;
-        foreach($menu_order as $m_data){
-                    
+        $item = 0;
+        $total_cart_value = 0;
+        foreach ($menu_order as $m_data) {
+
             $menu_list = new menu_list;
             $menu_data_list = $menu_list->orderMenuListById($m_data->id);
             $item = $item + $m_data->quantity;
@@ -224,7 +213,7 @@ class OrderController extends Controller
         $cart = new cart;
         $cart_data = $cart->getCartData($order_data->id);
 
-        $service_data =array();             
+        $service_data = array();
         $service_data['tax'] = $order_data->service_tax;
         $service_data['commission'] = $order_data->service_commission;
         $service_data = json_encode($service_data);
@@ -233,22 +222,21 @@ class OrderController extends Controller
         $service_tax = $order_data->total_amount - $total_cart_value - $resto_data->delivery_charge + $resto_data->discount;
         $service_data->service_tax = $service_tax;
         $sub_total = $total_cart_value;
-        $user['currency']=$this->currency;
-        if($order_data != NULL){
-            return view('customer.trackOrder')->with(['user_data'=>$user,
-                                                    'order_data' => $order_data,
-                                                    'menu_data' => $menu_data,
-                                                    'resto_data' => $resto_data,
-                                                    'sub_total' => $sub_total,
-                                                    'service_data' => $service_data,
-                                                    'total_amount'=>$order_data->total_amount,
-                                                    'item'=>$item
+        $user['currency'] = $this->currency;
+        if ($order_data != NULL) {
+            return view('customer.trackOrder')->with([
+                'user_data' => $user,
+                'order_data' => $order_data,
+                'menu_data' => $menu_data,
+                'resto_data' => $resto_data,
+                'sub_total' => $sub_total,
+                'service_data' => $service_data,
+                'total_amount' => $order_data->total_amount,
+                'item' => $item
             ]);
-        }
-        else{
+        } else {
             Session::flash('message', 'Order Details Found !');
             return redirect()->back();
         }
-        
     }
 }
