@@ -34,8 +34,8 @@ class RestaurentController extends Controller
         }
         $user_address = new user_address;
         $resto_add = $user_address->getUserAddress($user->id);
-        
-        if(count($resto_add)){
+        echo count($resto_add);
+        if(count($resto_add)<1){
              echo "ddd";
             die();
             $response = ['data'=>$user,
