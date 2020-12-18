@@ -1,68 +1,78 @@
 <style>
     @charset "UTF-8";
-.star-cb-group {
-  font-size: 0;
-  unicode-bidi: bidi-override;
-  direction: rtl;
-}
-.star-cb-group * {
-  font-size: 1rem;
-}
-.star-cb-group > input {
-  display: none;
-}
-.star-cb-group > input + label {
-  /* only enough room for the star */
-  display: inline-block;
-  /* overflow: hidden; */
-  /* text-indent: 9999px; */
-  /* width: 1em; */
-  white-space: nowrap;
-  cursor: pointer;
-}
-.star-cb-group > input + label:before {
-  display: inline-block;
-  content: "☆";
-  color: #888;
-  font-size: 72px;
-}
-.star-cb-group > input:checked ~ label:before, .star-cb-group > input + label:hover ~ label:before, .star-cb-group > input + label:hover:before {
-  content: "★";
-  color: #7d3b8a;
-}
-.star-cb-group > .star-cb-clear + label {
-  text-indent: -9999px;
-  width: .5em;
-  margin-left: -.5em;
-}
-.star-cb-group > .star-cb-clear + label:before {
-  width: .5em;
-}
-.star-cb-group:hover > input + label:before {
-  content: "☆";
-  color: #888;
-  text-shadow: none;
-}
-.star-cb-group:hover > input + label:hover ~ label:before, .star-cb-group:hover > input + label:hover:before {
-  content: "★";
-  color:#7d3b8a;
-}
 
-fieldset {
-  border: 0;
-  text-align: center;
-}
+    .star-cb-group {
+        font-size: 0;
+        unicode-bidi: bidi-override;
+        direction: rtl;
+    }
 
-#log {
-  margin: 1em auto;
-  width: 5em;
-  text-align: center;
-  background: transparent;
-}
+    .star-cb-group * {
+        font-size: 1rem;
+    }
 
+    .star-cb-group>input {
+        display: none;
+    }
 
+    .star-cb-group>input+label {
+        /* only enough room for the star */
+        display: inline-block;
+        /* overflow: hidden; */
+        /* text-indent: 9999px; */
+        /* width: 1em; */
+        white-space: nowrap;
+        cursor: pointer;
+    }
+
+    .star-cb-group>input+label:before {
+        display: inline-block;
+        content: "☆";
+        color: #888;
+        font-size: 72px;
+    }
+
+    .star-cb-group>input:checked~label:before,
+    .star-cb-group>input+label:hover~label:before,
+    .star-cb-group>input+label:hover:before {
+        content: "★";
+        color: #7d3b8a;
+    }
+
+    .star-cb-group>.star-cb-clear+label {
+        text-indent: -9999px;
+        width: .5em;
+        margin-left: -.5em;
+    }
+
+    .star-cb-group>.star-cb-clear+label:before {
+        width: .5em;
+    }
+
+    .star-cb-group:hover>input+label:before {
+        content: "☆";
+        color: #888;
+        text-shadow: none;
+    }
+
+    .star-cb-group:hover>input+label:hover~label:before,
+    .star-cb-group:hover>input+label:hover:before {
+        content: "★";
+        color: #7d3b8a;
+    }
+
+    fieldset {
+        border: 0;
+        text-align: center;
+    }
+
+    #log {
+        margin: 1em auto;
+        width: 5em;
+        text-align: center;
+        background: transparent;
+    }
 </style>
-
 
 <footer class="footer">
     <div class="md_container">
@@ -141,9 +151,10 @@ fieldset {
             <h4>Save delivery address</h4>
         </div>
         <div id="address-map-container" style="width:105%;height:360px; margin-bottom: -115px;">
-                <div style="width: 100%; height: 60%;" id="address-map"></div>
-            </div>
-        <form role="form" method="POST" action="{{ url('/saveAddress') }}" onSubmit="return checkform()" class="form save_adrs">
+            <div style="width: 100%; height: 60%;" id="address-map"></div>
+        </div>
+        <form role="form" method="POST" action="{{ url('/saveAddress') }}" onSubmit="return checkform()"
+            class="form save_adrs">
             @csrf
             <!-- <div class="form-group">
                 <label for="address_address">Address</label>
@@ -151,11 +162,11 @@ fieldset {
 
             </div> -->
 
-
             <div class="field-wrap">
                 <label for="address_address">Address</label>
                 <div class="address_box_dyn">
-                    <input type="text" id="address-input"  name="address_address" placeholder="Address" class="map-input" >
+                    <input type="text" id="address-input" name="address_address" placeholder="Address"
+                        class="map-input">
                     <button type="button" class="show_address"><i class="fa fa-crosshairs"></i></button>
                     <span id="add" class="errors"></span>
 
@@ -235,7 +246,8 @@ fieldset {
                 <h3 class="mt-3 mb-3">THANK YOU!</h3>
                 <p>Your order was successfully placed <br>and being prepared for delivery.</p>
                 <div class="d-flex align-items-center justify-content-center">
-                    <a href="{{url('/trackOrder')}}@if(Session::has('order_id')){{'?odr_id='}}{{Session::get('order_id')}}@endif
+                    <a href="{{url('/trackOrder')}}@if(Session::has('order_id')){{'?odr_id='}}{{Session::get('order_id')}}
+                    @endif
                 ">
                         <button type="button" class="btn_purple auth_btn hover_effect1 track_order_btn">TRACK YOUR
                             ORDER</button></a>
@@ -245,7 +257,6 @@ fieldset {
         </div>
     </div>
 </div>
-
 
 <div class="side-panel right" data-panel-id="filterPanel">
     <div class="inner-sidebar">
@@ -305,83 +316,81 @@ fieldset {
 <div class="modal fade review_mdl" id="review">
     <div class="modal-dialog">
         <div class="modal-content">
-        <div class="modal-body">
-            <h3 class="text-center">Rate and Review</h3>
-            <div class="mdl_top">
-            <div class="row">
-                <div class="col-md-4">
-                    <img src="{{url('asset/customer/assets/images/food.png')}}" alt="image" class="w-100">
+            <div class="modal-body">
+                <h3 class="text-center">Rate and Review</h3>
+                <div class="mdl_top">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <img src="{{url('asset/customer/assets/images/food.png')}}" alt="image" class="w-100">
+                        </div>
+                        <div class="col-md-8">
+                            <h4>Woody's Low Bridge Place</h4>
+                            <p>Cuisine 1, Cuisine 2, etc.</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-8">
-                    <h4>Woody's Low Bridge Place</h4>
-                    <p>Cuisine 1, Cuisine 2, etc.</p>
-                </div>
-            </div>
-            </div>
-            <form>
-                <fieldset>
-                  <span class="star-cb-group">
-                    <input type="radio" id="rating-5" name="rating" value="5" />
-                    <label for="rating-5"></label>
+                <form action="">
 
-                    <input type="radio" id="rating-4" name="rating" value="4" />
-                    <label for="rating-4"></label>
-
-                    <input type="radio" id="rating-3" name="rating" value="3" />
-                    <label for="rating-3"></label>
-
-                    <input type="radio" id="rating-2" name="rating" value="2" />
-                    <label for="rating-2"></label>
-
-                    <input type="radio" id="rating-1" name="rating" value="1" />
-                    <label for="rating-1"></label>
-
-                    <input type="radio" id="rating-0" name="rating" value="0" class="star-cb-clear" />
-                    <label for="rating-0" class="d-none">0</label>
-
-
-                  </span>
-                </fieldset>
-              </form>
-            <form action="">
-                {{-- <img src="{{url('asset/customer/assets/images/star_rating.svg')}}" alt="stars"> --}}
-
-
-                <input type="text" class="" placeholder="Type Your message....">
-                <h4>Rate Rider</h4>
-                <div class="rider_review">
-                    <p class="text-center"><img src="{{url('asset/customer/assets/images/user_dp.png')}}" alt="image">   Brushe soe</p>
-                </div>
-                {{-- <img src="{{url('asset/customer/assets/images/star_rating.svg')}}" alt="stars"> --}}
-                <form>
                     <fieldset>
-                      <span class="star-cb-group">
-                        <input type="radio" id="ratings-5" name="rating" value="5" />
-                        <label for="ratings-5"></label>
+                        <span class="star-cb-group">
+                            <input type="radio" id="rating-5" name="restaurant_rating" value="5" />
+                            <label for="rating-5"></label>
 
-                        <input type="radio" id="ratings-4" name="rating" value="4" />
-                        <label for="ratings-4"></label>
+                            <input type="radio" id="rating-4" name="restaurant_rating" value="4" />
+                            <label for="rating-4"></label>
 
-                        <input type="radio" id="ratings-3" name="rating" value="3" />
-                        <label for="ratings-3"></label>
+                            <input type="radio" id="rating-3" name="restaurant_rating" value="3" />
+                            <label for="rating-3"></label>
 
-                        <input type="radio" id="ratings-2" name="rating" value="2" />
-                        <label for="ratings-2"></label>
+                            <input type="radio" id="rating-2" name="restaurant_rating" value="2" />
+                            <label for="rating-2"></label>
 
-                        <input type="radio" id="ratings-1" name="rating" value="1" />
-                        <label for="ratings-1"></label>
+                            <input type="radio" id="rating-1" name="restaurant_rating" value="1" />
+                            <label for="rating-1"></label>
 
-                        <input type="radio" id="ratings-0" name="rating" value="0" class="star-cb-clear" />
-                        <label for="ratings-0" class="d-none">0</label>
+                            <input type="radio" id="rating-0" name="restaurant_rating" value="0"
+                                class="star-cb-clear" />
+                            <label for="rating-0" class="d-none">0</label>
 
-
-                      </span>
+                        </span>
                     </fieldset>
-                  </form>
+
+                    {{-- <img src="{{url('asset/customer/assets/images/star_rating.svg')}}" alt="stars"> --}}
+
+                    <input type="text" class="" placeholder="Type Your message....">
+                    <h4>Rate Rider</h4>
+                    <div class="rider_review">
+                        <p class="text-center"><img src="{{url('asset/customer/assets/images/user_dp.png')}}"
+                                alt="image"> Brushe soe</p>
+                    </div>
+                    {{-- <img src="{{url('asset/customer/assets/images/star_rating.svg')}}" alt="stars"> --}}
+                    <fieldset>
+                        <span class="star-cb-group">
+                            <input type="radio" id="ratings-5" name="rider_rating" value="5" />
+                            <label for="ratings-5"></label>
+
+                            <input type="radio" id="ratings-4" name="rider_rating" value="4" />
+                            <label for="ratings-4"></label>
+
+                            <input type="radio" id="ratings-3" name="rider_rating" value="3" />
+                            <label for="ratings-3"></label>
+
+                            <input type="radio" id="ratings-2" name="rider_rating" value="2" />
+                            <label for="ratings-2"></label>
+
+                            <input type="radio" id="ratings-1" name="rider_rating" value="1" />
+                            <label for="ratings-1"></label>
+
+                            <input type="radio" id="ratings-0" name="rider_rating" value="0" class="star-cb-clear" />
+                            <label for="ratings-0" class="d-none">0</label>
+
+                        </span>
+                    </fieldset>
+                </form>
                 {{-- <button type="submit" class="btn_purple auth_btn hover_effect1 submit_btn">Submit</button> --}}
                 <input type="submit" class="btn_purple auth_btn hover_effect1 submit_btn" value="Submit">
-            </form>
-        </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
@@ -397,82 +406,69 @@ fieldset {
     async defer></script>
 @if(Session::has('modal_check_subscribe'))
 <script>
-$(window).on('load', function() {
-    $('#forgot_psw').modal('show');
-})
+    $(window).on('load', function() {
+        $('#forgot_psw').modal('show');
+    })
 </script>
 @endif
 @if(Session::has('modal_check_order'))
 <script>
-$(window).on('load', function() {
-    $('#thankyou').modal('show');
-});
+    $(window).on('load', function() {
+        $('#thankyou').modal('show');
+    });
 </script>
 @endif
 
 <script>
-$(document).ready(function(){
-    $('[data-toggle="tooltip"]').tooltip();
-});
-
-// $('.accord_btn').click(function() {
-//     $(this).next('.apply_cpn_box').slideToggle();
-//     $(this).find('span').next('img').toggleClass('rotate_icon');
-// })
-
-function checkform()
-{
-    let add = document.getElementById('address-input').value;
-    let flat = document.getElementById('flat').value;
-    let landmrk = document.getElementById('landmrk').value;
-    let lat = document.getElementById('address-latitude').value;
-    let log = document.getElementById('address-longitude').value;
-    let err = true;
-
-	if (add == ''){
-		document.getElementById('add').innerHTML = 'Address field required';
-		document.getElementById('add').style.display = 'block';
-		err = false;
-    }else if(lat == '' || lat == 0 || log == '' || log == 0) {
-        document.getElementById('add').innerHTML = 'Invalid address';
-        document.getElementById('add').style.display = 'block';
-        err = false;
+    $(document).ready(function() {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+    // $('.accord_btn').click(function() {
+    //     $(this).next('.apply_cpn_box').slideToggle();
+    //     $(this).find('span').next('img').toggleClass('rotate_icon');
+    // })
+    function checkform() {
+        let add = document.getElementById('address-input').value;
+        let flat = document.getElementById('flat').value;
+        let landmrk = document.getElementById('landmrk').value;
+        let lat = document.getElementById('address-latitude').value;
+        let log = document.getElementById('address-longitude').value;
+        let err = true;
+        if (add == '') {
+            document.getElementById('add').innerHTML = 'Address field required';
+            document.getElementById('add').style.display = 'block';
+            err = false;
+        } else if (lat == '' || lat == 0 || log == '' || log == 0) {
+            document.getElementById('add').innerHTML = 'Invalid address';
+            document.getElementById('add').style.display = 'block';
+            err = false;
+        }
+        if (flat == '') {
+            document.getElementById('flaterr').innerHTML = 'Flat field required';
+            document.getElementById('flaterr').style.display = 'block';
+            err = false;
+        }
+        if (landmrk == '') {
+            document.getElementById('landmarkerr').innerHTML = 'Landmark field required';
+            document.getElementById('landmarkerr').style.display = 'block';
+            err = false;
+        }
+        // If the script gets this far through all of your fields
+        // without problems, it's ok and you can submit the form
+        if (err == true) {
+            return true;
+        } else {
+            return false;
+        }
     }
-    if(flat == '') {
-        document.getElementById('flaterr').innerHTML = 'Flat field required';
-        document.getElementById('flaterr').style.display = 'block';
-		err =  false;
-    }
-
-    if(landmrk == '') {
-        document.getElementById('landmarkerr').innerHTML = 'Landmark field required';
-        document.getElementById('landmarkerr').style.display = 'block';
-		err =  false;
-    }
-
-	// If the script gets this far through all of your fields
-	// without problems, it's ok and you can submit the form
-
-	if(err == true) {
-        return true;
-    }else {
-        return false;
-    }
-}
-
-
-$('.save_adrs input').on('blur',function() {
-    $(this).nextAll('span').hide();
-})
-
-
-var logID = 'log',
-  log = $('<div id="'+logID+'"></div>');
-$('body').append(log);
-  $('[type*="radio"]').change(function () {
-    var me = $(this);
-    log.html(me.attr('value'));
-  });
-
+    $('.save_adrs input').on('blur', function() {
+        $(this).nextAll('span').hide();
+    })
+    var logID = 'log',
+        log = $('<div id="' + logID + '"></div>');
+    $('body').append(log);
+    $('[type*="radio"]').change(function() {
+        var me = $(this);
+        log.html(me.attr('value'));
+    });
 </script>
-

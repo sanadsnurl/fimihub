@@ -45,7 +45,7 @@
                                         @if($m_data->dish_type == 2)
                                         <h4 class="green_dot">{{$m_data->name ?? ''}}</h4>
                                         @else
-                                        <h4 >{{$m_data->name ?? ''}}</h4>
+                                        <h4>{{$m_data->name ?? ''}}</h4>
                                         @endif
                                         <p>{{$m_data->about ?? ''}}</p>
                                     </div>
@@ -92,7 +92,6 @@
                         </div>
                         @endif
 
-
                         <div class="bill_details">
                             <h4>Bill Details</h4>
                             <div class="total_item pb-1">
@@ -101,7 +100,8 @@
                             </div>
                             <div class="total_item pb-1">
                                 <span> Item Sub-Total </span>
-                                <span>{{$user_data->currency ?? ''}} <span id="sub_total">{{number_format((float)$sub_total, 2) ?? '0'}}</span></span>
+                                <span>{{$user_data->currency ?? ''}} <span
+                                        id="sub_total">{{number_format((float)$sub_total, 2) ?? '0'}}</span></span>
                             </div>
                             @if($resto_data->discount != 0 || $resto_data->discount != Null)
 
@@ -148,7 +148,7 @@
                         <div class="total_price d-flex align-items-center">
                             <span>Total</span>
                             <span>{{$user_data->currency ?? ''}} <span
-                                id="total_amount">{{number_format((float)$total_amount, 2) ?? '0'}}</span></span>
+                                    id="total_amount">{{number_format((float)$total_amount, 2) ?? '0'}}</span></span>
                         </div>
 
                         <div class="to_pay_box button_box_hlp d-flex align-items-center">
@@ -173,76 +173,71 @@
 @include('customer.include.footer')
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script>
-function increment_quantity(menu_id) {
-    var resto_id = $("#input-quantity").val();
-    var menu_decode_id = atob(menu_id);
-    var inputQuantityElement = $("#input-quantity-" + menu_decode_id);
-    var item_count = $("#item_count");
-    var total_amount = $("#total_amount");
-    var service_tax = $("#service_tax");
-    var sub_total = $("#sub_total");
+    function increment_quantity(menu_id) {
+        var resto_id = $("#input-quantity").val();
+        var menu_decode_id = atob(menu_id);
+        var inputQuantityElement = $("#input-quantity-" + menu_decode_id);
+        var item_count = $("#item_count");
+        var total_amount = $("#total_amount");
+        var service_tax = $("#service_tax");
+        var sub_total = $("#sub_total");
+        $.ajax({
+            url: "addMenuItem",
+            data: "menu_id=" + menu_id + "&resto_id=" + resto_id,
+            type: 'get',
+            beforeSend: function() {
+                $("#loading-overlay").show();
+            },
+            success: function(response) {
+                var total_amnt = (response.total_amount + response.service_data.service_tax);
+                total_amnt = total_amnt.toFixed(2);
+                var service_taxs = response.service_data.service_tax.toFixed(2);
+                var sub_totals = response.sub_total.toFixed(2);
+                $(inputQuantityElement).val(response.quantity);
+                $(item_count).html(response.items);
+                $(sub_total).html(sub_totals);
+                $(total_amount).html(total_amnt);
+                $(service_tax).html(service_taxs);
+                $("#loading-overlay").hide();
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                $("#loading-overlay").hide();
+                alert("something went wrong");
+            }
+        });
+    }
 
-    $.ajax({
-        url: "addMenuItem",
-        data: "menu_id=" + menu_id + "&resto_id=" + resto_id,
-        type: 'get',
-        beforeSend: function() {
-            $("#loading-overlay").show();
-        },
-        success: function(response) {
-            var total_amnt = (response.total_amount + response.service_data.service_tax);
-            total_amnt = total_amnt.toFixed(2);
-            var service_taxs = response.service_data.service_tax.toFixed(2);
-            var sub_totals = response.sub_total.toFixed(2);
-
-            $(inputQuantityElement).val(response.quantity);
-            $(item_count).html(response.items);
-            $(sub_total).html(sub_totals);
-            $(total_amount).html(total_amnt);
-            $(service_tax).html(service_taxs);
-            $("#loading-overlay").hide();
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            $("#loading-overlay").hide();
-            alert("something went wrong");
-        }
-    });
-}
-
-function decrement_quantity(menu_id) {
-    var resto_id = $("#input-quantity").val();
-    var menu_decode_id = atob(menu_id);
-    var inputQuantityElement = $("#input-quantity-" + menu_decode_id);
-    var item_count = $("#item_count");
-    var total_amount = $("#total_amount");
-    var service_tax = $("#service_tax");
-    var sub_total = $("#sub_total");
-
-    $.ajax({
-        url: "subtractMenuItem",
-        data: "menu_id=" + menu_id + "&resto_id=" + resto_id,
-        type: 'get',
-        beforeSend: function() {
-            $("#loading-overlay").show();
-        },
-        success: function(response) {
-            var total_amnt = (response.total_amount + response.service_data.service_tax);
-            total_amnt = total_amnt.toFixed(2);
-            var service_taxs = response.service_data.service_tax.toFixed(2);
-            var sub_totals = response.sub_total.toFixed(2);
-
-            $(inputQuantityElement).val(response.quantity);
-            $(item_count).html(response.items);
-            $(sub_total).html(sub_totals);
-            $(total_amount).html(total_amnt);
-            $(service_tax).html(service_taxs);
-            $("#loading-overlay").hide();
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            $("#loading-overlay").hide();
-            alert("something went wrong");
-        }
-    });
-}
-
+    function decrement_quantity(menu_id) {
+        var resto_id = $("#input-quantity").val();
+        var menu_decode_id = atob(menu_id);
+        var inputQuantityElement = $("#input-quantity-" + menu_decode_id);
+        var item_count = $("#item_count");
+        var total_amount = $("#total_amount");
+        var service_tax = $("#service_tax");
+        var sub_total = $("#sub_total");
+        $.ajax({
+            url: "subtractMenuItem",
+            data: "menu_id=" + menu_id + "&resto_id=" + resto_id,
+            type: 'get',
+            beforeSend: function() {
+                $("#loading-overlay").show();
+            },
+            success: function(response) {
+                var total_amnt = (response.total_amount + response.service_data.service_tax);
+                total_amnt = total_amnt.toFixed(2);
+                var service_taxs = response.service_data.service_tax.toFixed(2);
+                var sub_totals = response.sub_total.toFixed(2);
+                $(inputQuantityElement).val(response.quantity);
+                $(item_count).html(response.items);
+                $(sub_total).html(sub_totals);
+                $(total_amount).html(total_amnt);
+                $(service_tax).html(service_taxs);
+                $("#loading-overlay").hide();
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                $("#loading-overlay").hide();
+                alert("something went wrong");
+            }
+        });
+    }
 </script>

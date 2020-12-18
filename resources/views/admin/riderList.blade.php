@@ -90,14 +90,7 @@
             dom: 'lBfrtip',
             buttons: ['copy', 'excel', 'pdf', 'print'],
             ajax: "{{url('adminfimihub/riderList')}}",
-            columns: [
-                // {
-                //     data: 'action',
-                //     name: 'action',
-                //     orderable: true,
-                //     searchable: false
-                // },
-                {
+            columns: [{
                     data: 'DT_RowIndex',
                     name: 'id'
                 },
