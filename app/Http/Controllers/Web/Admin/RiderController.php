@@ -27,44 +27,55 @@ class RiderController extends Controller
 
         $users = new user;
         $user_list = $users->allUserPaginateListRiderData(2)
-                ->with('riderBankDetails','vehicleDetails');
+            ->with('riderBankDetails', 'vehicleDetails');
         if ($request->ajax()) {
             return Datatables::of($user_list)
                 ->addIndexColumn()
-                ->addColumn('action', function($row){
-                    $btn = '<a href="editResto?resto_user_id='.base64_encode($row->resto_user_id).'" class="btn btn-outline-secondary btn-sm btn-round waves-effect waves-light m-0">Edit</a>
-                    <a href="deleteResto?resto_user_id='.base64_encode($row->resto_user_id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light mt-1">Delete</a>
+                ->addColumn('action', function ($row) {
+                    $btn = '<a href="editResto?resto_user_id=' . base64_encode($row->resto_user_id) . '" class="btn btn-outline-secondary btn-sm btn-round waves-effect waves-light m-0">Edit</a>
+                    <a href="deleteResto?resto_user_id=' . base64_encode($row->resto_user_id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light mt-1">Delete</a>
                     ';
                     return $btn;
                 })
-                ->addColumn('vehicle_image', function($row){
+                ->addColumn('vehicle_image', function ($row) {
                     $url = $row->vehicleDetails->vehicle_image;
-                    $btns = '<a href="'.$url.'" class="btn btn-outline-secondary btn-sm btn-round waves-effect waves-light m-0">View Image</a>';
+                    if ($url != NUll) {
+                        $btns = '<a href="' . $url . '" class="btn btn-outline-secondary btn-sm btn-round waves-effect waves-light m-0">View Image</a>';
+                    } else {
+                        $btns = 'N.A';
+                    }
                     return $btns;
                 })
-                ->addColumn('id_proof', function($row){
+                ->addColumn('id_proof', function ($row) {
+
+
                     $url = $row->vehicleDetails->id_proof;
-                    $btns = '<a href="'.$url.'" class="btn btn-outline-secondary btn-sm btn-round waves-effect waves-light m-0">View</a>';
+                    if ($url != NUll) {
+                        $btns = '<a href="' . $url . '" class="btn btn-outline-secondary btn-sm btn-round waves-effect waves-light m-0">View</a>';
+                    } else {
+                        $btns = 'N.A';
+                    }
                     return $btns;
                 })
-                ->addColumn('driving_license', function($row){
+                ->addColumn('driving_license', function ($row) {
                     $url = $row->vehicleDetails->driving_license;
-                    $btns = '<a href="'.$url.'" class="btn btn-outline-secondary btn-sm btn-round waves-effect waves-light m-0">View</a>';
-                    return $btns;
+                    if ($url != NUll) {
+                        $btns = '<a href="' . $url . '" class="btn btn-outline-secondary btn-sm btn-round waves-effect waves-light m-0">View</a>';
+                    } else {
+                        $btns = 'N.A';
+                    }
                 })
-                ->addColumn('created_at', function($row){
+                ->addColumn('created_at', function ($row) {
 
                     return date('d F Y', strtotime($row->created_at));
                 })
-                ->rawColumns(['action','vehicle_image','id_proof','driving_license'])
+                ->rawColumns(['action', 'vehicle_image', 'id_proof', 'driving_license'])
                 ->make(true);
-
         }
-        $user['currency']=$this->currency;
+        $user['currency'] = $this->currency;
         $user_list = $user_list->get();
 
-        dd($user_list);
-        return view('admin.riderList')->with(['data'=>$user]);
-
+        // dd($user_list);
+        return view('admin.riderList')->with(['data' => $user]);
     }
 }
