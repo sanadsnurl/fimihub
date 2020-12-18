@@ -18,7 +18,7 @@
                     <div class="card-header"><i class="fa fa-table"></i> Rider List</div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table id="example" class="table table-bordered">
+                            <table id="example1" class="table table-bordered">
                                 <thead>
                                     <tr>
                                         {{-- <th>Action</th> --}}
@@ -80,9 +80,9 @@
     <script>
     $(document).ready(function() {
         //Default data table
-        $('#default-datatable').DataTable();
+        // $('#defaultdatatable').DataTable();
 
-        var table = $('#example').DataTable({
+        var table = $('#example1').DataTable({
             lengthChange: true,
             processing: true,
             serverSide: true,
