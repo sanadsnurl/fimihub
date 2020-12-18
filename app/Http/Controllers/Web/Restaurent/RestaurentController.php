@@ -39,12 +39,14 @@ class RestaurentController extends Controller
             'resto_data'=>$resto_data,
             'resto_add'=> null];
             var_dump($response);
+            echo $user;
             die();
             return view('restaurent.myDetails')->with(['data'=>$user,
             'resto_data'=>$resto_data,
             'resto_add'=> null]);
         }
         else{
+            echo "ds";
             return view('restaurent.myDetails')->with(['data'=>$user,
                                                 'resto_data'=>$resto_data,
                                                 'resto_add'=> $resto_add[0]]);
