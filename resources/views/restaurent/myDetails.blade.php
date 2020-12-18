@@ -196,7 +196,7 @@
                             </div>
 
                             <div class="form-footer">
-                                <input type="submit" class="btn btn-primary" value="Save Data"></input>
+                                <input type="submit" class="btn btn-primary" value="Save Data">
 
                             </div>
                         </form>

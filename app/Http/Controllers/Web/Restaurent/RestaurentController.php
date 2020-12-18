@@ -29,10 +29,13 @@ class RestaurentController extends Controller
         $user = Auth::user();
         $restaurent_detail = new restaurent_detail;
         $resto_data = $restaurent_detail->getRestoData($user->id);
+        if($resto_data == NUll){
+            $resto_data = null;
+        }
         $user_address = new user_address;
         $resto_add = $user_address->getUserAddress($user->id);
-        dd($resto_data.'======'.$resto_add);
-        if($resto_add == NULL){
+
+        if(empty($resto_add)){
             return view('restaurent.myDetails')->with(['data'=>$user,
             'resto_data'=>$resto_data,
             'resto_add'=> null]);
@@ -42,7 +45,6 @@ class RestaurentController extends Controller
                                                 'resto_data'=>$resto_data,
                                                 'resto_add'=> $resto_add[0]]);
         }
-
 
     }
 
