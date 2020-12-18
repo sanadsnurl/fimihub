@@ -19,9 +19,13 @@
             <div class="row">
                 <div class="col-md-9">
                     <ul class="order_track_step">
+                        <li class="{{ in_array($order_data->order_status,array(1)) ? 'order_cancel' : 'order_status_hide'}} " ><span></span> Failed</li>
+                        <li class="{{ in_array($order_data->order_status,array(2)) ? 'order_cancel' : 'order_status_hide'}} "><span></span> Cancelled</li>
+                        <li class="{{ in_array($order_data->order_status,array(4)) ? 'order_cancel' : 'order_status_hide rest_den'}} "><span></span> Restaurant Denied</li>
                         <li class="{{ in_array($order_data->order_status,array(5,6,7,8,9,10,11,12)) ? 'active' : ''}}"><span></span> Order placed</li>
                         <li class="{{ in_array($order_data->order_status,array(6,7,8,9,10,11,12)) ? 'active' : ''}}"><span></span> Order packed</li>
-                        <li class="{{ in_array($order_data->order_status,array(7,8,9,10,11,12)) ? 'active' : ''}}"><span></span> Order has been picked by Brushe soe</li>
+                        <li class="{{ in_array($order_data->order_status,array(8)) ? 'order_cancel' : 'order_status_hide'}} "><span></span> Cancelled</li>
+                        <li class="{{ in_array($order_data->order_status,array(7,8,9,10,11,12)) ? 'active' : ''}}"><span></span> Order has been picked by {{$order_event_data->rider_details->name ?? '---'}}</li>
                         <li class="{{ in_array($order_data->order_status,array(9,10)) ? 'active' : ''}} m-0"><span></span> Order delivered</li>
                     </ul>
                 </div>
