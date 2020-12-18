@@ -34,15 +34,12 @@ class RestaurentController extends Controller
         }
         $user_address = new user_address;
         $resto_add = $user_address->getUserAddress($user->id);
-        echo $resto_add ;
-        die();
-        if(empty($resto_add)){
+        
+        if(count($resto_add)){
             $response = ['data'=>$user,
             'resto_data'=>$resto_data,
             'resto_add'=> null];
-            var_dump($response);
-            echo $user;
-            die();
+            
             return view('restaurent.myDetails')->with(['data'=>$user,
             'resto_data'=>$resto_data,
             'resto_add'=> null]);
