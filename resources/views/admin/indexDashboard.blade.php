@@ -14,7 +14,7 @@
                         <div class="media">
                             <div class="media-body text-left">
                                 <h4 class="text-white">{{$data->user_count ?? '0'}}</h4>
-                                <span class="text-white">Total User's</span>
+                                <span class="text-white">Total Customer's</span>
                             </div>
                             <div class="align-self-center w-circle-icon rounded-circle bg-contrast">
                                 <i class="icon-people text-white"></i>
@@ -29,7 +29,7 @@
                         <div class="media">
                             <div class="media-body text-left">
                                 <h4 class="text-white">{{$data->merchant_count ?? '0'}}</h4>
-                                <span class="text-white">Total Partner's</span>
+                                <span class="text-white">Total Restaurant's</span>
                             </div>
                             <div class="align-self-center w-circle-icon rounded-circle bg-contrast">
                                 <i class="icon-user-following text-white"></i>

@@ -62,6 +62,8 @@ class RiderController extends Controller
         }
         $user['currency']=$this->currency;
         $user_list = $user_list->get();
+
+        dd($user_list);
         return view('admin.riderList')->with(['data'=>$user]);
 
     }
