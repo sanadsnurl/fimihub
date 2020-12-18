@@ -106,4 +106,34 @@ class OrderEvent extends Model
         return $this->belongsTo(Reason::class);
 
     }
+
+    public function getOrderEvent($data)
+    {
+        try {
+            $user_address=DB::table('order_events')
+                ->where('visibility', 0)
+                ->where('order_id', $data)
+                ->get();
+
+            return $user_address;
+        }
+        catch (Exception $e) {
+            dd($e);
+        }
+    }
+
+    public function updateOrderEvent($data)
+    {
+        try {
+            $query_data = DB::table('order_events')
+                        ->where('id', $data['id'])
+                        ->update($data);
+
+            return $query_data;
+        }
+        catch (Exception $e) {
+            dd($e);
+        }
+    }
+
 }

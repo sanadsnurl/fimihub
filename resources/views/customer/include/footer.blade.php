@@ -313,6 +313,8 @@
     </div>
 </div>
 <!-- reviews modal -->
+@if(isset($resto_data->name))
+
 <div class="modal fade review_mdl" id="review">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -321,16 +323,17 @@
                 <div class="mdl_top">
                     <div class="row">
                         <div class="col-md-4">
-                            <img src="{{url('asset/customer/assets/images/food.png')}}" alt="image" class="w-100">
+                            <img src="{{$resto_data->picture ?? url('asset/customer/assets/images/resto_thumbnail.png')}}"
+                                alt="image" class="w-100">
                         </div>
                         <div class="col-md-8">
-                            <h4>Woody's Low Bridge Place</h4>
-                            <p>Cuisine 1, Cuisine 2, etc.</p>
+                            <h4>{{$resto_data->name ?? ''}}</h4>
+                            <p>{{$resto_data->address ?? ''}}</p>
                         </div>
                     </div>
                 </div>
-                <form action="">
-
+                <form role="form" method="POST" action="{{ url('/feedback') }}">
+                    @csrf
                     <fieldset>
                         <span class="star-cb-group">
                             <input type="radio" id="rating-5" name="restaurant_rating" value="5" />
@@ -348,22 +351,24 @@
                             <input type="radio" id="rating-1" name="restaurant_rating" value="1" />
                             <label for="rating-1"></label>
 
-                            <input type="radio" id="rating-0" name="restaurant_rating" value="0"
-                                class="star-cb-clear" />
-                            <label for="rating-0" class="d-none">0</label>
-
                         </span>
+                        @if($errors->has('restaurant_rating'))
+                        <div class="error">{{ $errors->first('restaurant_rating') }}</div>
+                        @endif
                     </fieldset>
 
-                    {{-- <img src="{{url('asset/customer/assets/images/star_rating.svg')}}" alt="stars"> --}}
-
-                    <input type="text" class="" placeholder="Type Your message....">
+                    <input type="text" class="" name="resto_feedback" placeholder="Type Your message....">
+                    <input type="hidden" class="" name="resto_event_id" value="{{$order_event_data->restaurant->id}}">
+                    <input type="hidden" class="" name="rider_event_id" value="{{$order_event_data->rider->id}}">
+                    @if($errors->has('resto_feedback'))
+                    <div class="error" style="text-align-last: center;">{{ $errors->first('resto_feedback') }}</div>
+                    @endif
                     <h4>Rate Rider</h4>
                     <div class="rider_review">
-                        <p class="text-center"><img src="{{url('asset/customer/assets/images/user_dp.png')}}"
-                                alt="image"> Brushe soe</p>
+                        <p class="text-center"><img
+                                src="{{$order_event_data->rider_details->picture ?? url('asset/customer/assets/images/user_dp.png')}}"
+                                alt="image"> {{$order_event_data->rider_details->name ?? '---'}}</p>
                     </div>
-                    {{-- <img src="{{url('asset/customer/assets/images/star_rating.svg')}}" alt="stars"> --}}
                     <fieldset>
                         <span class="star-cb-group">
                             <input type="radio" id="ratings-5" name="rider_rating" value="5" />
@@ -381,19 +386,20 @@
                             <input type="radio" id="ratings-1" name="rider_rating" value="1" />
                             <label for="ratings-1"></label>
 
-                            <input type="radio" id="ratings-0" name="rider_rating" value="0" class="star-cb-clear" />
-                            <label for="ratings-0" class="d-none">0</label>
-
                         </span>
+                        @if($errors->has('rider_rating'))
+                        <div class="error">{{ $errors->first('rider_rating') }}</div>
+                        @endif
                     </fieldset>
+                    <input type="submit" class="btn_purple auth_btn hover_effect1 submit_btn" value="Submit">
                 </form>
-                {{-- <button type="submit" class="btn_purple auth_btn hover_effect1 submit_btn">Submit</button> --}}
-                <input type="submit" class="btn_purple auth_btn hover_effect1 submit_btn" value="Submit">
-                </form>
+
             </div>
         </div>
     </div>
 </div>
+@endif
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -464,11 +470,4 @@
     $('.save_adrs input').on('blur', function() {
         $(this).nextAll('span').hide();
     })
-    var logID = 'log',
-        log = $('<div id="' + logID + '"></div>');
-    $('body').append(log);
-    $('[type*="radio"]').change(function() {
-        var me = $(this);
-        log.html(me.attr('value'));
-    });
 </script>

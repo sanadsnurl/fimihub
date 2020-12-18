@@ -112,6 +112,8 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
         Route::post('addPaymentMethod', 'Web\Customer\OrderController@addPaymentType');
         //Track Order
         Route::get('trackOrder', 'Web\Customer\OrderController@trackOrder');
+        //feedback
+        Route::post('feedback', 'Web\Customer\OrderController@postFeedback');
 
     });
 

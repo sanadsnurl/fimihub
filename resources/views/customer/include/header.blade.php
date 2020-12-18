@@ -72,7 +72,7 @@ window.onload = function() {
                         <li>
                             <a href="{{url('/cart')}}" class="icon-link cart_nofti">
                                 <img src="{{url('asset/customer/assets/images/cart.svg')}}" alt="cart">
-                                <span class="notfi_cart" >8
+                                <span class="notfi_cart" >0
                                     {{-- @if($item <100)
                                     {{$item ?? '0'}}
                                     @else
@@ -84,7 +84,7 @@ window.onload = function() {
                         <li>
                             <a href="#" class="icon-link cart_nofti">
                                 <img src="{{url('asset/customer/assets/images/notification.svg')}}" alt="notification">
-                                <span>9</span>
+                                <span>0</span>
                             </a>
                         </li>
                         <li>

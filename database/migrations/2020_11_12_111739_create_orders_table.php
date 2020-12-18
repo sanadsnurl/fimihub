@@ -121,7 +121,7 @@ class CreateOrdersTable extends Migration
             $table->tinyInteger('order_status')->comment('based on user type')->nullable();
             $table->string('order_comment')->nullable();
             $table->tinyInteger('order_feedback')->nullable();
-            $table->tinyInteger('feedback_comment')->nullable();
+            $table->string('feedback_comment')->nullable();
             $table->tinyInteger('reason_id')->nullable();
             $table->tinyInteger('user_type')->comment('1-Rider,2-Restaurent')->nullable();
             $table->tinyInteger('visibility')->default('0');

@@ -13,6 +13,7 @@ use App\Model\cart_submenu;
 use App\Model\menu_list;
 use App\Model\order;
 use App\Model\ServiceCategory;
+use App\Model\OrderEvent;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -194,6 +195,8 @@ class OrderController extends Controller
         $order_data = $orders->getOrderData($order_id);
         $menu_order = json_decode($order_data->ordered_menu);
 
+
+
         $menu_data = array();
         $item = 0;
         $total_cart_value = 0;
@@ -224,11 +227,28 @@ class OrderController extends Controller
         $sub_total = $total_cart_value;
         $user['currency'] = $this->currency;
         if ($order_data != NULL) {
+            $OrderEvents = new OrderEvent;
+            $order_event_data = $OrderEvents->getOrderEvent($order_id);
+            $event_data = array();
+            foreach ($order_event_data as $o_event) {
+                if ($o_event->user_type == 2) {
+                    $event_data['restaurant'] = $o_event;
+                } elseif ($o_event->user_type == 1) {
+                    $event_data['rider'] = $o_event;
+                    $ride_event_data = auth()->user()->userByIdData($o_event->user_id);
+                    $event_data['rider_details'] = $ride_event_data;
+
+                }
+            }
+            $event_data = json_encode($event_data);
+            $event_data = json_decode($event_data);
+            // dd($event_data);
             return view('customer.trackOrder')->with([
                 'user_data' => $user,
                 'order_data' => $order_data,
                 'menu_data' => $menu_data,
                 'resto_data' => $resto_data,
+                'order_event_data' => $event_data,
                 'sub_total' => $sub_total,
                 'service_data' => $service_data,
                 'total_amount' => $order_data->total_amount,
@@ -239,4 +259,37 @@ class OrderController extends Controller
             return redirect()->back();
         }
     }
+
+    public function postFeedback(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'restaurant_rating' => 'required|in:1,2,3,4,5',
+            'rider_rating' => 'required|in:1,2,3,4,5',
+            'resto_feedback' => 'required|string',
+
+        ]);
+        if (!$validator->fails()) {
+            $data=$request->toArray();
+            $rider_feedback = array();
+            $rider_feedback['order_feedback'] = $data['rider_rating'];
+            $rider_feedback['id'] = $data['rider_event_id'];
+            $OrderEvents = new OrderEvent;
+            $order_event_data_resto = $OrderEvents->updateOrderEvent($rider_feedback);
+
+            $resto_feedback = array();
+            $resto_feedback['order_feedback'] = $data['restaurant_rating'];
+            $resto_feedback['feedback_comment'] = $data['resto_feedback'];
+            $resto_feedback['id'] = $data['resto_event_id'];
+            $order_event_data_rider = $OrderEvents->updateOrderEvent($resto_feedback);
+
+            return redirect()->back();
+
+        }
+        else{
+            return redirect()->back()->withInput()->withErrors($validator);
+
+        }
+    }
+
 }

@@ -1,4 +1,26 @@
 @include('customer.include.header')
+<style>
+    .rating_star .fa {
+        position: relative;
+        font-size: 14px;
+        color: #fff;
+    }
+
+    .rating_star .fa-star-percentage {
+        position: absolute;
+        left: 0;
+        top: 0;
+        overflow: hidden;
+    }
+
+    .rating_star .fa-star {
+        color: #fff;
+    }
+
+    .img-wrap {
+        margin-top: -8px
+    }
+</style>
 <section class="cart_login">
     <div class="container sm_container">
         <div class="cart_login_inr">
@@ -25,8 +47,8 @@
                         <div class="card_rht_top">
                             <div class="row">
                                 <div class="col-md-4">
-                                    <img src="{{url('asset/customer/assets/images/food.png')}}" alt="image"
-                                        class="w-100">
+                                    <img src="{{$resto_data->picture ?? url('asset/customer/assets/images/resto_thumbnail.png')}}"
+                                        alt="image" class="w-100">
                                 </div>
                                 <div class="col-md-8">
                                     <h4>{{$resto_data->name ?? ''}}</h4>
@@ -145,16 +167,46 @@
                             </div>
                         </a>
                         @elseif(request()->is('trackOrder'))
-                        <div class="total_price d-flex align-items-center">
+                        <div class="total_price d-flex align-items-center pb-3">
                             <span>Total</span>
                             <span>{{$user_data->currency ?? ''}} <span
                                     id="total_amount">{{number_format((float)$total_amount, 2) ?? '0'}}</span></span>
                         </div>
-
+                        @if(in_array($order_data->order_status,array(9,10)))
                         <div class="to_pay_box button_box_hlp d-flex align-items-center">
                             <button type="button">Help</button>
                             <button type="button" data-toggle="modal" data-target="#review">Rate and Review</button>
                         </div>
+                        @elseif(in_array($order_data->order_status,array(7)))
+
+                        <div class="to_pay_box d-flex align-items-center">
+                            <div class="d-flex align-items-start">
+                                <div class="d-flex align-items-center">
+                                    <div>
+                                    <img src="{{$order_event_data->rider_details->picture ?? url('asset/customer/assets/images/user_dp.png')}}"
+                                    alt="user">
+                                    </div>
+                                    <div>
+
+                                        <p>{{$order_event_data->rider_details->name ?? '---'}}</p>
+                                        <div class="img-wrap">
+                                            <span class="js-star-rating rating_star" data-rating="4.5">
+                                                <span class="fa fa-star-o"></span>
+                                                <span class="fa fa-star-o"></span>
+                                                <span class="fa fa-star-o"></span>
+                                                <span class="fa fa-star-o"></span>
+                                                <span class="fa fa-star-o"></span>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <a href="tel:{{$order_event_data->rider_details->mobile ?? '---'}}" class="call_btn">Call</a>
+                        </div>
+                        @endif
+
                         @else
                         <div class="to_pay_box d-flex align-items-center">
                             <span>Total</span>
@@ -240,4 +292,35 @@
             }
         });
     }
+
+
+
+/* display rating in form of stars */
+$.fn.makeStars = function() {
+    $(this).each( function() {
+        var rating       = $(this).data('rating'),
+            starNumber   = $(this).children().length,
+            fullStars    = Math.floor(rating),
+            halfStarPerc = (rating - fullStars) * 100;
+
+        if(rating > 0) {
+            $(this).children().each(function (index) {
+                $(this).addClass('fa-star');
+                $(this).removeClass('fa-star-o');
+                return ( (index + 1) < fullStars );
+            });
+        }
+
+        if ( halfStarPerc !== 0 && fullStars < starNumber ) {
+            var halfStar = $(this).children(":nth-child(" + parseInt(fullStars+1, 10) + ")");
+
+            $('<span class="fa fa-star fa-star-percentage"></span>').width(halfStarPerc + '%').appendTo(halfStar);
+        }
+
+    });
+};
+
+$(document).ready( function() {
+    $('.js-star-rating').makeStars();
+});
 </script>
