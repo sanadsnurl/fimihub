@@ -34,6 +34,8 @@ class RestaurentController extends Controller
         }
         $user_address = new user_address;
         $resto_add = $user_address->getUserAddress($user->id);
+        echo $resto_add ;
+        die();
         if(empty($resto_add)){
             $response = ['data'=>$user,
             'resto_data'=>$resto_data,
@@ -46,7 +48,7 @@ class RestaurentController extends Controller
             'resto_add'=> null]);
         }
         else{
-            echo "ds";
+            
             return view('restaurent.myDetails')->with(['data'=>$user,
                                                 'resto_data'=>$resto_data,
                                                 'resto_add'=> $resto_add[0]]);
