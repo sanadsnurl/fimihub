@@ -23,7 +23,7 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
 
     // Customer Root Page
     Route::get('/', function () {
-        
+
         return view('customer.index');
     });
     // Customer Login
@@ -225,6 +225,8 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
         Route::get('deleteResto', 'Web\Admin\RestaurentController@deleteRestaurent');
         // Admin Rider List
         Route::get('riderList', 'Web\Admin\RiderController@RiderListDetails');
+        // Get FAQ's
+        Route::get('getFaq', 'Web\Admin\DashboardController@getFaqPage');
     });
 
 });
