@@ -48,6 +48,10 @@ class OrderController extends Controller
             $order = $this->order->getOrder($orderId)
             ->with('restroAddress','userAddress.userDetails','restaurentDetails','cart.cartItems.menuItems')
             ->first();
+            if(isset($order->ordered_menu)){
+                $order->ordered_menu = json_decode($order->ordered_menu);
+
+            }
         } else {
 
             $order = $this->order->getOrder()
@@ -57,10 +61,9 @@ class OrderController extends Controller
             //     $query->select('id', 'address', 'flat_no', 'landmark', 'longitude', 'longitude');
             // }))
             ->paginate(10);
-        }
-        if(isset($order->ordered_menu)){
-            $order->ordered_menu = json_decode($order->ordered_menu);
-
+            foreach($order as $value) {
+                $value->ordered_menu = json_decode($value->ordered_menu);
+            }
         }
         return response()->json(['data' => $order, 'message' => 'Success', 'status' => true], $this->successStatus);
     }
