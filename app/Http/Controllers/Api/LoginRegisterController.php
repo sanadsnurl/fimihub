@@ -21,7 +21,7 @@ use Response;
 use App\Model\rider_bank_detail;
 use App\Model\vehicle_detail;
 use File;
-
+use App\Model\user_address;
 
 class LoginRegisterController extends Controller
 {
@@ -122,6 +122,14 @@ class LoginRegisterController extends Controller
             $rider_bank_detail = new rider_bank_detail;
             $bank_data = $rider_bank_detail->insertUpdateBankData($bank_details);
             $bank_data = $rider_bank_detail->getBankData($user->id);
+
+            $address_data =array();
+            $address_data['user_id'] = $user_data->id;
+            $address_data['address']=$data['address'];
+            $address_data['latitude']=$data['lat'];
+            $address_data['longitude']=$data['lng'];
+            $user_address = new user_address;
+            $subscribe = $user_address->insertUpdateAddress($address_data);
 
             if ($user_data->visibility != 2) {
                 if ($user_data->mobile_verified_at != NULL) {
@@ -451,6 +459,14 @@ class LoginRegisterController extends Controller
             $rider_bank_detail = new rider_bank_detail;
             $bank_data = $rider_bank_detail->insertUpdateBankData($bank_details);
             $bank_data = $rider_bank_detail->getBankData($user->id);
+
+            $address_data =array();
+            $address_data['user_id'] = $user_data->id;
+            $address_data['address']=$data['address'];
+            $address_data['latitude']=$data['lat'];
+            $address_data['longitude']=$data['lng'];
+            $user_address = new user_address;
+            $subscribe = $user_address->insertUpdateAddress($address_data);
 
             return response()->json([
                 'data' => $user_data,

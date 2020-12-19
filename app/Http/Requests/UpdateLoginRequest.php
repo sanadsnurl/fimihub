@@ -45,8 +45,9 @@ class UpdateLoginRequest extends FormRequest
             'account_number' => 'string',
             'holder_name' => 'string|max:150',
             'branch_name' => 'string|max:150',
-            'ifsc_code' => 'string',
-
+            'ifsc_code' => 'string|nullable',
+            'lat' => 'required|numeric',
+            'lng' => 'required|numeric',
         ];
         return $validator;
     }
