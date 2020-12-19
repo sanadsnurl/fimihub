@@ -14,13 +14,13 @@ class Cms extends Model
     protected $fillable = ['content', 'heading', 'is_active', 'type'];
 
 
-    public function getCms(int $type = 0, $isActive = true) {
+    public function getCms(int $type = 0, $isActive = 1) {
         $query = $this;
         if($type) {
-            return $query->where('type', $type);
+            return $query->where('type', $type)->where('is_active', $isActive);
         }
         if($isActive) {
-            return $query->where('is_active', 1);
+            return $query->where('is_active', $isActive);
         }
     }
 }

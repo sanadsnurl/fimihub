@@ -313,7 +313,7 @@
     </div>
 </div>
 <!-- reviews modal -->
-@if(isset($resto_data->name))
+@if(isset($order_event_data) && $order_event_data!=NULL)
 
 <div class="modal fade review_mdl" id="review">
     <div class="modal-dialog">

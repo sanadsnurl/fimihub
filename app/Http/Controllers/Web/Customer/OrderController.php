@@ -12,6 +12,7 @@ use App\Model\user_address;
 use App\Model\cart_submenu;
 use App\Model\menu_list;
 use App\Model\order;
+use App\Model\Notification;
 use App\Model\ServiceCategory;
 use App\Model\OrderEvent;
 use Illuminate\Support\Facades\Auth;
@@ -19,11 +20,13 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use App\Http\Traits\OtpGenerationTrait;
+use App\Http\Traits\NotificationTrait;
 use Response;
 use Session;
 
 class OrderController extends Controller
 {
+    use NotificationTrait;
     public function getPaymentPage(Request $request)
     {
         $user = Auth::user();
@@ -173,6 +176,19 @@ class OrderController extends Controller
                     $add_order['payment_status'] = 1;
                 }
                 $make_order_id = $orders->makeOrder($add_order);
+
+// ============================================= PUSH NOTIFICATION=======================================
+                $sender_data = Auth::user();
+                $push_notification_sender = array();
+                $push_notification_sender['device_token'] = $sender_data->device_token;
+                $push_notification_sender['title'] = 'Order Pending';
+                $push_notification_sender['notification'] = 'Waiting For Restaurant Approval';
+
+                $push_notification_sender_result = $this->pushNotification($push_notification_sender);
+
+// ==========================================================================================================
+
+
                 $order_id = base64_encode($make_order_id);
                 $cart_delete = $cart->deleteCart($user->id);
 
@@ -194,21 +210,23 @@ class OrderController extends Controller
         $orders = new order;
         $order_data = $orders->getOrderData($order_id);
         $menu_order = json_decode($order_data->ordered_menu);
-
-
-
+        if ($menu_order == NULL) {
+        }
         $menu_data = array();
         $item = 0;
         $total_cart_value = 0;
+        // dd($order_data);
         foreach ($menu_order as $m_data) {
-
             $menu_list = new menu_list;
             $menu_data_list = $menu_list->orderMenuListById($m_data->id);
-            $item = $item + $m_data->quantity;
-            $menu_data_list->quantity = $m_data->quantity;
-            $menu_data_list->price = $m_data->price;
-            $total_cart_value = $total_cart_value + $m_data->price * $m_data->quantity;
-            $menu_data[] = $menu_data_list;
+            // dd($menu_data_list);
+            if ($menu_data_list != null) {
+                $item = $item + $m_data->quantity;
+                $menu_data_list->quantity = $m_data->quantity;
+                $menu_data_list->price = $m_data->price;
+                $total_cart_value = $total_cart_value + $m_data->price * $m_data->quantity;
+                $menu_data[] = $menu_data_list;
+            }
         }
         $restaurent_detail = new restaurent_detail;
         $resto_data = $restaurent_detail->getRestoDataOnId($order_data->restaurent_id);
@@ -237,7 +255,6 @@ class OrderController extends Controller
                     $event_data['rider'] = $o_event;
                     $ride_event_data = auth()->user()->userByIdData($o_event->user_id);
                     $event_data['rider_details'] = $ride_event_data;
-
                 }
             }
             $event_data = json_encode($event_data);
@@ -270,7 +287,7 @@ class OrderController extends Controller
 
         ]);
         if (!$validator->fails()) {
-            $data=$request->toArray();
+            $data = $request->toArray();
             $rider_feedback = array();
             $rider_feedback['order_feedback'] = $data['rider_rating'];
             $rider_feedback['id'] = $data['rider_event_id'];
@@ -284,12 +301,8 @@ class OrderController extends Controller
             $order_event_data_rider = $OrderEvents->updateOrderEvent($resto_feedback);
 
             return redirect()->back();
-
-        }
-        else{
+        } else {
             return redirect()->back()->withInput()->withErrors($validator);
-
         }
     }
-
 }

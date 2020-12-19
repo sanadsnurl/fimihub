@@ -4,7 +4,6 @@
 <link href="{{url('asset/admin/assets/plugins/bootstrap-datatable/css/buttons.bootstrap4.min.css')}}" rel="stylesheet"
     type="text/css">
 
-
 @include('admin.include.sideNav')
 @include('admin.include.header')
 <div class="clearfix"></div>
@@ -58,7 +57,6 @@
     </div>
     <!-- End container-fluid-->
 
-
     <!--End content-wrapper-->
     @include('admin.include.footer')
     <!-- Bootstrap core JavaScript-->
@@ -78,110 +76,174 @@
     <script src="{{url('asset/admin/assets/plugins/bootstrap-datatable/js/buttons.colVis.min.js')}}"></script>
 
     <script>
-    $(document).ready(function() {
-        //Default data table
-        // $('#defaultdatatable').DataTable();
+        $(document).ready(function() {
+            //Default data table
+            // $('#defaultdatatable').DataTable();
+            var table = $('#example1').DataTable({
+                lengthChange: true,
+                processing: true,
+                serverSide: true,
+                paging: true,
+                dom: 'lBfrtip',
+                buttons: ['copy', 'excel', 'pdf', 'print'],
+                ajax: "{{url('adminfimihub/riderList')}}",
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'id'
+                    },
+                    {
+                        data: 'name',
+                        name: 'name'
+                    },
+                    {
+                        data: 'mobile',
+                        name: 'mobile'
+                    },
+                    {
+                        data: 'email',
+                        name: 'email'
+                    },
+                    {
+                        data: 'vehicle_details',
+                        render: function(data, type, row) {
+                            if (row.vehicle_details) {
+                                return row.vehicle_details.vehicle_number;
+                            }
+                            return 'N.A';
+                        },
+                    },
+                    {
+                        data: 'vehicle_image',
+                        name: 'vehicle_image',
+                        orderable: true,
+                        searchable: false
+                    },
+                    {
+                        data: 'vehicle_details',
+                        render: function(data, type, row) {
+                            if (row.vehicle_details) {
+                                return row.vehicle_details.model_name;
+                            }
+                            return 'N.A';
+                        },
+                    },
+                    {
+                        data: 'vehicle_details',
+                        render: function(data, type, row) {
+                            if (row.vehicle_details) {
+                                return row.vehicle_details.color;
+                            }
+                            return 'N.A';
+                        },
+                    },
 
-        var table = $('#example1').DataTable({
-            lengthChange: true,
-            processing: true,
-            serverSide: true,
-            paging: true,
-            dom: 'lBfrtip',
-            buttons: ['copy', 'excel', 'pdf', 'print'],
-            ajax: "{{url('adminfimihub/riderList')}}",
-            columns: [{
-                    data: 'DT_RowIndex',
-                    name: 'id'
-                },
-                {
-                    data: 'name',
-                    name: 'name'
-                },
-                {
-                    data: 'mobile',
-                    name: 'mobile'
-                },
-                {
-                    data: 'email',
-                    name: 'email'
-                },
-                {
-                    data: 'vehicle_details.vehicle_number',
-                    name: 'vehicle_details.vehicle_number'
-                },
-                {
-                    data: 'vehicle_image',
-                    name: 'vehicle_image',
-                    orderable: true,
-                    searchable: false
-                },
-                {
-                    data: 'vehicle_details.model_name',
-                    name: 'vehicle_details.model_name'
-                },
-                {
-                    data: 'vehicle_details.color',
-                    name: 'vehicle_details.color'
-                },
-                {
-                    data: 'id_proof',
-                    name: 'id_proof'
-                },
-                {
-                    data: 'vehicle_details.address',
-                    name: 'vehicle_details.address'
-                },
-                {
-                    data: 'vehicle_details.pincode',
-                    name: 'vehicle_details.pincode'
-                },
-                {
-                    data: 'driving_license',
-                    name: 'driving_license'
-                },
-                {
-                    data: 'vehicle_details.dl_start_date',
-                    name: 'vehicle_details.dl_start_date'
-                },
-                {
-                    data: 'vehicle_details.dl_end_date',
-                    name: 'vehicle_details.dl_end_date'
-                },
-                {
-                    data: 'vehicle_details.registraion_start_date',
-                    name: 'vehicle_details.registraion_start_date'
-                },
-                {
-                    data: 'vehicle_details.registraion_end_date',
-                    name: 'vehicle_details.registraion_end_date'
-                },
-                {
-                    data: 'rider_bank_details.account_number',
-                    name: 'rider_bank_details.account_number'
-                },
-                {
-                    data: 'rider_bank_details.holder_name',
-                    name: 'rider_bank_details.holder_name'
-                },
-                {
-                    data: 'rider_bank_details.branch_name',
-                    name: 'rider_bank_details.branch_name'
-                },
-                {
-                    data: 'rider_bank_details.ifsc_code',
-                    name: 'rider_bank_details.ifsc_code'
-                },
-                {
-                    data: 'created_at',
-                    name: 'created_at'
-                },
-            ]
+                    {
+                        data: 'id_proof',
+                        name: 'id_proof'
+                    },
+                    {
+                        data: 'vehicle_details',
+                        render: function(data, type, row) {
+                            if (row.vehicle_details) {
+                                return row.vehicle_details.address;
+                            }
+                            return 'N.A';
+                        },
+                    },
+                    {
+                        data: 'vehicle_details',
+                        render: function(data, type, row) {
+                            if (row.vehicle_details) {
+                                return row.vehicle_details.pincode;
+                            }
+                            return 'N.A';
+                        },
+                    },
+                    {
+                        data: 'driving_license',
+                        name: 'driving_license'
+                    },
+                    {
+                        data: 'vehicle_details',
+                        render: function(data, type, row) {
+                            if (row.vehicle_details) {
+                                return row.vehicle_details.dl_start_date;
+                            }
+                            return 'N.A';
+                        },
+                    },
+                    {
+                        data: 'vehicle_details',
+                        render: function(data, type, row) {
+                            if (row.vehicle_details) {
+                                return row.vehicle_details.dl_end_date;
+                            }
+                            return 'N.A';
+                        },
+                    },
+                    {
+                        data: 'vehicle_details',
+                        render: function(data, type, row) {
+                            if (row.vehicle_details) {
+                                return row.vehicle_details.registraion_start_date;
+                            }
+                            return 'N.A';
+                        },
+                    },
+                    {
+                        data: 'vehicle_details',
+                        render: function(data, type, row) {
+                            if (row.vehicle_details) {
+                                return row.vehicle_details.registraion_end_date;
+                            }
+                            return 'N.A';
+                        },
+                    },
+                    {
+                        data: 'rider_bank_details',
+                        render: function(data, type, row) {
+                            if (row.rider_bank_details) {
+                                return row.rider_bank_details.account_number;
+                            }
+                            return 'N.A';
+                        },
+                    },
+                    {
+                        data: 'rider_bank_details',
+                        render: function(data, type, row) {
+                            if (row.rider_bank_details) {
+                                return row.rider_bank_details.holder_name;
+                            }
+                            return 'N.A';
+                        },
+                    },
+                    {
+                        data: 'rider_bank_details',
+                        render: function(data, type, row) {
+                            if (row.rider_bank_details) {
+                                return row.rider_bank_details.branch_name;
+                            }
+                            return 'N.A';
+                        },
+                    },
+                    {
+                        data: 'rider_bank_details',
+                        render: function(data, type, row) {
+                            if (row.rider_bank_details) {
+                                return row.rider_bank_details.ifsc_code;
+                            }
+                            return 'N.A';
+                        },
+                    },
+
+                    {
+                        data: 'created_at',
+                        name: 'created_at'
+                    },
+                ]
+            });
+            table.buttons().container()
+                .appendTo('#example_wrapper .col-md-6:eq(0)');
         });
-
-        table.buttons().container()
-            .appendTo('#example_wrapper .col-md-6:eq(0)');
-
-    });
     </script>
     <!--End content-wrapper-->
