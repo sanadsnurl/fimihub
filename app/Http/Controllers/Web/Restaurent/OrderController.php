@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use App\Http\Traits\NotificationTrait;
 use App\Model\restaurent_detail;
 use App\Model\Notification;
 use App\Model\order;
@@ -21,6 +22,8 @@ use DataTables;
 
 class OrderController extends Controller
 {
+    use NotificationTrait;
+
     public function getCustomerOrderList(Request $request)
     {
         $user = Auth::user();

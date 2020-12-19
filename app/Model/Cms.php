@@ -3,6 +3,8 @@
 namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
+//custom import
+use Illuminate\Support\Facades\DB;
 
 class Cms extends Model
 {
@@ -22,5 +24,26 @@ class Cms extends Model
         if($isActive) {
             return $query->where('is_active', $isActive);
         }
+    }
+
+    public function makeFaq($data)
+    {
+        $data['updated_at'] = now();
+        $data['created_at'] = now();
+        unset($data['_token']);
+        $query_data = DB::table('cms')->insertGetId($data);
+        return $query_data;
+    }
+
+    public function deleteCms($data)
+    {
+        $data['deleted_at'] = now();
+        unset($data['_token']);
+
+        $query_data = DB::table('cms')
+            ->where('id', $data['id'])
+            ->update(['is_active'=> 2]);
+
+        return $query_data;
     }
 }

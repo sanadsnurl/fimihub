@@ -82,11 +82,19 @@ class OrderController extends Controller
             $order = $this->order->getActiveOrders($orderId)
             ->with('restroAddress','userAddress.userDetails','restaurentDetails','cart.cartItems.menuItems','orderEvent.reason')
             ->first();
+            if(isset($order->ordered_menu)){
+                $order->ordered_menu = json_decode($order->ordered_menu);
+
+            }
+
         } else {
 
             $order = $this->order->getActiveOrders($orderId)
             ->with('restroAddress','userAddress.userDetails', 'orderEvent.reason')
             ->paginate(10);
+            foreach($order as $value) {
+                $value->ordered_menu = json_decode($value->ordered_menu);
+            }
         }
         return response()->json(['data' => $order, 'message' => 'Success', 'status' => true], $this->successStatus);
     }
@@ -163,11 +171,18 @@ class OrderController extends Controller
             $order = $this->order->getMyPreviusOrders($orderId)
             ->with('restroAddress','userAddress.userDetails','restaurentDetails','cart.cartItems.menuItems', 'orderEvent.reason')
             ->first();
+            if(isset($order->ordered_menu)){
+                $order->ordered_menu = json_decode($order->ordered_menu);
+
+            }
         } else {
 
             $order = $this->order->getMyPreviusOrders($orderId)
             ->with('restroAddress','userAddress.userDetails', 'orderEvent.reason')
             ->paginate(10);
+            foreach($order as $value) {
+                $value->ordered_menu = json_decode($value->ordered_menu);
+            }
         }
 
         return response()->json(['data' => $order, 'message' => 'Success', 'status' => true], $this->successStatus);
