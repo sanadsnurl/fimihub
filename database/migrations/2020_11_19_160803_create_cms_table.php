@@ -18,7 +18,7 @@ class CreateCmsTable extends Migration
             $table->charset = 'utf16';
             $table->collation = 'utf16_general_ci';
             $table->increments('id');
-            $table->integer('type')->comment('1.About us, 2. term and condition, 3. FAQ');
+            $table->integer('type')->comment('1.About us, 2. term and condition, 3. FAQ, 4.leagal info');
             $table->text('content');
             $table->string('heading')->nullable();
             $table->boolean('is_active')->default(1);

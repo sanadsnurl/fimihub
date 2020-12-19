@@ -36,15 +36,8 @@
                             </div>
                             <p class="margin_btm text-right noAccount_txt forgot_psw"><a href="javascript:void(0);"
                                     data-toggle="modal" data-target="#forgot_psw">Forgot your password?</a></p>
-                            <div class="custome_checkbox">
-                                <input type="checkbox" id="terms" name="terms">
-                                <label for="terms">I accept the Terms and Conditions and Privacy Policy</label>
-                                @if($errors->has('terms'))
-                                <div class="error">{{ $errors->first('terms') }}</div>
-                                @endif
-                            </div>
+
                             <input type="submit" class="signin_btn btn_purple hover_effect1 auth_btn" value="SIGN IN">
-                            <!-- <button type="submit" >SIGN IN</button> -->
                             <p class="text-center noAccount_txt">Don't have an account? <a
                                     href="{{url('register')}}">SIGN UP</a></p>
                         </form>
@@ -96,7 +89,6 @@
                                 Login</button>
                             <input type="submit" class="getOtp_btn btn_purple hover_effect1 auth_btn" value="Get OTP">
                         </div>
-
 
                         <p class="text-center noAccount_txt">Don't have an account? <a href="{{url('register')}}">SIGN
                                 UP</a>
@@ -182,14 +174,14 @@
                         <div class="form-group">
                             <label for="">Password</label>
                             <input type="password" class="form-control" name="password">
-                            <button type="button" class="psw_show_btn"><img src="{{ url('asset/customer/assets/images/eye.svg') }}"
-                                    alt="eye"></button>
+                            <button type="button" class="psw_show_btn"><img
+                                    src="{{ url('asset/customer/assets/images/eye.svg') }}" alt="eye"></button>
                         </div>
                         <div class="form-group">
                             <label for="">Confirm password</label>
                             <input type="password" class="form-control" name="password_confirmation">
-                            <button type="button" class="psw_show_btn"><img src="{{ url('asset/customer/assets/images/eye.svg') }}"
-                                    alt="eye"></button>
+                            <button type="button" class="psw_show_btn"><img
+                                    src="{{ url('asset/customer/assets/images/eye.svg') }}" alt="eye"></button>
                         </div>
                         <input type="submit" class="signup_btn btn_purple hover_effect1 auth_btn" value="Change">
                         <!-- <button type="button" class="signup_btn btn_purple hover_effect1 auth_btn">Done</button> -->
@@ -257,29 +249,29 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 @if(Session::has('modal_check'))
 <script>
-$(window).on('load', function() {
-    $('#otpverification').modal('show');
-})
+    $(window).on('load', function() {
+        $('#otpverification').modal('show');
+    })
 </script>
 @endif
 @if(Session::has('forget_pwd_modal_check'))
 <script>
-$(window).on('load', function() {
-    $('#restpassword').modal('show');
-})
+    $(window).on('load', function() {
+        $('#restpassword').modal('show');
+    })
 </script>
 @endif
 @if(Session::has('forget_pwd_snd_otp_modal_check'))
 <script>
-$(window).on('load', function() {
-    $('#forgot_psw').modal('show');
-})
+    $(window).on('load', function() {
+        $('#forgot_psw').modal('show');
+    })
 </script>
 @endif
 @if(Session::has('modal_check2'))
 <script>
-$(window).on('load', function() {
-    $('#otpverification2').modal('show');
-})
+    $(window).on('load', function() {
+        $('#otpverification2').modal('show');
+    })
 </script>
 @endif
