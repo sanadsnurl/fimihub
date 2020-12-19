@@ -37,7 +37,7 @@ class order extends Model
         unset($data['_token']);
         $query_data = DB::table('orders')->insertGetId($data);
         return $query_data;
-    } 
+    }
 
     public function getOrder($orderId = false)
     {
