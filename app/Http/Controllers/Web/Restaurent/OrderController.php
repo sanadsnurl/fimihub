@@ -11,10 +11,12 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use App\Http\Traits\NotificationTrait;
+use App\Http\Traits\LatLongRadiusScopeTrait;
 use App\Model\restaurent_detail;
 use App\Model\Notification;
 use App\Model\order;
 use App\Model\OrderEvent;
+use App\Model\user_address;
 use Response;
 use Session;
 use DataTables;
@@ -22,7 +24,7 @@ use DataTables;
 
 class OrderController extends Controller
 {
-    use NotificationTrait;
+    use NotificationTrait, LatLongRadiusScopeTrait;
 
     public function getCustomerOrderList(Request $request)
     {
@@ -133,6 +135,14 @@ class OrderController extends Controller
         $OrderEvents = new OrderEvent;
         $make_event = $OrderEvents->makeUpdateOrderEvent($order_event);
 
+        $restaurent_detail = new restaurent_detail;
+        $resto_data = $restaurent_detail->getRestoDataOnId($order_data->restaurent_id);
+        if($resto_data == NUll){
+            $resto_data = null;
+        }
+        $user_address = new user_address;
+        $resto_add = $user_address->getUserAddress($resto_data->user_id);
+        // dd($resto_add);
         // ============================================= PUSH NOTIFICATION=======================================
         $push_notification_sender = array();
         $push_notification_sender['device_token'] = $customer_data->device_token;
@@ -143,10 +153,16 @@ class OrderController extends Controller
         $notification_sender['user_id'] = $customer_data->id;
         $notification_sender['txn_id'] = $order_data->order_id;
         $notification_sender['title'] = 'Order Accepted';
-        $notification_sender['notification'] = 'Order Accepted By Restaurent';
+        $notification_sender['notification'] = 'Order Accepted By Restaurant';
         $notification = new Notification();
         $notification_id = $notification->makeNotifiaction($notification_sender);
         $push_notification_sender_result = $this->pushNotification($push_notification_sender);
+
+        // ================================== get rider by restaurant location ====================
+        $lat = $resto_add[0]->latitude;
+        $lng = $resto_add[0]->longitude;
+        $kmRadius = $this->max_distance_km;
+        $rider = $this->riderClosestOrders($user, $lat, $lng, $kmRadius)->get();
 
         // ==========================================================================================================
 
