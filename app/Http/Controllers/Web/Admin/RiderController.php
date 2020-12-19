@@ -38,8 +38,8 @@ class RiderController extends Controller
                     return $btn;
                 })
                 ->addColumn('vehicle_image', function ($row) {
-                    $url = $row->vehicleDetails->vehicle_image;
-                    if ($url != NUll) {
+                    if ($row->vehicleDetails != NUll) {
+                        $url = $row->vehicleDetails->vehicle_image;
                         $btns = '<a href="' . $url . '" class="btn btn-outline-secondary btn-sm btn-round waves-effect waves-light m-0">View Image</a>';
                     } else {
                         $btns = 'N.A';
@@ -49,8 +49,9 @@ class RiderController extends Controller
                 ->addColumn('id_proof', function ($row) {
 
 
-                    $url = $row->vehicleDetails->id_proof;
-                    if ($url != NUll) {
+                    if ($row->vehicleDetails != NUll) {
+                        $url = $row->vehicleDetails->id_proof;
+
                         $btns = '<a href="' . $url . '" class="btn btn-outline-secondary btn-sm btn-round waves-effect waves-light m-0">View</a>';
                     } else {
                         $btns = 'N.A';
@@ -58,8 +59,9 @@ class RiderController extends Controller
                     return $btns;
                 })
                 ->addColumn('driving_license', function ($row) {
-                    $url = $row->vehicleDetails->driving_license;
-                    if ($url != NUll) {
+                    if ($row->vehicleDetails != NUll) {
+                        $url = $row->vehicleDetails->driving_license;
+
                         $btns = '<a href="' . $url . '" class="btn btn-outline-secondary btn-sm btn-round waves-effect waves-light m-0">View</a>';
                     } else {
                         $btns = 'N.A';

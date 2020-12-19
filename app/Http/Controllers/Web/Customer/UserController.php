@@ -9,6 +9,7 @@ use App\User;
 use App\Model\user_address;
 use App\Model\contactUs;
 use App\Model\order;
+use App\Model\Cms;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -33,7 +34,7 @@ class UserController extends Controller
                 'name' => 'string|max:150',
                 'email' => 'email|nullable',
                 'picture' => 'mimes:png,jpg,jpeg|max:3072|nullable',
-                
+
             ]);
             if(!$validator->fails()){
             $user = Auth::user();
@@ -75,18 +76,18 @@ class UserController extends Controller
 
                 $path = public_path('uploads/'.$id.'/images');
                 File::makeDirectory($path, $mode = 0777, true, true);
-                                
+
                 $destinationPath = 'uploads/'.$id.'/images'.'/';
                 if($profile_pic->move($destinationPath, $input['imagename']))
                 {
                     $file_url=url($destinationPath.$input['imagename']);
                     $user_update_data['picture']=$file_url;
-                
+
                 }else{
                     $error_file_not_required[]="Profile Picture Have Some Issue";
                     $user_update_data['picture']="";
                 }
-                
+
             }
             $user = auth()->user()->UpdateLogin($user_update_data);
             $user_data = auth()->user()->userByIdData($id);
@@ -96,19 +97,19 @@ class UserController extends Controller
 
             Session::flash('modal_check_subscribe', 'open');
             return redirect()->back();
-            
+
         }
         else{
-            return redirect()->back()->withInput()->withErrors($validator);  
+            return redirect()->back()->withInput()->withErrors($validator);
         }
         } catch (\Throwable $th) {
             report($th);
-            
+
             return response()->json(['message'=> $th->getMessage(),'status'=>false], $this->invalidStatus);
 
         }
 
-        
+
     }
 
 
@@ -123,8 +124,8 @@ class UserController extends Controller
             'password' => 'required|string|confirmed|min:6',
             'current_password' => 'required|string|min:6',
             'password_confirmation' => 'required|string',
-            
-            
+
+
         ]);
         if(!$validator->fails()){
             $user=Auth::user();
@@ -136,16 +137,16 @@ class UserController extends Controller
                 Session::flash('modal_message', 'Password Changed ');
                 Session::flash('modal_check_subscribe', 'open');
 
-                return redirect()->back(); 
+                return redirect()->back();
             }else{
-                Session::flash('message', 'Invalid Current Password'); 
-                return redirect()->back(); 
+                Session::flash('message', 'Invalid Current Password');
+                return redirect()->back();
             }
         }
         else{
-            return redirect()->back()->withInput()->withErrors($validator);  
+            return redirect()->back()->withInput()->withErrors($validator);
         }
-        
+
     }
 
     public function getContactUsPage(Request $request){
@@ -160,8 +161,8 @@ class UserController extends Controller
             'email' => 'email|nullable',
             'mobile' => 'required|numeric|digits:10',
             'message' => 'required|string',
-            
-            
+
+
         ]);
         if(!$validator->fails()){
             $user=Auth::user();
@@ -171,12 +172,12 @@ class UserController extends Controller
             Session::flash('modal_message', 'Message Sent ');
             Session::flash('modal_check_subscribe', 'open');
 
-            return redirect()->back(); 
+            return redirect()->back();
         }
         else{
-            return redirect()->back()->withInput()->withErrors($validator);  
+            return redirect()->back()->withInput()->withErrors($validator);
         }
-        
+
     }
 
     public function getSaveAddressPage(Request $request){
@@ -184,7 +185,7 @@ class UserController extends Controller
         $user_data = auth()->user()->userByIdData($user->id);
         $user_address = new user_address();
         $user_add = $user_address->getUserAddress($user->id);
-        
+
         return view('customer.savedAddress')->with(['user_data'=>$user_data,'user_address'=>$user_add]);
     }
 
@@ -210,28 +211,35 @@ class UserController extends Controller
     public function getTermsConditionPage(Request $request){
         $user=Auth::user();
         $user_data = auth()->user()->userByIdData($user->id);
-        
-        return view('customer.termsCondition')->with(['user_data'=>$user_data]);
+        $cmsObj = new Cms;
+        $tnc_data = $cmsObj->getCms(2)->get();
+
+        return view('customer.termsCondition')->with(['user_data'=>$user_data,'tnc_data'=>$tnc_data]);
     }
 
     public function getFaqPage(Request $request){
         $user=Auth::user();
         $user_data = auth()->user()->userByIdData($user->id);
-        
-        return view('customer.faq')->with(['user_data'=>$user_data]);
+        $cmsObj = new Cms;
+        $faq_data = $cmsObj->getCms(3)->get();
+
+        return view('customer.faq')->with(['user_data'=>$user_data,'faq_data'=>$faq_data]);
     }
 
     public function getLegalInformationPage(Request $request){
         $user=Auth::user();
         $user_data = auth()->user()->userByIdData($user->id);
-        
-        return view('customer.legalInformation')->with(['user_data'=>$user_data]);
+        $cmsObj = new Cms;
+        $legal_data = $cmsObj->getCms(4)->get();
+        return view('customer.legalInformation')->with(['user_data'=>$user_data,'legal_data'=>$legal_data]);
     }
 
     public function getAboutUsPage(Request $request){
         $user=Auth::user();
         $user_data = auth()->user()->userByIdData($user->id);
-        
-        return view('customer.aboutUs')->with(['user_data'=>$user_data]);
+        $cmsObj = new Cms;
+        $about_data = $cmsObj->getCms(1)->get();
+
+        return view('customer.aboutUs')->with(['user_data'=>$user_data,'about_data'=>$about_data]);
     }
 }
