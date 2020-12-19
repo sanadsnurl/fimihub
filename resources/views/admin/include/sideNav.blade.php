@@ -82,21 +82,31 @@
                     </ul>
                 </li>
                 <li>
+                    <a href="#" class="waves-effect">
+                        <i class="icon-magic-wand"></i> <span>Customer </span> <i
+                            class="fa fa-angle-right pull-right"></i>
+                    </a>
+                    <ul class="sidebar-submenu">
+                        <li><a href="{{url('adminfimihub/userList')}}"><i class="fa fa-circle-o"></i>Customer List</a></li>
+
+                    </ul>
+                </li>
+                <li>
                     <a href="{{url('adminfimihub/serviceList')}}" class="waves-effect">
                         <i class="icon-home"></i> <span>Services</span>
 
                     </a>
                 </li>
-                {{-- <li>
+                <li>
                     <a href="#" class="waves-effect">
                         <i class="icon-magic-wand"></i> <span>CMS </span> <i
                             class="fa fa-angle-right pull-right"></i>
                     </a>
                     <ul class="sidebar-submenu">
-                        <li><a href="{{url('adminfimihub/ridList')}}"><i class="fa fa-circle-o"></i>FAQ's</a></li>
+                        <li><a href="{{url('adminfimihub/getFaq')}}"><i class="fa fa-circle-o"></i>FAQ's</a></li>
 
                     </ul>
-                </li> --}}
+                </li>
 
                 <li>
                     <a href="{{url('adminfimihub/logout')}}" class="waves-effect">

@@ -40,10 +40,10 @@
                     </li>
 
                     <li class="dropdown-divider"></li>
-                    <li class="dropdown-item"><i class="icon-wallet mr-2"></i> Account</li>
+                    {{-- <li class="dropdown-item"><i class="icon-wallet mr-2"></i> Account</li>
                     <li class="dropdown-divider"></li>
                     <li class="dropdown-item"><i class="icon-settings mr-2"></i> Setting</li>
-                    <li class="dropdown-divider"></li>
+                    <li class="dropdown-divider"></li> --}}
                     <a href="{{url('Restaurent/logout')}}">
                         <li class="dropdown-item">
                             <i class="icon-power mr-2"></i> Logout
