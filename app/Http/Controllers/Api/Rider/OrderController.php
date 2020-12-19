@@ -45,9 +45,6 @@ class OrderController extends Controller
 
     public function getOrders(Request $request, int $orderId = 0)
     {
-        $user = auth()->user();
-        $lat = $request->input('lat');
-        $lng = $request->input('lng');
         if ($orderId) {
             $order = $this->order->getOrder($orderId)
             ->with('restroAddress','userAddress.userDetails','restaurentDetails','cart.cartItems.menuItems')
@@ -58,6 +55,17 @@ class OrderController extends Controller
             }
         } else {
 
+            $user = auth()->user();
+            if(is_numeric($request->input('lng'))) {
+                $lng =$request->input('lng');
+            } else {
+                return response()->json(['message' => 'Unable to detect location', 'status' => false], $this->successStatus);
+            }
+            if(is_numeric($request->input('lat'))) {
+                $lat =$request->input('lat');
+            } else {
+                return response()->json(['message' =>'Unable to detect location', 'status' => false], $this->successStatus);
+            }
             $kmRadius = $this->max_distance_km;
             $order = $this->riderClosestOrders($user, $lat, $lng, $kmRadius)
             ->with('restroAddress','userAddress.userDetails')
