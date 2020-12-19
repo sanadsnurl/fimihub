@@ -137,7 +137,7 @@ class OrderController extends Controller
 
         $restaurent_detail = new restaurent_detail;
         $resto_data = $restaurent_detail->getRestoDataOnId($order_data->restaurent_id);
-        if($resto_data == NUll){
+        if ($resto_data == NUll) {
             $resto_data = null;
         }
         $user_address = new user_address;
@@ -163,7 +163,21 @@ class OrderController extends Controller
         $lng = $resto_add[0]->longitude;
         $kmRadius = $this->max_distance_km;
         $rider = $this->riderClosestOrders($user, $lat, $lng, $kmRadius)->get();
+        foreach ($rider as $rid) {
+            $push_notification_rider = array();
+            $push_notification_rider['device_token'] = $rid->device_token;
+            $push_notification_rider['title'] = 'New Order Request';
+            $push_notification_rider['notification'] = 'New Order By '.$customer_data->name;
 
+            $notification_rider = array();
+            $notification_rider['user_id'] = $rid->id;
+            $notification_rider['txn_id'] = $order_data->order_id;
+            $notification_rider['title'] = 'New Order Request';
+            $notification_rider['notification'] = 'New Order By '.$customer_data->name;
+            $notification = new Notification();
+            $notification_id = $notification->makeNotifiaction($notification_rider);
+            $push_notification_rider_result = $this->pushNotification($push_notification_rider);
+        }
         // ==========================================================================================================
 
         return redirect()->back();
@@ -193,13 +207,13 @@ class OrderController extends Controller
         $push_notification_sender = array();
         $push_notification_sender['device_token'] = $customer_data->device_token;
         $push_notification_sender['title'] = 'Order Rejected';
-        $push_notification_sender['notification'] = 'Order Rejected By Restaurent';
+        $push_notification_sender['notification'] = 'Order Rejected By Restaurant';
 
         $notification_sender = array();
         $notification_sender['user_id'] = $customer_data->id;
         $notification_sender['txn_id'] = $order_data->order_id;
         $notification_sender['title'] = 'Order Rejected';
-        $notification_sender['notification'] = 'Order Rejected By Restaurent';
+        $notification_sender['notification'] = 'Order Rejected By Restaurant';
         $notification = new Notification();
         $notification_id = $notification->makeNotifiaction($notification_sender);
         $push_notification_sender_result = $this->pushNotification($push_notification_sender);
@@ -233,13 +247,13 @@ class OrderController extends Controller
         $push_notification_sender = array();
         $push_notification_sender['device_token'] = $customer_data->device_token;
         $push_notification_sender['title'] = 'Order Packed';
-        $push_notification_sender['notification'] = 'Order Packed By Restaurent';
+        $push_notification_sender['notification'] = 'Order Packed By Restaurant';
 
         $notification_sender = array();
         $notification_sender['user_id'] = $customer_data->id;
         $notification_sender['txn_id'] = $order_data->order_id;
         $notification_sender['title'] = 'Order Packed';
-        $notification_sender['notification'] = 'Order Packed By Restaurent';
+        $notification_sender['notification'] = 'Order Packed By Restaurant';
         $notification = new Notification();
         $notification_id = $notification->makeNotifiaction($notification_sender);
         $push_notification_sender_result = $this->pushNotification($push_notification_sender);
