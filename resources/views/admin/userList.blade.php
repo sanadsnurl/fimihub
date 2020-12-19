@@ -74,7 +74,7 @@
             paging: true,
             dom: 'lBfrtip',
             buttons: ['copy', 'excel', 'pdf', 'print'],
-            ajax: "{{url('adminQbeez/userList')}}",
+            ajax: "{{url('adminfimihub/userList')}}",
             columns: [{
                     data: 'DT_RowIndex',
                     name: 'id'

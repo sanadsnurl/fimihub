@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Response;
 use Session;
-use Datatables;
+use DataTables;
 
 class DashboardController extends Controller
 {
@@ -51,8 +51,8 @@ class DashboardController extends Controller
             return Datatables::of($faq_data)
                 ->addIndexColumn()
                 ->addColumn('action', function($row){
-                    $btn = '<a href="editResto?resto_user_id='.base64_encode($row->resto_user_id).'" class="btn btn-outline-secondary btn-sm btn-round waves-effect waves-light m-0">Edit</a>
-                    <a href="deleteResto?resto_user_id='.base64_encode($row->resto_user_id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light mt-1">Delete</a>
+                    $btn = '
+                    <a href="deleteCms?cms_id='.base64_encode($row->id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light mt-1">Delete</a>
                     ';
                     return $btn;
                 })
@@ -66,6 +66,41 @@ class DashboardController extends Controller
         }
         $user['currency']=$this->currency;
         $faq_data = $faq_data->get();
+        // dd($faq_data->toArray());
         return view('admin.manageFaq')->with(['data'=>$user,'faq_data'=>$faq_data]);
+    }
+
+    public function addFaqPage(Request $request){
+        $validator = Validator::make($request->all(), [
+            'content' => 'required|string',
+            'heading' => 'required|string',
+
+        ]);
+        if(!$validator->fails()){
+            $data=$request->toArray();
+            $data['type']=3;
+
+            $cmsObj = new Cms;
+            $faq_data = $cmsObj->makeFaq($data);
+            Session::flash('message', 'FAQ Added !');
+            return redirect()->back();
+        }
+        else{
+        	return redirect()->back()->withInput()->withErrors($validator);
+        }
+    }
+
+    public function deleteCms(Request $request){
+        $user = Auth::user();
+        $cms_id = base64_decode(request('cms_id'));
+
+        $delete_faq = array();
+        $delete_faq['id'] = $cms_id;
+
+        $cmsObj = new Cms;
+        $faq_data = $cmsObj->deleteCms($delete_faq);
+        Session::flash('message', 'FAQ Deleted !');
+
+        return redirect()->back();
     }
 }

@@ -16,7 +16,7 @@
             <div class="col-lg-8">
                 <div class="card">
                     <div class="card-body">
-                        <form role="form" method="POST" action="{{ url('adminfimihub/addCategory')}}" id="personal-info"
+                        <form role="form" method="POST" action="{{ url('adminfimihub/addfaqs')}}" id="personal-info"
                             enctype="multipart/form-data">
                             @csrf
                             <h4 class="form-header text-uppercase">
@@ -29,29 +29,14 @@
                             </div>
 
                             @endif
-                            <div class="form-group row">
-                                <label for="input-1" class="col-sm-2 col-form-label">Service</label>
-                                <div class="col-sm-10">
-                                    <select name="service_catagory_id" id="" class="form-control">
-                                        <option value="">-- Select Service --</option>
-                                        @foreach($service_list as $s_data)
-                                        <option value="{{$s_data->id}}">
-                                            {{$s_data->name}}</option>
-                                        @endforeach
-                                    </select>
 
-                                    @if($errors->has('service_catagory_id'))
-                                    <div class="error">{{ $errors->first('service_catagory_id') }}</div>
-                                    @endif
-                                </div>
-                            </div>
                             <div class="form-group row">
                                 <label for="input-1" class="col-sm-2 col-form-label">Title</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="input-1" name="name"
-                                        value="{{old('name')}}">
-                                    @if($errors->has('name'))
-                                    <div class="error">{{ $errors->first('name') }}</div>
+                                    <input type="text" class="form-control" id="input-1" name="heading"
+                                        value="{{old('heading')}}">
+                                    @if($errors->has('heading'))
+                                    <div class="error">{{ $errors->first('heading') }}</div>
                                     @endif
                                 </div>
 
@@ -60,10 +45,10 @@
                             <div class="form-group row">
                                 <label for="input-1" class="col-sm-2 col-form-label">Content</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="input-1" name="about"
-                                        value="{{old('about')}}">
-                                    @if($errors->has('about'))
-                                    <div class="error">{{ $errors->first('about') }}</div>
+                                    <input type="text" class="form-control" id="input-1" name="content"
+                                        value="{{old('content')}}">
+                                    @if($errors->has('content'))
+                                    <div class="error">{{ $errors->first('content') }}</div>
                                     @endif
                                 </div>
 
@@ -99,6 +84,7 @@
                             <table id="example" class="table table-bordered">
                                 <thead>
                                     <tr>
+                                        <th>Action</th>
                                         <th>S.No.</th>
                                         <th>Title</th>
                                         <th>Content</th>
@@ -122,11 +108,7 @@
 
 </div>
 
-
-
-
 <!-- End container-fluid-->
-
 
 <!--End content-wrapper-->
 @include('admin.include.footer')
@@ -147,45 +129,43 @@
 <script src="{{url('asset/admin/assets/plugins/bootstrap-datatable/js/buttons.colVis.min.js')}}"></script>
 
 <script>
-$(document).ready(function() {
-    //Default data table
-    $('#default-datatable').DataTable();
-
-    var table = $('#example').DataTable({
-        lengthChange: true,
-        processing: true,
-        serverSide: true,
-        paging: true,
-        dom: 'lBfrtip',
-        buttons: ['copy', 'excel', 'pdf', 'print'],
-        ajax: "{{url('adminfimihub/getFaq)}}",
-        columns: [{
-                data: 'DT_RowIndex',
-                name: 'id'
-            },
-            {
-                data: 'heading',
-                name: 'heading'
-            },
-            {
-                data: 'content',
-                name: 'content'
-            },
-
-
-            {
-                data: 'created_at',
-                name: 'created_at'
-            },
-
-
-
-        ]
+    $(document).ready(function() {
+        //Default data table
+        $('#default-datatable').DataTable();
+        var table = $('#example').DataTable({
+            lengthChange: true,
+            processing: true,
+            serverSide: true,
+            paging: true,
+            dom: 'lBfrtip',
+            buttons: ['copy', 'excel', 'pdf', 'print'],
+            ajax: "{{url('adminfimihub/getFaq')}}",
+            columns: [{
+                    data: 'action',
+                    name: 'action',
+                    orderable: true,
+                    searchable: false
+                },
+                {
+                    data: 'DT_RowIndex',
+                    name: 'id'
+                },
+                {
+                    data: 'heading',
+                    name: 'heading'
+                },
+                {
+                    data: 'content',
+                    name: 'content'
+                },
+                {
+                    data: 'created_at',
+                    name: 'created_at'
+                },
+            ]
+        });
+        table.buttons().container()
+            .appendTo('#example_wrapper .col-md-6:eq(0)');
     });
-
-    table.buttons().container()
-        .appendTo('#example_wrapper .col-md-6:eq(0)');
-
-});
 </script>
 <!--End content-wrapper-->
