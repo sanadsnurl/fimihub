@@ -22,6 +22,7 @@ class CreateCmsTable extends Migration
             $table->text('content');
             $table->string('heading')->nullable();
             $table->boolean('is_active')->default(1);
+            $table->timestamp('deleted_at', 0)->nullable();
             $table->timestamps();
         });
     }

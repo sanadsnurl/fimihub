@@ -43,7 +43,7 @@
                     <li class="dropdown-item"><i class="icon-wallet mr-2"></i> Account</li> --}}
                     <a href="{{url('adminfimihub/resetPass')}}">
                     <li class="dropdown-divider"></li>
-                    <li class="dropdown-item"><i class="icon-settings mr-2"></i> Reset Password</li>
+                    {{-- <li class="dropdown-item"><i class="icon-settings mr-2"></i> Reset Password</li> --}}
                     </a>
 
                     <li class="dropdown-divider"></li>
