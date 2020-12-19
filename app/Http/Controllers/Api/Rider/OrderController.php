@@ -49,7 +49,7 @@ class OrderController extends Controller
         $lat = $request->input('lat');
         $lng = $request->input('lng');
         if ($orderId) {
-            $order = $this->order->getOrderByRiderLocation($orderId)
+            $order = $this->order->getOrder($orderId)
             ->with('restroAddress','userAddress.userDetails','restaurentDetails','cart.cartItems.menuItems')
             ->first();
             if(isset($order->ordered_menu)){
@@ -58,14 +58,9 @@ class OrderController extends Controller
             }
         } else {
 
-
-            dd($this->closestRider($user, $lat, $lng));
-            $order = $this->order->getOrderByRiderLocation()
+            $kmRadius = $this->max_distance_km;
+            $order = $this->riderClosestOrders($user, $lat, $lng, $kmRadius)
             ->with('restroAddress','userAddress.userDetails')
-            // to do
-            // ->with(array('restroAddress' => function($query){
-            //     $query->select('id', 'address', 'flat_no', 'landmark', 'longitude', 'longitude');
-            // }))
             ->paginate(10);
             foreach($order as $value) {
                 $value->ordered_menu = json_decode($value->ordered_menu);

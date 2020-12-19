@@ -2,9 +2,12 @@
 
 namespace App\Http\Traits;
 use Illuminate\Support\Facades\DB;
+use App\Model\order;
 
 trait LatLongRadiusScopeTrait
 {
+
+    public $max_distance_km = 25;
     /*
     *  find the n closest locations
     *  @param float $lat latitude of the po+int of interest
@@ -14,7 +17,7 @@ trait LatLongRadiusScopeTrait
     *  @param string $units miles|kilometers
     *  @return array
     */
-    static public function closestRider($order, $lat, $lng, $max_distance = 25, $units = 'kilometers')
+    public function riderClosestOrders($order, $lat, $lng, $max_distance = 25, $units = 'kilometers')
     {
         // $numberOfVehicle = $myRequestDetails->number_of_vehicle ? $myRequestDetails->number_of_vehicle : 1;
         /*
@@ -36,10 +39,10 @@ trait LatLongRadiusScopeTrait
         *  Generate the select field for disctance
         */
         $disctance_select = sprintf(
-                "u.*,( %d * acos( cos( radians(%s) ) " .
-                        " * cos( radians( user_address.latitude ) ) " .
-                        " * cos( radians( user_address.longitude ) - radians(%s) ) " .
-                        " + sin( radians(%s) ) * sin( radians( user_address.latitude ) ) " .
+                "orders.*,ua.latitude,ua.longitude,ua.id as addres_id, ( %d * acos( cos( radians(%s) ) " .
+                        " * cos( radians( ua.latitude ) ) " .
+                        " * cos( radians( ua.longitude ) - radians(%s) ) " .
+                        " + sin( radians(%s) ) * sin( radians( ua.latitude ) ) " .
                     ") " .
                 ") " .
                 "AS distance",
@@ -48,13 +51,21 @@ trait LatLongRadiusScopeTrait
                 $lng,
                 $lat
             );
-        return DB::table('user_address')
-            ->rightJoin('orders as o', 'user_address.id', '=', 'o.address_id')
+        return order::leftjoin('user_address as ua', 'orders.address_id', '=', 'ua.id')
+            // ->rightJoin('orders as o', 'user_address.id', '=', 'o.address_id')
             ->select(DB::raw($disctance_select) )
-            ->whereNotNull('o.address_id')
+            // ->whereNotNull('o.address_id')
+            ->where(function($query) {
+                $query->orWhere('orders.order_status', 6)->orWhere('orders.order_status', 5);
+            })
+            ->leftjoin('order_events as oe',function($query){
+                $query->on('orders.id', '=', 'oe.order_id')
+                ->where('oe.user_type', 1);
+                // ->where('oe.user_id', Auth::id());
+            })
             ->having('distance', '<=', $max_distance )
             ->orderBy('distance', 'ASC' )
-            ->groupBy('u.user_id')
-            ->get();
+            ->whereNull('oe.order_id')
+            ->groupBy('orders.id');
     }
 }

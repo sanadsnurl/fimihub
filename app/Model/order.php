@@ -61,29 +61,6 @@ class order extends Model
         return $query;
     }
 
-    public function getOrderByRiderLocation($orderId = false)
-    {
-        $query = $this;
-        if($orderId) {
-            $query = $this->where('orders.id', $orderId)
-            ->select('orders.*');
-        } else {
-
-            $query = $this->where(function($query) {
-                $query->orWhere('orders.order_status', 6)->orWhere('orders.order_status', 5);
-            })
-            ->join
-            ->leftjoin('order_events as oe',function($query){
-                $query->on('orders.id', '=', 'oe.order_id')
-                ->where('oe.user_type', 1);
-                // ->where('oe.user_id', Auth::id());
-            })->select('orders.*')
-            ->whereNull('oe.order_id')->orderBy('orders.id', 'DESC')->groupBy('orders.id');
-        }
-        // dd($query->toSql());
-        return $query;
-    }
-
     public function getActiveOrders($orderId = false) {
         $query = $this;
         if($orderId) {
