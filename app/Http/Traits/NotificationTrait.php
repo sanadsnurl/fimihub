@@ -19,7 +19,7 @@ trait NotificationTrait
         $title = $notification_data['title'];
         $notifications = $notification_data['notification'];
 		//server key
-        $your_project_id_as_key = 'AAAAcsjec0w:APA91bH7EFy5uBHYsSGqPq9wRDTxVdFlSUgNHqwzCuvjP_TNNLMuEUm9aroesnJBC9jCCuCq_ylm9NF9Vg_VrqKF2E2R5r-WMlBV2p090MM4jHa8FTGp-ok6rJDnnXKzgOA7cfIgoutz';
+        $your_project_id_as_key = 'AAAAS7OBtOE:APA91bGi-xdLFihiaQrTEmlXedX_QDWDxNZVVqrHaMxV82cpeK_wEP_lucI8HaCtCM9bSCJvMJ2JHUE9u-B6mRpj3aVkfGUi3-wqC3Y-cUPSg3h9avqCOqCHaS7xWW-m0xmz6OVwh8tL';
         $url = "https://fcm.googleapis.com/fcm/send";
         $header = [
         'authorization: key=' . $your_project_id_as_key,

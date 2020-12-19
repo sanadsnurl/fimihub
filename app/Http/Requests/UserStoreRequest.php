@@ -49,7 +49,9 @@ class UserStoreRequest extends FormRequest
             'account_number' => 'required|string',
             'holder_name' => 'required|string|max:150',
             'branch_name' => 'required|string|max:150',
-            'ifsc_code' => 'required|string',
+            'ifsc_code' => 'string',
+            'lat' => 'required|numeric',
+            'lng' => 'required|numeric',
 
         ];
         return $validator;

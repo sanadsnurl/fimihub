@@ -99,215 +99,63 @@
                     <!-- <span class="filter-btn">Filter</span> -->
                 </div>
                 <div class="row-wrap">
+                    @foreach($veg as $r_data)
                     <div class="col-wrap">
                         <div class="card-wrap">
-                            <a href="#">
+                            <a href="{{url('restaurentDetails')}}{{'?resto_id='}}{{base64_encode($r_data->id)}}">
                                 <div class="img-wrap">
-                                    <img src="{{url('asset/customer/assets/images/veg1.png')}}" alt="veg">
+                                    <img src="{{$r_data->picture ?? url('asset/customer/assets/images/resto_thumbnail.png')}}"
+                                        alt="restaurant">
                                     <div class="img-cutout"></div>
                                     <span class="rating">4.1 (60+)</span>
                                 </div>
                                 <div class="text-wrap">
-                                    <h6>Vegetarian Stew</h6>
-                                    <span class="eta">20 Min</span>
-                                    <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy</p>
+                                    <h6>{{$r_data->name ?? ''}}</h6>
+                                    <span class="eta">{{$r_data->avg_time ?? '--'}} Min</span>
+                                    <p>{{$r_data->about ?? ''}}</p>
                                 </div>
                             </a>
                         </div>
                     </div>
-                    <div class="col-wrap">
-                        <div class="card-wrap">
-                            <a href="#">
-                                <div class="img-wrap">
-                                    <img src="{{url('asset/customer/assets/images/veg2.png')}}" alt="veg">
-                                    <div class="img-cutout"></div>
-                                    <span class="rating">4.1 (60+)</span>
-                                </div>
-                                <div class="text-wrap">
-                                    <h6>Vegan Feast</h6>
-                                    <span class="eta">20 Min</span>
-                                    <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy</p>
-                                </div>
-                            </a>
-                        </div>
+                    @endforeach
+
+                    <div class="btn-wrap">
+                        <a href="#" class="btn btn-transparent btn-lg">See All</a>
                     </div>
-                    <div class="col-wrap">
-                        <div class="card-wrap">
-                            <a href="#">
-                                <div class="img-wrap">
-                                    <img src="{{url('asset/customer/assets/images/veg3.png')}}" alt="veg">
-                                    <div class="img-cutout"></div>
-                                    <span class="rating">4.1 (60+)</span>
-                                </div>
-                                <div class="text-wrap">
-                                    <h6>Tofu With Chickpeas</h6>
-                                    <span class="eta">20 Min</span>
-                                    <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy</p>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-wrap">
-                        <div class="card-wrap">
-                            <a href="#">
-                                <div class="img-wrap">
-                                    <img src="{{url('asset/customer/assets/images/veg3.png')}}" alt="veg">
-                                    <div class="img-cutout"></div>
-                                    <span class="rating">4.1 (60+)</span>
-                                </div>
-                                <div class="text-wrap">
-                                    <h6>Tofu With Chickpeas</h6>
-                                    <span class="eta">20 Min</span>
-                                    <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy</p>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-wrap">
-                        <div class="card-wrap">
-                            <a href="#">
-                                <div class="img-wrap">
-                                    <img src="{{url('asset/customer/assets/images/veg1.png')}}" alt="veg">
-                                    <div class="img-cutout"></div>
-                                    <span class="rating">4.1 (60+)</span>
-                                </div>
-                                <div class="text-wrap">
-                                    <h6>Vegetarian Stew</h6>
-                                    <span class="eta">20 Min</span>
-                                    <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy</p>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-wrap">
-                        <div class="card-wrap">
-                            <a href="#">
-                                <div class="img-wrap">
-                                    <img src="{{url('asset/customer/assets/images/veg2.png')}}" alt="veg">
-                                    <div class="img-cutout"></div>
-                                    <span class="rating">4.1 (60+)</span>
-                                </div>
-                                <div class="text-wrap">
-                                    <h6>Vegan Feast</h6>
-                                    <span class="eta">20 Min</span>
-                                    <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy</p>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="btn-wrap">
-                    <a href="#" class="btn btn-transparent btn-lg">See All</a>
                 </div>
             </div>
             <div class="grid-container">
                 <div class="intro-row">
                     <div class="intro-wrap">
-                        <h3>Offers Near You</h3>
+                        <h3>Non - Vegetarian Options</h3>
                         <h5>Fresh Food Gurantee</h5>
                     </div>
                     <!-- <span class="filter-btn">Filter</span> -->
                 </div>
                 <div class="row-wrap">
+                    @foreach($nonveg as $r_data)
                     <div class="col-wrap">
                         <div class="card-wrap">
-                            <a href="#">
+                            <a href="{{url('restaurentDetails')}}{{'?resto_id='}}{{base64_encode($r_data->id)}}">
                                 <div class="img-wrap">
-                                    <img src="{{url('asset/customer/assets/images/offer5.png')}}" alt="veg">
+                                    <img src="{{$r_data->picture ?? url('asset/customer/assets/images/resto_thumbnail.png')}}"
+                                        alt="restaurant">
                                     <div class="img-cutout"></div>
                                     <span class="rating">4.1 (60+)</span>
                                 </div>
                                 <div class="text-wrap">
-                                    <h6>Curry goat/mutton/chicken</h6>
-                                    <span class="eta">20 Min</span>
-                                    <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy</p>
+                                    <h6>{{$r_data->name ?? ''}}</h6>
+                                    <span class="eta">{{$r_data->avg_time ?? '--'}} Min</span>
+                                    <p>{{$r_data->about ?? ''}}</p>
                                 </div>
                             </a>
                         </div>
                     </div>
-                    <div class="col-wrap">
-                        <div class="card-wrap">
-                            <a href="#">
-                                <div class="img-wrap">
-                                    <img src="{{url('asset/customer/assets/images/veg2.png')}}" alt="veg">
-                                    <div class="img-cutout"></div>
-                                    <span class="rating">4.1 (60+)</span>
-                                </div>
-                                <div class="text-wrap">
-                                    <h6>Vegan Feast</h6>
-                                    <span class="eta">20 Min</span>
-                                    <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy</p>
-                                </div>
-                            </a>
-                        </div>
+                    @endforeach
+
+                    <div class="btn-wrap">
+                        <a href="#" class="btn btn-transparent btn-lg">See All</a>
                     </div>
-                    <div class="col-wrap">
-                        <div class="card-wrap">
-                            <a href="#">
-                                <div class="img-wrap">
-                                    <img src="{{url('asset/customer/assets/images/veg3.png')}}" alt="veg">
-                                    <div class="img-cutout"></div>
-                                    <span class="rating">4.1 (60+)</span>
-                                </div>
-                                <div class="text-wrap">
-                                    <h6>Tofu With Chickpeas</h6>
-                                    <span class="eta">20 Min</span>
-                                    <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy</p>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-wrap">
-                        <div class="card-wrap">
-                            <a href="#">
-                                <div class="img-wrap">
-                                    <img src="{{url('asset/customer/assets/images/veg2.png')}}" alt="veg">
-                                    <div class="img-cutout"></div>
-                                    <span class="rating">4.1 (60+)</span>
-                                </div>
-                                <div class="text-wrap">
-                                    <h6>Vegan Feast</h6>
-                                    <span class="eta">20 Min</span>
-                                    <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy</p>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-wrap">
-                        <div class="card-wrap">
-                            <a href="#">
-                                <div class="img-wrap">
-                                    <img src="{{url('asset/customer/assets/images/veg3.png')}}" alt="veg">
-                                    <div class="img-cutout"></div>
-                                    <span class="rating">4.1 (60+)</span>
-                                </div>
-                                <div class="text-wrap">
-                                    <h6>Tofu With Chickpeas</h6>
-                                    <span class="eta">20 Min</span>
-                                    <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy</p>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-wrap">
-                        <div class="card-wrap">
-                            <a href="#">
-                                <div class="img-wrap">
-                                    <img src="{{url('asset/customer/assets/images/veg1.png')}}" alt="veg">
-                                    <div class="img-cutout"></div>
-                                    <span class="rating">4.1 (60+)</span>
-                                </div>
-                                <div class="text-wrap">
-                                    <h6>Vegetarian Stew</h6>
-                                    <span class="eta">20 Min</span>
-                                    <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy</p>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="btn-wrap">
-                    <a href="#" class="btn btn-transparent btn-lg">See All</a>
                 </div>
             </div>
         </div>

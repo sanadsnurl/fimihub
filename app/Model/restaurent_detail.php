@@ -21,7 +21,7 @@ class restaurent_detail extends Model
             unset($data['_token']);
             $query_data = DB::table('restaurent_details')->insert($data);
             $query_type="insert";
-            
+
         }
         else
         {
@@ -31,7 +31,7 @@ class restaurent_detail extends Model
                         ->where('user_id', $data['user_id'])
                         ->update($data);
         }
-        
+
         return $query_data;
     }
 
@@ -42,7 +42,7 @@ class restaurent_detail extends Model
                 ->where('visibility', 0)
                 ->where('user_id', $userid)
                 ->first();
-            
+
             return $restaurent_details;
         }
         catch (Exception $e) {
@@ -57,7 +57,7 @@ class restaurent_detail extends Model
                 ->where('visibility', 0)
                 ->where('id', $userid)
                 ->first();
-            
+
             return $restaurent_details;
         }
         catch (Exception $e) {
@@ -72,7 +72,7 @@ class restaurent_detail extends Model
                 ->orderBy('name')
                 ->limit(6)
                 ->get();
-            
+
             return $restaurent_details;
         }
         catch (Exception $e) {
@@ -114,7 +114,7 @@ class restaurent_detail extends Model
                                                 {
                                                 $join->on('menu_list.restaurent_id', '=', 'restaurent_details.id');
                                                 $join->where('menu_list.visibility', 0);
-                                                
+
                                                 })
                                 ->limit(6)
                                 ->select('restaurent_details.*', DB::raw('COUNT(menu_list.restaurent_id) AS dish_count'))
@@ -123,7 +123,33 @@ class restaurent_detail extends Model
                                 ->having('dish_count', '>', 0)
                                 ->groupBy('menu_list.restaurent_id')
                                 ->get();
-                                
+
+
+            return $restaurent_details;
+        }
+        catch (Exception $e) {
+            dd($e);
+        }
+    }
+
+    public function getallCatRestaurantWithMenu($data)
+    {
+        try {
+            $restaurent_details=DB::table('restaurent_details')
+                                ->leftJoin('menu_list', function($join)
+                                                {
+                                                $join->on('menu_list.restaurent_id', '=', 'restaurent_details.id');
+                                                $join->where('menu_list.visibility', 0);
+
+                                                })
+                                ->limit(6)
+                                ->select('restaurent_details.*', DB::raw('COUNT(menu_list.restaurent_id) AS dish_count'))
+                                ->where('restaurent_details.visibility', 0)
+                                ->where('restaurent_details.resto_type', $data)
+                                ->orderBy('restaurent_details.name')
+                                ->having('dish_count', '>', 0)
+                                ->groupBy('menu_list.restaurent_id')
+                                ->get();
 
             return $restaurent_details;
         }

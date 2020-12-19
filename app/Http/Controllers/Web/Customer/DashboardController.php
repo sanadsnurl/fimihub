@@ -18,37 +18,46 @@ use Session;
 
 class DashboardController extends Controller
 {
-    public function index(Request $request){
-        $user=Auth::user();
+    public function index(Request $request)
+    {
+        $user = Auth::user();
         $user_data = auth()->user()->userByIdData($user->id);
         $restaurent_detail = new restaurent_detail;
         $resto_data = $restaurent_detail->getallRestaurantWithMenu();
-                                        
-        return view('customer.home')->with(['user_data'=>$user_data,'resto_data'=>$resto_data]);
+        $nonveg_resto_data = $restaurent_detail->getallCatRestaurantWithMenu(1);
+        $veg_resto_data = $restaurent_detail->getallCatRestaurantWithMenu(2);
+
+        return view('customer.home')->with(['user_data' => $user_data,
+                                            'resto_data' => $resto_data,
+                                            'nonveg' => $nonveg_resto_data,
+                                            'veg' => $veg_resto_data
+                                            ]);
     }
 
-    public function subscribe(Request $request){
+    public function subscribe(Request $request)
+    {
 
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
-            
-            
+
+
         ]);
-        if(!$validator->fails()){
-            
+        if (!$validator->fails()) {
+
             $data = $request->toarray();
             $subscribe = new subscribe;
             $subscribe = $subscribe->makeSubscription($data);
-            Session::flash('modal_check_subscribe', 'open'); 
+            Session::flash('modal_check_subscribe', 'open');
             Session::flash('modal_message', 'Successfully Subscribed !');
 
             return redirect()->back();
-        }else{
-        	return redirect()->back()->withInput()->withErrors($validator);  
+        } else {
+            return redirect()->back()->withInput()->withErrors($validator);
         }
     }
 
-    public function partnerRegister(Request $request){
+    public function partnerRegister(Request $request)
+    {
 
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:150',
@@ -56,24 +65,21 @@ class DashboardController extends Controller
             'mobile' => 'required|numeric|unique:users|digits:10',
             'email' => 'email|unique:users|nullable',
         ]);
-        if(!$validator->fails()){
-            $data=$request->toArray();
-            $data['user_type']=4;
-            $data['visibility']=1;
+        if (!$validator->fails()) {
+            $data = $request->toArray();
+            $data['user_type'] = 4;
+            $data['visibility'] = 1;
             $user = User::create($data);
-                if($user != NULL){
-                
-                    Session::flash('message', 'Request Sent Succesfully !'); 
-                    return redirect()->back();
-                    
-                }else{
-                    Session::flash('message', 'Request Not Sent , Please try again!'); 
-                    return redirect()->back();
-                }
-            
-        }
-        else{
-        	return redirect()->back()->withInput()->withErrors($validator);  
+            if ($user != NULL) {
+
+                Session::flash('message', 'Request Sent Succesfully !');
+                return redirect()->back();
+            } else {
+                Session::flash('message', 'Request Not Sent , Please try again!');
+                return redirect()->back();
+            }
+        } else {
+            return redirect()->back()->withInput()->withErrors($validator);
         }
     }
 }
