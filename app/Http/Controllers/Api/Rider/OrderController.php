@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Rider;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Traits\NotificationTrait;
+use App\Http\Traits\LatLongRadiusScopeTrait;
 use App\Model\MyEarning;
 use App\Model\Notification;
 use App\Model\order;
@@ -14,7 +15,7 @@ use Auth, Validator;
 
 class OrderController extends Controller
 {
-    use NotificationTrait;
+    use NotificationTrait, LatLongRadiusScopeTrait;
 
     public function __construct(order $order, OrderEvent $orderEvent, MyEarning $myEarning) {
         $this->order = $order;
@@ -54,12 +55,20 @@ class OrderController extends Controller
             }
         } else {
 
-            $order = $this->order->getOrder()
+            $user = auth()->user();
+            if(is_numeric($request->input('lng'))) {
+                $lng =$request->input('lng');
+            } else {
+                return response()->json(['message' => 'Unable to detect location', 'status' => false], $this->successStatus);
+            }
+            if(is_numeric($request->input('lat'))) {
+                $lat =$request->input('lat');
+            } else {
+                return response()->json(['message' =>'Unable to detect location', 'status' => false], $this->successStatus);
+            }
+            $kmRadius = $this->max_distance_km;
+            $order = $this->riderClosestOrders($user, $lat, $lng, $kmRadius)
             ->with('restroAddress','userAddress.userDetails')
-            // to do
-            // ->with(array('restroAddress' => function($query){
-            //     $query->select('id', 'address', 'flat_no', 'landmark', 'longitude', 'longitude');
-            // }))
             ->paginate(10);
             foreach($order as $value) {
                 $value->ordered_menu = json_decode($value->ordered_menu);
