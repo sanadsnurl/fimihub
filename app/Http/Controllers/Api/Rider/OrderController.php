@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Rider;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Traits\NotificationTrait;
+use App\Http\Traits\LatLongRadiusScopeTrait;
 use App\Model\MyEarning;
 use App\Model\Notification;
 use App\Model\order;
@@ -14,7 +15,7 @@ use Auth, Validator;
 
 class OrderController extends Controller
 {
-    use NotificationTrait;
+    use NotificationTrait, LatLongRadiusScopeTrait;
 
     public function __construct(order $order, OrderEvent $orderEvent, MyEarning $myEarning) {
         $this->order = $order;
@@ -44,8 +45,11 @@ class OrderController extends Controller
 
     public function getOrders(Request $request, int $orderId = 0)
     {
+        $user = auth()->user();
+        $lat = $request->input('lat');
+        $lng = $request->input('lng');
         if ($orderId) {
-            $order = $this->order->getOrder($orderId)
+            $order = $this->order->getOrderByRiderLocation($orderId)
             ->with('restroAddress','userAddress.userDetails','restaurentDetails','cart.cartItems.menuItems')
             ->first();
             if(isset($order->ordered_menu)){
@@ -54,7 +58,9 @@ class OrderController extends Controller
             }
         } else {
 
-            $order = $this->order->getOrder()
+
+            dd($this->closestRider($user, $lat, $lng));
+            $order = $this->order->getOrderByRiderLocation()
             ->with('restroAddress','userAddress.userDetails')
             // to do
             // ->with(array('restroAddress' => function($query){
