@@ -242,6 +242,10 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
         Route::get('userList', 'Web\Admin\UserManageController@UserListDetails');
         // Delete User
         Route::get('deleteUser', 'Web\Admin\UserManageController@deleteUser');
+        // Get T&C
+        Route::get('tnc', 'Web\Admin\DashboardController@getTncPage');
+        // Get About Us
+        Route::get('aboutUs', 'Web\Admin\DashboardController@getAboutUsPage');
     });
 
 });
