@@ -272,10 +272,13 @@ class LoginRegisterController extends Controller
         $vehicle_detail = new vehicle_detail;
         $vehicle_datas = $vehicle_detail->getVehicleData($user->id);
 
+        $user_address = new user_address;
+        $address_data = $user_address->getUserAddress($user->id);
         return response()->json([
             'data' => $user,
             'bank_data' => $bank_data,
             'vehicle_data' => $vehicle_datas,
+            'address_data' => $address_data,
             'status' => true
         ], $this->successStatus);
     }
