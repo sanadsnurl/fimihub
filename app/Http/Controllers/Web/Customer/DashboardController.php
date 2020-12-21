@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\User;
 use App\Model\subscribe;
 use App\Model\restaurent_detail;
+use App\Model\slider_cms;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -27,9 +28,14 @@ class DashboardController extends Controller
         $nonveg_resto_data = $restaurent_detail->getallCatRestaurantWithMenu(1);
         $veg_resto_data = $restaurent_detail->getallCatRestaurantWithMenu(2);
 
+        $slider_cms = new slider_cms;
+        $slider_array = ['slider_type'=> 2, 'user_id'=>NULL];
+        $slider_data = $slider_cms->getSlider($slider_array);
+
         return view('customer.home')->with(['user_data' => $user_data,
                                             'resto_data' => $resto_data,
                                             'nonveg' => $nonveg_resto_data,
+                                            'slider_data' => $slider_data,
                                             'veg' => $veg_resto_data
                                             ]);
     }

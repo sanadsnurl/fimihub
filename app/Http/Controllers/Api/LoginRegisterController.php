@@ -486,11 +486,12 @@ class LoginRegisterController extends Controller
             $address_data['longitude']=$data['lng'];
             $user_address = new user_address;
             $subscribe = $user_address->insertUpdateAddress($address_data);
-
+            $address_data = $user_address->getUserAddress($user->id);
             return response()->json([
                 'data' => $user_data,
                 'bank_data' => $bank_data,
                 'vehicle_data' => $vehicle_datas,
+                'address_data' => $address_data,
                 'message' => 'Profile Updated !',
                 'status' => true
             ], $this->successStatusCreated);

@@ -28,11 +28,9 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
 
 //========================================== Customer Routes ===================================================
 
-    // Customer Root Page
-    Route::get('/', function () {
+    // Customer index Page
+    Route::get('/', 'Web\Customer\CmsController@indexHandShake');
 
-        return view('customer.index');
-    });
     // Customer Login
     Route::get('/login', function () {
         return view('customer.auth.login');
