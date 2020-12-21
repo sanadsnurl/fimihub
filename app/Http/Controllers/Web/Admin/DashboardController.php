@@ -103,4 +103,64 @@ class DashboardController extends Controller
 
         return redirect()->back();
     }
+
+    public function getTncPage(Request $request){
+        $user=Auth::user();
+
+        $cmsObj = new Cms;
+        $tnc_data = $cmsObj->getCms(2);
+
+        if ($request->ajax()) {
+            return Datatables::of($tnc_data)
+                ->addIndexColumn()
+                ->addColumn('action', function($row){
+                    $btn = '
+                    <a href="deleteCms?cms_id='.base64_encode($row->id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light mt-1">Delete</a>
+                    ';
+                    return $btn;
+                })
+                ->addColumn('created_at', function($row){
+
+                    return date('d F Y', strtotime($row->created_at));
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+
+        }
+        $user['currency']=$this->currency;
+        $tnc_data = $tnc_data->get();
+        // dd($faq_data->toArray());
+        return view('admin.manageTnc')->with(['data'=>$user,'tnc_data'=>$tnc_data]);
+    }
+
+    public function getAboutusPage(Request $request){
+        $user=Auth::user();
+
+        $cmsObj = new Cms;
+        $about_us_data = $cmsObj->getCms(2);
+
+        if ($request->ajax()) {
+            return Datatables::of($about_us_data)
+                ->addIndexColumn()
+                ->addColumn('action', function($row){
+                    $btn = '
+                    <a href="deleteCms?cms_id='.base64_encode($row->id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light mt-1">Delete</a>
+                    ';
+                    return $btn;
+                })
+                ->addColumn('created_at', function($row){
+
+                    return date('d F Y', strtotime($row->created_at));
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+
+        }
+        $user['currency']=$this->currency;
+        $about_us_data = $about_us_data->get();
+        // dd($faq_data->toArray());
+        return view('admin.manageAboutUs')->with(['data'=>$user,'tnc_data'=>$about_us_data]);
+    }
+
+
 }

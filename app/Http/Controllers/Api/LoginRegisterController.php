@@ -130,6 +130,7 @@ class LoginRegisterController extends Controller
             $address_data['longitude']=$data['lng'];
             $user_address = new user_address;
             $subscribe = $user_address->insertUpdateAddress($address_data);
+            $address_data = $user_address->getUserAddress($user->id);
 
             if ($user_data->visibility != 2) {
                 if ($user_data->mobile_verified_at != NULL) {
@@ -137,6 +138,7 @@ class LoginRegisterController extends Controller
                         'data' => $user_data,
                         'bank_data' => $bank_data,
                         'vehicle_data' => $vehicle_datas,
+                        'address_data' => $address_data,
                         'status' => true,
                         'message' => 'Registered', 'verified' => true
                     ];
@@ -149,6 +151,7 @@ class LoginRegisterController extends Controller
                         'data' => $user_data,
                         'bank_data' => $bank_data,
                         'vehicle_data' => $vehicle_datas,
+                        'address_data' => $address_data,
                         'status' => true,
                         'message' => 'Not Verified', 'verified' => false
                     ];
@@ -201,6 +204,9 @@ class LoginRegisterController extends Controller
                 $vehicle_detail = new vehicle_detail;
                 $vehicle_datas = $vehicle_detail->getVehicleData($user_data->id);
 
+                $user_address = new user_address;
+                $address_data = $user_address->getUserAddress($user_data->id);
+
                 if ($user_data->mobile_verified_at == NULL) {
                     $otp = $this->OtpGeneration($user_data->mobile);
                     $user_data->access_token = $accessToken;
@@ -209,6 +215,7 @@ class LoginRegisterController extends Controller
                         'data' => $user_data,
                         'bank_data' => $bank_data,
                         'vehicle_data' => $vehicle_datas,
+                        'address_data' => $address_data,
                         'status' => true
                     ], $this->successStatus);
                 } else {
@@ -218,6 +225,7 @@ class LoginRegisterController extends Controller
                         'data' => $user_data,
                         'bank_data' => $bank_data,
                         'vehicle_data' => $vehicle_datas,
+                        'address_data' => $address_data,
                         'message' => 'success',
                         'status' => true
                     ], $this->successStatus);
