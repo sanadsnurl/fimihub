@@ -43,7 +43,7 @@ class DashboardController extends Controller
         $nonveg_resto_data = $this->closestRestaurant($user, $lat, $lng, $kmRadius)->where('resto_type',1)->get();
 
         $veg_resto_data = $this->closestRestaurant($user, $lat, $lng, $kmRadius)->where('resto_type',2)->get();
-// dd($resto_data);
+//  dd($resto_data);
         $slider_cms = new slider_cms;
         $slider_array = ['slider_type'=> 1, 'user_id'=>NULL];
         $slider_data = $slider_cms->getSlider($slider_array);
