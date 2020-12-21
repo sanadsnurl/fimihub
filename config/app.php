@@ -164,7 +164,7 @@ return [
         Laravel\Passport\PassportServiceProvider::class,
         SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
         Yajra\DataTables\DataTablesServiceProvider::class,
-
+        Stevebauman\Location\LocationServiceProvider::class,
         /*
          * Package Service Providers...
          */
@@ -236,7 +236,7 @@ return [
         'Image' => Intervention\Image\Facades\Image::class,
         'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
-
+        'Location' => Stevebauman\Location\Facades\Location::class,
     ],
 
 ];

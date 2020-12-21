@@ -15,6 +15,8 @@ use File;
 
 trait MediaUploadTrait
 {
+    // Staged File Domain
+    public $domain = 'https://filebooks.herokuapp.com/';
 
     function mediaUpload($media)
     {
@@ -23,35 +25,39 @@ trait MediaUploadTrait
         $name = $media['name'];
         $media_path = $media['media_path'];
 
-        if (hasfile($media_file)) {
-            $profile_pic = file($media_file);
-            $input['imagename'] = $name . time() . '.' . $profile_pic->getClientOriginalExtension();
+        if ($media_file) {
+            // $profile_pic = file($media_file);
+            $input['imagename'] = $name . time() . '.' . $media_file->getClientOriginalExtension();
 
-            $path = public_path('uploads/'.$media_path);
+            if(env('APP_ENV')=='staged'){
+                $path = $this->domain.'fimihub/uploads/'.$media_path;
+                $destinationPath = $this->domain.'fimihub/uploads/'.$media_path.'/';
+
+            }else{
+                $path = public_path('uploads/'.$media_path);
+                $destinationPath = 'uploads/'.$media_path.'/';
+
+            }
+
             File::makeDirectory($path, $mode = 0777, true, true);
 
-            $destinationPath = 'uploads/'.$media_path.'/';
-            if ($profile_pic->move($destinationPath, $input['imagename'])) {
+            if ($media_file->move($destinationPath, $input['imagename'])) {
                 return $destinationPath . $input['imagename'];
             } else {
-                return 0;
+                return '';
 
             }
         } else {
-            return 0;
+            return '';
         }
     }
 
-
-    function checkFile(){
-        if
-    }
 
     function checkEnv($value){
         if(env('APP_ENV')=='staged'){
             $path = $this->domain.$value;
         }else{
-            $path = url($value)
+            $path = url($value);
         }
     }
 }

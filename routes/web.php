@@ -252,6 +252,10 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
         Route::get('legalInfo', 'Web\Admin\DashboardController@getLegalInfoPage');
         // Add Legal Information
         Route::post('addlegalInfo', 'Web\Admin\DashboardController@addLegalInfoPage');
+        // Get Slider
+        Route::get('slider', 'Web\Admin\CmsController@getSliderPage');
+        // Add Slider
+        Route::post('addSlider', 'Web\Admin\CmsController@addSliderPage');
     });
 
 });

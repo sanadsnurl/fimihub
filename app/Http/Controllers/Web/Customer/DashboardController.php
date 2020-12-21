@@ -16,6 +16,7 @@ use Illuminate\Support\Str;
 use App\Http\Traits\OtpGenerationTrait;
 use Response;
 use Session;
+use Location;
 
 class DashboardController extends Controller
 {
@@ -23,13 +24,23 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
         $user_data = auth()->user()->userByIdData($user->id);
+        $ip = request()->ip(); //Dynamic IP address get
+
+        $loc_data = Location::get($ip);
+
+        $lat = $loc_data->latitude;
+        $lng = $$loc_data->longitude;
+        dd($loc_data.'--'.$lat.'--'.$lng);
+
+        $kmRadius = $this->max_distance_km;
+        $rider = $this->closestRestaurant($user, $lat, $lng, $kmRadius)->get();
         $restaurent_detail = new restaurent_detail;
         $resto_data = $restaurent_detail->getallRestaurantWithMenu();
         $nonveg_resto_data = $restaurent_detail->getallCatRestaurantWithMenu(1);
         $veg_resto_data = $restaurent_detail->getallCatRestaurantWithMenu(2);
 
         $slider_cms = new slider_cms;
-        $slider_array = ['slider_type'=> 2, 'user_id'=>NULL];
+        $slider_array = ['slider_type'=> 1, 'user_id'=>NULL];
         $slider_data = $slider_cms->getSlider($slider_array);
 
         return view('customer.home')->with(['user_data' => $user_data,

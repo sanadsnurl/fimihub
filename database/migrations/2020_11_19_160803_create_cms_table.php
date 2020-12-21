@@ -39,9 +39,8 @@ class CreateCmsTable extends Migration
             $table->text('text2')->nullable();
             $table->string('link')->nullable();
             $table->string('media')->nullable();
-            $table->tinyInteger('slider_type')->default('1')->comment('1-before login,
-                                                                2-after login,
-                                                                3-resto dash,')->nullable();
+            $table->tinyInteger('slider_type')->default('1')->comment('1-Web Slider,
+                                                                2-resto dash,')->nullable();
             $table->tinyInteger('listing_order')->nullable();
             $table->tinyInteger('visibility')->default('0');
             $table->timestamp('deleted_at', 0)->nullable();
