@@ -216,6 +216,7 @@ class LoginRegisterController extends Controller
                         'bank_data' => $bank_data,
                         'vehicle_data' => $vehicle_datas,
                         'address_data' => $address_data,
+                        'message' => 'success',
                         'status' => true
                     ], $this->successStatus);
                 } else {
@@ -241,6 +242,8 @@ class LoginRegisterController extends Controller
                 $vehicle_detail = new vehicle_detail;
                 $vehicle_datas = $vehicle_detail->getVehicleData($user_data->id);
 
+                $user_address = new user_address;
+                $address_data = $user_address->getUserAddress($user_data->id);
                 if ($user_data->email_verified_at == NULL) {
                     $user_data->access_token = $accessToken;
                     return response()->json([
@@ -248,6 +251,8 @@ class LoginRegisterController extends Controller
                         'data' => $user_data,
                         'bank_data' => $bank_data,
                         'vehicle_data' => $vehicle_datas,
+                        'address_data' => $address_data,
+                        'message' => 'success',
                         'status' => true
                     ], $this->successStatus);
                 } else {
@@ -257,6 +262,8 @@ class LoginRegisterController extends Controller
                         'data' => $user_data,
                         'bank_data' => $bank_data,
                         'vehicle_data' => $vehicle_datas,
+                        'address_data' => $address_data,
+                        'message' => 'success',
                         'status' => true
                     ], $this->successStatus);
                 }

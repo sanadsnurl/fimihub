@@ -16,12 +16,12 @@
             <div class="col-lg-8">
                 <div class="card">
                     <div class="card-body">
-                        <form role="form" method="POST" action="{{ url('adminfimihub/addTnc')}}" id="personal-info"
+                        <form role="form" method="POST" action="{{ url('adminfimihub/addlegalInfo')}}" id="personal-info"
                             enctype="multipart/form-data">
                             @csrf
                             <h4 class="form-header text-uppercase">
                                 <i class="fa fa-cutlery"></i>
-                                Add T&C
+                                Add Legal Information
                             </h4>
                             @if(Session::has('message'))
                             <div class="error" style="text-align:center;">
@@ -54,7 +54,7 @@
                             </div> -->
 
                             <div class="form-footer">
-                                <input type="submit" class="btn btn-primary" value="Save T&C"></input>
+                                <input type="submit" class="btn btn-primary" value="Save Info"></input>
 
                             </div>
                         </form>
@@ -66,7 +66,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
-                    <div class="card-header"><i class="fa fa-table"></i> T&C List</div>
+                    <div class="card-header"><i class="fa fa-table"></i> Legal Information List</div>
                     <div class="card-body">
                         <div class="table-responsive">
                             <table id="example" class="table table-bordered">
@@ -126,7 +126,7 @@
             paging: true,
             dom: 'lBfrtip',
             buttons: ['copy', 'excel', 'pdf', 'print'],
-            ajax: "{{url('adminfimihub/tnc')}}",
+            ajax: "{{url('adminfimihub/legalInfo')}}",
             columns: [{
                     data: 'action',
                     name: 'action',

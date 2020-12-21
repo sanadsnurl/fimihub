@@ -15,7 +15,7 @@
                         </div>
                         <div class="search-bar">
                             <div class="location-selector">
-                                <span>Delhi NCR</span>
+                                <span >Delhi NCR</span>
                             </div>
                             <div class="search-input">
                                 <input type="text" placeholder="Search for restaurant, groceries,essentials & errand">

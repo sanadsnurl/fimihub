@@ -31,18 +31,18 @@ class DashboardController extends Controller
         $rider_count = $user_instance->allUserList(2)->count();
         $orders = new order;
         $order_data = $orders->allOrderPaginationData();
-        $user['currency']=$this->currency;
-        $user['user_count']=$user_count;
-        $user['merchant_count']=$merchant_count;
-        $user['rider_count']=$rider_count;
-        $user['order_count']=$order_data->count();
+        $user['currency'] = $this->currency;
+        $user['user_count'] = $user_count;
+        $user['merchant_count'] = $merchant_count;
+        $user['rider_count'] = $rider_count;
+        $user['order_count'] = $order_data->count();
         //dd($user);
-        return view('admin.indexDashboard')->with(['data'=>$user]);
-
+        return view('admin.indexDashboard')->with(['data' => $user]);
     }
 
-    public function getFaqPage(Request $request){
-        $user=Auth::user();
+    public function getFaqPage(Request $request)
+    {
+        $user = Auth::user();
 
         $cmsObj = new Cms;
         $faq_data = $cmsObj->getCms(3);
@@ -50,47 +50,47 @@ class DashboardController extends Controller
         if ($request->ajax()) {
             return Datatables::of($faq_data)
                 ->addIndexColumn()
-                ->addColumn('action', function($row){
+                ->addColumn('action', function ($row) {
                     $btn = '
-                    <a href="deleteCms?cms_id='.base64_encode($row->id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light mt-1">Delete</a>
+                    <a href="deleteCms?cms_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light mt-1">Delete</a>
                     ';
                     return $btn;
                 })
-                ->addColumn('created_at', function($row){
+                ->addColumn('created_at', function ($row) {
 
                     return date('d F Y', strtotime($row->created_at));
                 })
                 ->rawColumns(['action'])
                 ->make(true);
-
         }
-        $user['currency']=$this->currency;
+        $user['currency'] = $this->currency;
         $faq_data = $faq_data->get();
         // dd($faq_data->toArray());
-        return view('admin.manageFaq')->with(['data'=>$user,'faq_data'=>$faq_data]);
+        return view('admin.manageFaq')->with(['data' => $user, 'faq_data' => $faq_data]);
     }
 
-    public function addFaqPage(Request $request){
+    public function addFaqPage(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'content' => 'required|string',
             'heading' => 'required|string',
 
         ]);
-        if(!$validator->fails()){
-            $data=$request->toArray();
-            $data['type']=3;
+        if (!$validator->fails()) {
+            $data = $request->toArray();
+            $data['type'] = 3;
 
             $cmsObj = new Cms;
             $faq_data = $cmsObj->makeFaq($data);
             Session::flash('message', 'FAQ Added !');
             return redirect()->back();
-        }
-        else{
-        	return redirect()->back()->withInput()->withErrors($validator);
+        } else {
+            return redirect()->back()->withInput()->withErrors($validator);
         }
     }
 
-    public function deleteCms(Request $request){
+    public function deleteCms(Request $request)
+    {
         $user = Auth::user();
         $cms_id = base64_decode(request('cms_id'));
 
@@ -104,8 +104,9 @@ class DashboardController extends Controller
         return redirect()->back();
     }
 
-    public function getTncPage(Request $request){
-        $user=Auth::user();
+    public function getTncPage(Request $request)
+    {
+        $user = Auth::user();
 
         $cmsObj = new Cms;
         $tnc_data = $cmsObj->getCms(2);
@@ -113,54 +114,135 @@ class DashboardController extends Controller
         if ($request->ajax()) {
             return Datatables::of($tnc_data)
                 ->addIndexColumn()
-                ->addColumn('action', function($row){
+                ->addColumn('action', function ($row) {
                     $btn = '
-                    <a href="deleteCms?cms_id='.base64_encode($row->id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light mt-1">Delete</a>
+                    <a href="deleteCms?cms_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light mt-1">Delete</a>
                     ';
                     return $btn;
                 })
-                ->addColumn('created_at', function($row){
+                ->addColumn('created_at', function ($row) {
 
                     return date('d F Y', strtotime($row->created_at));
                 })
                 ->rawColumns(['action'])
                 ->make(true);
-
         }
-        $user['currency']=$this->currency;
+        $user['currency'] = $this->currency;
         $tnc_data = $tnc_data->get();
         // dd($faq_data->toArray());
-        return view('admin.manageTnc')->with(['data'=>$user,'tnc_data'=>$tnc_data]);
+        return view('admin.manageTnc')->with(['data' => $user, 'tnc_data' => $tnc_data]);
     }
 
-    public function getAboutusPage(Request $request){
-        $user=Auth::user();
+    public function addTncPage(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'content' => 'required|string',
+        ]);
+        if (!$validator->fails()) {
+            $data = $request->toArray();
+            $data['type'] = 2;
+
+            $cmsObj = new Cms;
+            $tnc_data = $cmsObj->makeFaq($data);
+            Session::flash('message', 'T&C Added !');
+            return redirect()->back();
+        } else {
+            return redirect()->back()->withInput()->withErrors($validator);
+        }
+    }
+
+    public function getAboutusPage(Request $request)
+    {
+        $user = Auth::user();
 
         $cmsObj = new Cms;
-        $about_us_data = $cmsObj->getCms(2);
+        $about_us_data = $cmsObj->getCms(1);
 
         if ($request->ajax()) {
             return Datatables::of($about_us_data)
                 ->addIndexColumn()
-                ->addColumn('action', function($row){
+                ->addColumn('action', function ($row) {
                     $btn = '
-                    <a href="deleteCms?cms_id='.base64_encode($row->id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light mt-1">Delete</a>
+                    <a href="deleteCms?cms_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light mt-1">Delete</a>
                     ';
                     return $btn;
                 })
-                ->addColumn('created_at', function($row){
+                ->addColumn('created_at', function ($row) {
 
                     return date('d F Y', strtotime($row->created_at));
                 })
                 ->rawColumns(['action'])
                 ->make(true);
-
         }
-        $user['currency']=$this->currency;
+        $user['currency'] = $this->currency;
         $about_us_data = $about_us_data->get();
         // dd($faq_data->toArray());
-        return view('admin.manageAboutUs')->with(['data'=>$user,'tnc_data'=>$about_us_data]);
+        return view('admin.manageAboutUs')->with(['data' => $user, 'about_us_data' => $about_us_data]);
     }
 
+    public function addAboutUsPage(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'content' => 'required|string',
+        ]);
+        if (!$validator->fails()) {
+            $data = $request->toArray();
+            $data['type'] = 1;
+
+            $cmsObj = new Cms;
+            $tnc_data = $cmsObj->makeFaq($data);
+            Session::flash('message', 'About Us Added !');
+            return redirect()->back();
+        } else {
+            return redirect()->back()->withInput()->withErrors($validator);
+        }
+    }
+
+    public function getLegalInfoPage(Request $request)
+    {
+        $user = Auth::user();
+
+        $cmsObj = new Cms;
+        $legal_info_data = $cmsObj->getCms(4);
+
+        if ($request->ajax()) {
+            return Datatables::of($legal_info_data)
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+                    $btn = '
+                    <a href="deleteCms?cms_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light mt-1">Delete</a>
+                    ';
+                    return $btn;
+                })
+                ->addColumn('created_at', function ($row) {
+
+                    return date('d F Y', strtotime($row->created_at));
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+        $user['currency'] = $this->currency;
+        $legal_info_data = $legal_info_data->get();
+        // dd($faq_data->toArray());
+        return view('admin.manageLegalInfo')->with(['data' => $user, 'legal_info_data' => $legal_info_data]);
+    }
+
+    public function addLegalInfoPage(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'content' => 'required|string',
+        ]);
+        if (!$validator->fails()) {
+            $data = $request->toArray();
+            $data['type'] = 4;
+
+            $cmsObj = new Cms;
+            $tnc_data = $cmsObj->makeFaq($data);
+            Session::flash('message', 'About Us Added !');
+            return redirect()->back();
+        } else {
+            return redirect()->back()->withInput()->withErrors($validator);
+        }
+    }
 
 }
