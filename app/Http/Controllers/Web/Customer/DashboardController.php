@@ -25,6 +25,7 @@ class DashboardController extends Controller
         $user = Auth::user();
         $user_data = auth()->user()->userByIdData($user->id);
         $ip = request()->ip(); //Dynamic IP address get
+        dd($ip);
 
         $loc_data = Location::get($ip);
 
