@@ -104,6 +104,7 @@
                     </a>
                     <ul class="sidebar-submenu">
                         <li><a href="{{url('adminfimihub/getFaq')}}"><i class="fa fa-circle-o"></i>FAQ's</a></li>
+                        <li><a href="{{url('adminfimihub/getFaq')}}"><i class="fa fa-circle-o"></i>FAQ's</a></li>
 
                     </ul>
                 </li>
