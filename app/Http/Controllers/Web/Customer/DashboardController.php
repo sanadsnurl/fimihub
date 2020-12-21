@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Http\Traits\LatLongRadiusScopeTrait;
 use Illuminate\Http\Request;
 //custom import
 use App\User;
@@ -20,6 +21,7 @@ use Location;
 
 class DashboardController extends Controller
 {
+    use LatLongRadiusScopeTrait;
     public function index(Request $request)
     {
         $user = Auth::user();
