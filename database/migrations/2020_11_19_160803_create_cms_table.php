@@ -25,6 +25,19 @@ class CreateCmsTable extends Migration
             $table->timestamp('deleted_at', 0)->nullable();
             $table->timestamps();
         });
+
+        Schema::create('my_earnings', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
+            $table->charset = 'utf16';
+            $table->collation = 'utf16_general_ci';
+            $table->increments('id');
+            $table->integer('order_id');
+            $table->integer('user_id');
+            $table->float('ride_price', 8,2)->nullable();
+            $table->float('cash_price', 8,2)->nullable();
+            $table->boolean('is_active')->default(1);
+            $table->timestamps();
+        });
     }
 
     /**
