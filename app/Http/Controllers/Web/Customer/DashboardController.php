@@ -26,22 +26,24 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
         $user_data = auth()->user()->userByIdData($user->id);
-        $ip = $_SERVER['HTTP_X_FORWARDED_FOR']; //Dynamic IP address get
+        $ip = isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR']: '127.0.0.1'; //Dynamic IP address get
 
         $loc_data = Location::get($ip);
 
-        $lat = $loc_data->latitude;
-        $lng = $loc_data->longitude;
+        $lat = $loc_data->latitude ??  '27.2046';
+        $lng = $loc_data->longitude ?? '77.4977';
         // dd($loc_data.'--'.$lat.'--'.$lng);
 
         $kmRadius = $this->max_distance_km;
-        $resto = $this->closestRestaurant($user, $lat, $lng, $kmRadius)->get();
-        dd($resto);
-        $restaurent_detail = new restaurent_detail;
-        $resto_data = $restaurent_detail->getallRestaurantWithMenu();
-        $nonveg_resto_data = $restaurent_detail->getallCatRestaurantWithMenu(1);
-        $veg_resto_data = $restaurent_detail->getallCatRestaurantWithMenu(2);
+        $resto = $this->closestRestaurant($user, $lat, $lng, $kmRadius);
 
+        $restaurent_detail = new restaurent_detail;
+        $resto_data = $this->closestRestaurant($user, $lat, $lng, $kmRadius)->get();
+
+        $nonveg_resto_data = $this->closestRestaurant($user, $lat, $lng, $kmRadius)->where('resto_type',1)->get();
+
+        $veg_resto_data = $this->closestRestaurant($user, $lat, $lng, $kmRadius)->where('resto_type',2)->get();
+// dd($resto_data);
         $slider_cms = new slider_cms;
         $slider_array = ['slider_type'=> 1, 'user_id'=>NULL];
         $slider_data = $slider_cms->getSlider($slider_array);
