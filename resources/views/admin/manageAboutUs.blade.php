@@ -16,7 +16,7 @@
             <div class="col-lg-8">
                 <div class="card">
                     <div class="card-body">
-                        <form role="form" method="POST" action="{{ url('adminfimihub/addfaqs')}}" id="personal-info"
+                        <form role="form" method="POST" action="{{ url('adminfimihub/addAboutUs')}}" id="personal-info"
                             enctype="multipart/form-data">
                             @csrf
                             <h4 class="form-header text-uppercase">

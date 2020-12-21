@@ -237,8 +237,16 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
         Route::get('deleteUser', 'Web\Admin\UserManageController@deleteUser');
         // Get T&C
         Route::get('tnc', 'Web\Admin\DashboardController@getTncPage');
+        // Add T&C
+        Route::post('addTnc', 'Web\Admin\DashboardController@addTncPage');
         // Get About Us
         Route::get('aboutUs', 'Web\Admin\DashboardController@getAboutUsPage');
+        // Add About Us
+        Route::post('addAboutUs', 'Web\Admin\DashboardController@addAboutUsPage');
+        // Get Legal Information
+        Route::get('legalInfo', 'Web\Admin\DashboardController@getLegalInfoPage');
+        // Add Legal Information
+        Route::post('addlegalInfo', 'Web\Admin\DashboardController@addLegalInfoPage');
     });
 
 });
