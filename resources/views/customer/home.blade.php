@@ -2,6 +2,8 @@
 
 <section class="banner food-banner no-padding">
     <div class="slider-wrap">
+        @foreach($slider_data as $s_data)
+        @if($s_data->media != NULL)
         <div class="slide-item">
             <div class="bg-img">
                 <img src="{{url('asset/customer/assets/images/food_banner.png')}}" alt="food banner">
@@ -10,49 +12,19 @@
                 <div class="container">
                     <div class="inner-wrap">
                         <div class="text-wrap">
-                            <h1>Discover Restaurant & Delicious Food</h1>
-                            <p>It's very easy to create stylish and beautiful prototypes for your future projects, both
-                                graphical and dynamic.</p>
-                            <a href="#" class="btn btn-lg btn-white">See More</a>
+                            <h1>{{$s_data->text1 ?? ''}}</h1>
+                            <p>{{$s_data->text2 ?? ''}}</p>
+                            @if($s_data->link != NULL)
+                            <a href="{{$s_data->link ?? ''}}" class="btn btn-lg btn-white">See More</a>
+                            @endif
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="slide-item">
-            <div class="bg-img">
-                <img src="{{url('asset/customer/assets/images/food_banner.png')}}" alt="food banner">
-            </div>
-            <div class="content-wrap">
-                <div class="container">
-                    <div class="inner-wrap">
-                        <div class="text-wrap">
-                            <h1>Discover Restaurant & Delicious Food</h1>
-                            <p>It's very easy to create stylish and beautiful prototypes for your future projects, both
-                                graphical and dynamic.</p>
-                            <a href="#" class="btn btn-lg btn-white">See More</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="slide-item">
-            <div class="bg-img">
-                <img src="{{url('asset/customer/assets/images/food_banner.png')}}" alt="food banner">
-            </div>
-            <div class="content-wrap">
-                <div class="container">
-                    <div class="inner-wrap">
-                        <div class="text-wrap">
-                            <h1>Discover Restaurant & Delicious Food</h1>
-                            <p>It's very easy to create stylish and beautiful prototypes for your future projects, both
-                                graphical and dynamic.</p>
-                            <a href="#" class="btn btn-lg btn-white">See More</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        @endif
+        @endforeach
+
     </div>
 </section>
 <section class="card-grid">

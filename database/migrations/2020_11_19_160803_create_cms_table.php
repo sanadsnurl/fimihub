@@ -26,16 +26,25 @@ class CreateCmsTable extends Migration
             $table->timestamps();
         });
 
-        Schema::create('my_earnings', function (Blueprint $table) {
+        Schema::create('slider_cms', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->charset = 'utf16';
             $table->collation = 'utf16_general_ci';
             $table->increments('id');
-            $table->integer('order_id');
-            $table->integer('user_id');
-            $table->float('ride_price', 8,2)->nullable();
-            $table->float('cash_price', 8,2)->nullable();
-            $table->boolean('is_active')->default(1);
+            // foreign key of users table
+            $table->integer('user_id')->nullable()->unsigned();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+
+            $table->text('text1')->nullable();
+            $table->text('text2')->nullable();
+            $table->string('link')->nullable();
+            $table->string('media')->nullable();
+            $table->tinyInteger('slider_type')->default('1')->comment('1-before login,
+                                                                2-after login,
+                                                                3-resto dash,')->nullable();
+            $table->tinyInteger('listing_order')->nullable();
+            $table->tinyInteger('visibility')->default('0');
+            $table->timestamp('deleted_at', 0)->nullable();
             $table->timestamps();
         });
     }
@@ -47,6 +56,7 @@ class CreateCmsTable extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('slider_cms');
         Schema::dropIfExists('cms');
     }
 }
