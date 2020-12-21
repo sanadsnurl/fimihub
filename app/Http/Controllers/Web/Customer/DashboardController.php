@@ -24,17 +24,17 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
         $user_data = auth()->user()->userByIdData($user->id);
-        $ip = $_SERVER; //Dynamic IP address get
-        dd($ip);
+        $ip = $_SERVER['HTTP_X_FORWARDED_FOR']; //Dynamic IP address get
 
         $loc_data = Location::get($ip);
 
         $lat = $loc_data->latitude;
         $lng = $$loc_data->longitude;
-        dd($loc_data.'--'.$lat.'--'.$lng);
+        // dd($loc_data.'--'.$lat.'--'.$lng);
 
         $kmRadius = $this->max_distance_km;
-        $rider = $this->closestRestaurant($user, $lat, $lng, $kmRadius)->get();
+        $resto = $this->closestRestaurant($user, $lat, $lng, $kmRadius)->get();
+        dd($resto);
         $restaurent_detail = new restaurent_detail;
         $resto_data = $restaurent_detail->getallRestaurantWithMenu();
         $nonveg_resto_data = $restaurent_detail->getallCatRestaurantWithMenu(1);
