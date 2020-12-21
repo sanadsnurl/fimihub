@@ -1,12 +1,12 @@
 @include('customer.include.header')
 
-<section class="banner food-banner no-padding">
+<section class="banner no-padding">
     <div class="slider-wrap">
         @foreach($slider_data as $s_data)
         @if($s_data->media != NULL)
         <div class="slide-item">
             <div class="bg-img">
-                <img src="{{url('asset/customer/assets/images/food_banner.png')}}" alt="food banner">
+                <img src="{{url('asset/customer/assets/images/banner.png')}}" alt="banner">
             </div>
             <div class="content-wrap">
                 <div class="container">
@@ -14,9 +14,19 @@
                         <div class="text-wrap">
                             <h1>{{$s_data->text1 ?? ''}}</h1>
                             <p>{{$s_data->text2 ?? ''}}</p>
-                            @if($s_data->link != NULL)
+                        </div>
+                        <br>
+                        @if($s_data->link != NULL)
                             <a href="{{$s_data->link ?? ''}}" class="btn btn-lg btn-white">See More</a>
                             @endif
+                        <div class="search-bar">
+                            <div class="location-selector">
+                                <span>Delhi NCR</span>
+                            </div>
+                            <div class="search-input">
+                                <input type="text" placeholder="Search for restaurant, groceries,essentials & errand">
+                                <div class="search-btn"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -24,6 +34,7 @@
         </div>
         @endif
         @endforeach
+
 
     </div>
 </section>

@@ -2,6 +2,7 @@
 <section class="banner no-padding">
     <div class="slider-wrap">
         @foreach($slider_data as $s_data)
+        @if($s_data->media != NULL)
         <div class="slide-item">
             <div class="bg-img">
                 <img src="{{url('asset/customer/assets/images/banner.png')}}" alt="banner">
@@ -10,10 +11,13 @@
                 <div class="container">
                     <div class="inner-wrap">
                         <div class="text-wrap">
-                            <h1>Discover Restaurant & Delicious Food</h1>
-                            <p>It's very easy to create stylish and beautiful prototypes for your future projects, both
-                                graphical and dynamic.</p>
+                            <h1>{{$s_data->text1 ?? ''}}</h1>
+                            <p>{{$s_data->text2 ?? ''}}</p>
                         </div>
+                        <br>
+                        @if($s_data->link != NULL)
+                            <a href="{{$s_data->link ?? ''}}" class="btn btn-lg btn-white">See More</a>
+                            @endif
                         <div class="search-bar">
                             <div class="location-selector">
                                 <span>Delhi NCR</span>
@@ -27,6 +31,7 @@
                 </div>
             </div>
         </div>
+        @endif
         @endforeach
 
 
