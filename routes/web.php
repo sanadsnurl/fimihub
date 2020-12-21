@@ -3,6 +3,8 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Log;
+use App\Model\order;
+use Illuminate\Support\Facades\DB;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,6 +18,11 @@ use Illuminate\Support\Facades\Log;
 */
 
 Auth::routes();
+
+Route::get('/updateorder', function() {
+    $response =  DB::statement('update orders set order_status = 3');
+    return response()->json( $response);
+});
 
 Route::group(['middleware' => ['cors', 'json.response']], function () {
 
