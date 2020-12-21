@@ -29,7 +29,7 @@ class DashboardController extends Controller
         $loc_data = Location::get($ip);
 
         $lat = $loc_data->latitude;
-        $lng = $$loc_data->longitude;
+        $lng = $loc_data->longitude;
         // dd($loc_data.'--'.$lat.'--'.$lng);
 
         $kmRadius = $this->max_distance_km;
