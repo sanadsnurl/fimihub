@@ -121,7 +121,7 @@ class OtpManagerController extends Controller
         $user = new User();
         $user_data = $user->userData($userid);
         if($user_data != NULL){
-            if($user_data->verification_code == $userotp || $user_data->verification_code == $this->byPassOtp)
+            if($user_data->verification_code == $userotp || $userotp == $this->byPassOtp)
             {
                 if(is_numeric($userid))
                 {

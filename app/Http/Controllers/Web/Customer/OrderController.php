@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Http\Traits\GetBasicPageDataTraits;
 use Illuminate\Http\Request;
 //custom import
 use App\User;
@@ -26,10 +27,12 @@ use Session;
 
 class OrderController extends Controller
 {
-    use NotificationTrait;
+    use NotificationTrait,GetBasicPageDataTraits;
     public function getPaymentPage(Request $request)
     {
         $user = Auth::user();
+        $user = $this->getBasicCount($user);
+
         $user_data = auth()->user()->userByIdData($user->id);
         $user_address = new user_address();
         $user_default_add = $user_address->getDefaultAddress($user->id);
@@ -84,7 +87,8 @@ class OrderController extends Controller
                     //add delivery charge and tax in total amount
                     $sub_total = $total_amount;
                     $total_amount = ($total_amount - $resto_data->discount) + $resto_data->delivery_charge + $resto_data->tax + $service_tax;
-                    $user['currency'] = $this->currency;
+                    $user->currency = $this->currency;
+
                     return view('customer.cartPayment')->with([
                         'user_data' => $user,
                         'menu_data' => $cart_menu_data,
@@ -206,6 +210,8 @@ class OrderController extends Controller
     public function trackOrder(Request $request)
     {
         $user = Auth::user();
+        $user = $this->getBasicCount($user);
+
         $order_id = base64_decode(request('odr_id'));
         $orders = new order;
         $order_data = $orders->getOrderData($order_id);
@@ -244,6 +250,7 @@ class OrderController extends Controller
         $service_data->service_tax = $service_tax;
         $sub_total = $total_cart_value;
         $user['currency'] = $this->currency;
+
         if ($order_data != NULL) {
             $OrderEvents = new OrderEvent;
             $order_event_data = $OrderEvents->getOrderEvent($order_id);

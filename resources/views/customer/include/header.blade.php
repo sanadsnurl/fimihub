@@ -17,10 +17,9 @@
         <div class="loading-icon"></div>
     </div>
     <script>
-
-window.onload = function() {
-    showPosition();
-};
+        window.onload = function() {
+            showPosition();
+        };
     </script>
     <header class="header">
         <div class="md_container">
@@ -39,8 +38,8 @@ window.onload = function() {
                         <li>
                             <a href="#" class="location-link show-sidepanel" id="addressPanel"><img
                                     src="{{url('asset/customer/assets/images/location.svg')}}" alt="location">
-                                    <span id="result" data-toggle="tooltip" title="Hooray!">Location</span>
-                                    </span></a>
+                                <span id="result" data-toggle="tooltip" title="">Location</span>
+                                </span></a>
                         </li>
                         @else
                         <li>
@@ -58,7 +57,6 @@ window.onload = function() {
                         </li>
                         @endif
 
-
                     </ul>
                 </div>
                 <nav class="nav-menu">
@@ -72,12 +70,8 @@ window.onload = function() {
                         <li>
                             <a href="{{url('/cart')}}" class="icon-link cart_nofti">
                                 <img src="{{url('asset/customer/assets/images/cart.svg')}}" alt="cart">
-                                <span class="notfi_cart" >0
-                                    {{-- @if($item <100)
-                                    {{$item ?? '0'}}
-                                    @else
-                                    99+
-                                    @endif --}}
+                                <span class="notfi_cart"> {{$user_data->cart_item_count ?? '!'}}
+
                                 </span>
                             </a>
                         </li>
@@ -140,5 +134,3 @@ window.onload = function() {
             </div>
         </div>
     </header>
-
-

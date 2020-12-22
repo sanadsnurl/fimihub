@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Http\Traits\GetBasicPageDataTraits;
 use Illuminate\Http\Request;
 //custom import
 use App\User;
@@ -22,10 +23,13 @@ use Session;
 
 class CartController extends Controller
 {
+    use GetBasicPageDataTraits;
     public function index(Request $request)
     {
 
         $user = Auth::user();
+        $user = $this->getBasicCount($user);
+
         $user_data = auth()->user()->userByIdData($user->id);
 
         $user_address = new user_address();
@@ -72,7 +76,7 @@ class CartController extends Controller
                 $service_data->service_tax = $service_tax;
                 $sub_total = $total_amount;
                 $total_amount = ($total_amount - $resto_data->discount) + $resto_data->delivery_charge + $resto_data->tax + $service_tax;
-                $user['currency'] = $this->currency;
+                $user->currency = $this->currency;
                 return view('customer.cartAddress')->with([
                     'user_data' => $user,
                     'menu_data' => $cart_menu_data,

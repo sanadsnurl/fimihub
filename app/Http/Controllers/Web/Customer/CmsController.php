@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Http\Traits\GetBasicPageDataTraits;
 use App\Http\Traits\MediaUploadTrait;
 use Illuminate\Http\Request;
 //custom import
@@ -19,7 +20,7 @@ use Session;
 
 class CmsController extends Controller
 {
-    use MediaUploadTrait;
+    use MediaUploadTrait,GetBasicPageDataTraits;
     public function indexHandShake(Request $request)
     {
 

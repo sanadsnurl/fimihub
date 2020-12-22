@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Http\Traits\GetBasicPageDataTraits;
 use Illuminate\Http\Request;
 use App\User;
 //custom import
@@ -16,7 +17,7 @@ use Session;
 
 class LoginRegisterController extends Controller
 {
-    use OtpGenerationTrait;
+    use OtpGenerationTrait, GetBasicPageDataTraits;
 
     public function register(Request $request)
     {
