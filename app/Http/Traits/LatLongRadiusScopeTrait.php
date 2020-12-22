@@ -9,7 +9,7 @@ use App\User;
 trait LatLongRadiusScopeTrait
 {
 
-    public $max_distance_km = 25;
+    public $max_distance_km = 50;
     /*
     *  find the n closest locations
     *  @param float $lat latitude of the po+int of interest
