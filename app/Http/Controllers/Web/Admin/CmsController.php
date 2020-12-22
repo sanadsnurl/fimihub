@@ -74,9 +74,9 @@ class CmsController extends Controller
     public function addSliderPage(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'text1' => 'required|string',
-            'text2' => 'required|string',
-            'link' => 'required|url',
+            'text1' => 'string',
+            'text2' => 'string',
+            'link' => 'url',
             'media' => 'required|mimes:png,jpg,jpeg|max:8192',
         ]);
         if (!$validator->fails()) {

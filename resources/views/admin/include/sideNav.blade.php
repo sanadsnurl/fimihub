@@ -107,7 +107,7 @@
                         <li><a href="{{url('adminfimihub/tnc')}}"><i class="fa fa-circle-o"></i>T&C</a></li>
                         <li><a href="{{url('adminfimihub/aboutUs')}}"><i class="fa fa-circle-o"></i>About Us</a></li>
                         <li><a href="{{url('adminfimihub/legalInfo')}}"><i class="fa fa-circle-o"></i>Legal Info</a></li>
-                        {{-- <li><a href="{{url('adminfimihub/slider')}}"><i class="fa fa-circle-o"></i>Slider</a></li> --}}
+                        <li><a href="{{url('adminfimihub/slider')}}"><i class="fa fa-circle-o"></i>Slider</a></li>
 
                     </ul>
                 </li>

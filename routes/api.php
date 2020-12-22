@@ -41,6 +41,8 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
     Route::group(['middleware' => 'auth:api'], function(){
         //Rider Details
         Route::get('/details', 'Api\LoginRegisterController@details');
+        //Rider Online Status Update
+        Route::get('/dutyStatus', 'Api\LoginRegisterController@updateOnlineStatus');
         //Rider logout
         Route::get('/logout', 'Api\LoginRegisterController@logout');
         //Rider Device token updation

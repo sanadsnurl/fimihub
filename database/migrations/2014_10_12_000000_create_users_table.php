@@ -29,6 +29,7 @@ class CreateUsersTable extends Migration
             $table->string('picture')->nullable();
             $table->tinyInteger('user_type')->comment('1-Admin,2-Rider,3-User,4-Restaurent')->nullable();
             $table->string('device_token')->nullable();
+            $table->tinyInteger('status')->default('1')->comment('1-online,0-offline');
             $table->tinyInteger('visibility')->default('0');
             $table->timestamp('deleted_at', 0)->nullable();
             $table->timestamps();

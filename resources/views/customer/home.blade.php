@@ -6,7 +6,7 @@
         @if($s_data->media != NULL)
         <div class="slide-item">
             <div class="bg-img">
-                <img src="{{url('asset/customer/assets/images/banner.png')}}" alt="banner">
+                <img src="{{url($s_data->media)}}" alt="banner">
             </div>
             <div class="content-wrap">
                 <div class="container">

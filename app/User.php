@@ -22,7 +22,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'mobile','status','user_type','role','permission','verification_code','country_code','device_token','visibility'
+        'name', 'email', 'password', 'mobile','status','user_type','role','permission','verification_code','country_code','device_token','visibility','status'
     ];
 
     /**
@@ -31,7 +31,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token','permission','status','created_at','deleted_at','updated_at'
+        'password', 'remember_token','permission','created_at','deleted_at','updated_at'
     ];
 
     /**
@@ -257,5 +257,18 @@ class User extends Authenticatable
     {
         return $this->hasOne(vehicle_detail::class, 'user_id');
     }
+
+    public function updateStatus($data)
+    {
+        $data['updated_at'] = now();
+        unset($data['_token']);
+
+        $query_data = DB::table('users')
+            ->where('id', $data['id'])
+            ->update(['status'=>$data['status']]);
+
+        return $query_data;
+    }
+
 
 }
