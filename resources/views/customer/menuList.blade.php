@@ -179,6 +179,8 @@ function increment_quantity(menu_id) {
     var item_count = $("#item_count");
     var total_amount = $("#total_amount");
     var cart_flex = document.getElementById('cart_flex');
+    var notfi_cart =  document.getElementById('notfi_cart');
+
 
     $.ajax({
         url: "addMenuItem",
@@ -197,6 +199,7 @@ function increment_quantity(menu_id) {
             }
             $(inputQuantityElement).html(response.quantity);
             $(item_count).html(response.items);
+            $(notfi_cart).html(response.items);
             $(total_amount).html(response.sub_total);
             $("#loading-overlay").hide();
         },
@@ -214,6 +217,7 @@ function decrement_quantity(menu_id) {
     var item_count = $("#item_count");
     var total_amount = $("#total_amount");
     var cart_flex = document.getElementById('cart_flex');
+    var notfi_cart =  document.getElementById('notfi_cart');
 
     $.ajax({
         url: "subtractMenuItem",
@@ -231,6 +235,7 @@ function decrement_quantity(menu_id) {
             }
             $(inputQuantityElement).html(response.quantity);
             $(item_count).html(response.items);
+            $(notfi_cart).html(response.items);
             $(total_amount).html(response.sub_total);
             $("#loading-overlay").hide();
         },

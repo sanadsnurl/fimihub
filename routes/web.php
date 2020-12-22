@@ -256,6 +256,8 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
         Route::get('slider', 'Web\Admin\CmsController@getSliderPage');
         // Add Slider
         Route::post('addSlider', 'Web\Admin\CmsController@addSliderPage');
+        //Delete Slider Cms
+        Route::get('deleteSliderCms', 'Web\Admin\CmsController@deleteSliderCms');
     });
 
 });

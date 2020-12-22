@@ -27,8 +27,15 @@ class CmsController extends Controller
         $slider_cms = new slider_cms;
         $slider_array = ['slider_type'=> 1, 'user_id'=>NULL];
         $slider_data = $slider_cms->getSlider($slider_array);
+        $sl_data = array();
+        foreach ($slider_data as $s_data) {
+            if (file_exists($s_data->media)) {
+                $s_data->media = url($s_data->media);
+                $sl_data[] =  $s_data;
+            }
+        }
 // dd($slider_data);
-        return view('customer.index')->with(['slider_data' => $slider_data,
+        return view('customer.index')->with(['slider_data' => $sl_data,
                                             ]);
     }
 }
