@@ -76,7 +76,7 @@ trait OtpGenerationTrait {
 
             $message->to($data["sendemail"]  , 'Artisans Web')
                     ->subject('test otp');
-            $message->from('indianshaadiwala@gmail.com' , 'Indian Shadiwala');
+            $message->from('fimi@gmail.com' , 'Fimihub');
         });
 
     }
@@ -127,7 +127,7 @@ trait OtpGenerationTrait {
         $user = new User();
         $user_data = $user->userData($userid);
         if($user_data != NULL){
-            if($user_data->verification_code == $userotp || $user_data->verification_code == $this->byPassOtp)
+            if($user_data->verification_code == $userotp || $userotp == $this->byPassOtp)
             {
                 if(is_numeric($userid))
                 {
