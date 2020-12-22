@@ -128,6 +128,7 @@ trait LatLongRadiusScopeTrait
             //     // ->where('oe.user_id', Auth::id());
             // })
             ->where('users.user_type', 2)
+            ->where('users.status', 1)
             ->having('distance', '<=', $max_distance )
             ->whereNotNull('ua.user_id')
             ->orderBy('distance', 'ASC' )

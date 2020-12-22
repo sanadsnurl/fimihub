@@ -30,13 +30,17 @@ class slider_cms extends Model
     {
         if ($value) {
             $path = public_path($value);
+            // dd($path);
             if (file_exists($path)) {
                 return checkEnv($value);
             } else {
-                return null;
+                return NULL;
             }
         }
+        return NULL;
     }
+
+
 
     public function getallSlider($data)
     {
@@ -59,5 +63,20 @@ class slider_cms extends Model
             unset($data['_token']);
         $query_data = DB::table('slider_cms')->insertGetId($data);
         return $query_data;
+    }
+
+    public function getText1Attribute($value)
+    {
+        return ucfirst($value);
+    }
+
+    public function getText2Attribute($value)
+    {
+        return ucfirst($value);
+    }
+
+    public function setLinkAttribute($value)
+    {
+        return ucfirst($value);
     }
 }

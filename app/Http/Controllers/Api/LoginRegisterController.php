@@ -16,6 +16,7 @@ use App\Http\Requests\UpdateLoginRequest;
 use App\Http\Requests\UserForgetPasswordRequest;
 use App\Http\Requests\UpdateDeviceTokenRequest;
 use App\Http\Requests\UpdatePasswordRequest;
+use App\Http\Requests\UpdateLoginStatusRequest;
 use App\Http\Traits\OtpGenerationTrait;
 use Response;
 use App\Model\rider_bank_detail;
@@ -596,5 +597,17 @@ class LoginRegisterController extends Controller
             $message = collect($validator->messages())->values()->first();
             return response()->json(['message' =>  $message[0], 'status' => false], $this->successStatus);
         }
+    }
+
+    public function updateOnlineStatus(UpdateLoginStatusRequest $request){
+        $user = Auth::user();
+        $id = $user->id;
+        $data = $request->toarray();
+        $status_array = ['status' => $data['status'], 'id' => $id];
+
+        $user_data = auth()->user()->updateStatus($status_array);
+
+        return response()->json(['message' => 'Status Updated !', 'status' => true], $this->successStatus);
+
     }
 }
