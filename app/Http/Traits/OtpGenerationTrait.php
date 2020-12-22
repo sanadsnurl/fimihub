@@ -21,40 +21,59 @@ trait OtpGenerationTrait {
     {
         try {
             //Integrate SMS API here
-            $mobile = $user_data->mobile;
-            $otp = $user_data->verification_code;
-            $authKey = "309952Aq8MczyMxu5e03001fP1";
-            $senderId = "ADSURL";
-            $messageMsg = urlencode("<#>Your OTP is: $otp ");
-            $postData = array(
-                'authkey' => $authKey,
-                'mobiles' => $mobile,
-                'message' => $messageMsg,
-                'sender' => $senderId,
-                'route' => 4,
-                'country' => 91
-            );
-            $url = "https://api.msg91.com/api/sendhttp.php";
-            $ch = curl_init();
-            curl_setopt_array($ch, array(
-                CURLOPT_URL => $url,
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_POST => true,
-                CURLOPT_POSTFIELDS => $postData
-            ));
-            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-            $output = curl_exec($ch);
-            if (curl_errno($ch)) {
-                echo 'error:' . curl_error($ch);
-            }
-            curl_close($ch);
-            if (strlen($output) == 24) {
-                return 1;
-            }else{
-                return 2;
-            }
+            // $mobile = $user_data->mobile;
+            // $otp = $user_data->verification_code;
+            // $authKey = "309952Aq8MczyMxu5e03001fP1";
+            // $senderId = "ADSURL";
+            // $messageMsg = urlencode("<#>Your OTP is: $otp ");
+            // $postData = array(
+            //     'authkey' => $authKey,
+            //     'mobiles' => $mobile,
+            //     'message' => $messageMsg,
+            //     'sender' => $senderId,
+            //     'route' => 4,
+            //     'country' => 91
+            // );
+            // $url = "https://api.msg91.com/api/sendhttp.php";
+            // $ch = curl_init();
+            // curl_setopt_array($ch, array(
+            //     CURLOPT_URL => $url,
+            //     CURLOPT_RETURNTRANSFER => true,
+            //     CURLOPT_POST => true,
+            //     CURLOPT_POSTFIELDS => $postData
+            // ));
+            // curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+            // $output = curl_exec($ch);
+            // if (curl_errno($ch)) {
+            //     echo 'error:' . curl_error($ch);
+            // }
+            // curl_close($ch);
+            // if (strlen($output) == 24) {
+            //     return 1;
+            // }else{
+            //     return 2;
+            // }
 
 
+            // Your Account SID and Auth Token from twilio.com/console
+            // To set up environmental variables, see http://twil.io/secure
+            // $account_sid = env('TWILIO_ACCOUNT_SID');
+            // $auth_token = env('TWILIO_AUTH_TOKEN');
+            // In production, these should be environment variables. E.g.:
+            // $auth_token = $_ENV["TWILIO_AUTH_TOKEN"]
+
+            // A Twilio number you own with SMS capabilities
+            // $twilio_number = "+18768454365";
+
+            // $client = new Client($account_sid, $auth_token);
+            // $client->messages->create(
+            //     // Where to send a text message (your cell phone?)
+            //     '+18768454365',
+            //     array(
+            //         'from' => $twilio_number,
+            //         'body' => 'I sent this test message'.$otp
+            //     )
+            // );
 
 
         } catch (Exception $e) {
