@@ -304,7 +304,7 @@ class LoginRegisterController extends Controller
     {
         $user = Auth::user();
         $Users = new User();
-        $user_update_data = ['device_token' => NULL , 'id' => $user->id];
+        $user_update_data = ['device_token' => NULL , 'id' => $user->id,'status'=> 0];
         $User_device_token = $Users->UpdateLogin($user_update_data);
         $request->user()->token()->revoke();
         return response()->json(['message' => 'Successfull Logout', 'status' => true], 200);
