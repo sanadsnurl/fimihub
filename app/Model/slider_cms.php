@@ -74,8 +74,14 @@ class slider_cms extends Model
     {
         return ucfirst($value);
     }
+/**
+    * Get the user's first name.
+    *
+    * @param  string  $value
+    * @return string
+    */
 
-    public function setLinkAttribute($value)
+    public function getLinkAttribute($value)
     {
         return ucfirst($value);
     }

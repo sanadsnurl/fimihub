@@ -135,7 +135,7 @@ trait LatLongRadiusScopeTrait
             ->groupBy('users.id');
     }
 
-     /*
+    /*
     *  find the n closest locations
     *  @param float $lat latitude of the po+int of interest
     *  @param float $lng longitude of the point of interest

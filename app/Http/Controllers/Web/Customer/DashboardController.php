@@ -30,8 +30,8 @@ class DashboardController extends Controller
 
         $loc_data = Location::get($ip);
 
-        $lat = $loc_data->latitude ??  '27.2046';
-        $lng = $loc_data->longitude ?? '77.4977';
+        $lat = $loc_data->latitude ??  '28.6581196';
+        $lng = $loc_data->longitude ?? '77.14289509999999';
         // dd($loc_data.'--'.$lat.'--'.$lng);
 
         $kmRadius = $this->max_distance_km;
@@ -41,16 +41,23 @@ class DashboardController extends Controller
         $resto_data = $this->closestRestaurant($user, $lat, $lng, $kmRadius)->get();
 
         $nonveg_resto_data = $this->closestRestaurant($user, $lat, $lng, $kmRadius)->where('resto_type',1)->get();
-
         $veg_resto_data = $this->closestRestaurant($user, $lat, $lng, $kmRadius)->where('resto_type',2)->get();
         $slider_cms = new slider_cms;
         $slider_array = ['slider_type'=> 1, 'user_id'=>NULL];
         $slider_data = $slider_cms->getSlider($slider_array);
+        $sl_data = array();
+        foreach($slider_data as $s_data){
+            if(file_exists($s_data->media)){
+                $s_data->media = url($s_data->media);
+                $sl_data[] =  $s_data;
+            }
+        }
+// dd($slider_data);
 
         return view('customer.home')->with(['user_data' => $user_data,
                                             'resto_data' => $resto_data,
                                             'nonveg' => $nonveg_resto_data,
-                                            'slider_data' => $slider_data,
+                                            'slider_data' => $sl_data,
                                             'veg' => $veg_resto_data
                                             ]);
     }
