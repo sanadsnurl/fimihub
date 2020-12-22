@@ -233,6 +233,8 @@
         var total_amount = $("#total_amount");
         var service_tax = $("#service_tax");
         var sub_total = $("#sub_total");
+        var notfi_cart =  document.getElementById('notfi_cart');
+
         $.ajax({
             url: "addMenuItem",
             data: "menu_id=" + menu_id + "&resto_id=" + resto_id,
@@ -247,6 +249,7 @@
                 var sub_totals = response.sub_total.toFixed(2);
                 $(inputQuantityElement).val(response.quantity);
                 $(item_count).html(response.items);
+                $(notfi_cart).html(response.items);
                 $(sub_total).html(sub_totals);
                 $(total_amount).html(total_amnt);
                 $(service_tax).html(service_taxs);
@@ -267,6 +270,8 @@
         var total_amount = $("#total_amount");
         var service_tax = $("#service_tax");
         var sub_total = $("#sub_total");
+        var notfi_cart =  document.getElementById('notfi_cart');
+
         $.ajax({
             url: "subtractMenuItem",
             data: "menu_id=" + menu_id + "&resto_id=" + resto_id,
@@ -281,6 +286,7 @@
                 var sub_totals = response.sub_total.toFixed(2);
                 $(inputQuantityElement).val(response.quantity);
                 $(item_count).html(response.items);
+                $(notfi_cart).html(response.items);
                 $(sub_total).html(sub_totals);
                 $(total_amount).html(total_amnt);
                 $(service_tax).html(service_taxs);

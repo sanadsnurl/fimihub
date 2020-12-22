@@ -70,7 +70,7 @@
                         <li>
                             <a href="{{url('/cart')}}" class="icon-link cart_nofti">
                                 <img src="{{url('asset/customer/assets/images/cart.svg')}}" alt="cart">
-                                <span class="notfi_cart"> {{$user_data->cart_item_count ?? '!'}}
+                                <span class="notfi_cart" id="notfi_cart"> {{$user_data->cart_item_count ?? '!'}}
 
                                 </span>
                             </a>

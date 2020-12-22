@@ -110,4 +110,17 @@ class CmsController extends Controller
             return redirect()->back()->withInput()->withErrors($validator);
         }
     }
+
+    public function deleteSliderCms(Request $request){
+        $slider_id = base64_decode(request('slider_id'));
+
+        $slider_cms = new slider_cms;
+        $delete_slider = array();
+        $delete_slider['id'] = $slider_id;
+
+        $delete_slider = $slider_cms->deleteSliderCms($delete_slider);
+        Session::flash('message', 'Slider Deleted Successfully !');
+
+        return redirect()->back();
+    }
 }

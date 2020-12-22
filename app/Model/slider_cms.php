@@ -74,15 +74,16 @@ class slider_cms extends Model
     {
         return ucfirst($value);
     }
-/**
-    * Get the user's first name.
-    *
-    * @param  string  $value
-    * @return string
-    */
 
-    public function getLinkAttribute($value)
+    public function deleteSliderCms($data)
     {
-        return ucfirst($value);
+        $data['deleted_at'] = now();
+        unset($data['_token']);
+
+        $query_data = DB::table('slider_cms')
+            ->where('id', $data['id'])
+            ->update(['visibility'=> 2,'deleted_at' => $data['deleted_at']]);
+
+        return $query_data;
     }
 }
