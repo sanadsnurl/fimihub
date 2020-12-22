@@ -163,7 +163,7 @@ class OrderController extends Controller
         $lng = $resto_add[0]->longitude;
         $kmRadius = $this->max_distance_km;
         $rider = $this->closestRiders($user, $lat, $lng, $kmRadius)->get();
-dd($rider->toArray());
+// dd($rider->toArray());
 
         foreach ($rider as $rid) {
             $push_notification_rider = array();
