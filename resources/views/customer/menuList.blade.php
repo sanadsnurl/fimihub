@@ -26,6 +26,7 @@
                 <img src="{{url('asset/customer/assets/images/restaurant_detail_banner.png')}}" alt="banner">
             </div>
         </div>
+
         <div class="slide-item">
             <div class="bg-img">
                 <img src="{{url('asset/customer/assets/images/restaurant_detail_banner.png')}}" alt="banner">

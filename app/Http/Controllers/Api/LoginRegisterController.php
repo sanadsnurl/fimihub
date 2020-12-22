@@ -302,6 +302,10 @@ class LoginRegisterController extends Controller
 
     public function logout(Request $request)
     {
+        $user = Auth::user();
+        $Users = new User();
+        $user_update_data = ['device_token' => NULL , 'id' => $user->id];
+        $User_device_token = $Users->UpdateLogin($user_update_data);
         $request->user()->token()->revoke();
         return response()->json(['message' => 'Successfull Logout', 'status' => true], 200);
     }
@@ -562,7 +566,7 @@ class LoginRegisterController extends Controller
     public function updateProfilePicture(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'picture' => 'nullable|mimes:png,jpg,jpeg|max:3072',
+            'picture' => 'required|mimes:png,jpg,jpeg|max:3072',
         ]);
 
         $user = Auth::user();
