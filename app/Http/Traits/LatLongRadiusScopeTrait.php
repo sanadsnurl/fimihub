@@ -69,6 +69,7 @@ trait LatLongRadiusScopeTrait
             ->having('distance', '<=', $max_distance )
             ->orderBy('distance', 'ASC' )
             ->whereNull('oe.order_id')
+            ->orderBy('orders.id', 'DESC')
             ->groupBy('orders.id');
     }
 
