@@ -18,6 +18,7 @@ trait NotificationTrait
 		$firebase_token = $notification_data['device_token'];
         $title = $notification_data['title'];
         $notifications = $notification_data['notification'];
+        $page_token = $notification_data['page_token'] ?? '-1';
 		//server key
         $your_project_id_as_key = 'AAAAS7OBtOE:APA91bGi-xdLFihiaQrTEmlXedX_QDWDxNZVVqrHaMxV82cpeK_wEP_lucI8HaCtCM9bSCJvMJ2JHUE9u-B6mRpj3aVkfGUi3-wqC3Y-cUPSg3h9avqCOqCHaS7xWW-m0xmz6OVwh8tL';
         $url = "https://fcm.googleapis.com/fcm/send";
@@ -30,12 +31,14 @@ trait NotificationTrait
                 "to" : "'.$firebase_token.'",
                     "notification" : {
                         "title":"'.$title.'",
-                        "text" : "'.strip_tags($notifications).'"
+                        "text" : "'.strip_tags($notifications).'",
+                        "page_token" : "'.$page_token.'"
                     },
                 "data" : {
                     "id" : 1,
                     "title":"'.$title.'",
-                    "description" : "'.strip_tags($notifications).'"
+                    "description" : "'.strip_tags($notifications).'",
+                    "page_token" : "'.$page_token.'"
                 }
             }';
 
