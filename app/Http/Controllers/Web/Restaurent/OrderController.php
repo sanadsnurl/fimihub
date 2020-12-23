@@ -234,7 +234,7 @@ class OrderController extends Controller
         $orders = new order;
         $order_data = $orders->getOrderData($order_id);
         $order_status_update = $orders->updateOrderStatus($order_id, $order_status);
-
+// dd($order_data);
         $user_instanca = new User;
         $customer_data = $user_instanca->userByIdData($order_data->user_id);
 
@@ -245,11 +245,17 @@ class OrderController extends Controller
         $order_event['user_type'] = 2;
         $OrderEvents = new OrderEvent;
         $make_event = $OrderEvents->makeUpdateOrderEvent($order_event);
+
+
         // ============================================= PUSH NOTIFICATION=======================================
-        $push_notification_sender = array();
-        $push_notification_sender['device_token'] = $customer_data->device_token;
-        $push_notification_sender['title'] = 'Order Packed';
-        $push_notification_sender['notification'] = 'Order Packed By Restaurant';
+        if(isset($customer_data->device_token)){
+            $push_notification_sender = array();
+            $push_notification_sender['device_token'] = $customer_data->device_token;
+            $push_notification_sender['title'] = 'Order Packed';
+            $push_notification_sender['notification'] = 'Order Packed By Restaurant';
+            $push_notification_sender_result = $this->pushNotification($push_notification_sender);
+        }
+
 
         $notification_sender = array();
         $notification_sender['user_id'] = $customer_data->id;
@@ -258,7 +264,33 @@ class OrderController extends Controller
         $notification_sender['notification'] = 'Order Packed By Restaurant';
         $notification = new Notification();
         $notification_id = $notification->makeNotifiaction($notification_sender);
-        $push_notification_sender_result = $this->pushNotification($push_notification_sender);
+
+
+        //============================= Rider PUSH =======================================
+        $OrderEvents = new OrderEvent;
+        $order_event_data = $OrderEvents->getOrderEvent($order_event);
+// dd($order_event_data);
+        foreach($order_event_data as $oe_data){
+            if($oe_data->user_type == 1){
+                $user_instanca = new User;
+                $rid = $user_instanca->userByIdData($oe_data->user_id);
+
+                $push_notification_rider = array();
+                $push_notification_rider['device_token'] = $rid->device_token;
+                $push_notification_rider['title'] = 'Order Ready For Pick-Up';
+                $push_notification_rider['notification'] = $customer_data->name.' ,Order Has Been Packed';
+
+                $notification_rider = array();
+                $notification_rider['user_id'] = $rid->id;
+                $notification_rider['txn_id'] = $order_data->order_id;
+                $notification_rider['title'] = 'Order Ready For Pick-Up';
+                $notification_rider['notification'] = $customer_data->name.', Order Has Been Packed';
+                $notification = new Notification();
+                $notification_id = $notification->makeNotifiaction($notification_rider);
+                $push_notification_rider_result = $this->pushNotification($push_notification_rider);
+            }
+
+        }
 
         // ==========================================================================================================
 
