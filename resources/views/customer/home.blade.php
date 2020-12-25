@@ -20,9 +20,9 @@
                             <a href="{{$s_data->link ?? ''}}" class="btn btn-lg btn-white">See More</a>
                             @endif
                         <div class="search-bar">
-                            <div class="location-selector">
-                                <span>Delhi NCR</span>
-                            </div>
+                            {{-- <div class="location-selector">
+                                <span><input type="text" name="city" placeholder="Search Location"></span>
+                            </div> --}}
                             <div class="search-input">
                                 <input type="text" placeholder="Search for restaurant, groceries,essentials & errand">
                                 <div class="search-btn"></div>

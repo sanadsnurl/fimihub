@@ -107,6 +107,10 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
         Route::get('addMenuItem', 'Web\Customer\CartController@addToCart');
         //Subtract Menu Item To Cart
         Route::get('subtractMenuItem', 'Web\Customer\CartController@removeFromCart');
+        //Add Custom Menu Item To Cart
+        Route::get('addCustomMenuItem', 'Web\Customer\CartController@addToCartCustom');
+        //Subtract Custom Menu Item To Cart
+        Route::get('subtractCustomMenuItem', 'Web\Customer\CartController@removeFromCartCustom');
         //Add default address
         Route::get('addDefaultAddress', 'Web\Customer\AddressController@addToDefault');
         //Delete address
@@ -170,6 +174,14 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
         Route::get('editDish', 'Web\Restaurent\RestaurentController@editMenu');
         //Edit Dish Prcoess
         Route::post('editDishProcess', 'Web\Restaurent\RestaurentController@editMenuProcess');
+        // Add ON List
+        Route::get('addOn', 'Web\Restaurent\RestaurentController@getAddOn');
+        // Add ON insert
+        Route::post('createAddOn', 'Web\Restaurent\RestaurentController@addOnProcess');
+        //Delete Add ON
+        Route::get('deleteAddOn', 'Web\Restaurent\RestaurentController@deleteCustomization');
+        //Edit Add ON
+        Route::get('editAddOn', 'Web\Restaurent\RestaurentController@editCustomization');
 
     });
 

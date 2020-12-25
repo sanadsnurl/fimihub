@@ -4372,14 +4372,22 @@ header:after,
     width: 250px;
     padding-left: 52px;
     position: relative;
-    border-right: 1px solid #7D3B8A;
+    border-right: 1px solid #ccc;
+}
+
+.banner .slider-wrap .slide-item .content-wrap .inner-wrap .search-bar .location-selector input {
+    border: none;
+    border-bottom: 1px solid #ccc;
+    width: 122px;
+    font-weight: 600;
+    font-size: 14px;
 }
 
 @media (max-width: 595px) {
     .banner .slider-wrap .slide-item .content-wrap .inner-wrap .search-bar .location-selector {
         padding-bottom: 11px;
         border-right: 0;
-        border-bottom: 1px solid #858585;
+        border-bottom: 1px solid #ccc;
         margin-bottom: 10px;
         width: 100%;
     }
@@ -4429,7 +4437,8 @@ header:after,
     border: none;
     outline: none;
     padding-left: 40px;
-    font-size: 12px;
+    font-weight: 600;
+    font-size: 14px;
 }
 
 @media (max-width: 595px) {
@@ -6963,6 +6972,32 @@ form .form-group label {
 
 .progress_box .steps li.step3.active span {
     background: #fff url("../assets/images/step3-active.svg") no-repeat;
+}
+
+.collapsible {
+    margin-left: 25px;
+    margin-top: 5px;
+}
+
+.collapsible a {
+    margin-bottom: 10px;
+    color: #007bff;
+}
+
+.collapsible a:after {
+    content: "";
+    display: inline-block;
+    width: 6px;
+    height: 11px;
+    background: url(../assets/images/arrow_blue.svg) no-repeat;
+    background-size: contain;
+    transform: rotate(90deg);
+    margin-left: 4px;
+    transition: all .3s ease-in-out;
+}
+
+.collapsible a.show:after {
+    transform: rotate(-90deg);
 }
 
 .cart_login_inr .card_lft,
