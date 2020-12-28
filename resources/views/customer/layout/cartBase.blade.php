@@ -92,7 +92,12 @@
                             <div class="collapsible">
                                 <a href="#" data-toggle="collapse" data-target="#collapseExample{{$m_data->id}}"
                                     aria-expanded="false" aria-controls="collapseExample">
+                                    @if(request()->is('trackOrder'))
+                                    Customization's
+                                    @else
                                     Customize
+                                    @endif
+
                                 </a>
                                 @foreach($m_data->add_on_data as $add_data)
                                 <div class="collapse" id="collapseExample{{$m_data->id}}">
@@ -124,7 +129,8 @@
                                                     <button type="button" class="minus_btn"
                                                         onClick="custom_decrement_quantity('{{base64_encode($m_data->id)}}','{{base64_encode($add_data->id)}}')">-</button>
                                                     <input type="text" value="{{$add_data->quantity ?? '0'}}"
-                                                        id="input-quantity-custom-{{$add_data->id}}" readonly>
+                                                        id="input-quantity-custom-{{$add_data->id}}"
+                                                        class="remove_all_count" readonly>
                                                     <button type="button" class="pluse_btn"
                                                         onClick="custom_increment_quantity('{{base64_encode($m_data->id)}}','{{base64_encode($add_data->id)}}')">+</button>
                                                     @endif
@@ -238,13 +244,13 @@
 
                                         <p>{{$order_event_data->rider_details->name ?? '---'}}</p>
                                         <div class="img-wrap">
-                                            <span class="js-star-rating rating_star" data-rating="4.5">
+                                            {{-- <span class="js-star-rating rating_star" data-rating="4.5">
                                                 <span class="fa fa-star-o"></span>
                                                 <span class="fa fa-star-o"></span>
                                                 <span class="fa fa-star-o"></span>
                                                 <span class="fa fa-star-o"></span>
                                                 <span class="fa fa-star-o"></span>
-                                            </span>
+                                            </span> --}}
                                         </div>
                                     </div>
 
@@ -314,6 +320,7 @@
         var resto_id = $("#input-quantity").val();
         var menu_decode_id = atob(menu_id);
         var inputQuantityElement = $("#input-quantity-" + menu_decode_id);
+        var remove_all_count = $(".remove_all_count");
         var item_count = $("#item_count");
         var total_amount = $("#total_amount");
         var service_tax = $("#service_tax");
@@ -332,6 +339,9 @@
                 var service_taxs = response.service_data.service_tax.toFixed(2);
                 var sub_totals = response.sub_total.toFixed(2);
                 $(inputQuantityElement).val(response.quantity);
+                if (response.quantity == 0) {
+                    $(remove_all_count).val(0);
+                }
                 $(item_count).html(response.items);
                 $(notfi_cart).html(response.items);
                 $(sub_total).html(sub_totals);
@@ -346,7 +356,7 @@
         });
     }
 
-    function custom_increment_quantity(menu_id,custom_id) {
+    function custom_increment_quantity(menu_id, custom_id) {
         var resto_id = $("#input-quantity").val();
         var menu_decode_id = atob(menu_id);
         var custom_decode_id = atob(custom_id);
@@ -370,7 +380,7 @@
                 var service_taxs = response.service_data.service_tax.toFixed(2);
                 var sub_totals = response.sub_total.toFixed(2);
                 $(inputQuantityElementCustom).val(response.quantity);
-                if($(inputQuantityElement).val() == 0){
+                if ($(inputQuantityElement).val() == 0) {
                     $(inputQuantityElement).val(1);
                 }
                 $(item_count).html(response.items);
@@ -387,7 +397,7 @@
         });
     }
 
-    function custom_decrement_quantity(menu_id,custom_id) {
+    function custom_decrement_quantity(menu_id, custom_id) {
         var resto_id = $("#input-quantity").val();
         var menu_decode_id = atob(menu_id);
         var custom_decode_id = atob(custom_id);
@@ -406,15 +416,11 @@
                 $("#loading-overlay").show();
             },
             success: function(response) {
-                console.log(response);
                 var total_amnt = (response.total_amount + response.service_data.service_tax);
                 total_amnt = total_amnt.toFixed(2);
                 var service_taxs = response.service_data.service_tax.toFixed(2);
                 var sub_totals = response.sub_total.toFixed(2);
                 $(inputQuantityElementCustom).val(response.quantity);
-                if($(inputQuantityElement).val() == 0){
-                    $(inputQuantityElement).val(1);
-                }
                 $(item_count).html(response.items);
                 $(notfi_cart).html(response.items);
                 $(sub_total).html(sub_totals);
@@ -428,8 +434,6 @@
             }
         });
     }
-
-
     /* display rating in form of stars */
     $.fn.makeStars = function() {
         $(this).each(function() {

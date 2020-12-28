@@ -21,6 +21,8 @@
                                 <thead>
                                     <tr>
                                         <!-- <th>S.no</th> -->
+                                        <th>Action</th>
+
                                         <th>S.No.</th>
                                         <th>Order Id</th>
                                         <th>Customer Name</th>
@@ -29,7 +31,6 @@
                                         <th>Payment Method</th>
                                         <th>Order Status</th>
                                         <th>Create At</th>
-                                        <th>Action</th>
 
                                     </tr>
                                 </thead>
@@ -85,6 +86,12 @@ $(document).ready(function() {
         buttons: ['copy', 'excel', 'pdf', 'print'],
         ajax: "{{url('Restaurent/customerOrder')}}",
         columns: [{
+                data: 'action',
+                name: 'action',
+                orderable: true,
+                searchable: false
+            },
+            {
                 data: 'DT_RowIndex',
                 name: 'id'
             },
@@ -117,12 +124,7 @@ $(document).ready(function() {
                 name: 'created_at'
             },
 
-            {
-                data: 'action',
-                name: 'action',
-                orderable: true,
-                searchable: false
-            },
+            
 
 
         ]

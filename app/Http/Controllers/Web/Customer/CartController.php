@@ -72,19 +72,17 @@ class CartController extends Controller
                         $cart_customizations = new cart_customization();
                         $quant_details['cart_submenu_id'] = $m_data->sub_menu_id;
                         $quant_details['custom_id'] = $add_data->id;
-                        $cart_add_data= $cart_customizations->getCartCustomDataBySubMenu($quant_details)->first();
+                        $cart_add_data = $cart_customizations->getCartCustomDataBySubMenu($quant_details)->first();
                         $add_data->price = $add_data->price + (($percentage / 100) * $add_data->price);
-                        if(isset($cart_add_data)){
+                        if (isset($cart_add_data)) {
                             if (isset($cart_add_data->quantity) || $cart_add_data->quantity != 0) {
-                                $add_data->quantity =$cart_add_data->quantity;
+                                $add_data->quantity = $cart_add_data->quantity;
                                 $custom_count = $custom_count + $cart_add_data->quantity;
                                 $custom_total = $custom_total + ($cart_add_data->quantity * $add_data->price);
-                            }
-                            else{
+                            } else {
                                 $add_data->quantity = 0;
                             }
-                        }
-                        else{
+                        } else {
                             $add_data->quantity = 0;
                         }
                     }
@@ -182,15 +180,15 @@ class CartController extends Controller
 
                 $total_amount = 0;
                 $item = 0;
-                $custom_count =0;
-                $custom_total =0;
+                $custom_count = 0;
+                $custom_total = 0;
                 foreach ($menu_data as $m_data) {
                     $ServiceCategories = new ServiceCategory;
                     $service_data = $ServiceCategories->getServiceById(1);
                     $percentage = $service_data->commission;
                     $m_data->price = $m_data->price + (($percentage / 100) * $m_data->price);
 
-//==================================================================================
+                    //==================================================================================
                     $menu_customizations = new menu_customization();
                     $m_data->add_on_data = $menu_customizations->getAddOnData($m_data->id)->get();
 
@@ -198,23 +196,21 @@ class CartController extends Controller
                         $cart_customizations = new cart_customization();
                         $quant_details['custom_id'] = $add_data->id;
                         $quant_details['cart_id'] = $cart_submenu_data['cart_id'];
-                        $cart_add_data= $cart_customizations->getCartCustomDataBySubMenu($quant_details)->first();
+                        $cart_add_data = $cart_customizations->getCartCustomDataBySubMenu($quant_details)->first();
                         $add_data->price = $add_data->price + (($percentage / 100) * $add_data->price);
-                        if(isset($cart_add_data)){
+                        if (isset($cart_add_data)) {
                             if (isset($cart_add_data->quantity) || $cart_add_data->quantity != 0) {
-                                $add_data->quantity =$cart_add_data->quantity;
+                                $add_data->quantity = $cart_add_data->quantity;
                                 $custom_count = $custom_count + $cart_add_data->quantity;
                                 $custom_total = $custom_total + ($cart_add_data->quantity * $add_data->price);
-                            }
-                            else{
+                            } else {
                                 $add_data->quantity = 0;
                             }
-                        }
-                        else{
+                        } else {
                             $add_data->quantity = 0;
                         }
                     }
-//===================================================================
+                    //===================================================================
                     if ($m_data->quantity != NULL) {
                         $item = $item + $m_data->quantity;
                         $total_amount = $total_amount + ($m_data->quantity * $m_data->price);
@@ -295,10 +291,35 @@ class CartController extends Controller
 
                     $total_amount = 0;
                     $item = 0;
+                    $custom_count = 0;
+                    $custom_total = 0;
                     foreach ($menu_data as $m_data) {
                         $ServiceCategories = new ServiceCategory;
                         $service_data = $ServiceCategories->getServiceById(1);
                         $percentage = $service_data->commission;
+                        //==================================================================================
+                        $menu_customizations = new menu_customization();
+                        $m_data->add_on_data = $menu_customizations->getAddOnData($m_data->id)->get();
+
+                        foreach ($m_data->add_on_data as $add_data) {
+                            $cart_customizations = new cart_customization();
+                            $quant_details['cart_id'] = $cart_submenu_data['cart_id'];
+                            $quant_details['custom_id'] = $add_data->id;
+                            $cart_add_data = $cart_customizations->getCartCustomDataBySubMenu($quant_details)->first();
+                            $add_data->price = $add_data->price + (($percentage / 100) * $add_data->price);
+                            if (isset($cart_add_data)) {
+                                if (isset($cart_add_data->quantity) || $cart_add_data->quantity != 0) {
+                                    $add_data->quantity = $cart_add_data->quantity;
+                                    $custom_count = $custom_count + $cart_add_data->quantity;
+                                    $custom_total = $custom_total + ($cart_add_data->quantity * $add_data->price);
+                                } else {
+                                    $add_data->quantity = 0;
+                                }
+                            } else {
+                                $add_data->quantity = 0;
+                            }
+                        }
+                        //===================================================================
                         $m_data->price = $m_data->price + (($percentage / 100) * $m_data->price);
 
                         if ($m_data->quantity != NULL) {
@@ -306,11 +327,13 @@ class CartController extends Controller
                             $total_amount = $total_amount + ($m_data->quantity * $m_data->price);
                         }
                     }
+                    $sub_total = $total_amount + $custom_total;
+                    $total_amount = $total_amount + $custom_total;
+
                     $ServiceCategories = new ServiceCategory;
                     $service_data = $ServiceCategories->getServiceById(1);
                     $service_tax = (($service_data->tax / 100) * $total_amount);
                     $service_data->service_tax = $service_tax;
-                    $sub_total = $total_amount;
                     $total_amount = ($total_amount - $resto_data->discount) + $resto_data->delivery_charge + $resto_data->tax;
 
 
@@ -333,10 +356,36 @@ class CartController extends Controller
 
                     $total_amount = 0;
                     $item = 0;
+                    $custom_count = 0;
+                    $custom_total = 0;
                     foreach ($menu_data as $m_data) {
                         $ServiceCategories = new ServiceCategory;
                         $service_data = $ServiceCategories->getServiceById(1);
                         $percentage = $service_data->commission;
+                        //==================================================================================
+                        $menu_customizations = new menu_customization();
+                        $m_data->add_on_data = $menu_customizations->getAddOnData($m_data->id)->get();
+
+                        foreach ($m_data->add_on_data as $add_data) {
+                            $cart_customizations = new cart_customization();
+                            $quant_details['cart_id'] = $cart_submenu_data['cart_id'];
+                            $quant_details['custom_id'] = $add_data->id;
+                            $cart_add_data = $cart_customizations->getCartCustomDataBySubMenu($quant_details)->first();
+                            $add_data->price = $add_data->price + (($percentage / 100) * $add_data->price);
+                            if (isset($cart_add_data)) {
+                                if (isset($cart_add_data->quantity) || $cart_add_data->quantity != 0) {
+                                    $add_data->quantity = $cart_add_data->quantity;
+                                    $custom_count = $custom_count + $cart_add_data->quantity;
+                                    $custom_total = $custom_total + ($cart_add_data->quantity * $add_data->price);
+                                } else {
+                                    $add_data->quantity = 0;
+                                }
+                            } else {
+                                $add_data->quantity = 0;
+                            }
+                        }
+                        //===================================================================
+
                         $m_data->price = $m_data->price + (($percentage / 100) * $m_data->price);
 
                         if ($m_data->quantity != NULL) {
@@ -344,11 +393,12 @@ class CartController extends Controller
                             $total_amount = $total_amount + ($m_data->quantity * $m_data->price);
                         }
                     }
+                    $sub_total = $total_amount + $custom_total;
+                    $total_amount = $total_amount + $custom_total;
                     $ServiceCategories = new ServiceCategory;
                     $service_data = $ServiceCategories->getServiceById(1);
                     $service_tax = (($service_data->tax / 100) * $total_amount);
                     $service_data->service_tax = $service_tax;
-                    $sub_total = $total_amount;
                     $total_amount = ($total_amount - $resto_data->discount) + $resto_data->delivery_charge + $resto_data->tax;
 
                     $response = [
@@ -414,7 +464,7 @@ class CartController extends Controller
                 $cart_submenu_data['user_id'] = $user->id;
                 $cart_submenu_data['menu_id'] = $menu_data->id;
                 $get_sub_menu = $cart_submenu->getCartValue($cart_submenu_data);
-                if(empty($get_sub_menu)){
+                if (empty($get_sub_menu)) {
                     $cart_sub_menu = $cart_submenu->makeCartSubMenu($cart_submenu_data);
                     $get_qaunt = array();
                     $get_quant['cart_id'] = $cart_submenu_data['cart_id'];
@@ -425,9 +475,7 @@ class CartController extends Controller
                     $cart_submenu_data['custom_id'] = $custom_id;
                     $cart_customizations = new cart_customization();
                     $cart_custom_set = $cart_customizations->makeCustomCartSubMenu($cart_submenu_data);
-
-                }
-                else{
+                } else {
                     $get_qaunt = array();
                     $get_quant['cart_id'] = $cart_submenu_data['cart_id'];
                     $get_quant['menu_id'] = $menu_data->id;
@@ -437,7 +485,6 @@ class CartController extends Controller
                     $cart_submenu_data['custom_id'] = $custom_id;
                     $cart_customizations = new cart_customization();
                     $cart_custom_set = $cart_customizations->makeCustomCartSubMenu($cart_submenu_data);
-
                 }
 
                 $menu_list = new menu_list;
@@ -463,31 +510,29 @@ class CartController extends Controller
                     $quant_details['cart_submenu_id'] = $cart_sub_menu->id;
                     $quant_details['cart_id'] = $cart_submenu_data['cart_id'];
                     $quant_details['custom_id'] = $custom_id;
-                    $cart_add_data= $cart_customizations->getCartCustomDataByID($quant_details['custom_id'])->first();
-//==================================================================================
+                    $cart_add_data = $cart_customizations->getCartCustomDataByID($quant_details['custom_id'])->first();
+                    //==================================================================================
                     $menu_customizations = new menu_customization();
                     $m_data->add_on_data = $menu_customizations->getAddOnData($m_data->id)->get();
 
                     foreach ($m_data->add_on_data as $add_data) {
                         $cart_customizations = new cart_customization();
                         $quant_details['custom_id'] = $add_data->id;
-                        $cart_add_data= $cart_customizations->getCartCustomDataBySubMenu($quant_details)->first();
+                        $cart_add_data = $cart_customizations->getCartCustomDataBySubMenu($quant_details)->first();
                         $add_data->price = $add_data->price + (($percentage / 100) * $add_data->price);
-                        if(isset($cart_add_data)){
+                        if (isset($cart_add_data)) {
                             if (isset($cart_add_data->quantity) || $cart_add_data->quantity != 0) {
-                                $add_data->quantity =$cart_add_data->quantity;
+                                $add_data->quantity = $cart_add_data->quantity;
                                 $custom_count = $custom_count + $cart_add_data->quantity;
                                 $custom_total = $custom_total + ($cart_add_data->quantity * $add_data->price);
-                            }
-                            else{
+                            } else {
                                 $add_data->quantity = 0;
                             }
-                        }
-                        else{
+                        } else {
                             $add_data->quantity = 0;
                         }
                     }
-//===================================================================
+                    //===================================================================
 
                     $m_data->price = $m_data->price + (($percentage / 100) * $m_data->price);
                     if ($m_data->quantity != NULL) {
@@ -503,7 +548,7 @@ class CartController extends Controller
                 // $service_tax = number_format((float) $service_tax, 2);
                 $service_data->service_tax = $service_tax;
                 $total_amount = ($total_amount - $resto_data->discount) + $resto_data->delivery_charge + $resto_data->tax;
-// return $cart_sub_menu;
+                // return $cart_sub_menu;
                 $response = [
                     'quantity' => $cart_add_data->quantity,
                     'items' => $item,
@@ -539,104 +584,104 @@ class CartController extends Controller
                 $cart_submenu_data = array();
                 $cart = new cart;
                 $cart_avail = $cart->checkCartAvaibility($user->id);
-                if ($cart_avail == NULL) {
-                    $cart_data = array();
-                    $cart_data['user_id'] = $user->id;
-                    $cart_data['restaurent_id'] = $resto_id;
-                    $cart_data['customer_name'] = $user->name;
-                    $cart_data['delivery_fee'] = $resto_data->delivery_charge;
-                    $cart_data['tax'] = $resto_data->tax;
-                    $cart_id = $cart->makeCart($cart_data);
-                    $cart_submenu_data['cart_id'] = $cart_id;
-                } elseif ($cart_avail->restaurent_id == $resto_id) {
+                if ($cart_avail->restaurent_id == $resto_id) {
                     $cart_submenu_data['cart_id'] = $cart_avail->id;
                 }
 
                 $cart_submenu = new cart_submenu;
                 $cart_submenu_data['user_id'] = $user->id;
                 $cart_submenu_data['menu_id'] = $menu_data->id;
-                $cart_sub_menu = $cart_submenu->removeCartSubMenu($cart_submenu_data);
+                $get_sub_menu = $cart_submenu->getCartValue($cart_submenu_data);
+                if (!empty($get_sub_menu)) {
+                    $get_qaunt = array();
+                    $get_quant['cart_id'] = $cart_submenu_data['cart_id'];
+                    $get_quant['menu_id'] = $menu_data->id;
+                    $get_quant['cart_submenu_id'] = $menu_data->id;
+                    $get_quant['custom_id'] = $menu_data->id;
 
-                $get_qaunt = array();
-                $get_quant['cart_id'] = $cart_submenu_data['cart_id'];
-                $get_quant['menu_id'] = $menu_data->id;
-                $cart_sub_menu = $cart_submenu->getCartValue($cart_submenu_data);
-                if ($cart_sub_menu == NULL) {
-                    $menu_list = new menu_list;
-                    $quant_details = array();
-                    $quant_details['user_id'] = $user->id;
-                    $quant_details['restaurent_id'] = $resto_id;
+                    // $quant_details['cart_submenu_id'] = $get_sub_menu->id;
+                    // $quant_details['cart_id'] = $cart_submenu_data['cart_id'];
+                    // $quant_details['custom_id'] = $custom_id;
+                    $cart_customizations = new cart_customization();
 
-                    $menu_data = $menu_list->menuListByQuantity($quant_details);
-
-                    $total_amount = 0;
-                    $item = 0;
-                    foreach ($menu_data as $m_data) {
-                        $ServiceCategories = new ServiceCategory;
-                        $service_data = $ServiceCategories->getServiceById(1);
-                        $percentage = $service_data->commission;
-                        $m_data->price = $m_data->price + (($percentage / 100) * $m_data->price);
-
-                        if ($m_data->quantity != NULL) {
-                            $item = $item + $m_data->quantity;
-                            $total_amount = $total_amount + ($m_data->quantity * $m_data->price);
-                        }
-                    }
-                    $ServiceCategories = new ServiceCategory;
-                    $service_data = $ServiceCategories->getServiceById(1);
-                    $service_tax = (($service_data->tax / 100) * $total_amount);
-                    $service_data->service_tax = $service_tax;
-                    $sub_total = $total_amount;
-                    $total_amount = ($total_amount - $resto_data->discount) + $resto_data->delivery_charge + $resto_data->tax;
-
-
-                    $response = [
-                        'quantity' => 0,
-                        'items' => $item,
-                        'service_data' => $service_data,
-                        'sub_total' => $sub_total,
-                        'total_amount' => $total_amount
-                    ];
-
-                    return $response;
-                } else {
-                    $menu_list = new menu_list;
-                    $quant_details = array();
-                    $quant_details['user_id'] = $user->id;
-                    $quant_details['restaurent_id'] = $resto_id;
-
-                    $menu_data = $menu_list->menuListByQuantity($quant_details);
-
-                    $total_amount = 0;
-                    $item = 0;
-                    foreach ($menu_data as $m_data) {
-                        $ServiceCategories = new ServiceCategory;
-                        $service_data = $ServiceCategories->getServiceById(1);
-                        $percentage = $service_data->commission;
-                        $m_data->price = $m_data->price + (($percentage / 100) * $m_data->price);
-
-                        if ($m_data->quantity != NULL) {
-                            $item = $item + $m_data->quantity;
-                            $total_amount = $total_amount + ($m_data->quantity * $m_data->price);
-                        }
-                    }
-                    $ServiceCategories = new ServiceCategory;
-                    $service_data = $ServiceCategories->getServiceById(1);
-                    $service_tax = (($service_data->tax / 100) * $total_amount);
-                    $service_data->service_tax = $service_tax;
-                    $sub_total = $total_amount;
-                    $total_amount = ($total_amount - $resto_data->discount) + $resto_data->delivery_charge + $resto_data->tax;
-
-                    $response = [
-                        'quantity' => $cart_sub_menu->quantity,
-                        'items' => $item,
-                        'service_data' => $service_data,
-                        'sub_total' => $sub_total,
-                        'total_amount' => $total_amount
-                    ];
-
-                    return ($response);
+                    $cart_submenu_data['cart_submenu_id'] = $get_sub_menu->id;
+                    $cart_submenu_data['custom_id'] = $custom_id;
+                    $cart_custom_set = $cart_customizations->removeCustomCartSubMenu($cart_submenu_data);
                 }
+                $menu_list = new menu_list;
+                $quant_details = array();
+                $quant_details['user_id'] = $user->id;
+                $quant_details['restaurent_id'] = $resto_id;
+
+                $menu_data = $menu_list->menuListByQuantity($quant_details);
+
+                $total_amount = 0;
+                $item = 0;
+                $custom_count = 0;
+                $custom_total = 0;
+                foreach ($menu_data as $m_data) {
+                    $ServiceCategories = new ServiceCategory;
+                    $service_data = $ServiceCategories->getServiceById(1);
+                    $percentage = $service_data->commission;
+
+                    $menu_customizations = new menu_customization();
+                    // $m_data->add_on_data = $menu_customizations->getAddOnData($m_data->id)->get();
+
+                    $cart_customizations = new cart_customization();
+                    $quant_details['cart_submenu_id'] = $get_sub_menu->id;
+                    $quant_details['cart_id'] = $cart_submenu_data['cart_id'];
+                    $quant_details['custom_id'] = $custom_id;
+                    $cart_add_datas = $cart_customizations->getCartCustomDataByID($quant_details['custom_id'])->first();
+                    if (!isset($cart_add_datas)) {
+                        $cart_add_datas['quantity'] = 0;
+                    }
+                    //==================================================================================
+                    $menu_customizations = new menu_customization();
+                    $m_data->add_on_data = $menu_customizations->getAddOnData($m_data->id)->get();
+
+                    foreach ($m_data->add_on_data as $add_data) {
+                        $cart_customizations = new cart_customization();
+                        $quant_details['custom_id'] = $add_data->id;
+                        $cart_add_data = $cart_customizations->getCartCustomDataBySubMenu($quant_details)->first();
+                        $add_data->price = $add_data->price + (($percentage / 100) * $add_data->price);
+                        if (isset($cart_add_data)) {
+                            if (isset($cart_add_data->quantity) || $cart_add_data->quantity != 0) {
+                                $add_data->quantity = $cart_add_data->quantity;
+                                $custom_count = $custom_count + $cart_add_data->quantity;
+                                $custom_total = $custom_total + ($cart_add_data->quantity * $add_data->price);
+                            } else {
+                                $add_data->quantity = 0;
+                            }
+                        } else {
+                            $add_data->quantity = 0;
+                        }
+                    }
+                    //===================================================================
+
+                    $m_data->price = $m_data->price + (($percentage / 100) * $m_data->price);
+                    if ($m_data->quantity != NULL) {
+                        $item = $item + $m_data->quantity;
+                        $total_amount = $total_amount + ($m_data->quantity * $m_data->price);
+                    }
+                }
+                $sub_total = $total_amount + $custom_total;
+                $total_amount = $total_amount + $custom_total;
+                $ServiceCategories = new ServiceCategory;
+                $service_data = $ServiceCategories->getServiceById(1);
+                $service_tax = (($service_data->tax / 100) * $total_amount);
+                // $service_tax = number_format((float) $service_tax, 2);
+                $service_data->service_tax = $service_tax;
+                $total_amount = ($total_amount - $resto_data->discount) + $resto_data->delivery_charge + $resto_data->tax;
+                // return $cart_sub_menu;
+                $response = [
+                    'quantity' => $cart_add_datas->quantity ?? 0,
+                    'items' => $item,
+                    'service_data' => $service_data,
+                    'sub_total' => $sub_total,
+                    'total_amount' => $total_amount
+                ];
+
+                return ($response);
             } else {
                 Session::flash('modal_message2', 'Inavlid Menu Item !');
             }

@@ -43,6 +43,10 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
     Route::get('/partnerWithUs', function () {
         return view('customer.auth.partnerRegister');
     });
+    // Test Payment page
+    Route::get('/testPayment', function () {
+        return view('customer.testPaymentPage');
+    });
     // Partner with us Process
     Route::post('/partnerRegisterProcess', 'Web\Customer\DashboardController@partnerRegister');
     // Customer Login Process
@@ -168,6 +172,8 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
         Route::get('rejectOrder', 'Web\Restaurent\OrderController@rejectOrder');
         //Packed Customer Order
         Route::get('packedOrder', 'Web\Restaurent\OrderController@packedOrder');
+        //View Customer Order
+        Route::get('viewOrder', 'Web\Restaurent\OrderController@viewOrder');
         //Delete Dish
         Route::get('deleteDish', 'Web\Restaurent\RestaurentController@deleteMenuList');
         //Edit Dish

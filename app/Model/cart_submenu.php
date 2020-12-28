@@ -99,6 +99,12 @@ class cart_submenu extends Model
                             ->where('user_id', $data['user_id'])
                             ->where('cart_id', $data['cart_id'])
                             ->update($data);
+
+                $query_data = DB::table('cart_customizations')
+                        ->where('menu_id', $data['menu_id'])
+                        ->where('user_id', $data['user_id'])
+                        ->where('cart_id', $data['cart_id'])
+                        ->update(['quantity'=>0 ,'visibility'=> 2]);
             }
 
         }else{

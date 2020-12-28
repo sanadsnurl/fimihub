@@ -51,7 +51,7 @@ class user_address extends Model
                 ->where('visibility', 0)
                 ->where('user_id', $userid)
                 ->get();
-            
+
             return $user_address;
         }
         catch (Exception $e) {
@@ -67,7 +67,22 @@ class user_address extends Model
                 ->where('default_status', 1)
                 ->where('user_id', $userid)
                 ->first();
-            
+
+            return $user_address;
+        }
+        catch (Exception $e) {
+            dd($e);
+        }
+    }
+
+    public function getAddressById($addid)
+    {
+        try {
+            $user_address=DB::table('user_address')
+                ->where('visibility', 0)
+                ->where('id', $addid)
+                ->first();
+
             return $user_address;
         }
         catch (Exception $e) {
