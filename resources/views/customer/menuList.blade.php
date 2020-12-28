@@ -53,10 +53,9 @@
                 <span class="location">{{$resto_data->address ?? ''}}</span>
             </div>
             <div class="rating-wrap">
-                <div class="col-wrap">
+                {{-- <div class="col-wrap">
                     <h5>80 rating</h5>
                     <div class="img-wrap">
-                        {{-- <img src="{{url('asset/customer/assets/images/rating-star.svg')}}" alt="rating star"> --}}
                         <span class="js-star-rating rating_star" data-rating="4.5">
                             <span class="fa fa-star-o"></span>
                             <span class="fa fa-star-o"></span>
@@ -65,7 +64,7 @@
                             <span class="fa fa-star-o"></span>
                         </span>
                     </div>
-                </div>
+                </div> --}}
                 <div class="col-wrap">
                     <h5>Minimum Order Value</h5>
                     <h4>{{$user_data->currency ?? ''}} {{$resto_data->avg_cost ?? ''}}</h4>
@@ -101,7 +100,7 @@
             </div>
             <div class="col-order">
                 <div class="filter-row">
-                    <div class="btn-grp">
+                    {{-- <div class="btn-grp">
                         <span class="cstm_box cstm_checkbox mr-4">
                             <input type="checkbox" id="veg" checked>
                             <label for="veg">Veg Only</label>
@@ -111,8 +110,8 @@
                             <label for="NonVeg_veg">NonVeg Only</label>
                         </span>
 
-                    </div>
-                    <span class="filter-btn show-sidepanel" id="filterPanel">Apply Filter</span>
+                    </div> --}}
+                    {{-- <span class="filter-btn show-sidepanel" id="filterPanel">Apply Filter</span> --}}
                 </div>
 
                 @foreach($menu_cat as $m_cat)

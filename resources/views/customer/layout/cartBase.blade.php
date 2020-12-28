@@ -88,6 +88,60 @@
                                     </div>
                                 </div>
                             </div>
+                            @if(count($m_data->add_on_data))
+                            <div class="collapsible">
+                                <a href="#" data-toggle="collapse" data-target="#collapseExample{{$m_data->id}}"
+                                    aria-expanded="false" aria-controls="collapseExample">
+                                    @if(request()->is('trackOrder'))
+                                    Customization's
+                                    @else
+                                    Customize
+                                    @endif
+
+                                </a>
+                                @foreach($m_data->add_on_data as $add_data)
+                                <div class="collapse" id="collapseExample{{$m_data->id}}">
+                                    <div class="card card-body">
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <div class="food_strip_lft">
+                                                    <h5>
+                                                        @if($add_data->price == 0)
+                                                        FREE
+                                                        @else
+                                                        {{$user_data->currency ?? ''}}
+                                                        {{$add_data->price ?? '0'}}
+                                                        @endif
+                                                    </h5>
+                                                    @if($add_data->customization_type == 2)
+                                                    <h4 class="green_dot">{{$add_data->name ?? ''}}</h4>
+                                                    @else
+                                                    <h4>{{$add_data->name ?? ''}}</h4>
+                                                    @endif
+                                                    <p> {{$add_data->about ?? '0'}}</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="food_strip_rht">
+                                                    @if(request()->is('trackOrder'))
+                                                    QTY - {{$add_data->quantity ?? '0'}}
+                                                    @else
+                                                    <button type="button" class="minus_btn"
+                                                        onClick="custom_decrement_quantity('{{base64_encode($m_data->id)}}','{{base64_encode($add_data->id)}}')">-</button>
+                                                    <input type="text" value="{{$add_data->quantity ?? '0'}}"
+                                                        id="input-quantity-custom-{{$add_data->id}}"
+                                                        class="remove_all_count" readonly>
+                                                    <button type="button" class="pluse_btn"
+                                                        onClick="custom_increment_quantity('{{base64_encode($m_data->id)}}','{{base64_encode($add_data->id)}}')">+</button>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endforeach
+                            </div>
+                            @endif
                         </div>
                         @endforeach
 
@@ -183,27 +237,28 @@
                             <div class="d-flex align-items-start">
                                 <div class="d-flex align-items-center">
                                     <div>
-                                    <img src="{{$order_event_data->rider_details->picture ?? url('asset/customer/assets/images/user_dp.png')}}"
-                                    alt="user">
+                                        <img src="{{$order_event_data->rider_details->picture ?? url('asset/customer/assets/images/user_dp.png')}}"
+                                            alt="user">
                                     </div>
                                     <div>
 
                                         <p>{{$order_event_data->rider_details->name ?? '---'}}</p>
                                         <div class="img-wrap">
-                                            <span class="js-star-rating rating_star" data-rating="4.5">
+                                            {{-- <span class="js-star-rating rating_star" data-rating="4.5">
                                                 <span class="fa fa-star-o"></span>
                                                 <span class="fa fa-star-o"></span>
                                                 <span class="fa fa-star-o"></span>
                                                 <span class="fa fa-star-o"></span>
                                                 <span class="fa fa-star-o"></span>
-                                            </span>
+                                            </span> --}}
                                         </div>
                                     </div>
 
                                 </div>
 
                             </div>
-                            <a href="tel:{{$order_event_data->rider_details->mobile ?? '---'}}" class="call_btn">Call</a>
+                            <a href="tel:{{$order_event_data->rider_details->mobile ?? '---'}}"
+                                class="call_btn">Call</a>
                         </div>
                         @endif
 
@@ -233,8 +288,7 @@
         var total_amount = $("#total_amount");
         var service_tax = $("#service_tax");
         var sub_total = $("#sub_total");
-        var notfi_cart =  document.getElementById('notfi_cart');
-
+        var notfi_cart = document.getElementById('notfi_cart');
         $.ajax({
             url: "addMenuItem",
             data: "menu_id=" + menu_id + "&resto_id=" + resto_id,
@@ -266,12 +320,12 @@
         var resto_id = $("#input-quantity").val();
         var menu_decode_id = atob(menu_id);
         var inputQuantityElement = $("#input-quantity-" + menu_decode_id);
+        var remove_all_count = $(".remove_all_count");
         var item_count = $("#item_count");
         var total_amount = $("#total_amount");
         var service_tax = $("#service_tax");
         var sub_total = $("#sub_total");
-        var notfi_cart =  document.getElementById('notfi_cart');
-
+        var notfi_cart = document.getElementById('notfi_cart');
         $.ajax({
             url: "subtractMenuItem",
             data: "menu_id=" + menu_id + "&resto_id=" + resto_id,
@@ -285,6 +339,9 @@
                 var service_taxs = response.service_data.service_tax.toFixed(2);
                 var sub_totals = response.sub_total.toFixed(2);
                 $(inputQuantityElement).val(response.quantity);
+                if (response.quantity == 0) {
+                    $(remove_all_count).val(0);
+                }
                 $(item_count).html(response.items);
                 $(notfi_cart).html(response.items);
                 $(sub_total).html(sub_totals);
@@ -299,34 +356,106 @@
         });
     }
 
+    function custom_increment_quantity(menu_id, custom_id) {
+        var resto_id = $("#input-quantity").val();
+        var menu_decode_id = atob(menu_id);
+        var custom_decode_id = atob(custom_id);
+        var inputQuantityElement = $("#input-quantity-" + menu_decode_id);
+        var inputQuantityElementCustom = $("#input-quantity-custom-" + custom_decode_id);
+        var item_count = $("#item_count");
+        var total_amount = $("#total_amount");
+        var service_tax = $("#service_tax");
+        var sub_total = $("#sub_total");
+        var notfi_cart = document.getElementById('notfi_cart');
+        $.ajax({
+            url: "addCustomMenuItem",
+            data: "menu_id=" + menu_id + "&resto_id=" + resto_id + "&custom_id=" + custom_id,
+            type: 'get',
+            beforeSend: function() {
+                $("#loading-overlay").show();
+            },
+            success: function(response) {
+                var total_amnt = (response.total_amount + response.service_data.service_tax);
+                total_amnt = total_amnt.toFixed(2);
+                var service_taxs = response.service_data.service_tax.toFixed(2);
+                var sub_totals = response.sub_total.toFixed(2);
+                $(inputQuantityElementCustom).val(response.quantity);
+                if ($(inputQuantityElement).val() == 0) {
+                    $(inputQuantityElement).val(1);
+                }
+                $(item_count).html(response.items);
+                $(notfi_cart).html(response.items);
+                $(sub_total).html(sub_totals);
+                $(total_amount).html(total_amnt);
+                $(service_tax).html(service_taxs);
+                $("#loading-overlay").hide();
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                $("#loading-overlay").hide();
+                alert("something went wrong");
+            }
+        });
+    }
 
-
-/* display rating in form of stars */
-$.fn.makeStars = function() {
-    $(this).each( function() {
-        var rating       = $(this).data('rating'),
-            starNumber   = $(this).children().length,
-            fullStars    = Math.floor(rating),
-            halfStarPerc = (rating - fullStars) * 100;
-
-        if(rating > 0) {
-            $(this).children().each(function (index) {
-                $(this).addClass('fa-star');
-                $(this).removeClass('fa-star-o');
-                return ( (index + 1) < fullStars );
-            });
-        }
-
-        if ( halfStarPerc !== 0 && fullStars < starNumber ) {
-            var halfStar = $(this).children(":nth-child(" + parseInt(fullStars+1, 10) + ")");
-
-            $('<span class="fa fa-star fa-star-percentage"></span>').width(halfStarPerc + '%').appendTo(halfStar);
-        }
-
+    function custom_decrement_quantity(menu_id, custom_id) {
+        var resto_id = $("#input-quantity").val();
+        var menu_decode_id = atob(menu_id);
+        var custom_decode_id = atob(custom_id);
+        var inputQuantityElement = $("#input-quantity-" + menu_decode_id);
+        var inputQuantityElementCustom = $("#input-quantity-custom-" + custom_decode_id);
+        var item_count = $("#item_count");
+        var total_amount = $("#total_amount");
+        var service_tax = $("#service_tax");
+        var sub_total = $("#sub_total");
+        var notfi_cart = document.getElementById('notfi_cart');
+        $.ajax({
+            url: "subtractCustomMenuItem",
+            data: "menu_id=" + menu_id + "&resto_id=" + resto_id + "&custom_id=" + custom_id,
+            type: 'get',
+            beforeSend: function() {
+                $("#loading-overlay").show();
+            },
+            success: function(response) {
+                var total_amnt = (response.total_amount + response.service_data.service_tax);
+                total_amnt = total_amnt.toFixed(2);
+                var service_taxs = response.service_data.service_tax.toFixed(2);
+                var sub_totals = response.sub_total.toFixed(2);
+                $(inputQuantityElementCustom).val(response.quantity);
+                $(item_count).html(response.items);
+                $(notfi_cart).html(response.items);
+                $(sub_total).html(sub_totals);
+                $(total_amount).html(total_amnt);
+                $(service_tax).html(service_taxs);
+                $("#loading-overlay").hide();
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                $("#loading-overlay").hide();
+                alert("something went wrong");
+            }
+        });
+    }
+    /* display rating in form of stars */
+    $.fn.makeStars = function() {
+        $(this).each(function() {
+            var rating = $(this).data('rating'),
+                starNumber = $(this).children().length,
+                fullStars = Math.floor(rating),
+                halfStarPerc = (rating - fullStars) * 100;
+            if (rating > 0) {
+                $(this).children().each(function(index) {
+                    $(this).addClass('fa-star');
+                    $(this).removeClass('fa-star-o');
+                    return ((index + 1) < fullStars);
+                });
+            }
+            if (halfStarPerc !== 0 && fullStars < starNumber) {
+                var halfStar = $(this).children(":nth-child(" + parseInt(fullStars + 1, 10) + ")");
+                $('<span class="fa fa-star fa-star-percentage"></span>').width(halfStarPerc + '%').appendTo(
+                    halfStar);
+            }
+        });
+    };
+    $(document).ready(function() {
+        $('.js-star-rating').makeStars();
     });
-};
-
-$(document).ready( function() {
-    $('.js-star-rating').makeStars();
-});
 </script>

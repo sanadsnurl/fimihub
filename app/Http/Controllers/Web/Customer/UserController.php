@@ -212,9 +212,11 @@ class UserController extends Controller
         }
         $current_order_data = $orders->allUserCurrentPastData($user->id);
         foreach($current_order_data as $c_order){
+
             $c_order->ordered_menu = json_decode($c_order->ordered_menu);
         }
         $user_data['currency']=$this->currency;
+        // dd($current_order_data);
         return view('customer.myOrder')->with(['user_data'=>$user_data,
                                             'order_data'=>$order_data,
                                             'current_order_data'=>$current_order_data]);

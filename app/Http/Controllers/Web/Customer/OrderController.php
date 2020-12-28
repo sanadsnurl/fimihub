@@ -22,12 +22,15 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use App\Http\Traits\OtpGenerationTrait;
 use App\Http\Traits\NotificationTrait;
+use App\Model\cart_customization;
+use App\Model\menu_customization;
 use Response;
 use Session;
 
 class OrderController extends Controller
 {
-    use NotificationTrait,GetBasicPageDataTraits;
+    use NotificationTrait, GetBasicPageDataTraits;
+
     public function getPaymentPage(Request $request)
     {
         $user = Auth::user();
@@ -68,11 +71,35 @@ class OrderController extends Controller
                 if ($cart_menu_data != NULL) {
                     $total_amount = 0;
                     $item = 0;
+                    $custom_count = 0;
+                    $custom_total = 0;
 
                     foreach ($cart_menu_data as $m_data) {
                         $ServiceCategories = new ServiceCategory;
                         $service_data = $ServiceCategories->getServiceById(1);
                         $percentage = $service_data->commission;
+                        //==================================================================================
+                        $menu_customizations = new menu_customization();
+                        $m_data->add_on_data = $menu_customizations->getAddOnData($m_data->id)->get();
+
+                        foreach ($m_data->add_on_data as $add_data) {
+                            $cart_customizations = new cart_customization();
+                            $quant_details['custom_id'] = $add_data->id;
+                            $cart_add_data = $cart_customizations->getCartCustomDataBySubMenu($quant_details)->first();
+                            $add_data->price = $add_data->price + (($percentage / 100) * $add_data->price);
+                            if (isset($cart_add_data)) {
+                                if (isset($cart_add_data->quantity) || $cart_add_data->quantity != 0) {
+                                    $add_data->quantity = $cart_add_data->quantity;
+                                    $custom_count = $custom_count + $cart_add_data->quantity;
+                                    $custom_total = $custom_total + ($cart_add_data->quantity * $add_data->price);
+                                } else {
+                                    $add_data->quantity = 0;
+                                }
+                            } else {
+                                $add_data->quantity = 0;
+                            }
+                        }
+                        //===================================================================
                         $m_data->price = $m_data->price + (($percentage / 100) * $m_data->price);
 
                         if ($m_data->quantity != NULL) {
@@ -80,12 +107,14 @@ class OrderController extends Controller
                             $total_amount = $total_amount + ($m_data->quantity * $m_data->price);
                         }
                     }
+                    $sub_total = $total_amount + $custom_total;
+                    $total_amount = $total_amount + $custom_total;
+
                     $ServiceCategories = new ServiceCategory;
                     $service_data = $ServiceCategories->getServiceById(1);
                     $service_tax = (($service_data->tax / 100) * $total_amount);
                     $service_data->service_tax = $service_tax;
                     //add delivery charge and tax in total amount
-                    $sub_total = $total_amount;
                     $total_amount = ($total_amount - $resto_data->discount) + $resto_data->delivery_charge + $resto_data->tax + $service_tax;
                     $user->currency = $this->currency;
 
@@ -135,6 +164,8 @@ class OrderController extends Controller
             if ($cart_menu_data != NULL) {
                 $total_amount = 0;
                 $item = 0;
+                $custom_count = 0;
+                $custom_total = 0;
 
                 $restaurent_detail = new restaurent_detail;
                 $resto_data = $restaurent_detail->getRestoDataOnId($cart_avail->restaurent_id);
@@ -143,12 +174,36 @@ class OrderController extends Controller
                     $ServiceCategories = new ServiceCategory;
                     $service_data = $ServiceCategories->getServiceById(1);
                     $percentage = $service_data->commission;
+                    //==================================================================================
+                    $menu_customizations = new menu_customization();
+                    $m_data->add_on_data = $menu_customizations->getAddOnData($m_data->id)->get();
+
+                    foreach ($m_data->add_on_data as $add_data) {
+                        $cart_customizations = new cart_customization();
+                        $quant_details['custom_id'] = $add_data->id;
+                        $cart_add_data = $cart_customizations->getCartCustomDataBySubMenu($quant_details)->first();
+                        $add_data->price = $add_data->price + (($percentage / 100) * $add_data->price);
+                        if (isset($cart_add_data)) {
+                            if (isset($cart_add_data->quantity) || $cart_add_data->quantity != 0) {
+                                $add_data->quantity = $cart_add_data->quantity;
+                                $custom_count = $custom_count + $cart_add_data->quantity;
+                                $custom_total = $custom_total + ($cart_add_data->quantity * $add_data->price);
+                            } else {
+                                $add_data->quantity = 0;
+                            }
+                        } else {
+                            $add_data->quantity = 0;
+                        }
+                    }
+                    //===================================================================
                     $m_data->price = $m_data->price + (($percentage / 100) * $m_data->price);
                     if ($m_data->quantity != NULL) {
                         $item = $item + $m_data->quantity;
                         $total_amount = $total_amount + ($m_data->quantity * $m_data->price);
                     }
                 }
+                $sub_total = $total_amount + $custom_total;
+                $total_amount = $total_amount + $custom_total;
                 //add delivery charge and tax in total amount
                 $ServiceCategories = new ServiceCategory;
                 $service_data = $ServiceCategories->getServiceById(1);
@@ -181,7 +236,7 @@ class OrderController extends Controller
                 }
                 $make_order_id = $orders->makeOrder($add_order);
 
-// ============================================= PUSH NOTIFICATION=======================================
+                // ============================================= PUSH NOTIFICATION=======================================
                 $sender_data = Auth::user();
                 $push_notification_sender = array();
                 $push_notification_sender['device_token'] = $sender_data->device_token;
@@ -190,7 +245,7 @@ class OrderController extends Controller
 
                 $push_notification_sender_result = $this->pushNotification($push_notification_sender);
 
-// ==========================================================================================================
+                // ==========================================================================================================
 
 
                 $order_id = base64_encode($make_order_id);
@@ -219,21 +274,38 @@ class OrderController extends Controller
         if ($menu_order == NULL) {
         }
         $menu_data = array();
+        $menu_data_list = array();
+        $add_on_data = array();
+
         $item = 0;
+        $custom_count = 0;
+        $custom_total = 0;
         $total_cart_value = 0;
-        // dd($order_data);
         foreach ($menu_order as $m_data) {
             $menu_list = new menu_list;
             $menu_data_list = $menu_list->orderMenuListById($m_data->id);
-            // dd($menu_data_list);
+
             if ($menu_data_list != null) {
+
                 $item = $item + $m_data->quantity;
                 $menu_data_list->quantity = $m_data->quantity;
                 $menu_data_list->price = $m_data->price;
                 $total_cart_value = $total_cart_value + $m_data->price * $m_data->quantity;
+                $add_on_data = array();
+                foreach ($m_data->add_on_data as $add_data) {
+
+                    if ($add_data->quantity != 0 && $add_data->menu_list_id == $m_data->id) {
+                        $total_cart_value = $total_cart_value + $add_data->price * $add_data->quantity;
+                        $add_on_data[] = $add_data;
+
+                    }
+                }
+                $menu_data_list->add_on_data = $add_on_data;
                 $menu_data[] = $menu_data_list;
+
             }
         }
+        // dd($add_on_data);
         $restaurent_detail = new restaurent_detail;
         $resto_data = $restaurent_detail->getRestoDataOnId($order_data->restaurent_id);
         $resto_data->delivery_fee = $order_data->delivery_fee;
@@ -270,6 +342,7 @@ class OrderController extends Controller
             return view('customer.trackOrder')->with([
                 'user_data' => $user,
                 'order_data' => $order_data,
+                'add_on_data' => ($add_on_data),
                 'menu_data' => $menu_data,
                 'resto_data' => $resto_data,
                 'order_event_data' => $event_data,

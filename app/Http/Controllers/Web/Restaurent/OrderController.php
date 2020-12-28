@@ -45,13 +45,13 @@ class OrderController extends Controller
             return Datatables::of($order_data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
+                    $btn = '';
+                    $btn .= '<a href="viewOrder?odr_id=' . base64_encode($row->id) . '" class="btn btn-outline-warning btn-sm btn-round waves-effect waves-light ">View</a>';
                     if ($row->order_status == 5) {
-                        $btn = '<a href="packedOrder?odr_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Ready For Pick-Up</a>';
+                        $btn .= '<a href="packedOrder?odr_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Ready For Pick-Up</a>';
                     } elseif ($row->order_status == 3) {
-                        $btn = '<a href="acceptOrder?odr_id=' . base64_encode($row->id) . '" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Accept</a>
+                        $btn .= '<a href="acceptOrder?odr_id=' . base64_encode($row->id) . '" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Accept</a>
                         <a href="rejectOrder?odr_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Reject</a>';
-                    } else {
-                        $btn = "N.A";
                     }
                     return $btn;
                 })
@@ -96,9 +96,45 @@ class OrderController extends Controller
 
                     foreach ($row->ordered_menu as $ordered_menu) {
                         if ($loop_count == 1) {
-                            $order_menu .= "(" . $ordered_menu->name . " x " . $ordered_menu->quantity . ")";
+                            $order_menu .= "(" . $ordered_menu->name . " x " . $ordered_menu->quantity;
+                            if (isset($ordered_menu->add_on_data) && $ordered_menu->add_on_data != NULL) {
+                                $order_menu .= " [";
+                                $loop_count_add = 1;
+
+
+                                foreach ($ordered_menu->add_on_data as $add_data) {
+                                    if ($add_data->quantity != 0) {
+                                        if ($loop_count == 1) {
+                                            $order_menu .= "(" . $add_data->name . " x " . $add_data->quantity . ")";
+                                        } else {
+                                            $order_menu .= "/(" . $add_data->name . " x " . $add_data->quantity . ")";
+                                        }
+                                        $loop_count_add += 1;
+                                    }
+                                }
+                                $order_menu .= "] ";
+                            }
+                            $order_menu .= ")";
                         } else {
-                            $order_menu .= "/(" . $ordered_menu->name . " x " . $ordered_menu->quantity . ")";
+                            $order_menu .= "/(" . $ordered_menu->name . " x " . $ordered_menu->quantity;
+                            if (isset($ordered_menu->add_on_data) && $ordered_menu->add_on_data != NULL) {
+                                $order_menu .= " [";
+                                $loop_count_add = 1;
+
+
+                                foreach ($ordered_menu->add_on_data as $add_data) {
+                                    if ($add_data->quantity != 0) {
+                                        if ($loop_count == 1) {
+                                            $order_menu .= "(" . $add_data->name . " x " . $add_data->quantity . ")";
+                                        } else {
+                                            $order_menu .= "/(" . $add_data->name . " x " . $add_data->quantity . ")";
+                                        }
+                                        $loop_count_add += 1;
+                                    }
+                                }
+                                $order_menu .= "] ";
+                            }
+                            $order_menu .= ")";
                         }
                         $loop_count += 1;
                     }
@@ -298,5 +334,128 @@ class OrderController extends Controller
         // ==========================================================================================================
 
         return redirect()->back();
+    }
+
+    public function viewOrder(Request $request)
+    {
+        $user = Auth::user();
+        $order_id = base64_decode(request('odr_id'));
+        $restaurent_detail = new restaurent_detail;
+        $resto_data = $restaurent_detail->getRestoData($user->id);
+        if ($resto_data == NULL) {
+            $orders = new order;
+            $order_data = $orders->customerOrderPaginationData(0);
+        } else {
+            $orders = new order;
+            $order_data = $orders->customerOrderPaginationData($resto_data->id);
+        }
+
+        $user['currency'] = $this->currency;
+
+        $order_data = $order_data->where('id', $order_id)->first();
+        if ($order_data != NUll) {
+            $order_menu = "";
+            $loop_count = 1;
+            $order_data->ordered_menu = json_decode($order_data->ordered_menu);
+
+            foreach ($order_data->ordered_menu as $ordered_menu) {
+                if ($loop_count == 1) {
+                    $order_menu .= "(" . $ordered_menu->name . " x " . $ordered_menu->quantity;
+                    if (isset($ordered_menu->add_on_data) && $ordered_menu->add_on_data != NULL) {
+                        $order_menu .= " [";
+                        $loop_count_add = 1;
+
+
+                        foreach ($ordered_menu->add_on_data as $add_data) {
+                            if ($add_data->quantity != 0) {
+                                if ($loop_count == 1) {
+                                    $order_menu .= "(" . $add_data->name . " x " . $add_data->quantity . ")";
+                                } else {
+                                    $order_menu .= "/(" . $add_data->name . " x " . $add_data->quantity . ")";
+                                }
+                                $loop_count_add += 1;
+                            }
+                        }
+                        $order_menu .= "] ";
+                    }
+                    $order_menu .= ")";
+                } else {
+                    $order_menu .= "/(" . $ordered_menu->name . " x " . $ordered_menu->quantity;
+                    if (isset($ordered_menu->add_on_data) && $ordered_menu->add_on_data != NULL) {
+                        $order_menu .= " [";
+                        $loop_count_add = 1;
+
+
+                        foreach ($ordered_menu->add_on_data as $add_data) {
+                            if ($add_data->quantity != 0) {
+                                if ($loop_count == 1) {
+                                    $order_menu .= "(" . $add_data->name . " x " . $add_data->quantity . ")";
+                                } else {
+                                    $order_menu .= "/(" . $add_data->name . " x " . $add_data->quantity . ")";
+                                }
+                                $loop_count_add += 1;
+                            }
+                        }
+                        $order_menu .= "] ";
+                    }
+                    $order_menu .= ")";
+                }
+                $loop_count += 1;
+            }
+
+            $order_data->ordered_menu = $order_menu;
+
+            if ($order_data->order_status == 3) {
+                $order_data->order_status = "Restaurent Approval Needed";
+            } elseif ($order_data->order_status == 5) {
+                $order_data->order_status = "Order Placed";
+            } elseif (in_array($order_data->order_status, array(2, 4, 8))) {
+                $order_data->order_status = "Order Cancelled";
+            } elseif ($order_data->order_status == 6) {
+                $order_data->order_status = "Order Packed";
+            } elseif ($order_data->order_status == 7) {
+                $order_data->order_status = "Order Picked";
+            } elseif ($order_data->order_status == 9) {
+                $order_data->order_status = "Order Recieved";
+            } elseif ($order_data->order_status == 10) {
+                $order_data->order_status = "Order Refunded";
+            } else {
+                $order_data->order_status = "N.A";
+            }
+
+            if ($order_data->payment_type == 1) {
+                $order_data->payment_type = "Stripe";
+            } elseif ($order_data->payment_type == 2) {
+                $order_data->payment_type = "Paypal";
+            } elseif ($order_data->payment_type == 3) {
+                $order_data->payment_type = "COD";
+            } else {
+                $order_data->payment_type = "N.A";
+            }
+
+            $user_address = new user_address;
+            $add_datas = $user_address->getAddressById($order_data->address_id);
+
+            $OrderEvents = new OrderEvent;
+            $order_event_data = $OrderEvents->getOrderEvent($order_id);
+            $event_data = array();
+            foreach ($order_event_data as $o_event) {
+                if ($o_event->user_type == 2) {
+                    $event_data['restaurant'] = $o_event;
+                } elseif ($o_event->user_type == 1) {
+                    $event_data['rider'] = $o_event;
+                    $ride_event_data = auth()->user()->userByIdData($o_event->user_id);
+                    $event_data['rider_details'] = $ride_event_data;
+                }
+            }
+        }
+        $event_data = json_encode($event_data);
+            $event_data = json_decode($event_data);
+
+        // dd($order_data);
+        return view('restaurent.viewOrder')->with(['data' => $user,
+                                            'order_data' => $order_data,
+                                            'event_data' => $event_data,
+                                            'add_datas' => $add_datas]);
     }
 }

@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0101)https://ecm.firstatlanticcommerce.com/sentry/paymentgateway/merchant/administration/WFrmErrorBox.aspx -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>WFrmErrorBox</title>
+    <meta content="Microsoft Visual Studio.NET 7.0" name="GENERATOR">
+    <meta content="Visual Basic 7.0" name="CODE_LANGUAGE">
+    <meta content="JavaScript" name="vs_defaultClientScript">
+    <meta content="http://schemas.microsoft.com/intellisense/ie5" name="vs_targetSchema">
+    <link href="./Styles.css" type="text/css" rel="stylesheet">
+    <script src="./Events.js" type="text/javascript"></script>
+</head>
+<body class="MainBgColor">
+    <form method="post" action="https://ecm.firstatlanticcommerce.com/sentry/paymentgateway/merchant/administration/WFrmErrorBox.aspx" id="Form1">
+<div class="aspNetHidden">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="tNmqxHzb+GX4N8TaoR4fQAE241N6eScT/J+37xFQAfZfznCIZP+JnZBcIOpw9f7AgY8U6JpLre+UW6Tq5ObcJH8Gx+skGTdJVFHnVkyn9t94bSwtmiGNj4Y0s1Op7kW5npFGYTCbrL6PQGjDgy8HBVMwx6VOgfNZxIFStqO4eCHAvU5FQji5sKhX3AKus8LV8uF8u/cRfX5fNXXnjJ0A70q9sTTJGFAgpMEPh+ela2N/xGKcKI0w3s6Q0fE5bbFAUl2BusVtgrH83xrmm0FPY1CZiQEj8gzGSMEGlsHFoqsXWNL9Q87tXR/koi4kXfTN5BfhPMaojb0IEjYFKlZpmSRVfuJlYn0+GBIzbZO1IYM=">
+</div>
+
+<div class="aspNetHidden">
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="0FCA0C55">
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="oaDc/0WE0fWItErFUkrAfwYuVo38GnM3s/DvaAvs8ujrFO57r5rezIlvTV/NQXVkI7gvBzdThNlQQ+ulZM+MT5n4VgBBLUyGSJJR+3BLZG441R455Gl2OjE+gpXJediPc8cqnXvMXJXPW+2yOuJsrOekAjFf/P+ldt34d9+bI2M=">
+</div>
+        &nbsp;
+    <table id="Table1" style="z-index: 101; left: 0px; width: 100%; position: absolute; top: 0px; height: 20px" cellspacing="0" cellpadding="0" width="300" border="0">
+        <tbody><tr style="height: 2px">
+            <td style="width: 10px"></td>
+            <td></td>
+            <td style="width: 2px"></td>
+        </tr>
+        <tr style="height: 20px">
+            <td></td>
+            <td valign="bottom">
+                <img src="./BtnHide.gif" id="BtnHideError" style="cursor: pointer; height: 20px" onclick="resizeFrame()">
+                <div id="LblHideError" class="Textlblheader" name="LblHideError" style="display: inline; height: 20px">Show Error Messages</div>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <textarea name="TxtError" id="TxtError" class="infotextboxlabel" style="font-size:8pt;width:100%;font-family:Verdana;height:2px;visibility:hidden;" rows="5" wrap="soft" cols="84" readonly="readonly"></textarea>
+            </td>
+            <td></td>
+        </tr>
+    </tbody></table>
+    </form>
+
+    <script type="text/javascript">
+        function resizeFrame() {
+            if (document.forms.length == 0) {
+                return;
+            }
+
+            var frm = document.forms[0];
+
+            if (frm.TxtError.style.visibility == 'hidden') {
+                frm.BtnHideError.src = "Images/BtnShow.gif"
+                document.getElementById("LblHideError").innerText = 'Hide Error Messages'
+                frm.TxtError.style.visibility = 'visible'
+                frm.TxtError.style.height = '100px'
+                /*parent.frames["FSRIGHT"].rows = "*,135"*/
+                parent.document.getElementById("FSRIGHT").rows = "*,135"
+            }
+            else {
+                frm.BtnHideError.src = "Images/BtnHide.gif"
+                document.getElementById("LblHideError").innerText = 'Show Error Messages'
+                frm.TxtError.style.visibility = 'hidden'
+                frm.TxtError.style.height = '2px'
+                /*parent.frames["FSRIGHT"].rows = "*,35"*/
+                parent.document.getElementById("FSRIGHT").rows = "*,35"
+            }
+        }
+
+        function AddError(ErrMsg) {
+            if (document.forms.length == 0) {
+                return;
+            }
+
+            var frm = document.forms[0];
+            if (!frm.TxtError) {
+                return;
+            }
+
+            t = new Date();
+
+            n = FormatTime(t.getHours()) + ":" + FormatTime(t.getMinutes()) + ":" + FormatTime(t.getSeconds());
+
+            if (frm.TxtError.value != "")
+                frm.TxtError.value = n + "\t" + ErrMsg + "\n" + frm.TxtError.value
+            else
+                frm.TxtError.value = n + "\t" + ErrMsg
+        }
+
+        function FormatTime(Input) {
+            if (Input >= 0 && Input <= 9)
+                return "0" + Input
+            else
+                return Input
+        }
+    </script>
+
+
+</body></html>

@@ -30,8 +30,34 @@
                             @foreach($order->ordered_menu as $ordered_menu)
                             @if($loop->iteration == 1)
                             {{$ordered_menu->name}} x {{$ordered_menu->quantity}}
+                            @if(isset($ordered_menu->add_on_data) && $ordered_menu->add_on_data != NULL)
+                            (
+                            @foreach($ordered_menu->add_on_data as $a_data)
+                            @if($a_data->quantity !=NULL)
+                            @if($loop->iteration == 1)
+                            {{$a_data->name}} x {{$a_data->quantity}}
+                            @else
+                            /{{$a_data->name}} x {{$a_data->quantity}}
+                            @endif
+                            @endif
+                            @endforeach
+                            )
+                            @endif
                             @else
                             /{{$ordered_menu->name}} x {{$ordered_menu->quantity}}
+                            @if(isset($ordered_menu->add_on_data) && $ordered_menu->add_on_data != NULL)
+                            (
+                            @foreach($ordered_menu->add_on_data as $a_data)
+                            @if($a_data->quantity !=NULL)
+                            @if($loop->iteration == 1)
+                            {{$a_data->name}} x {{$a_data->quantity}}
+                            @else
+                            /{{$a_data->name}} x {{$a_data->quantity}}
+                            @endif
+                            @endif
+                            @endforeach
+                            )
+                            @endif
                             @endif
                             @endforeach
                             @endif
@@ -89,8 +115,35 @@
                             @foreach($c_order->ordered_menu as $ordered_menu)
                             @if($loop->iteration == 1)
                             {{$ordered_menu->name}} x {{$ordered_menu->quantity}}
+                            @if(isset($ordered_menu->add_on_data) && $ordered_menu->add_on_data != NULL)
+                            (
+                            @foreach($ordered_menu->add_on_data as $a_data)
+                            @if($a_data->quantity !=NULL)
+                            @if($loop->iteration == 1)
+                            {{$a_data->name}} x {{$a_data->quantity}}
+                            @else
+                            /{{$a_data->name}} x {{$a_data->quantity}}
+                            @endif
+                            @endif
+                            @endforeach
+                            )
+                            @endif
+
                             @else
                             /{{$ordered_menu->name}} x {{$ordered_menu->quantity}}
+                            @if(isset($ordered_menu->add_on_data) && $ordered_menu->add_on_data != NULL)
+                            (
+                            @foreach($ordered_menu->add_on_data as $a_data)
+                            @if($a_data->quantity !=NULL)
+                            @if($loop->iteration == 1)
+                            {{$a_data->name}} x {{$a_data->quantity}}
+                            @else
+                            /{{$a_data->name}} x {{$a_data->quantity}}
+                            @endif
+                            @endif
+                            @endforeach
+                            )
+                            @endif
                             @endif
                             @endforeach
                             @endif
