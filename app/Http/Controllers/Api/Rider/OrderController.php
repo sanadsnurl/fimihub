@@ -47,7 +47,7 @@ class OrderController extends Controller
     {
         if ($orderId) {
             $order = $this->order->getOrder($orderId)
-            ->with('restroAddress','userAddress.userDetails','restaurentDetails','cart.cartItems.menuItems')
+            ->with('restroAddress','userAddress.userDetails','restaurentDetails.restroAddress','cart.cartItems.menuItems')
             ->first();
             if(isset($order->ordered_menu)){
                 $order->ordered_menu = json_decode($order->ordered_menu);
@@ -131,9 +131,9 @@ class OrderController extends Controller
             $this->order->updateStatus($orderId, 9); // 9-received
             $orderDetails = $this->order->getOrder($orderId)->first();
                 // To do
-            if($request->input('payment_type') == 3) {
                 $price = $orderDetails->total_amount;
                 $collectedPrice = $request->input('price');
+            if($request->input('payment_type') == 3) {
                 if($price <= $collectedPrice) {
                     $earning = array(
                         'user_id' => $id,
@@ -143,6 +143,14 @@ class OrderController extends Controller
                     );
                     $this->myEarning->updateEarning($earning, $orderId);
                 }
+            } else {
+                $earning = array(
+                    'user_id' => $id,
+                    'order_id' => $orderId,
+                    'ride_price' => $orderDetails->delivery_fee,
+                    'cash_price' => null,
+                );
+                $this->myEarning->updateEarning($earning, $orderId);
             }
 
             $this->orderEvent->updateStatus($orderId, $data);

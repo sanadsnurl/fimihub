@@ -64,15 +64,17 @@ trait OtpGenerationTrait {
 
             // A Twilio number you own with SMS capabilities
             // $twilio_number = "+18768454365";
-
+            // $recipients = '+1'."8768454366";
             // $client = new Client($account_sid, $auth_token);
             // $client->messages->create(
-            //     // Where to send a text message (your cell phone?)
-            //     '+18768454365',
-            //     array(
-            //         'from' => $twilio_number,
-            //         'body' => 'I sent this test message'.$otp
-            //     )
+            //     // the number you'd like to send the message to
+            //     '+19787763121',
+            //     [
+            //         // A Twilio phone number you purchased at twilio.com/console
+            //         'from' => '+19787763121',
+            //         // the body of the text message you'd like to send
+            //         'body' => 'Hey Ryan! Good luck !'
+            //     ]
             // );
 
 

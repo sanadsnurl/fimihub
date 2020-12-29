@@ -127,7 +127,7 @@ class order extends Model
 
     public function restroAddress()
     {
-        return $this->belongsTo(user_address::class, 'restaurent_id');
+        return $this->belongsTo(user_address::class, 'user_id');
     }
     public function orderEvent()
     {
