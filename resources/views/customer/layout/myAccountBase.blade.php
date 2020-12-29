@@ -48,7 +48,7 @@
                             <a href="{{url('contactUs')}}" class="{{ request()->is('contactUs') ? 'active' : ''}}">Contact Us</a>
                         </li>
                         <li>
-                            <a href="{{url('legalInformation')}}" class="{{ request()->is('legalInformation') ? 'active' : ''}}">Legal Information</a>
+                            <a href="{{url('legalInformation')}}" class="{{ request()->is('legalInformation') ? 'active' : ''}}">Privacy Ploicy</a>
                         </li>
                         <li>
                             <a href="{{url('aboutUs')}}" class="{{ request()->is('aboutUs') ? 'active' : ''}}">About Us</a>
