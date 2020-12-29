@@ -21,10 +21,11 @@ class CreateRiderBankDetailsTable extends Migration
             // foreign key of users table
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            
+
             $table->string('account_number')->nullable();
             $table->string('holder_name')->nullable();
             $table->string('branch_name')->nullable();
+            $table->string('bank_name')->nullable();
             $table->string('ifsc_code')->nullable();
             $table->tinyInteger('visibility')->default('0');
             $table->timestamp('deleted_at', 0)->nullable();
