@@ -47,7 +47,7 @@ class OrderController extends Controller
     {
         if ($orderId) {
             $order = $this->order->getOrder($orderId)
-            ->with('restroAddress','userAddress.userDetails','restaurentDetails.restroAddress','cart.cartItems.menuItems')
+            ->with('restaurentDetails.restroAddress','userAddress.userDetails','restaurentDetails.restroAddress','cart.cartItems.menuItems')
             ->first();
             if(isset($order->ordered_menu)){
                 $order->ordered_menu = json_decode($order->ordered_menu);
@@ -68,7 +68,7 @@ class OrderController extends Controller
             }
             $kmRadius = $this->max_distance_km;
             $order = $this->riderClosestOrders($user, $lat, $lng, $kmRadius)
-            ->with('restroAddress','userAddress.userDetails')
+            ->with('restaurentDetails.restroAddress','userAddress.userDetails')
             ->paginate(10);
             foreach($order as $value) {
                 $value->ordered_menu = json_decode($value->ordered_menu);
@@ -80,7 +80,7 @@ class OrderController extends Controller
     public function getActiveOrder(Request $request, int $orderId = 0) {
         if ($orderId) {
             $order = $this->order->getActiveOrders($orderId)
-            ->with('restroAddress','userAddress.userDetails','restaurentDetails','cart.cartItems.menuItems','orderEvent.reason')
+            ->with('userAddress.userDetails','restaurentDetails.restroAddress','cart.cartItems.menuItems','orderEvent.reason')
             ->first();
             if(isset($order->ordered_menu)){
                 $order->ordered_menu = json_decode($order->ordered_menu);
@@ -177,7 +177,7 @@ class OrderController extends Controller
     {
         if ($orderId) {
             $order = $this->order->getMyPreviusOrders($orderId)
-            ->with('restroAddress','userAddress.userDetails','restaurentDetails','cart.cartItems.menuItems', 'orderEvent.reason')
+            ->with('restaurentDetails.restroAddress','userAddress.userDetails','restaurentDetails','cart.cartItems.menuItems', 'orderEvent.reason')
             ->first();
             if(isset($order->ordered_menu)){
                 $order->ordered_menu = json_decode($order->ordered_menu);
@@ -186,7 +186,7 @@ class OrderController extends Controller
         } else {
 
             $order = $this->order->getMyPreviusOrders($orderId)
-            ->with('restroAddress','userAddress.userDetails', 'orderEvent.reason')
+            ->with('restaurentDetails.restroAddress','userAddress.userDetails', 'orderEvent.reason')
             ->paginate(10);
             foreach($order as $value) {
                 $value->ordered_menu = json_decode($value->ordered_menu);

@@ -157,4 +157,10 @@ class restaurent_detail extends Model
             dd($e);
         }
     }
+
+
+    public function restroAddress()
+    {
+        return $this->belongsTo(user_address::class, 'user_id', 'user_id');
+    }
 }

@@ -16,18 +16,19 @@
                         </div>
                         <br>
                         @if($s_data->link != NULL)
-                            <a href="{{$s_data->link ?? ''}}" class="btn btn-lg btn-white">See More</a>
-                            @endif
+                        <a href="{{$s_data->link ?? ''}}" class="btn btn-lg btn-white">See More</a>
+                        @endif
                         <div class="search-bar">
                             {{-- <div class="location-selector">
                                 <span><input type="text" name="city" placeholder="Search Location"></span>
                             </div> --}}
                             <div class="search-input">
-                                <input type="text" id="country_name" placeholder="Search for restaurant, food">
+                                <input type="text" id="filter_name" placeholder="Search for restaurant, food">
                                 <div id="countryList">
                                 </div>
                                 <div class="search-btn"></div>
                             </div>
+                            @csrf
                         </div>
                     </div>
                 </div>
@@ -35,7 +36,6 @@
         </div>
         @endif
         @endforeach
-
 
     </div>
 </section>
@@ -170,29 +170,28 @@
 </section>
 @include('customer.include.footer')
 <script>
-    $(document).ready(function(){
-
-     $('#country_name').keyup(function(){
+    $(document).ready(function() {
+        $('#filter_name').keyup(function() {
             var query = $(this).val();
-            if(query != '')
-            {
-             var _token = $('input[name="_token"]').val();
-             $.ajax({
-              url:"{{ route('autocomplete.fetch') }}",
-              method:"POST",
-              data:{query:query, _token:_token},
-              success:function(data){
-               $('#countryList').fadeIn();
+            if (query != '') {
+                var _token = $('input[name="_token"]').val();
+                $.ajax({
+                    url: "{{ route('autocomplete.fetch') }}",
+                    method: "POST",
+                    data: {
+                        query: query,
+                        _token: _token
+                    },
+                    success: function(data) {
+                        $('#countryList').fadeIn();
                         $('#countryList').html(data);
-              }
-             });
+                    }
+                });
             }
         });
-
-        $(document).on('click', 'li', function(){
-            $('#country_name').val($(this).text());
+        $(document).on('click', 'li', function() {
+            $('#filter_name').val($(this).text());
             $('#countryList').fadeOut();
         });
-
     });
-    </script>
+</script>
