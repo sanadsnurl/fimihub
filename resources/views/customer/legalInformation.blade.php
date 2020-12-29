@@ -6,7 +6,7 @@
 <div class="content-col">
     <div class="info-box">
         <div class="form-title">
-            <h5>LEGAL INFORMATION</h5>
+            <h5>Privacy Ploicy</h5>
         </div>
         <div class="inner-wrap">
             <div class="text-wrap">

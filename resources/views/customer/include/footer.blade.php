@@ -80,33 +80,52 @@
             <div class="col col-content">
                 <h4><a href="./index.html">Fimihub</a></h4>
                 <div class="content-wrap">
-                    <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
-                        ut labore et dolore</p>
-                    <p>© 2020—2021, Lorem ipsum dolor sit</p>
+                    <p>FiMi Hub is the most convenient way for customers to get the food
+                        they love, items they want, tasks they need done, or “Go for a lime”
+                        anytime!</p>
+                    <p>© 2020-2021, FiMi Hub</p>
                 </div>
             </div>
             <div class="col col-links">
-                <h5>Navigation</h5>
+                <h5>FAQ</h5>
                 <ul class="links">
                     <li>
-                        <a href="#">Menu One</a>
+                        <a href="#">Q&A for Merchants (comming soon)</a>
                     </li>
                     <li>
-                        <a href="#">Menu Two</a>
+                        <a href="#">Q&A for Customers (comming soon)</a>
                     </li>
                     <li>
-                        <a href="#">Menu Three</a>
+                        <a href="#">Q&A for Delivery & Shopper Partners (comming soon)</a>
+                    </li>
+
+                </ul>
+            </div>
+            <div class="col col-links">
+                <h5>Other Page content</h5>
+                <ul class="links">
+                    <li>
+                        <a href="#">Privacy Policy (comming soon)</a>
                     </li>
                     <li>
-                        <a href="#">Menu Four</a>
+                        <a href="#">Terms & Conditions (comming soon)</a>
+                    </li>
+                    <li>
+                        <a href="#">Merchant Terms & Conditions (comming soon)</a>
+                    </li>
+                    <li>
+                        <a href="#">About Us (comming soon)</a>
+                    </li>
+                    <li>
+                        <a href="#">Credit/Debit Card Security Policy (comming soon)</a>
                     </li>
                 </ul>
             </div>
             <div class="col col-info">
                 <h5>Contacts</h5>
-                <p>Country, city, street name 44</p>
-                <p>+1 (234) 567-89-90</p>
-                <p>info@collector.com</p>
+                <p>Main Street, Claremont P.O. St. Ann, Jamaica</p>
+                {{-- <p>+1 (234) 567-89-90</p> --}}
+                <p>support@fimihub.com</p>
             </div>
             <div class="col col-form">
                 <h5>Newsletter</h5>
@@ -122,21 +141,21 @@
                     </div>
                 </form>
                 <ul class="social-links">
-                    <li>
-                        <a href="#">
+                    {{-- <li>
+                        <a href="https://www.facebook.com/fimi.hub.3">
                             <img src="{{url('asset/customer/assets/images/twitter.svg')}}" alt="facebook">
                         </a>
-                    </li>
+                    </li> --}}
                     <li>
-                        <a href="#">
+                        <a href="https://www.facebook.com/fimi.hub.3">
                             <img src="{{url('asset/customer/assets/images/facebook.svg')}}" alt="facebook">
                         </a>
                     </li>
-                    <li>
+                    {{-- <li>
                         <a href="#">
                             <img src="{{url('asset/customer/assets/images/instagram.svg')}}" alt="instagram">
                         </a>
-                    </li>
+                    </li> --}}
                 </ul>
             </div>
         </div>
