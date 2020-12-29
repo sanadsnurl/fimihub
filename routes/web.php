@@ -70,7 +70,8 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
     // Customer Subscribed
     Route::post('subscribeProcess', 'Web\Customer\DashboardController@subscribe');
 
-
+    Route::get('/autocomplete', 'DashboardController@index');
+    Route::post('/autocomplete/fetch', 'DashboardController@fetch')->name('autocomplete.fetch');
     //========================================== Session Customer Auth Routes ===================================================
 
     Route::group(['middleware' => 'customerauth'], function () {

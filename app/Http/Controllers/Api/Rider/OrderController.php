@@ -90,7 +90,7 @@ class OrderController extends Controller
         } else {
 
             $order = $this->order->getActiveOrders($orderId)
-            ->with('restroAddress','userAddress.userDetails', 'orderEvent.reason')
+            ->with('restaurentDetails.restroAddress','userAddress.userDetails', 'orderEvent.reason')
             ->paginate(10);
             foreach($order as $value) {
                 $value->ordered_menu = json_decode($value->ordered_menu);
