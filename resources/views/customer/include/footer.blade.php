@@ -86,7 +86,7 @@
                     <p>© 2020-2021, FiMi Hub</p>
                 </div>
             </div>
-            <div class="col col-links">
+            {{-- <div class="col col-links">
                 <h5>FAQ</h5>
                 <ul class="links">
                     <li>
@@ -100,7 +100,7 @@
                     </li>
 
                 </ul>
-            </div>
+            </div> --}}
             <div class="col col-links">
                 <h5>Other Page content</h5>
                 <ul class="links">
