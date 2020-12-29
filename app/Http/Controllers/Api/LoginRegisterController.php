@@ -71,6 +71,38 @@ class LoginRegisterController extends Controller
             }
             $vehicle_data['color'] = $data['color'];
 
+            if ($request->hasfile('background_check')) {
+                $profile_pic = $request->file('background_check');
+                $input['imagename'] = 'PoliceBackgroundCheck' . time() . '.' . $profile_pic->getClientOriginalExtension();
+
+                $path = public_path('uploads/' . $id . '/images');
+                File::makeDirectory($path, $mode = 0777, true, true);
+
+                $destinationPath = 'uploads/' . $id . '/images' . '/';
+                if ($profile_pic->move($destinationPath, $input['imagename'])) {
+                    $file_url = url($destinationPath . $input['imagename']);
+                    $vehicle_data['background_check'] = $file_url;
+                } else {
+                    $error_file_not_required[] = "Background Check File Have Some Issue";
+                    $vehicle_data['background_check'] = "";
+                }
+            }
+            if ($request->hasfile('food_permit')) {
+                $profile_pic = $request->file('food_permit');
+                $input['imagename'] = 'FoodPermit' . time() . '.' . $profile_pic->getClientOriginalExtension();
+
+                $path = public_path('uploads/' . $id . '/images');
+                File::makeDirectory($path, $mode = 0777, true, true);
+
+                $destinationPath = 'uploads/' . $id . '/images' . '/';
+                if ($profile_pic->move($destinationPath, $input['imagename'])) {
+                    $file_url = url($destinationPath . $input['imagename']);
+                    $vehicle_data['food_permit'] = $file_url;
+                } else {
+                    $error_file_not_required[] = "Food Permit File Have Some Issue";
+                    $vehicle_data['food_permit'] = "";
+                }
+            }
             if ($request->hasfile('id_proof')) {
                 $profile_pic = $request->file('id_proof');
                 $input['imagename'] = 'IDProof' . time() . '.' . $profile_pic->getClientOriginalExtension();
@@ -119,6 +151,7 @@ class LoginRegisterController extends Controller
             $bank_details['account_number'] = $data['account_number'];
             $bank_details['holder_name'] = $data['holder_name'];
             $bank_details['branch_name'] = $data['branch_name'];
+            $bank_details['bank_name'] = $data['bank_name'];
             $bank_details['ifsc_code'] = $data['ifsc_code'];
             $rider_bank_detail = new rider_bank_detail;
             $bank_data = $rider_bank_detail->insertUpdateBankData($bank_details);
@@ -403,6 +436,38 @@ class LoginRegisterController extends Controller
                 } else {
                     $error_file_not_required[] = "Vehicle Picture Have Some Issue";
                     $vehicle_update_data['vehicle_image'] = "";
+                }
+            }
+            if ($request->hasfile('background_check')) {
+                $profile_pic = $request->file('background_check');
+                $input['imagename'] = 'PoliceBackgroundCheck' . time() . '.' . $profile_pic->getClientOriginalExtension();
+
+                $path = public_path('uploads/' . $id . '/images');
+                File::makeDirectory($path, $mode = 0777, true, true);
+
+                $destinationPath = 'uploads/' . $id . '/images' . '/';
+                if ($profile_pic->move($destinationPath, $input['imagename'])) {
+                    $file_url = url($destinationPath . $input['imagename']);
+                    $vehicle_update_data['background_check'] = $file_url;
+                } else {
+                    $error_file_not_required[] = "Background Check File Have Some Issue";
+                    $vehicle_update_data['background_check'] = "";
+                }
+            }
+            if ($request->hasfile('food_permit')) {
+                $profile_pic = $request->file('food_permit');
+                $input['imagename'] = 'FoodPermit' . time() . '.' . $profile_pic->getClientOriginalExtension();
+
+                $path = public_path('uploads/' . $id . '/images');
+                File::makeDirectory($path, $mode = 0777, true, true);
+
+                $destinationPath = 'uploads/' . $id . '/images' . '/';
+                if ($profile_pic->move($destinationPath, $input['imagename'])) {
+                    $file_url = url($destinationPath . $input['imagename']);
+                    $vehicle_update_data['food_permit'] = $file_url;
+                } else {
+                    $error_file_not_required[] = "Food Permit File Have Some Issue";
+                    $vehicle_update_data['food_permit'] = "";
                 }
             }
             if ($request->has('color')) {

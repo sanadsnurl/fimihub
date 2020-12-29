@@ -21,7 +21,7 @@ class CreateVehicleDetailsTable extends Migration
             // foreign key of users table
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            
+
             $table->string('vehicle_number')->nullable();
             $table->string('model_name')->nullable();
             $table->string('vehicle_image')->nullable();
@@ -30,6 +30,8 @@ class CreateVehicleDetailsTable extends Migration
             $table->text('address')->nullable();
             $table->integer('pincode')->nullable();
             $table->string('driving_license')->nullable();
+            $table->string('background_check')->nullable();
+            $table->string('food_permit')->nullable();
             $table->string('dl_start_date')->nullable();
             $table->string('dl_end_date')->nullable();
             $table->string('registraion_start_date')->nullable();
