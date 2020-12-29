@@ -542,6 +542,9 @@ class LoginRegisterController extends Controller
             if ($request->has('branch_name')) {
                 $bank_details['branch_name'] = $data['branch_name'];
             }
+            if ($request->has('bank_name')) {
+                $bank_details['bank_name'] = $data['bank_name'];
+            }
             if ($request->has('ifsc_code')) {
                 $bank_details['ifsc_code'] = $data['ifsc_code'];
             }
