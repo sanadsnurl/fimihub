@@ -126,7 +126,7 @@ class CreateOrdersTable extends Migration
                                                     11-assigned to rider
                                                     12-rider on the way')->nullable();
             $table->tinyInteger('payment_status')->comment('1-pending,2-success,3-failed')->nullable();
-            $table->tinyInteger('payment_type')->comment('1-stripe,2-paypal,3-COD');
+            $table->tinyInteger('payment_type')->comment('1-bank,2-paypal,3-COD');
             $table->tinyInteger('visibility')->default('0');
             $table->timestamp('deleted_at', 0)->nullable();
             $table->timestamps();

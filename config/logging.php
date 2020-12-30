@@ -17,7 +17,7 @@ return [
     |
     */
 
-    'default' => env('LOG_CHANNEL', 'stacks'),
+    'default' => env('LOG_CHANNEL', 'slack'),
 
     /*
     |--------------------------------------------------------------------------

@@ -60,7 +60,7 @@ class OrderController extends Controller
                 })
                 ->addColumn('payment_type', function ($row) {
                     if ($row->payment_type == 1) {
-                        return "Stripe";
+                        return "Bank Transfer";
                     } elseif ($row->payment_type == 2) {
                         return "Paypal";
                     } elseif ($row->payment_type == 3) {
@@ -424,7 +424,7 @@ class OrderController extends Controller
             }
 
             if ($order_data->payment_type == 1) {
-                $order_data->payment_type = "Stripe";
+                $order_data->payment_type = "Bank Transfer";
             } elseif ($order_data->payment_type == 2) {
                 $order_data->payment_type = "Paypal";
             } elseif ($order_data->payment_type == 3) {
@@ -452,7 +452,7 @@ class OrderController extends Controller
         $event_data = json_encode($event_data);
             $event_data = json_decode($event_data);
 
-        // dd($order_data);
+        // dd($order_data->address_id);
         return view('restaurent.viewOrder')->with(['data' => $user,
                                             'order_data' => $order_data,
                                             'event_data' => $event_data,

@@ -76,7 +76,7 @@
 
 <footer class="footer">
     <div class="md_container">
-        <div class="row-wrap">
+        <div class="row row-wrap">
             <div class="col col-content">
                 <h4><a href="./index.html">Fimihub</a></h4>
                 <div class="content-wrap">
@@ -86,38 +86,38 @@
                     <p>© 2020-2021, FiMi Hub</p>
                 </div>
             </div>
-            {{-- <div class="col col-links">
-                <h5>FAQ</h5>
+            <div class="col col-links">
+                <h5>FAQ's</h5>
                 <ul class="links">
                     <li>
-                        <a href="#">Q&A for Merchants (comming soon)</a>
+                        <a href="#">Q&A for Merchants</a>
                     </li>
                     <li>
-                        <a href="#">Q&A for Customers (comming soon)</a>
+                        <a href="#">Q&A for Customers </a>
                     </li>
                     <li>
-                        <a href="#">Q&A for Delivery & Shopper Partners (comming soon)</a>
+                        <a href="#">Q&A for Delivery & Shopper Partners </a>
                     </li>
 
                 </ul>
-            </div> --}}
+            </div>
             <div class="col col-links">
                 <h5>Other Page content</h5>
                 <ul class="links">
                     <li>
-                        <a href="#">Privacy Policy (comming soon)</a>
+                        <a href="{{url('asset/customer/assets/document/Privacy Policy.pdf')}}">Privacy Policy </a>
                     </li>
                     <li>
-                        <a href="#">Terms & Conditions (comming soon)</a>
+                        <a href="{{url('T&C')}}">Terms & Conditions </a>
                     </li>
                     <li>
-                        <a href="#">Merchant Terms & Conditions (comming soon)</a>
+                        <a href="{{url('asset/customer/assets/document/MERCHANT AGREEMENT- FIMI HUB.pdf')}}">Merchant Terms & Conditions </a>
                     </li>
                     <li>
-                        <a href="#">About Us (comming soon)</a>
+                        <a href="{{url('aboutUsPage')}}">About Us </a>
                     </li>
                     <li>
-                        <a href="#">Credit/Debit Card Security Policy (comming soon)</a>
+                        <a href="{{url('cardPolicy')}}">Credit/Debit Card Security Policy </a>
                     </li>
                 </ul>
             </div>
@@ -141,21 +141,21 @@
                     </div>
                 </form>
                 <ul class="social-links">
-                    {{-- <li>
+                    <li>
                         <a href="https://www.facebook.com/fimi.hub.3">
                             <img src="{{url('asset/customer/assets/images/twitter.svg')}}" alt="facebook">
                         </a>
-                    </li> --}}
+                    </li>
                     <li>
                         <a href="https://www.facebook.com/fimi.hub.3">
                             <img src="{{url('asset/customer/assets/images/facebook.svg')}}" alt="facebook">
                         </a>
                     </li>
-                    {{-- <li>
+                    <li>
                         <a href="#">
                             <img src="{{url('asset/customer/assets/images/instagram.svg')}}" alt="instagram">
                         </a>
-                    </li> --}}
+                    </li>
                 </ul>
             </div>
         </div>

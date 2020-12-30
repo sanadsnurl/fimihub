@@ -38,4 +38,30 @@ class CmsController extends Controller
         return view('customer.index')->with(['slider_data' => $sl_data,
                                             ]);
     }
+
+    public function indexAboutUsPage(Request $request)
+    {
+        $user = Auth::user();
+
+        return view('customer.pages.aboutUs')->with([
+            'user_data' => $user,
+        ]);
+    }
+
+    public function indexCardPolicy(Request $request)
+    {
+        $user = Auth::user();
+
+        return view('customer.pages.cardPolicy')->with([
+            'user_data' => $user,
+        ]);
+    }
+    public function indexTandC(Request $request)
+    {
+        $user = Auth::user();
+
+        return view('customer.pages.termAndCond')->with([
+            'user_data' => $user,
+        ]);
+    }
 }

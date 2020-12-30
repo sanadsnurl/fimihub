@@ -39,6 +39,12 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
     Route::get('/register', function () {
         return view('customer.auth.register');
     });
+    // About Us Page
+    Route::get('/aboutUsPage', 'Web\Customer\CmsController@indexAboutUsPage');
+    // Card Policy Page
+    Route::get('/cardPolicy', 'Web\Customer\CmsController@indexCardPolicy');
+    // T & C Page
+    Route::get('/T&C', 'Web\Customer\CmsController@indexTandC');
     // Partner with us page
     Route::get('/partnerWithUs', function () {
         return view('customer.auth.partnerRegister');
@@ -100,7 +106,7 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
         Route::get('myOrder', 'Web\Customer\UserController@getMyOrderPage');
         //Terms and condition Page
         Route::get('termsCondition', 'Web\Customer\UserController@getTermsConditionPage');
-        //Terms and condition Page
+        //FAQ Page
         Route::get('FAQ', 'Web\Customer\UserController@getFaqPage');
         //Legal Information Page
         Route::get('legalInformation', 'Web\Customer\UserController@getLegalInformationPage');
@@ -277,6 +283,10 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
         Route::post('addSlider', 'Web\Admin\CmsController@addSliderPage');
         //Delete Slider Cms
         Route::get('deleteSliderCms', 'Web\Admin\CmsController@deleteSliderCms');
+        //All Customer Order List
+        Route::get('customerOrder', 'Web\Admin\OrderController@getCustomerOrderList');
+        //View Customer Order
+        Route::get('viewOrder', 'Web\Admin\OrderController@viewOrder');
     });
 
 });

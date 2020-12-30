@@ -16,9 +16,27 @@
             <form role="form" method="POST" action="{{ url('/addPaymentMethod') }}">
                 @csrf
                 <input type="radio" name="payment" id="stripe" value="1">
-                <label for="stripe">
-                    <img src="{{url('asset/customer/assets/images/stripe.svg')}}" alt="stripe">
+                <label for="stripe" id="bank_transfer">
+                    <img src="{{url('asset/customer/assets/images/bank.svg')}}" class="mr-2" style="height: 25px;"
+                        alt="cash on delivery">
+                    Bank Transfer
+                    {{-- <img src="{{url('asset/customer/assets/images/stripe.svg')}}" alt="stripe"> --}}
                 </label>
+                <div class="bank_content">
+                    <p>Please make your Bank Transfer using the following
+                        banking details below. When you are through, please
+                        send us the confirmation number and amount
+                        via whatsapp (876-518-7786) or via email at
+                        support@fimihub.com</p>
+
+                        <ul>
+                            <li><strong>Bank Name :</strong> NCB</li>
+                            <li><strong>Bank Branch :</strong>   St. Ann’s Bay</li>
+                            <li><strong>Account Name :</strong> Fimilocal Systems</li>
+                            <li><strong>Account # JMD :</strong> 544509462</li>
+                            <li><strong> Account # USD:</strong> 544509470</li>
+                        </ul>
+                </div>
 
                 <input type="radio" name="payment" id="paypal" value="2">
                 <label for="paypal">
