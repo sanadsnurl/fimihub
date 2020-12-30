@@ -179,4 +179,15 @@ var customizeLink = $(".collapsible a");
 
 customizeLink.click(function() {
     $(this).toggleClass("show");
+});
+
+$('.payment_options label').click(function() {
+    setTimeout(function() {
+        if ($('#bank_transfer').prev('input').is(':checked')) {
+            $('#bank_transfer').next('.bank_content').slideDown();
+
+        } else {
+            $('#bank_transfer').next('.bank_content').slideUp();
+        }
+    }, 100)
 })

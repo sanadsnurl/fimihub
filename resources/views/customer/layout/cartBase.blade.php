@@ -95,12 +95,12 @@
                                     @if(request()->is('trackOrder'))
                                     Customization's
                                     @else
-                                    Customize
+                                    <span class="btn_purple deliver_btn hover_effect1">Customize your Order</span>
                                     @endif
 
                                 </a>
                                 @foreach($m_data->add_on_data as $add_data)
-                                <div class="collapse" id="collapseExample{{$m_data->id}}">
+                                <div class="collapse mt-3" id="collapseExample{{$m_data->id}}">
                                     <div class="card card-body">
                                         <div class="row">
                                             <div class="col-md-8">
@@ -146,7 +146,7 @@
                         @endforeach
 
                         @if(request()->is('cart'))
-                        <div class="aply_cupon ">
+                        {{-- <div class="aply_cupon ">
                             <a href="javascript:void(0)" class="d-flex accord_btn">
                                 <span><img src="{{url('asset/customer/assets/images/cuppon_icon.svg')}}" alt="icon">
                                     APPLY COUPON</span>
@@ -165,7 +165,7 @@
                                     </span>
                                 </form>
                             </div>
-                        </div>
+                        </div> --}}
                         @endif
 
                         <div class="bill_details">
@@ -215,7 +215,7 @@
                         @if(request()->is('cart'))
                         <a href="{{url('checkoutPage')}}">
                             <div class="to_pay_box d-flex align-items-center">
-                                <span>To pay</span>
+                                <span class="proceed_to_pay">Proceed to Payment</span>
                                 <span>{{$user_data->currency ?? ''}} <span
                                         id="total_amount">{{number_format((float)$total_amount, 2) ?? '0'}}</span></span>
                             </div>

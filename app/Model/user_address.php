@@ -79,7 +79,6 @@ class user_address extends Model
     {
         try {
             $user_address=DB::table('user_address')
-                ->where('visibility', 0)
                 ->where('id', $addid)
                 ->first();
 

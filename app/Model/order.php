@@ -211,10 +211,17 @@ class order extends Model
 
     public function allOrderPaginationData()
     {
-        $menu_list=DB::table('orders')
-                ->where('orders.visibility', 0)
-                ->where('orders.payment_status',2)
-                ->select('orders.*')
+        $menu_list=$this->select('orders.*')
+                ->orderBy('orders.created_at','DESC');
+
+        return $menu_list;
+
+    }
+
+    public function allOrderPaginationDataByID($order_id)
+    {
+        $menu_list=$this->select('orders.*')
+                ->where('orders.id', $order_id)
                 ->orderBy('orders.created_at','DESC');
 
         return $menu_list;

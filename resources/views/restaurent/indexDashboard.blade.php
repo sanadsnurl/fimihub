@@ -38,7 +38,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-lg-6 col-xl-3">
+            {{-- <div class="col-12 col-lg-6 col-xl-3">
                 <div class="card bg-pattern-success">
                     <div class="card-body">
                         <div class="media">
@@ -52,7 +52,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
             <div class="col-12 col-lg-6 col-xl-3">
                 <div class="card bg-pattern-warning">
                     <div class="card-body">

@@ -92,6 +92,12 @@
                     </ul>
                 </li>
                 <li>
+                    <a href="{{url('adminfimihub/customerOrder')}}" class="waves-effect">
+                        <i class="icon-list"></i> <span>Order's</span>
+
+                    </a>
+                </li>
+                <li>
                     <a href="{{url('adminfimihub/serviceList')}}" class="waves-effect">
                         <i class="icon-home"></i> <span>Services</span>
 
