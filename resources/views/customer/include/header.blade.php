@@ -62,11 +62,11 @@
                 <nav class="nav-menu">
                     <ul>
                         @if(Session::has('user'))
-                        <li>
+                        {{-- <li>
                             <a href="#" class="icon-link">
                                 <img src="{{url('asset/customer/assets/images/search_purple.svg')}}" alt="search">
                             </a>
-                        </li>
+                        </li> --}}
                         <li>
                             <a href="{{url('/cart')}}" class="icon-link cart_nofti">
                                 <img src="{{url('asset/customer/assets/images/cart.svg')}}" alt="cart">

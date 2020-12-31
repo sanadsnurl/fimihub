@@ -80,4 +80,47 @@ class RiderController extends Controller
         // dd($user_list);
         return view('admin.riderList')->with(['data' => $user]);
     }
+
+    public function pendingRider(Request $request)
+    {
+        $user = Auth::user();
+
+        $users = new user;
+        $pending_user = $users->pendingUserPaginateList(2);
+        if ($request->ajax()) {
+            return Datatables::of($pending_user)
+                ->addIndexColumn()
+                ->addColumn('action', function($row){
+                    $btn = '
+                        <a href="approveRider?user_id='.base64_encode($row->id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Approve</a>';
+                    return $btn;
+                })
+                ->addColumn('created_at', function($row){
+
+                    return date('d F Y', strtotime($row->created_at));
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+
+        }
+        $user['currency']=$this->currency;
+
+        $pending_user = $pending_user->get();
+        return view('admin.riderRequest')->with(['data'=>$user,'pending_user'=>$pending_user]);
+
+    }
+
+    public function approveRider(Request $request)
+    {
+        $user = Auth::user();
+
+        $user_id = base64_decode(request('user_id'));
+
+        $users = new user;
+        $approved = $users->requestApprove($user_id);
+        Session::flash('message', 'Approved!');
+
+        return redirect()->back();
+
+    }
 }
