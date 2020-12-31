@@ -142,6 +142,10 @@ class order extends Model
         return $this->where('id', $orderId)->update(['order_status'=> $status]);
     }
 
+    public function updatePaymentStatus($orderId, $payment_status){
+        return $this->where('id', $orderId)->update(['payment_status'=> $payment_status]);
+    }
+
     public function getOrderData($order_id)
     {
         try {

@@ -287,6 +287,10 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
         Route::get('customerOrder', 'Web\Admin\OrderController@getCustomerOrderList');
         //View Customer Order
         Route::get('viewOrder', 'Web\Admin\OrderController@viewOrder');
+        //View Order Set Txn Page
+        Route::get('orderPaid', 'Web\Admin\OrderController@viewOrderPaid');
+        //Set Txn Process
+        Route::post('changePaidStatus', 'Web\Admin\OrderController@orderPaidProcess');
     });
 
 });

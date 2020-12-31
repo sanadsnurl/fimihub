@@ -125,7 +125,22 @@ class OtpManagerController extends Controller
             {
                 if(is_numeric($userid))
                 {
-
+                    if ($user_data->visibility == 1) {
+                        $status= false;
+                        $message = "Account needs Admin Approval !";
+                        $bank_data = null;
+                        $vehicle_datas = null;
+                        $address_data = null;
+                    }elseif($user_data->visibility == 2){
+                        $status= false;
+                        $message = "Account Blocked Or Disabled";
+                        $bank_data = null;
+                        $vehicle_datas = null;
+                        $address_data = null;
+                    }else{
+                        $status= true;
+                        $message = "success";
+                    }
                     if($user_data->mobile_verified_at == NULL)
                     {
                         $user_data = User::find($user_data->id);
@@ -138,8 +153,8 @@ class OtpManagerController extends Controller
 
                         $user_data->access_token=$accessToken;
                         return response()->json(['data'=>$user_data,
-                                                'status' => true,
-                                                'message'=>'Verified Successfully'], $this->successStatus);
+                                                'status' => $status,
+                                                'message'=>$message], $this->successStatus);
                     }
                     else
                     {

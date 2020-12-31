@@ -38,26 +38,26 @@ class RestaurentController extends Controller
                     return $btn;
                 })
                 ->addColumn('created_at', function($row){
-                    
+
                     return date('d F Y', strtotime($row->created_at));
                 })
                 ->rawColumns(['action'])
                 ->make(true);
-                
+
         }
         $user['currency']=$this->currency;
-        $user_list = $user_list->get();        
+        $user_list = $user_list->get();
         return view('admin.restaurentList')->with(['data'=>$user]);
-        
+
     }
 
     public function addRestaurent(Request $request)
     {
         $user = Auth::user();
         $user['currency']=$this->currency;
-    
+
         return view('admin.addRestaurent')->with(['data'=>$user]);
-        
+
     }
 
     public function addRestaurentProcess(Request $request)
@@ -73,32 +73,32 @@ class RestaurentController extends Controller
             $data['user_type']=4;
             $user = User::create($data);
                 if($user != NULL){
-                
-                    Session::flash('message', 'Register Succesfully !'); 
+
+                    Session::flash('message', 'Register Succesfully !');
                     return redirect()->back();
-                    
+
                 }else{
-                    Session::flash('message', 'Registration Failed , Please try again!'); 
+                    Session::flash('message', 'Registration Failed , Please try again!');
                     return redirect()->back();
                 }
-            
+
         }
         else{
-        	return redirect()->back()->withInput()->withErrors($validator);  
+        	return redirect()->back()->withInput()->withErrors($validator);
         }
     }
 
     public function categoryDetails(Request $request)
     {
         $user = Auth::user();
-        
+
         $menu_categories = new menu_categories;
         $cat_data = $menu_categories->restaurentCategoryPaginationData();
         if ($request->ajax()) {
             return Datatables::of($cat_data)
                 ->addIndexColumn()
                 // ->addColumn('action', function($row){
-                //     $btn = ' 
+                //     $btn = '
                 //         <a href="deleteCat?cat_id='.base64_encode($row->id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Delete</a>';
                 //     return $btn;
                 // })
@@ -114,19 +114,19 @@ class RestaurentController extends Controller
                     }
                 })
                 ->addColumn('created_at', function($row){
-                    
+
                     return date('d F Y', strtotime($row->created_at));
                 })
                 ->rawColumns(['action'])
                 ->make(true);
-                
+
         }
         $user['currency']=$this->currency;
         $ServiceCategories = new ServiceCategory;
         $service_list = $ServiceCategories->getAllServices()->get();
         $cat_data = $cat_data->get();
         return view('admin.menuCategory')->with(['data'=>$user,'cat_data'=>$cat_data,'service_list'=>$service_list]);
-        
+
     }
 
     public function addCategoryProcess(Request $request)
@@ -135,12 +135,12 @@ class RestaurentController extends Controller
             'name' => 'required|string',
             'about' => 'string|nullable',
             'service_catagory_id' => 'required|in:1,2,3',
-            'discount' => 'numeric|nullable',       
-            
+            'discount' => 'numeric|nullable',
+
         ]);
         if(!$validator->fails()){
             $user = Auth::user();
-            
+
             $data = $request->toarray();
             $menu_categories = new menu_categories;
             $cate_id = $menu_categories->makeMenuCategory($data);
@@ -150,39 +150,39 @@ class RestaurentController extends Controller
 
         }
         else{
-        	return redirect()->back()->withInput()->withErrors($validator);  
+        	return redirect()->back()->withInput()->withErrors($validator);
         }
-        
+
     }
 
-    
+
     public function pendingRetaurant(Request $request)
     {
         $user = Auth::user();
-        
+
         $users = new user;
         $pending_user = $users->pendingUserPaginateList(4);
         if ($request->ajax()) {
             return Datatables::of($pending_user)
                 ->addIndexColumn()
                 ->addColumn('action', function($row){
-                    $btn = ' 
+                    $btn = '
                         <a href="approveResto?user_id='.base64_encode($row->id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Approve</a>';
                     return $btn;
                 })
                 ->addColumn('created_at', function($row){
-                    
+
                     return date('d F Y', strtotime($row->created_at));
                 })
                 ->rawColumns(['action'])
                 ->make(true);
-                
+
         }
         $user['currency']=$this->currency;
-        
+
         $pending_user = $pending_user->get();
         return view('admin.restaurentRequest')->with(['data'=>$user,'pending_user'=>$pending_user]);
-        
+
     }
 
     public function approveRetaurant(Request $request)
@@ -190,13 +190,13 @@ class RestaurentController extends Controller
         $user = Auth::user();
 
         $user_id = base64_decode(request('user_id'));
-        
+
         $users = new user;
         $approved = $users->requestApprove($user_id);
         Session::flash('message', 'Approved!');
 
         return redirect()->back();
-        
+
     }
     public function editRestaurant()
     {
@@ -208,7 +208,7 @@ class RestaurentController extends Controller
 // dd($resto_user_id);
         $user_address = new user_address;
         $resto_add = $user_address->getUserAddress($resto_user_id);
-        
+
         // dd($resto_data->user_id );
         if($resto_add == NULL || $resto_add->isEmpty()){
             return view('admin.editRestaurant')->with(['data'=>$user,
@@ -222,8 +222,8 @@ class RestaurentController extends Controller
                                                 'resto_user_id'=>$resto_user_id,
                                                 'resto_add'=> $resto_add[0]]);
         }
-        
-        
+
+
     }
 
     public function editRestaurantProcess(Request $request)
@@ -232,18 +232,18 @@ class RestaurentController extends Controller
             'name' => 'string|nullable',
             'user_id' => 'required|exists:users,id',
             'about' => 'string|nullable',
-            'other_details' => 'string|nullable',    
-            'picture' => 'mimes:png,jpg,jpeg|max:3072|nullable',    
-            'official_number' => 'numeric|nullable',    
-            'avg_cost' => 'numeric|nullable',    
-            'avg_time' => 'string|nullable',    
-            'open_time' => 'string|nullable',    
-            'close_time' => 'string|nullable',    
-            'address_address' => 'required|string',   
-            'delivery_charge' => 'string|nullable',    
-            'pincode' => 'string|nullable',    
-            'resto_type' => 'in:1,2,3|nullable',    
-            
+            'other_details' => 'string|nullable',
+            'picture' => 'mimes:png,jpg,jpeg|max:3072|nullable',
+            'official_number' => 'numeric|nullable',
+            'avg_cost' => 'numeric|nullable',
+            'avg_time' => 'string|nullable',
+            'open_time' => 'string|nullable',
+            'close_time' => 'string|nullable',
+            'address_address' => 'required|string',
+            'delivery_charge' => 'string|nullable',
+            'pincode' => 'string|nullable',
+            'resto_type' => 'in:1,2,3|nullable',
+
         ]);
         if(!$validator->fails()){
             $resto_id = base64_decode(request('resto_id'));
@@ -258,18 +258,18 @@ class RestaurentController extends Controller
 
                 $path = public_path('uploads/'.$data['user_id'].'/images');
                 File::makeDirectory($path, $mode = 0777, true, true);
-                                
+
                 $destinationPath = 'uploads/'.$data['user_id'].'/images'.'/';
                 if($profile_pic->move($destinationPath, $input['imagename']))
                 {
                     $file_url=url($destinationPath.$input['imagename']);
                     $data['picture']=$file_url;
-                
+
                 }else{
                     $error_file_not_required[]="Profile Picture Have Some Issue";
                     unset($data['picture']);
                 }
-                
+
             }
             else{
                 unset($data['picture']);
@@ -284,7 +284,7 @@ class RestaurentController extends Controller
                 }
                 else{
                     $add_data['user_id']=$data['user_id'];
-                    $add_data['address']=$data['address_address'];                    
+                    $add_data['address']=$data['address_address'];
                     $add_data['latitude']=$data['address_latitude'];
                     $add_data['longitude']=$data['address_longitude'];
                     $user_address = new user_address;
@@ -298,23 +298,23 @@ class RestaurentController extends Controller
                     Session::flash('message', 'Restaurent Data Updated !');
 
                     return redirect()->back();
-                    
+
                 }
             }
-            
+
 
         }
         else{
             // dd($validator->messages());
-        	return redirect()->back()->withInput()->withErrors($validator);  
+        	return redirect()->back()->withInput()->withErrors($validator);
         }
-        
+
     }
 
-    public function deleteRestaurent(Request $request){  
+    public function deleteRestaurent(Request $request){
         $user = Auth::user();
         $resto_user_id = base64_decode(request('resto_user_id'));
-        
+
         $users = new User;
         $delete_resto = array();
         $delete_resto['id'] = $resto_user_id;
