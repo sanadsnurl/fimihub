@@ -291,6 +291,10 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
         Route::get('orderPaid', 'Web\Admin\OrderController@viewOrderPaid');
         //Set Txn Process
         Route::post('changePaidStatus', 'Web\Admin\OrderController@orderPaidProcess');
+        // Pending Restaurent Partner Requests
+        Route::get('pendingRider', 'Web\Admin\RiderController@pendingRider');
+        // Approve Pending Restaurent Partner Requests
+        Route::get('approveRider', 'Web\Admin\RiderController@approveRider');
     });
 
 });

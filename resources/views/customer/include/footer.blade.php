@@ -142,17 +142,17 @@
                 </form>
                 <ul class="social-links">
                     <li>
-                        <a href="https://www.facebook.com/fimi.hub.3">
+                        <a href="#" target="_balnk">
                             <img src="{{url('asset/customer/assets/images/twitter.svg')}}" alt="facebook">
                         </a>
                     </li>
                     <li>
-                        <a href="https://www.facebook.com/fimi.hub.3">
+                        <a href="https://www.facebook.com/fimi.hub.3" target="_balnk">
                             <img src="{{url('asset/customer/assets/images/facebook.svg')}}" alt="facebook">
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="#" target="_balnk">
                             <img src="{{url('asset/customer/assets/images/instagram.svg')}}" alt="instagram">
                         </a>
                     </li>
@@ -425,7 +425,7 @@
 <script src="https://cdn.jsdelivr.net/jquery.validation/1.15.0/jquery.validate.min.js"></script>
 
 <script type="text/javascript" src="{{url('asset/customer/assets/scripts/mapInput.js')}}"></script>
-<script type="text/javascript" src="{{url('asset/customer/assets/scripts/currentLocation.js')}}"></script>
+<script type="text/javascript" src="{{url('asset/customer/assets/scripts/searchMap.js')}}"></script>
 <script
     src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}&libraries=places&callback=initialize"
     async defer></script>

@@ -72,13 +72,13 @@
                 </li>
                 <li>
                     <a href="#" class="waves-effect">
-                        <i class="icon-disc"></i> <span>Rider </span> <i
-                            class="fa fa-angle-right pull-right"></i>
+                        <i class="icon-disc"></i> <span>Rider </span> <i class="fa fa-angle-right pull-right"></i>
                     </a>
                     <ul class="sidebar-submenu">
                         <li><a href="{{url('adminfimihub/riderList')}}"><i class="fa fa-circle-o"></i>Rider
                                 List</a></li>
-
+                        <li><a href="{{url('adminfimihub/pendingRider')}}"><i class="fa fa-circle-o"></i>New
+                                Request</a></li>
                     </ul>
                 </li>
                 <li>
@@ -87,7 +87,8 @@
                             class="fa fa-angle-right pull-right"></i>
                     </a>
                     <ul class="sidebar-submenu">
-                        <li><a href="{{url('adminfimihub/userList')}}"><i class="fa fa-circle-o"></i>Customer List</a></li>
+                        <li><a href="{{url('adminfimihub/userList')}}"><i class="fa fa-circle-o"></i>Customer List</a>
+                        </li>
 
                     </ul>
                 </li>
@@ -105,14 +106,14 @@
                 </li>
                 <li>
                     <a href="#" class="waves-effect">
-                        <i class="icon-magic-wand"></i> <span>CMS </span> <i
-                            class="fa fa-angle-right pull-right"></i>
+                        <i class="icon-magic-wand"></i> <span>CMS </span> <i class="fa fa-angle-right pull-right"></i>
                     </a>
                     <ul class="sidebar-submenu">
                         <li><a href="{{url('adminfimihub/getFaq')}}"><i class="fa fa-circle-o"></i>FAQ's</a></li>
                         <li><a href="{{url('adminfimihub/tnc')}}"><i class="fa fa-circle-o"></i>T&C</a></li>
                         <li><a href="{{url('adminfimihub/aboutUs')}}"><i class="fa fa-circle-o"></i>About Us</a></li>
-                        <li><a href="{{url('adminfimihub/legalInfo')}}"><i class="fa fa-circle-o"></i>Legal Info</a></li>
+                        <li><a href="{{url('adminfimihub/legalInfo')}}"><i class="fa fa-circle-o"></i>Legal Info</a>
+                        </li>
                         <li><a href="{{url('adminfimihub/slider')}}"><i class="fa fa-circle-o"></i>Slider</a></li>
 
                     </ul>
@@ -124,7 +125,6 @@
 
                     </a>
                 </li>
-
 
             </ul>
 
