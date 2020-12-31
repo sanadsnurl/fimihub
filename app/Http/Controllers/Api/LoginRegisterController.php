@@ -40,6 +40,7 @@ class LoginRegisterController extends Controller
             $user_insert_data['country_code'] = $data['country_code'];
             $user_insert_data['email'] = $data['email'];
             $user_insert_data['user_type'] = 2;
+            $user_insert_data['visibility'] = 1;
 
             $user = User::create($user_insert_data);
 
@@ -240,7 +241,22 @@ class LoginRegisterController extends Controller
 
                 $user_address = new user_address;
                 $address_data = $user_address->getUserAddress($user_data->id);
-
+                if ($user_data->visibility == 1) {
+                    $status= false;
+                    $message = "Account needs Approval";
+                    $bank_data = null;
+                    $vehicle_datas = null;
+                    $address_data = null;
+                }elseif($user_data->visibility == 2){
+                    $status= false;
+                    $message = "Account Blocked Or Disabled";
+                    $bank_data = null;
+                    $vehicle_datas = null;
+                    $address_data = null;
+                }else{
+                    $status= true;
+                    $message = "success";
+                }
                 if ($user_data->mobile_verified_at == NULL) {
                     $otp = $this->OtpGeneration($user_data->mobile);
                     $user_data->access_token = $accessToken;
@@ -250,8 +266,8 @@ class LoginRegisterController extends Controller
                         'bank_data' => $bank_data,
                         'vehicle_data' => $vehicle_datas,
                         'address_data' => $address_data,
-                        'message' => 'success',
-                        'status' => true
+                        'message' => $message,
+                        'status' => $status
                     ], $this->successStatus);
                 } else {
                     $user_data->access_token = $accessToken;
@@ -261,8 +277,8 @@ class LoginRegisterController extends Controller
                         'bank_data' => $bank_data,
                         'vehicle_data' => $vehicle_datas,
                         'address_data' => $address_data,
-                        'message' => 'success',
-                        'status' => true
+                        'message' => $message,
+                        'status' => $status
                     ], $this->successStatus);
                 }
             } else {

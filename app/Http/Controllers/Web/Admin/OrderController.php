@@ -16,10 +16,12 @@ use App\Model\restaurent_detail;
 use App\Model\Notification;
 use App\Model\order;
 use App\Model\OrderEvent;
+use App\Model\payment_gateway_txn;
 use App\Model\user_address;
 use Response;
 use Session;
 use DataTables;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
@@ -31,7 +33,7 @@ class OrderController extends Controller
 
         $orders = new order;
         $order_data = $orders->allOrderPaginationData()
-                ->with('userAddress.userDetails','restaurentDetails.restroAddress','cart.cartItems.menuItems','orderEvent.reason');
+            ->with('userAddress.userDetails', 'restaurentDetails.restroAddress', 'cart.cartItems.menuItems', 'orderEvent.reason');
 
         if ($request->ajax()) {
             return Datatables::of($order_data)
@@ -39,9 +41,9 @@ class OrderController extends Controller
                 ->addColumn('action', function ($row) {
                     $btn = '';
                     $btn .= '<a href="viewOrder?odr_id=' . base64_encode($row->id) . '" class="btn btn-outline-warning btn-sm btn-round waves-effect waves-light ">View</a>';
-                    // if ($row->payment_type == 1 && $row->payment_status == 1) {
-                    //     $btn .= '<a href="orderPaid?odr_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Make Order Paid</a>';
-                    // }
+                    if ($row->payment_type == 1 && $row->payment_status == 1) {
+                        $btn .= '<a href="orderPaid?odr_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Make Order Paid</a>';
+                    }
                     return $btn;
                 })
                 ->addColumn('created_at', function ($row) {
@@ -129,7 +131,7 @@ class OrderController extends Controller
         $order_id = base64_decode(request('odr_id'));
         $orders = new order;
         $order_data = $orders->allOrderPaginationDataById($order_id)
-        ->with('userAddress.userDetails','restaurentDetails.restroAddress','cart.cartItems.menuItems','orderEvent.reason');
+            ->with('userAddress.userDetails', 'restaurentDetails.restroAddress', 'cart.cartItems.menuItems', 'orderEvent.reason');
 
         $user['currency'] = $this->currency;
 
@@ -231,14 +233,72 @@ class OrderController extends Controller
             }
         }
         $event_data = json_encode($event_data);
-            $event_data = json_decode($event_data);
+        $event_data = json_decode($event_data);
 
-            // dd($order_data->toArray());
-            // dd($order_data->restaurentDetails->name);
-            // $order_data->restaurent_details->name
-        return view('admin.viewOrder')->with(['data' => $user,
-                                            'order_data' => $order_data,
-                                            'event_data' => $event_data,
-                                            'add_datas' => $add_datas]);
+        // dd($order_data->toArray());
+        // dd($order_data->restaurentDetails->name);
+        // $order_data->restaurent_details->name
+        return view('admin.viewOrder')->with([
+            'data' => $user,
+            'order_data' => $order_data,
+            'event_data' => $event_data,
+            'add_datas' => $add_datas
+        ]);
+    }
+
+    public function viewOrderPaid(Request $request)
+    {
+        $user = Auth::user();
+        $order_id = base64_decode(request('odr_id'));
+        $orders = new order;
+        $order_data = $orders->allOrderPaginationDataById($order_id)->first();
+        // dd($order_data->first()->toArray());
+        return view('admin.changeOrderPaidStatus')->with([
+            'data' => $user,
+            'order_data' => $order_data
+        ]);
+    }
+
+    public function orderPaidProcess(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'txn_id' => 'required|string',
+
+        ]);
+        if (!$validator->fails()) {
+            $user = Auth::user();
+            $order_id = base64_decode(request('odr_id'));
+            $data = $request->toarray();
+            $txn_array = [
+                'txn_id' => $data['txn_id'],
+                'user_id' => $data['user_id'],
+                'txn_type' => 1,
+                'amount' => $data['total_amount'],
+                'status' => 1,
+                'payment_type' => 1,
+                'order_id' => $data['id']
+            ];
+            // Start transaction
+            DB::beginTransaction();
+            // Run Queries
+            $orders = new order();
+            $payment_status = 2;
+            $order_status_update = $orders->updatePaymentStatus($data['id'], $payment_status);
+            $payment_gateway_txns = new payment_gateway_txn();
+            $txn_done = $payment_gateway_txns->insertUpdateTxn($txn_array);
+            if ($order_status_update && $txn_done) {
+                Session::flash('message', 'Paid Status Updated !');
+                //Commit
+                DB::commit();
+                return redirect('adminfimihub/customerOrder');
+            } else {
+                Session::flash('message', 'Something Went Wrong !');
+                //rollback
+                DB::rollBack();
+                return redirect()->back()->withInput();
+            }
+        } else {
+            return redirect()->back()->withInput()->withErrors($validator);
+        }
     }
 }
