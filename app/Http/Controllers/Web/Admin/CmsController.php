@@ -74,9 +74,9 @@ class CmsController extends Controller
     public function addSliderPage(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'text1' => 'required|string',
-            'text2' => 'required|string',
-            'link' => 'required|url',
+            'text1' => 'string',
+            'text2' => 'string',
+            'link' => 'url',
             'media' => 'required|mimes:png,jpg,jpeg|max:8192',
         ]);
         if (!$validator->fails()) {
@@ -109,5 +109,18 @@ class CmsController extends Controller
         } else {
             return redirect()->back()->withInput()->withErrors($validator);
         }
+    }
+
+    public function deleteSliderCms(Request $request){
+        $slider_id = base64_decode(request('slider_id'));
+
+        $slider_cms = new slider_cms;
+        $delete_slider = array();
+        $delete_slider['id'] = $slider_id;
+
+        $delete_slider = $slider_cms->deleteSliderCms($delete_slider);
+        Session::flash('message', 'Slider Deleted Successfully !');
+
+        return redirect()->back();
     }
 }

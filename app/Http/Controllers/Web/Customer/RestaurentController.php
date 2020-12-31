@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Http\Traits\GetBasicPageDataTraits;
 use Illuminate\Http\Request;
 //custom import
 use App\User;
@@ -19,9 +20,13 @@ use Session;
 
 class RestaurentController extends Controller
 {
+    use GetBasicPageDataTraits;
     public function getRestaurentDetails(Request $request)
     {
         $user = Auth::user();
+
+        $user = $this->getBasicCount($user);
+        // dd($user);
         $resto_id = base64_decode(request('resto_id'));
         $restaurent_detail = new restaurent_detail;
         $resto_data = $restaurent_detail->getRestoDataOnId($resto_id);
@@ -51,7 +56,7 @@ class RestaurentController extends Controller
         }
         // dd($menu_data);
         $menu_cat = $menu_list->menuCategory($resto_id);
-        $user['currency']=$this->currency;
+        $user->currency=$this->currency;
         return view('customer.menuList')->with(['user_data'=>$user,
                                                 'menu_data'=>$menu_data,
                                                 'menu_cat'=>$menu_cat,

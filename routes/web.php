@@ -39,9 +39,19 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
     Route::get('/register', function () {
         return view('customer.auth.register');
     });
+    // About Us Page
+    Route::get('/aboutUsPage', 'Web\Customer\CmsController@indexAboutUsPage');
+    // Card Policy Page
+    Route::get('/cardPolicy', 'Web\Customer\CmsController@indexCardPolicy');
+    // T & C Page
+    Route::get('/T&C', 'Web\Customer\CmsController@indexTandC');
     // Partner with us page
     Route::get('/partnerWithUs', function () {
         return view('customer.auth.partnerRegister');
+    });
+    // Test Payment page
+    Route::get('/testPayment', function () {
+        return view('customer.testPaymentPage');
     });
     // Partner with us Process
     Route::post('/partnerRegisterProcess', 'Web\Customer\DashboardController@partnerRegister');
@@ -66,7 +76,8 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
     // Customer Subscribed
     Route::post('subscribeProcess', 'Web\Customer\DashboardController@subscribe');
 
-
+    Route::get('/autocomplete', 'DashboardController@index');
+    Route::post('/autocomplete/fetch', 'DashboardController@fetch')->name('autocomplete.fetch');
     //========================================== Session Customer Auth Routes ===================================================
 
     Route::group(['middleware' => 'customerauth'], function () {
@@ -95,7 +106,7 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
         Route::get('myOrder', 'Web\Customer\UserController@getMyOrderPage');
         //Terms and condition Page
         Route::get('termsCondition', 'Web\Customer\UserController@getTermsConditionPage');
-        //Terms and condition Page
+        //FAQ Page
         Route::get('FAQ', 'Web\Customer\UserController@getFaqPage');
         //Legal Information Page
         Route::get('legalInformation', 'Web\Customer\UserController@getLegalInformationPage');
@@ -107,6 +118,10 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
         Route::get('addMenuItem', 'Web\Customer\CartController@addToCart');
         //Subtract Menu Item To Cart
         Route::get('subtractMenuItem', 'Web\Customer\CartController@removeFromCart');
+        //Add Custom Menu Item To Cart
+        Route::get('addCustomMenuItem', 'Web\Customer\CartController@addToCartCustom');
+        //Subtract Custom Menu Item To Cart
+        Route::get('subtractCustomMenuItem', 'Web\Customer\CartController@removeFromCartCustom');
         //Add default address
         Route::get('addDefaultAddress', 'Web\Customer\AddressController@addToDefault');
         //Delete address
@@ -164,12 +179,22 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
         Route::get('rejectOrder', 'Web\Restaurent\OrderController@rejectOrder');
         //Packed Customer Order
         Route::get('packedOrder', 'Web\Restaurent\OrderController@packedOrder');
+        //View Customer Order
+        Route::get('viewOrder', 'Web\Restaurent\OrderController@viewOrder');
         //Delete Dish
         Route::get('deleteDish', 'Web\Restaurent\RestaurentController@deleteMenuList');
         //Edit Dish
         Route::get('editDish', 'Web\Restaurent\RestaurentController@editMenu');
         //Edit Dish Prcoess
         Route::post('editDishProcess', 'Web\Restaurent\RestaurentController@editMenuProcess');
+        // Add ON List
+        Route::get('addOn', 'Web\Restaurent\RestaurentController@getAddOn');
+        // Add ON insert
+        Route::post('createAddOn', 'Web\Restaurent\RestaurentController@addOnProcess');
+        //Delete Add ON
+        Route::get('deleteAddOn', 'Web\Restaurent\RestaurentController@deleteCustomization');
+        //Edit Add ON
+        Route::get('editAddOn', 'Web\Restaurent\RestaurentController@editCustomization');
 
     });
 
@@ -256,6 +281,20 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
         Route::get('slider', 'Web\Admin\CmsController@getSliderPage');
         // Add Slider
         Route::post('addSlider', 'Web\Admin\CmsController@addSliderPage');
+        //Delete Slider Cms
+        Route::get('deleteSliderCms', 'Web\Admin\CmsController@deleteSliderCms');
+        //All Customer Order List
+        Route::get('customerOrder', 'Web\Admin\OrderController@getCustomerOrderList');
+        //View Customer Order
+        Route::get('viewOrder', 'Web\Admin\OrderController@viewOrder');
+        //View Order Set Txn Page
+        Route::get('orderPaid', 'Web\Admin\OrderController@viewOrderPaid');
+        //Set Txn Process
+        Route::post('changePaidStatus', 'Web\Admin\OrderController@orderPaidProcess');
+        // Pending Restaurent Partner Requests
+        Route::get('pendingRider', 'Web\Admin\RiderController@pendingRider');
+        // Approve Pending Restaurent Partner Requests
+        Route::get('approveRider', 'Web\Admin\RiderController@approveRider');
     });
 
 });

@@ -9,7 +9,7 @@ use App\User;
 trait LatLongRadiusScopeTrait
 {
 
-    public $max_distance_km = 25;
+    public $max_distance_km = 100;
     /*
     *  find the n closest locations
     *  @param float $lat latitude of the po+int of interest
@@ -129,13 +129,14 @@ trait LatLongRadiusScopeTrait
             //     // ->where('oe.user_id', Auth::id());
             // })
             ->where('users.user_type', 2)
+            ->where('users.status', 1)
             ->having('distance', '<=', $max_distance )
             ->whereNotNull('ua.user_id')
             ->orderBy('distance', 'ASC' )
             ->groupBy('users.id');
     }
 
-     /*
+    /*
     *  find the n closest locations
     *  @param float $lat latitude of the po+int of interest
     *  @param float $lng longitude of the point of interest
@@ -166,7 +167,7 @@ trait LatLongRadiusScopeTrait
         *  Generate the select field for disctance
         */
         $disctance_select = sprintf(
-                "restaurent_details.*,ua.latitude,ua.longitude,ua.id as addres_id, ( %d * acos( cos( radians(%s) ) " .
+                "restaurent_details.*,ua.latitude,ua.longitude,ua.id as addres_id,COUNT(ml.restaurent_id) AS dish_count, ( %d * acos( cos( radians(%s) ) " .
                         " * cos( radians( ua.latitude ) ) " .
                         " * cos( radians( ua.longitude ) - radians(%s) ) " .
                         " + sin( radians(%s) ) * sin( radians( ua.latitude ) ) " .
@@ -178,13 +179,17 @@ trait LatLongRadiusScopeTrait
                 $lng,
                 $lat
             );
-        return restaurent_detail::leftjoin('user_address as ua', 'restaurent_details.id', '=', 'ua.user_id')
-            // ->rightJoin('orders as o', 'user_address.id', '=', 'o.address_id')
+        return restaurent_detail::leftjoin('user_address as ua', 'restaurent_details.user_id', '=', 'ua.user_id')
+            ->leftJoin('menu_list as ml', function($query) {
+                return $query->on('restaurent_details.id', '=', 'ml.restaurent_id')->where('ml.visibility', 0);
+            })
             ->select(DB::raw($disctance_select) )
             // ->where('users.user_type', 2)
             ->having('distance', '<=', $max_distance )
             ->whereNotNull('ua.user_id')
+            ->having('dish_count', '>', 0)
             ->orderBy('distance', 'ASC' )
+            ->groupBy('ml.restaurent_id')
             ->groupBy('restaurent_details.id');
     }
 }

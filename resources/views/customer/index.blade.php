@@ -5,7 +5,7 @@
         @if($s_data->media != NULL)
         <div class="slide-item">
             <div class="bg-img">
-                <img src="{{url('asset/customer/assets/images/banner.png')}}" alt="banner">
+                <img src="{{url($s_data->media)}}" alt="banner">
             </div>
             <div class="content-wrap">
                 <div class="container">
@@ -16,24 +16,55 @@
                         </div>
                         <br>
                         @if($s_data->link != NULL)
-                            <a href="{{$s_data->link ?? ''}}" class="btn btn-lg btn-white">See More</a>
-                            @endif
-                        <div class="search-bar">
-                            <div class="location-selector">
-                                <span>Delhi NCR</span>
-                            </div>
-                            <div class="search-input">
-                                <input type="text" placeholder="Search for restaurant, groceries,essentials & errand">
-                                <div class="search-btn"></div>
-                            </div>
+                        <a href="{{$s_data->link ?? ''}}" class="btn btn-lg btn-white">See More</a>
+                        @endif
+                        {{-- <form role="form" method="POST" action="{{ url('/saveAddress') }}" onSubmit="return checkform()"
+                            class="form save_adrs">
+                            @csrf
+                            <div class="search-bar"> --}}
+                                {{-- <div id="address-map-container" style="width:0%;height:0px; margin-bottom: 0px;">
+                                        <div style="width: 0%; height: 0%;" id="address-map1"></div>
+                                    </div> --}}
+                                {{-- <div class="location-selector">
+                                    <span>
+                                        <input id="autocomplete" placeholder="Enter your address" onFocus="geolocate()"
+                                            type="text"> --}}
+
+                                        {{-- <div class="field-wrap">
+                                            <div class="address_box_dyn">
+                                                <input type="text" id="address-input" name="address_address"
+                                                    placeholder="Search Location" class="map-input1">
+
+                                            </div>
+                                            <input type="hidden" name="address_latitude" id="address-latitude1"
+                                                value="0" />
+                                            <input type="hidden" name="address_longitude" id="address-longitude1"
+                                                value="0" />
+                                            @if($errors->has('address_address'))
+                                            <div class="error">{{ $errors->first('address') }}</div>
+                                @endif
+                                @if(Session::has('address_error'))
+                                <div class="error">{{ Session::get('address_error') }}</div>
+                                @endif
+                            </div> --}}
+                            {{-- </span>
+                    </div>
+
+                    <div class="search-input">
+                        <input type="text" id="filter_name" placeholder="Search for restaurant, food">
+
+                        <div class="search-btn">
+                            <input type="submit" value=" ">
                         </div>
                     </div>
                 </div>
+                </form> --}}
             </div>
         </div>
-        @endif
-        @endforeach
-
+    </div>
+    </div>
+    @endif
+    @endforeach
 
     </div>
 </section>
@@ -166,4 +197,34 @@
         </div>
     </div>
 </section>
+<script
+    src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}&libraries=places&callback=initAutocomplete"
+    async defer></script>
 @include('customer.include.footer')
+
+<script>
+    $(document).ready(function() {
+        $('#filter_name').keyup(function() {
+            var query = $(this).val();
+            if (query != '') {
+                var _token = $('input[name="_token"]').val();
+                $.ajax({
+                    url: "{{ route('autocomplete.fetch') }}",
+                    method: "POST",
+                    data: {
+                        query: query,
+                        _token: _token
+                    },
+                    success: function(data) {
+                        $('#countryList').fadeIn();
+                        $('#countryList').html(data);
+                    }
+                });
+            }
+        });
+        $(document).on('click', 'li', function() {
+            $('#filter_name').val($(this).text());
+            $('#countryList').fadeOut();
+        });
+    });
+</script>

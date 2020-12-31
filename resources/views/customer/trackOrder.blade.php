@@ -13,7 +13,7 @@
                 <p>{{$resto_data->name ?? ''}}</p>
                 <p>Order ID- {{$order_data->order_id ?? ''}}</p>
             </div>
-            <p>Arriving Today at 5:20</p>
+            {{-- <p>Arriving Today at 5:20</p> --}}
         </div>
         <div class="order_progress">
             <div class="row">
@@ -23,7 +23,19 @@
                         <li class="{{ in_array($order_data->order_status,array(2)) ? 'order_cancel' : 'order_status_hide'}} "><span></span> Cancelled</li>
                         <li class="{{ in_array($order_data->order_status,array(4)) ? 'order_cancel' : 'order_status_hide rest_den'}} "><span></span> Restaurant Denied</li>
                         <li class="{{ in_array($order_data->order_status,array(5,6,7,8,9,10,11,12)) ? 'active' : ''}}"><span></span> Order placed</li>
+                        @if(isset($order_event_data->rider->order_status) && $order_event_data->rider->order_status >= 1 && $order_data->order_status < 6)
+                        <li class="{{ in_array($order_event_data->rider->order_status,array(1,2)) ? 'active' : ''}}"><span></span> Order has been accepted by {{$order_event_data->rider_details->name ?? '---'}}</li>
+                        <li class="{{ in_array($order_event_data->rider->order_status,array(1,2)) ? 'active' : ''}}"><span></span> {{$order_event_data->rider_details->name ?? '---'}} is one is way to the restaurant </li>
+                        <li class="{{ in_array($order_event_data->rider->order_status,array(2)) ? 'active' : ''}}"><span></span> {{$order_event_data->rider_details->name ?? '---'}} has arrived at restaurant</li>
                         <li class="{{ in_array($order_data->order_status,array(6,7,8,9,10,11,12)) ? 'active' : ''}}"><span></span> Order packed</li>
+                        @elseif(isset($order_event_data->rider->order_status) && $order_event_data->rider->order_status >= 1 && $order_data->order_status >= 6)
+                        <li class="{{ in_array($order_data->order_status,array(6,7,8,9,10,11,12)) ? 'active' : ''}}"><span></span> Order packed</li>
+                        <li class="{{ in_array($order_event_data->rider->order_status,array(1,2)) ? 'active' : ''}}"><span></span> Order has been accepted by {{$order_event_data->rider_details->name ?? '---'}}</li>
+                        <li class="{{ in_array($order_event_data->rider->order_status,array(1,2)) ? 'active' : ''}}"><span></span> {{$order_event_data->rider_details->name ?? '---'}} is one is way to the restaurant </li>
+                        <li class="{{ in_array($order_event_data->rider->order_status,array(2)) ? 'active' : ''}}"><span></span> {{$order_event_data->rider_details->name ?? '---'}} has arrived at restaurant</li>
+                        @else
+                        <li class="{{ in_array($order_data->order_status,array(6,7,8,9,10,11,12)) ? 'active' : ''}}"><span></span> Order packed</li>
+                        @endif
                         <li class="{{ in_array($order_data->order_status,array(8)) ? 'order_cancel' : 'order_status_hide'}} "><span></span> Cancelled</li>
                         <li class="{{ in_array($order_data->order_status,array(7,8,9,10,11,12)) ? 'active' : ''}}"><span></span> Order has been picked by {{$order_event_data->rider_details->name ?? '---'}}</li>
                         <li class="{{ in_array($order_data->order_status,array(9,10)) ? 'active' : ''}} m-0"><span></span> Order delivered</li>

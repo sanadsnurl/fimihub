@@ -76,37 +76,56 @@
 
 <footer class="footer">
     <div class="md_container">
-        <div class="row-wrap">
+        <div class="row row-wrap">
             <div class="col col-content">
                 <h4><a href="./index.html">Fimihub</a></h4>
                 <div class="content-wrap">
-                    <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
-                        ut labore et dolore</p>
-                    <p>© 2020—2021, Lorem ipsum dolor sit</p>
+                    <p>FiMi Hub is the most convenient way for customers to get the food
+                        they love, items they want, tasks they need done, or “Go for a lime”
+                        anytime!</p>
+                    <p>© 2020-2021, FiMi Hub</p>
                 </div>
             </div>
             <div class="col col-links">
-                <h5>Navigation</h5>
+                <h5>FAQ's</h5>
                 <ul class="links">
                     <li>
-                        <a href="#">Menu One</a>
+                        <a href="#">Q&A for Merchants</a>
                     </li>
                     <li>
-                        <a href="#">Menu Two</a>
+                        <a href="#">Q&A for Customers </a>
                     </li>
                     <li>
-                        <a href="#">Menu Three</a>
+                        <a href="#">Q&A for Delivery & Shopper Partners </a>
+                    </li>
+
+                </ul>
+            </div>
+            <div class="col col-links">
+                <h5>Other Page content</h5>
+                <ul class="links">
+                    <li>
+                        <a href="{{url('asset/customer/assets/document/Privacy Policy.pdf')}}">Privacy Policy </a>
                     </li>
                     <li>
-                        <a href="#">Menu Four</a>
+                        <a href="{{url('T&C')}}">Terms & Conditions </a>
+                    </li>
+                    <li>
+                        <a href="{{url('asset/customer/assets/document/MERCHANT AGREEMENT- FIMI HUB.pdf')}}">Merchant Terms & Conditions </a>
+                    </li>
+                    <li>
+                        <a href="{{url('aboutUsPage')}}">About Us </a>
+                    </li>
+                    <li>
+                        <a href="{{url('cardPolicy')}}">Credit/Debit Card Security Policy </a>
                     </li>
                 </ul>
             </div>
             <div class="col col-info">
                 <h5>Contacts</h5>
-                <p>Country, city, street name 44</p>
-                <p>+1 (234) 567-89-90</p>
-                <p>info@collector.com</p>
+                <p>Main Street, Claremont P.O. St. Ann, Jamaica</p>
+                {{-- <p>+1 (234) 567-89-90</p> --}}
+                <p>support@fimihub.com</p>
             </div>
             <div class="col col-form">
                 <h5>Newsletter</h5>
@@ -123,17 +142,17 @@
                 </form>
                 <ul class="social-links">
                     <li>
-                        <a href="#">
+                        <a href="#" target="_balnk">
                             <img src="{{url('asset/customer/assets/images/twitter.svg')}}" alt="facebook">
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="https://www.facebook.com/fimi.hub.3" target="_balnk">
                             <img src="{{url('asset/customer/assets/images/facebook.svg')}}" alt="facebook">
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="#" target="_balnk">
                             <img src="{{url('asset/customer/assets/images/instagram.svg')}}" alt="instagram">
                         </a>
                     </li>
@@ -313,7 +332,7 @@
     </div>
 </div>
 <!-- reviews modal -->
-@if(isset($order_event_data) && $order_event_data!=NULL)
+@if(isset($order_event_data) && $order_event_data!=NULL && isset($order_event_data->rider->id) && isset($order_event_data->restaurant->id))
 
 <div class="modal fade review_mdl" id="review">
     <div class="modal-dialog">
@@ -406,7 +425,7 @@
 <script src="https://cdn.jsdelivr.net/jquery.validation/1.15.0/jquery.validate.min.js"></script>
 
 <script type="text/javascript" src="{{url('asset/customer/assets/scripts/mapInput.js')}}"></script>
-<script type="text/javascript" src="{{url('asset/customer/assets/scripts/currentLocation.js')}}"></script>
+<script type="text/javascript" src="{{url('asset/customer/assets/scripts/searchMap.js')}}"></script>
 <script
     src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}&libraries=places&callback=initialize"
     async defer></script>

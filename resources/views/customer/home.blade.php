@@ -6,7 +6,7 @@
         @if($s_data->media != NULL)
         <div class="slide-item">
             <div class="bg-img">
-                <img src="{{url('asset/customer/assets/images/banner.png')}}" alt="banner">
+                <img src="{{url($s_data->media)}}" alt="banner">
             </div>
             <div class="content-wrap">
                 <div class="container">
@@ -19,15 +19,15 @@
                         @if($s_data->link != NULL)
                             <a href="{{$s_data->link ?? ''}}" class="btn btn-lg btn-white">See More</a>
                             @endif
-                        <div class="search-bar">
-                            <div class="location-selector">
-                                <span>Delhi NCR</span>
-                            </div>
-                            <div class="search-input">
+                        {{-- <div class="search-bar"> --}}
+                            {{-- <div class="location-selector">
+                                <span><input type="text" name="city" placeholder="Search Location"></span>
+                            </div> --}}
+                            {{-- <div class="search-input">
                                 <input type="text" placeholder="Search for restaurant, groceries,essentials & errand">
                                 <div class="search-btn"></div>
-                            </div>
-                        </div>
+                            </div> --}}
+                        {{-- </div> --}}
                     </div>
                 </div>
             </div>

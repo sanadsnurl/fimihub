@@ -25,7 +25,7 @@
 <!-- waves effect js -->
 <script src="{{url('asset/admin/assets/js/waves.js')}}"></script>
 <!-- sidebar-menu js -->
-<script src="{{url('asset/admin/assets/js/sidebar-menu.js')}}"></script>
+{{-- <script src="{{url('asset/admin/assets/js/sidebar-menu.js')}}"></script> --}}
 <!-- Custom scripts -->
 <script src="{{url('asset/admin/assets/js/app-script.js')}}"></script>
 

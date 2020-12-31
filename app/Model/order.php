@@ -127,7 +127,7 @@ class order extends Model
 
     public function restroAddress()
     {
-        return $this->belongsTo(user_address::class, 'restaurent_id');
+        return $this->belongsTo(user_address::class, 'user_id');
     }
     public function orderEvent()
     {
@@ -140,6 +140,10 @@ class order extends Model
 
     public function updateOrderStatus($orderId, $status){
         return $this->where('id', $orderId)->update(['order_status'=> $status]);
+    }
+
+    public function updatePaymentStatus($orderId, $payment_status){
+        return $this->where('id', $orderId)->update(['payment_status'=> $payment_status]);
     }
 
     public function getOrderData($order_id)
@@ -211,10 +215,17 @@ class order extends Model
 
     public function allOrderPaginationData()
     {
-        $menu_list=DB::table('orders')
-                ->where('orders.visibility', 0)
-                ->where('orders.payment_status',2)
-                ->select('orders.*')
+        $menu_list=$this->select('orders.*')
+                ->orderBy('orders.created_at','DESC');
+
+        return $menu_list;
+
+    }
+
+    public function allOrderPaginationDataByID($order_id)
+    {
+        $menu_list=$this->select('orders.*')
+                ->where('orders.id', $order_id)
                 ->orderBy('orders.created_at','DESC');
 
         return $menu_list;

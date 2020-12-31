@@ -58,6 +58,33 @@ class CreateOrdersTable extends Migration
             $table->timestamps();
         });
 
+        Schema::create('cart_customizations', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
+            $table->charset = 'utf16';
+            $table->collation = 'utf16_general_ci';
+            $table->increments('id');
+            // foreign key of users table
+            $table->integer('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            // foreign key of carts table
+            $table->integer('cart_id')->unsigned();
+            $table->foreign('cart_id')->references('id')->on('carts')->onDelete('cascade')->onUpdate('cascade');
+            // foreign key of menu_list table
+            $table->integer('menu_id')->unsigned();
+            $table->foreign('menu_id')->references('id')->on('menu_list')->onDelete('cascade')->onUpdate('cascade');
+            // foreign key of cart_submenus table
+            $table->integer('cart_submenu_id')->unsigned();
+            $table->foreign('cart_submenu_id')->references('id')->on('cart_submenus')->onDelete('cascade')->onUpdate('cascade');
+            // foreign key of cart_submenus table
+            $table->integer('custom_id')->unsigned();
+            $table->foreign('custom_id')->references('id')->on('menu_customizations')->onDelete('cascade')->onUpdate('cascade');
+
+            $table->string('quantity')->nullable();
+            $table->tinyInteger('visibility')->default('0');
+            $table->timestamp('deleted_at', 0)->nullable();
+            $table->timestamps();
+        });
+
         Schema::create('orders', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->charset = 'utf16';
@@ -99,7 +126,7 @@ class CreateOrdersTable extends Migration
                                                     11-assigned to rider
                                                     12-rider on the way')->nullable();
             $table->tinyInteger('payment_status')->comment('1-pending,2-success,3-failed')->nullable();
-            $table->tinyInteger('payment_type')->comment('1-stripe,2-paypal,3-COD');
+            $table->tinyInteger('payment_type')->comment('1-bank,2-paypal,3-COD');
             $table->tinyInteger('visibility')->default('0');
             $table->timestamp('deleted_at', 0)->nullable();
             $table->timestamps();
@@ -138,6 +165,7 @@ class CreateOrdersTable extends Migration
     public function down()
     {
         Schema::dropIfExists('order_events');
+        Schema::dropIfExists('cart_customizations');
         Schema::dropIfExists('orders');
         Schema::dropIfExists('cart_submenus');
         Schema::dropIfExists('carts');

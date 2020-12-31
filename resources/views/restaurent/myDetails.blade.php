@@ -175,7 +175,7 @@
                             </div>
 
                             <div class="form-group row">
-                                <label for="input-4" class="col-sm-2 col-form-label">Pincode</label>
+                                <label for="input-4" class="col-sm-2 col-form-label">Zip Code</label>
                                 <div class="col-sm-10">
                                     <input type="number" class="form-control" id="input-4" name="pincode"
                                         value="{{$resto_data->pincode ?? ''}}">

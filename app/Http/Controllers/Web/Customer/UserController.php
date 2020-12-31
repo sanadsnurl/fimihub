@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Http\Traits\GetBasicPageDataTraits;
 use Illuminate\Http\Request;
 //custom import
 use App\User;
@@ -10,6 +11,8 @@ use App\Model\user_address;
 use App\Model\contactUs;
 use App\Model\order;
 use App\Model\Cms;
+use App\Model\cart_submenu;
+use App\Model\cart;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -21,9 +24,11 @@ use File;
 
 class UserController extends Controller
 {
+    use GetBasicPageDataTraits;
     public function index(Request $request){
         $user=Auth::user();
         $user_data = auth()->user()->userByIdData($user->id);
+        $user_data = $this->getBasicCount($user);
         return view('customer.myAccount')->with(['user_data'=>$user_data]);
     }
 
@@ -116,6 +121,8 @@ class UserController extends Controller
     public function getChangePasswordPage(Request $request){
         $user=Auth::user();
         $user_data = auth()->user()->userByIdData($user->id);
+        $user_data = $this->getBasicCount($user);
+
         return view('customer.changePassword')->with(['user_data'=>$user_data]);
     }
 
@@ -152,6 +159,8 @@ class UserController extends Controller
     public function getContactUsPage(Request $request){
         $user=Auth::user();
         $user_data = auth()->user()->userByIdData($user->id);
+        $user_data = $this->getBasicCount($user);
+
         return view('customer.contactUs')->with(['user_data'=>$user_data]);
     }
 
@@ -183,6 +192,8 @@ class UserController extends Controller
     public function getSaveAddressPage(Request $request){
         $user=Auth::user();
         $user_data = auth()->user()->userByIdData($user->id);
+        $user_data = $this->getBasicCount($user);
+
         $user_address = new user_address();
         $user_add = $user_address->getUserAddress($user->id);
 
@@ -192,6 +203,7 @@ class UserController extends Controller
     public function getMyOrderPage(Request $request){
         $user=Auth::user();
         $user_data = auth()->user()->userByIdData($user->id);
+        $user_data = $this->getBasicCount($user);
 
         $orders = new order;
         $order_data = $orders->allUserOrderPastData($user->id);
@@ -200,9 +212,11 @@ class UserController extends Controller
         }
         $current_order_data = $orders->allUserCurrentPastData($user->id);
         foreach($current_order_data as $c_order){
+
             $c_order->ordered_menu = json_decode($c_order->ordered_menu);
         }
-        $user_data->currency=$this->currency;
+        $user_data['currency']=$this->currency;
+        // dd($current_order_data);
         return view('customer.myOrder')->with(['user_data'=>$user_data,
                                             'order_data'=>$order_data,
                                             'current_order_data'=>$current_order_data]);
@@ -211,6 +225,8 @@ class UserController extends Controller
     public function getTermsConditionPage(Request $request){
         $user=Auth::user();
         $user_data = auth()->user()->userByIdData($user->id);
+        $user_data = $this->getBasicCount($user);
+
         $cmsObj = new Cms;
         $tnc_data = $cmsObj->getCms(2)->get();
 
@@ -220,6 +236,8 @@ class UserController extends Controller
     public function getFaqPage(Request $request){
         $user=Auth::user();
         $user_data = auth()->user()->userByIdData($user->id);
+        $user_data = $this->getBasicCount($user);
+
         $cmsObj = new Cms;
         $faq_data = $cmsObj->getCms(3)->get();
 
@@ -229,6 +247,8 @@ class UserController extends Controller
     public function getLegalInformationPage(Request $request){
         $user=Auth::user();
         $user_data = auth()->user()->userByIdData($user->id);
+        $user_data = $this->getBasicCount($user);
+
         $cmsObj = new Cms;
         $legal_data = $cmsObj->getCms(4)->get();
         return view('customer.legalInformation')->with(['user_data'=>$user_data,'legal_data'=>$legal_data]);
@@ -237,6 +257,8 @@ class UserController extends Controller
     public function getAboutUsPage(Request $request){
         $user=Auth::user();
         $user_data = auth()->user()->userByIdData($user->id);
+        $user_data = $this->getBasicCount($user);
+
         $cmsObj = new Cms;
         $about_data = $cmsObj->getCms(1)->get();
 

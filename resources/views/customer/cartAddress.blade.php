@@ -61,8 +61,7 @@
                             </a>
                             <a href="{{url('addDefaultAddress')}}{{'?add_id='}}{{base64_encode($user_add->id)}}"
                                 class="f">
-                                <button type="button" class="btn_purple deliver_btn hover_effect1">Set
-                                    Default</button>
+                                <button type="button" class="btn_purple deliver_btn hover_effect1">Deliver Here</button>
                             </a>
                         </div>
                     </div>

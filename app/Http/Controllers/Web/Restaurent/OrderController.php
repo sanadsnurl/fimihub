@@ -45,13 +45,13 @@ class OrderController extends Controller
             return Datatables::of($order_data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
+                    $btn = '';
+                    $btn .= '<a href="viewOrder?odr_id=' . base64_encode($row->id) . '" class="btn btn-outline-warning btn-sm btn-round waves-effect waves-light ">View</a>';
                     if ($row->order_status == 5) {
-                        $btn = '<a href="packedOrder?odr_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Ready For Pick-Up</a>';
+                        $btn .= '<a href="packedOrder?odr_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Ready For Pick-Up</a>';
                     } elseif ($row->order_status == 3) {
-                        $btn = '<a href="acceptOrder?odr_id=' . base64_encode($row->id) . '" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Accept</a>
+                        $btn .= '<a href="acceptOrder?odr_id=' . base64_encode($row->id) . '" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Accept</a>
                         <a href="rejectOrder?odr_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Reject</a>';
-                    } else {
-                        $btn = "N.A";
                     }
                     return $btn;
                 })
@@ -60,7 +60,7 @@ class OrderController extends Controller
                 })
                 ->addColumn('payment_type', function ($row) {
                     if ($row->payment_type == 1) {
-                        return "Stripe";
+                        return "Bank Transfer";
                     } elseif ($row->payment_type == 2) {
                         return "Paypal";
                     } elseif ($row->payment_type == 3) {
@@ -96,9 +96,45 @@ class OrderController extends Controller
 
                     foreach ($row->ordered_menu as $ordered_menu) {
                         if ($loop_count == 1) {
-                            $order_menu .= "(" . $ordered_menu->name . " x " . $ordered_menu->quantity . ")";
+                            $order_menu .= "(" . $ordered_menu->name . " x " . $ordered_menu->quantity;
+                            if (isset($ordered_menu->add_on_data) && $ordered_menu->add_on_data != NULL) {
+                                $order_menu .= " [";
+                                $loop_count_add = 1;
+
+
+                                foreach ($ordered_menu->add_on_data as $add_data) {
+                                    if ($add_data->quantity != 0) {
+                                        if ($loop_count == 1) {
+                                            $order_menu .= "(" . $add_data->name . " x " . $add_data->quantity . ")";
+                                        } else {
+                                            $order_menu .= "/(" . $add_data->name . " x " . $add_data->quantity . ")";
+                                        }
+                                        $loop_count_add += 1;
+                                    }
+                                }
+                                $order_menu .= "] ";
+                            }
+                            $order_menu .= ")";
                         } else {
-                            $order_menu .= "/(" . $ordered_menu->name . " x " . $ordered_menu->quantity . ")";
+                            $order_menu .= "/(" . $ordered_menu->name . " x " . $ordered_menu->quantity;
+                            if (isset($ordered_menu->add_on_data) && $ordered_menu->add_on_data != NULL) {
+                                $order_menu .= " [";
+                                $loop_count_add = 1;
+
+
+                                foreach ($ordered_menu->add_on_data as $add_data) {
+                                    if ($add_data->quantity != 0) {
+                                        if ($loop_count == 1) {
+                                            $order_menu .= "(" . $add_data->name . " x " . $add_data->quantity . ")";
+                                        } else {
+                                            $order_menu .= "/(" . $add_data->name . " x " . $add_data->quantity . ")";
+                                        }
+                                        $loop_count_add += 1;
+                                    }
+                                }
+                                $order_menu .= "] ";
+                            }
+                            $order_menu .= ")";
                         }
                         $loop_count += 1;
                     }
@@ -142,11 +178,12 @@ class OrderController extends Controller
         }
         $user_address = new user_address;
         $resto_add = $user_address->getUserAddress($resto_data->user_id);
-        // dd($resto_add);
+
         // ============================================= PUSH NOTIFICATION=======================================
         $push_notification_sender = array();
         $push_notification_sender['device_token'] = $customer_data->device_token;
         $push_notification_sender['title'] = 'Order Accepted';
+        $push_notification_rider['page_token'] = 1;
         $push_notification_sender['notification'] = 'Order Accepted By Restaurent';
 
         $notification_sender = array();
@@ -162,21 +199,24 @@ class OrderController extends Controller
         $lat = $resto_add[0]->latitude;
         $lng = $resto_add[0]->longitude;
         $kmRadius = $this->max_distance_km;
-        $rider = $this->riderClosestOrders($user, $lat, $lng, $kmRadius)->get();
-        foreach ($rider as $rid) {
-            $push_notification_rider = array();
-            $push_notification_rider['device_token'] = $rid->device_token;
-            $push_notification_rider['title'] = 'New Order Request';
-            $push_notification_rider['notification'] = 'New Order By '.$customer_data->name;
+        $rider = $this->closestRiders($user, $lat, $lng, $kmRadius)->get();
 
+        foreach ($rider as $rid) {
+            if (isset($rid->device_token)) {
+                $push_notification_rider = array();
+                $push_notification_rider['device_token'] = $rid->device_token;
+                $push_notification_rider['title'] = 'New Order Request';
+                $push_notification_rider['page_token'] = 1;
+                $push_notification_rider['notification'] = 'New Order By ' . $customer_data->name;
+                $push_notification_rider_result = $this->pushNotification($push_notification_rider);
+            }
             $notification_rider = array();
             $notification_rider['user_id'] = $rid->id;
             $notification_rider['txn_id'] = $order_data->order_id;
             $notification_rider['title'] = 'New Order Request';
-            $notification_rider['notification'] = 'New Order By '.$customer_data->name;
+            $notification_rider['notification'] = 'New Order By ' . $customer_data->name;
             $notification = new Notification();
             $notification_id = $notification->makeNotifiaction($notification_rider);
-            $push_notification_rider_result = $this->pushNotification($push_notification_rider);
         }
         // ==========================================================================================================
 
@@ -207,6 +247,7 @@ class OrderController extends Controller
         $push_notification_sender = array();
         $push_notification_sender['device_token'] = $customer_data->device_token;
         $push_notification_sender['title'] = 'Order Rejected';
+        $push_notification_rider['page_token'] = 3;
         $push_notification_sender['notification'] = 'Order Rejected By Restaurant';
 
         $notification_sender = array();
@@ -232,7 +273,7 @@ class OrderController extends Controller
         $orders = new order;
         $order_data = $orders->getOrderData($order_id);
         $order_status_update = $orders->updateOrderStatus($order_id, $order_status);
-
+        // dd($order_data);
         $user_instanca = new User;
         $customer_data = $user_instanca->userByIdData($order_data->user_id);
 
@@ -243,11 +284,17 @@ class OrderController extends Controller
         $order_event['user_type'] = 2;
         $OrderEvents = new OrderEvent;
         $make_event = $OrderEvents->makeUpdateOrderEvent($order_event);
+
+
         // ============================================= PUSH NOTIFICATION=======================================
-        $push_notification_sender = array();
-        $push_notification_sender['device_token'] = $customer_data->device_token;
-        $push_notification_sender['title'] = 'Order Packed';
-        $push_notification_sender['notification'] = 'Order Packed By Restaurant';
+        if (isset($customer_data->device_token)) {
+            $push_notification_sender = array();
+            $push_notification_sender['device_token'] = $customer_data->device_token;
+            $push_notification_sender['title'] = 'Order Packed';
+            $push_notification_rider['page_token'] = 2;
+            $push_notification_sender['notification'] = 'Order Packed By Restaurant';
+            $push_notification_sender_result = $this->pushNotification($push_notification_sender);
+        }
 
         $notification_sender = array();
         $notification_sender['user_id'] = $customer_data->id;
@@ -256,10 +303,159 @@ class OrderController extends Controller
         $notification_sender['notification'] = 'Order Packed By Restaurant';
         $notification = new Notification();
         $notification_id = $notification->makeNotifiaction($notification_sender);
-        $push_notification_sender_result = $this->pushNotification($push_notification_sender);
+
+
+        //============================= Rider PUSH =======================================
+        $OrderEvents = new OrderEvent;
+        $order_event_data = $OrderEvents->getOrderEvent($order_event);
+
+        foreach ($order_event_data as $oe_data) {
+            if ($oe_data->user_type == 1) {
+                $user_instanca = new User;
+                $rid = $user_instanca->userByIdData($oe_data->user_id);
+
+                $push_notification_rider = array();
+                $push_notification_rider['device_token'] = $rid->device_token;
+                $push_notification_rider['title'] = 'Order Ready For Pick-Up';
+                $push_notification_rider['page_token'] = 2;
+                $push_notification_rider['notification'] = $customer_data->name . ' ,Order Has Been Packed';
+
+                $notification_rider = array();
+                $notification_rider['user_id'] = $rid->id;
+                $notification_rider['txn_id'] = $order_data->order_id;
+                $notification_rider['title'] = 'Order Ready For Pick-Up';
+                $notification_rider['notification'] = $customer_data->name . ', Order Has Been Packed';
+                $notification = new Notification();
+                $notification_id = $notification->makeNotifiaction($notification_rider);
+                $push_notification_rider_result = $this->pushNotification($push_notification_rider);
+            }
+        }
 
         // ==========================================================================================================
 
         return redirect()->back();
+    }
+
+    public function viewOrder(Request $request)
+    {
+        $user = Auth::user();
+        $order_id = base64_decode(request('odr_id'));
+        $restaurent_detail = new restaurent_detail;
+        $resto_data = $restaurent_detail->getRestoData($user->id);
+        if ($resto_data == NULL) {
+            $orders = new order;
+            $order_data = $orders->customerOrderPaginationData(0);
+        } else {
+            $orders = new order;
+            $order_data = $orders->customerOrderPaginationData($resto_data->id);
+        }
+
+        $user['currency'] = $this->currency;
+
+        $order_data = $order_data->where('id', $order_id)->first();
+        if ($order_data != NUll) {
+            $order_menu = "";
+            $loop_count = 1;
+            $order_data->ordered_menu = json_decode($order_data->ordered_menu);
+
+            foreach ($order_data->ordered_menu as $ordered_menu) {
+                if ($loop_count == 1) {
+                    $order_menu .= "(" . $ordered_menu->name . " x " . $ordered_menu->quantity;
+                    if (isset($ordered_menu->add_on_data) && $ordered_menu->add_on_data != NULL) {
+                        $order_menu .= " [";
+                        $loop_count_add = 1;
+
+
+                        foreach ($ordered_menu->add_on_data as $add_data) {
+                            if ($add_data->quantity != 0) {
+                                if ($loop_count == 1) {
+                                    $order_menu .= "(" . $add_data->name . " x " . $add_data->quantity . ")";
+                                } else {
+                                    $order_menu .= "/(" . $add_data->name . " x " . $add_data->quantity . ")";
+                                }
+                                $loop_count_add += 1;
+                            }
+                        }
+                        $order_menu .= "] ";
+                    }
+                    $order_menu .= ")";
+                } else {
+                    $order_menu .= "/(" . $ordered_menu->name . " x " . $ordered_menu->quantity;
+                    if (isset($ordered_menu->add_on_data) && $ordered_menu->add_on_data != NULL) {
+                        $order_menu .= " [";
+                        $loop_count_add = 1;
+
+
+                        foreach ($ordered_menu->add_on_data as $add_data) {
+                            if ($add_data->quantity != 0) {
+                                if ($loop_count == 1) {
+                                    $order_menu .= "(" . $add_data->name . " x " . $add_data->quantity . ")";
+                                } else {
+                                    $order_menu .= "/(" . $add_data->name . " x " . $add_data->quantity . ")";
+                                }
+                                $loop_count_add += 1;
+                            }
+                        }
+                        $order_menu .= "] ";
+                    }
+                    $order_menu .= ")";
+                }
+                $loop_count += 1;
+            }
+
+            $order_data->ordered_menu = $order_menu;
+
+            if ($order_data->order_status == 3) {
+                $order_data->order_status = "Restaurent Approval Needed";
+            } elseif ($order_data->order_status == 5) {
+                $order_data->order_status = "Order Placed";
+            } elseif (in_array($order_data->order_status, array(2, 4, 8))) {
+                $order_data->order_status = "Order Cancelled";
+            } elseif ($order_data->order_status == 6) {
+                $order_data->order_status = "Order Packed";
+            } elseif ($order_data->order_status == 7) {
+                $order_data->order_status = "Order Picked";
+            } elseif ($order_data->order_status == 9) {
+                $order_data->order_status = "Order Recieved";
+            } elseif ($order_data->order_status == 10) {
+                $order_data->order_status = "Order Refunded";
+            } else {
+                $order_data->order_status = "N.A";
+            }
+
+            if ($order_data->payment_type == 1) {
+                $order_data->payment_type = "Bank Transfer";
+            } elseif ($order_data->payment_type == 2) {
+                $order_data->payment_type = "Paypal";
+            } elseif ($order_data->payment_type == 3) {
+                $order_data->payment_type = "COD";
+            } else {
+                $order_data->payment_type = "N.A";
+            }
+
+            $user_address = new user_address;
+            $add_datas = $user_address->getAddressById($order_data->address_id);
+
+            $OrderEvents = new OrderEvent;
+            $order_event_data = $OrderEvents->getOrderEvent($order_id);
+            $event_data = array();
+            foreach ($order_event_data as $o_event) {
+                if ($o_event->user_type == 2) {
+                    $event_data['restaurant'] = $o_event;
+                } elseif ($o_event->user_type == 1) {
+                    $event_data['rider'] = $o_event;
+                    $ride_event_data = auth()->user()->userByIdData($o_event->user_id);
+                    $event_data['rider_details'] = $ride_event_data;
+                }
+            }
+        }
+        $event_data = json_encode($event_data);
+            $event_data = json_decode($event_data);
+
+        // dd($order_data->address_id);
+        return view('restaurent.viewOrder')->with(['data' => $user,
+                                            'order_data' => $order_data,
+                                            'event_data' => $event_data,
+                                            'add_datas' => $add_datas]);
     }
 }

@@ -31,7 +31,7 @@
                                         <th>color</th>
                                         <th>ID-Proof</th>
                                         <th>Address</th>
-                                        <th>Pincode</th>
+                                        <th>Zip Code</th>
                                         <th>Driving License</th>
                                         <th>DL Start Date</th>
                                         <th>DL End Date</th>

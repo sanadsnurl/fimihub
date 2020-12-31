@@ -16,6 +16,7 @@ use App\Http\Requests\UpdateLoginRequest;
 use App\Http\Requests\UserForgetPasswordRequest;
 use App\Http\Requests\UpdateDeviceTokenRequest;
 use App\Http\Requests\UpdatePasswordRequest;
+use App\Http\Requests\UpdateLoginStatusRequest;
 use App\Http\Traits\OtpGenerationTrait;
 use Response;
 use App\Model\rider_bank_detail;
@@ -39,6 +40,7 @@ class LoginRegisterController extends Controller
             $user_insert_data['country_code'] = $data['country_code'];
             $user_insert_data['email'] = $data['email'];
             $user_insert_data['user_type'] = 2;
+            $user_insert_data['visibility'] = 1;
 
             $user = User::create($user_insert_data);
 
@@ -70,6 +72,38 @@ class LoginRegisterController extends Controller
             }
             $vehicle_data['color'] = $data['color'];
 
+            if ($request->hasfile('background_check')) {
+                $profile_pic = $request->file('background_check');
+                $input['imagename'] = 'PoliceBackgroundCheck' . time() . '.' . $profile_pic->getClientOriginalExtension();
+
+                $path = public_path('uploads/' . $id . '/images');
+                File::makeDirectory($path, $mode = 0777, true, true);
+
+                $destinationPath = 'uploads/' . $id . '/images' . '/';
+                if ($profile_pic->move($destinationPath, $input['imagename'])) {
+                    $file_url = url($destinationPath . $input['imagename']);
+                    $vehicle_data['background_check'] = $file_url;
+                } else {
+                    $error_file_not_required[] = "Background Check File Have Some Issue";
+                    $vehicle_data['background_check'] = "";
+                }
+            }
+            if ($request->hasfile('food_permit')) {
+                $profile_pic = $request->file('food_permit');
+                $input['imagename'] = 'FoodPermit' . time() . '.' . $profile_pic->getClientOriginalExtension();
+
+                $path = public_path('uploads/' . $id . '/images');
+                File::makeDirectory($path, $mode = 0777, true, true);
+
+                $destinationPath = 'uploads/' . $id . '/images' . '/';
+                if ($profile_pic->move($destinationPath, $input['imagename'])) {
+                    $file_url = url($destinationPath . $input['imagename']);
+                    $vehicle_data['food_permit'] = $file_url;
+                } else {
+                    $error_file_not_required[] = "Food Permit File Have Some Issue";
+                    $vehicle_data['food_permit'] = "";
+                }
+            }
             if ($request->hasfile('id_proof')) {
                 $profile_pic = $request->file('id_proof');
                 $input['imagename'] = 'IDProof' . time() . '.' . $profile_pic->getClientOriginalExtension();
@@ -118,6 +152,7 @@ class LoginRegisterController extends Controller
             $bank_details['account_number'] = $data['account_number'];
             $bank_details['holder_name'] = $data['holder_name'];
             $bank_details['branch_name'] = $data['branch_name'];
+            $bank_details['bank_name'] = $data['bank_name'];
             $bank_details['ifsc_code'] = $data['ifsc_code'];
             $rider_bank_detail = new rider_bank_detail;
             $bank_data = $rider_bank_detail->insertUpdateBankData($bank_details);
@@ -206,7 +241,22 @@ class LoginRegisterController extends Controller
 
                 $user_address = new user_address;
                 $address_data = $user_address->getUserAddress($user_data->id);
-
+                if ($user_data->visibility == 1) {
+                    $status= false;
+                    $message = "Account needs Approval";
+                    $bank_data = null;
+                    $vehicle_datas = null;
+                    $address_data = null;
+                }elseif($user_data->visibility == 2){
+                    $status= false;
+                    $message = "Account Blocked Or Disabled";
+                    $bank_data = null;
+                    $vehicle_datas = null;
+                    $address_data = null;
+                }else{
+                    $status= true;
+                    $message = "success";
+                }
                 if ($user_data->mobile_verified_at == NULL) {
                     $otp = $this->OtpGeneration($user_data->mobile);
                     $user_data->access_token = $accessToken;
@@ -216,8 +266,8 @@ class LoginRegisterController extends Controller
                         'bank_data' => $bank_data,
                         'vehicle_data' => $vehicle_datas,
                         'address_data' => $address_data,
-                        'message' => 'success',
-                        'status' => true
+                        'message' => $message,
+                        'status' => $status
                     ], $this->successStatus);
                 } else {
                     $user_data->access_token = $accessToken;
@@ -227,8 +277,8 @@ class LoginRegisterController extends Controller
                         'bank_data' => $bank_data,
                         'vehicle_data' => $vehicle_datas,
                         'address_data' => $address_data,
-                        'message' => 'success',
-                        'status' => true
+                        'message' => $message,
+                        'status' => $status
                     ], $this->successStatus);
                 }
             } else {
@@ -301,6 +351,10 @@ class LoginRegisterController extends Controller
 
     public function logout(Request $request)
     {
+        $user = Auth::user();
+        $Users = new User();
+        $user_update_data = ['device_token' => NULL , 'id' => $user->id,'status'=> 0];
+        $User_device_token = $Users->UpdateLogin($user_update_data);
         $request->user()->token()->revoke();
         return response()->json(['message' => 'Successfull Logout', 'status' => true], 200);
     }
@@ -400,6 +454,38 @@ class LoginRegisterController extends Controller
                     $vehicle_update_data['vehicle_image'] = "";
                 }
             }
+            if ($request->hasfile('background_check')) {
+                $profile_pic = $request->file('background_check');
+                $input['imagename'] = 'PoliceBackgroundCheck' . time() . '.' . $profile_pic->getClientOriginalExtension();
+
+                $path = public_path('uploads/' . $id . '/images');
+                File::makeDirectory($path, $mode = 0777, true, true);
+
+                $destinationPath = 'uploads/' . $id . '/images' . '/';
+                if ($profile_pic->move($destinationPath, $input['imagename'])) {
+                    $file_url = url($destinationPath . $input['imagename']);
+                    $vehicle_update_data['background_check'] = $file_url;
+                } else {
+                    $error_file_not_required[] = "Background Check File Have Some Issue";
+                    $vehicle_update_data['background_check'] = "";
+                }
+            }
+            if ($request->hasfile('food_permit')) {
+                $profile_pic = $request->file('food_permit');
+                $input['imagename'] = 'FoodPermit' . time() . '.' . $profile_pic->getClientOriginalExtension();
+
+                $path = public_path('uploads/' . $id . '/images');
+                File::makeDirectory($path, $mode = 0777, true, true);
+
+                $destinationPath = 'uploads/' . $id . '/images' . '/';
+                if ($profile_pic->move($destinationPath, $input['imagename'])) {
+                    $file_url = url($destinationPath . $input['imagename']);
+                    $vehicle_update_data['food_permit'] = $file_url;
+                } else {
+                    $error_file_not_required[] = "Food Permit File Have Some Issue";
+                    $vehicle_update_data['food_permit'] = "";
+                }
+            }
             if ($request->has('color')) {
                 $vehicle_update_data['color'] = $data['color'];
             }
@@ -471,6 +557,9 @@ class LoginRegisterController extends Controller
             }
             if ($request->has('branch_name')) {
                 $bank_details['branch_name'] = $data['branch_name'];
+            }
+            if ($request->has('bank_name')) {
+                $bank_details['bank_name'] = $data['bank_name'];
             }
             if ($request->has('ifsc_code')) {
                 $bank_details['ifsc_code'] = $data['ifsc_code'];
@@ -561,7 +650,7 @@ class LoginRegisterController extends Controller
     public function updateProfilePicture(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'picture' => 'nullable|mimes:png,jpg,jpeg|max:3072',
+            'picture' => 'required|mimes:png,jpg,jpeg|max:3072',
         ]);
 
         $user = Auth::user();
@@ -596,5 +685,17 @@ class LoginRegisterController extends Controller
             $message = collect($validator->messages())->values()->first();
             return response()->json(['message' =>  $message[0], 'status' => false], $this->successStatus);
         }
+    }
+
+    public function updateOnlineStatus(UpdateLoginStatusRequest $request){
+        $user = Auth::user();
+        $id = $user->id;
+        $data = $request->toarray();
+        $status_array = ['status' => $data['status'], 'id' => $id];
+
+        $user_data = auth()->user()->updateStatus($status_array);
+
+        return response()->json(['message' => 'Status Updated !', 'status' => true], $this->successStatus);
+
     }
 }

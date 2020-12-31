@@ -36,7 +36,7 @@
 
                             </div>
 
-                           
+
                             <div class="form-group row">
                                 <label for="input-1" class="col-sm-3 col-form-label">Commission (in %)</label>
                                 <div class="col-sm-9">
@@ -59,7 +59,7 @@
                                 </div>
 
                             </div>
-                            
+
                             <div class="form-footer">
                                 <input type="submit" class="btn btn-primary" value="Update"></input>
 
@@ -82,7 +82,7 @@
 
 
 <!--End content-wrapper-->
-@include('restaurent.include.footer')
+@include('admin.include.footer')
 <!-- Bootstrap core JavaScript-->
 <script src="{{url('asset/admin/assets/js/jquery.min.js')}}"></script>
 <!-- waves effect js -->

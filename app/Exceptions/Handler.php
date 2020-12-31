@@ -69,15 +69,15 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
-    
-        //return response()->json(['error'=>'something went wrong'], 401);   
+
+        //return response()->json(['error'=>'something went wrong'], 401);
         if ($exception instanceof ValidationException)
-        { 
+        {
             $first_keys=($exception->errors());
             $first_key=reset($first_keys);
             $first_value=reset($first_key);
-            return new JsonResponse(['message'=>$first_value,'status'=>false], 400); 
-        }    
+            return new JsonResponse(['message'=>$first_value,'status'=>false], 400);
+        }
         if ($exception instanceof AccessDeniedException) {
             return response()->json([
                 'message' => 'Access Denied','status'=>false
@@ -111,11 +111,11 @@ class Handler extends ExceptionHandler
         if ($exception instanceof TokenMismatchException){
             // Redirect to a form. Here is an example of how I handle mine
             Session::flash('message', "Oops! Seems you couldn't submit form for a long time. Please try again.");
-            return redirect('Restaurent/login')->with('csrf_error',"Oops! Seems you couldn't submit form for a long time. Please try again.");
+            return redirect('login')->with('csrf_error',"Oops! Seems you couldn't submit form for a long time. Please try again.");
         }
         return parent::render($request, $exception);
-        
+
     }
-    
+
 
 }

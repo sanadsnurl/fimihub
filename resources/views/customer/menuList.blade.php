@@ -26,6 +26,7 @@
                 <img src="{{url('asset/customer/assets/images/restaurant_detail_banner.png')}}" alt="banner">
             </div>
         </div>
+
         <div class="slide-item">
             <div class="bg-img">
                 <img src="{{url('asset/customer/assets/images/restaurant_detail_banner.png')}}" alt="banner">
@@ -52,10 +53,9 @@
                 <span class="location">{{$resto_data->address ?? ''}}</span>
             </div>
             <div class="rating-wrap">
-                <div class="col-wrap">
+                {{-- <div class="col-wrap">
                     <h5>80 rating</h5>
                     <div class="img-wrap">
-                        {{-- <img src="{{url('asset/customer/assets/images/rating-star.svg')}}" alt="rating star"> --}}
                         <span class="js-star-rating rating_star" data-rating="4.5">
                             <span class="fa fa-star-o"></span>
                             <span class="fa fa-star-o"></span>
@@ -64,7 +64,7 @@
                             <span class="fa fa-star-o"></span>
                         </span>
                     </div>
-                </div>
+                </div> --}}
                 <div class="col-wrap">
                     <h5>Minimum Order Value</h5>
                     <h4>{{$user_data->currency ?? ''}} {{$resto_data->avg_cost ?? ''}}</h4>
@@ -100,7 +100,7 @@
             </div>
             <div class="col-order">
                 <div class="filter-row">
-                    <div class="btn-grp">
+                    {{-- <div class="btn-grp">
                         <span class="cstm_box cstm_checkbox mr-4">
                             <input type="checkbox" id="veg" checked>
                             <label for="veg">Veg Only</label>
@@ -110,8 +110,8 @@
                             <label for="NonVeg_veg">NonVeg Only</label>
                         </span>
 
-                    </div>
-                    <span class="filter-btn show-sidepanel" id="filterPanel">Apply Filter</span>
+                    </div> --}}
+                    {{-- <span class="filter-btn show-sidepanel" id="filterPanel">Apply Filter</span> --}}
                 </div>
 
                 @foreach($menu_cat as $m_cat)
@@ -179,6 +179,8 @@ function increment_quantity(menu_id) {
     var item_count = $("#item_count");
     var total_amount = $("#total_amount");
     var cart_flex = document.getElementById('cart_flex');
+    var notfi_cart =  document.getElementById('notfi_cart');
+
 
     $.ajax({
         url: "addMenuItem",
@@ -197,6 +199,7 @@ function increment_quantity(menu_id) {
             }
             $(inputQuantityElement).html(response.quantity);
             $(item_count).html(response.items);
+            $(notfi_cart).html(response.items);
             $(total_amount).html(response.sub_total);
             $("#loading-overlay").hide();
         },
@@ -214,6 +217,7 @@ function decrement_quantity(menu_id) {
     var item_count = $("#item_count");
     var total_amount = $("#total_amount");
     var cart_flex = document.getElementById('cart_flex');
+    var notfi_cart =  document.getElementById('notfi_cart');
 
     $.ajax({
         url: "subtractMenuItem",
@@ -231,6 +235,7 @@ function decrement_quantity(menu_id) {
             }
             $(inputQuantityElement).html(response.quantity);
             $(item_count).html(response.items);
+            $(notfi_cart).html(response.items);
             $(total_amount).html(response.sub_total);
             $("#loading-overlay").hide();
         },
