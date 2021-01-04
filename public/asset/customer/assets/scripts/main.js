@@ -37,46 +37,6 @@
         $(".side-panel").removeClass("show");
     })
 
-    // manage order quantity
-    var incBtn = $(".order-block .order-menu-row .col-order .card-wrap .add-to-cart #inc");
-    var decBtn = $(".order-block .order-menu-row .col-order .card-wrap .add-to-cart #dec");
-    var qty = $(".order-block .order-menu-row .col-order .card-wrap .add-to-cart #qty");
-    var cartBlock = $(".order-block .cart-block");
-    var totalItemsEl = $(".order-block .cart-block h4 .totalItems");
-    var totalPriceEl = $(".order-block .cart-block h4 .totalPrice");
-    var totalQty = 0;
-    var totalPrice = 0;
-
-    incBtn.click(function() {
-        let inititalQty = +$(this).parent().find("#qty").text();
-        inititalQty += 1;
-        totalQty += 1;
-        totalPrice = +$(this).parents(".card-wrap").find(".text-wrap h6").text().replace("$ ", "") * totalQty;
-        $(this).parent().find("#qty").text(inititalQty);
-        totalItemsEl.text(totalQty);
-        totalPriceEl.text(totalPrice);
-        if (totalQty > 0) {
-            cartBlock.addClass("show");
-        } else {
-            cartBlock.removeClass("show");
-        }
-    })
-    decBtn.click(function() {
-        let inititalQty = +$(this).parent().find("#qty").text();
-        inititalQty -= 1;
-        if (inititalQty < 0) {
-            inititalQty = 0;
-        }
-        totalQty -= 1;
-        $(this).parent().find("#qty").text(inititalQty);
-        totalItemsEl.text(totalQty);
-        if (totalQty > 0) {
-            cartBlock.addClass("show");
-        } else {
-            cartBlock.removeClass("show");
-        }
-    })
-
     //order category menuBlock
     var menuBlock = $(".order-block .order-menu-row .col-menu .menu-block");
     var categoryTabs = menuBlock.find("ul li a");
@@ -191,3 +151,73 @@ $('.payment_options label').click(function() {
         }
     }, 100)
 })
+
+ // sticky menu sidebar
+ var stickyMenu = $(".order-block .order-menu-row .col-menu .menu-block");
+
+ $(window).on("scroll", function(e){
+    stickyMenu.each(function(e){
+         let scrolled = $(window).scrollTop();
+         let startPos = $(this).parents(".col-menu").offset().top - 20;
+         let endPos = $(this).parents(".col-menu").offset().top + $(this).parents(".col-menu").height() - $(this).height() - 90;
+         if(window.matchMedia("(min-width: 768px)").matches) {
+             if(scrolled > startPos && scrolled < endPos) {
+                 $(this).css({
+                     position: "fixed",
+                     top: 20,
+                     bottom: "auto",
+                     width: $(this).parent().width()
+                 })
+             } 
+             else if(scrolled > endPos) {
+                 $(this).css({
+                     position: "absolute",
+                     bottom: 0,
+                     top: "auto"
+                 })
+             } 
+             else {
+                 $(this).css({
+                     position: "relative",
+                     bottom: 0,
+                     top: 0
+                 })
+             }
+         }
+     })
+ });
+
+ // sticky cart block
+//  var stickyCart = $(".order-block .cart-block");
+
+//  $(window).on("scroll", function(e){
+//     stickyCart.each(function(e){
+//          let scrolled = $(window).scrollTop();
+//          let startPos = $(this).parents(".col-order").offset().top - 20;
+//          let endPos = $(this).parents(".col-order").offset().top + $(this).parents(".col-order").height() - $(this).height() - 90;
+//          if(window.matchMedia("(min-width: 768px)").matches) {
+//              if(scrolled > startPos) {
+//                  $(this).css({
+//                      position: "fixed",
+//                      top: 20,
+//                      bottom: "auto",
+//                      width: $(this).parent().width()
+//                  })
+//              } 
+//              else if(scrolled > endPos) {
+//                  $(this).css({
+//                      position: "absolute",
+//                      bottom: 0,
+//                      top: "auto"
+//                  })
+//              } 
+//              else {
+//                  $(this).css({
+//                      position: "relative",
+//                      bottom: 0,
+//                      top: 0
+//                  })
+//              }
+//          }
+//      })
+ });

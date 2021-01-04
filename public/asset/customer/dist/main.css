@@ -3962,13 +3962,13 @@ header:after,
         height: 100%;
         margin-top: 0px;
         background: white;
-        z-index: 9;
+        z-index: 19;
         display: none;
     }
 }
 
 @media (max-width: 991px) {
-    .header .inner-wrap .nav-menu ul {
+    .header .inner-wrap .nav-menu>ul {
         padding-top: 50px;
     }
 }
@@ -4067,6 +4067,13 @@ header:after,
     opacity: 0;
 }
 
+@media screen and (max-width: 991px) {
+    .header .inner-wrap .nav-menu ul li .sub-menu {
+        left: 50%;
+        transform: translate(-50%);
+    }
+}
+
 .header .inner-wrap .nav-menu ul li .sub-menu li {
     margin: 5px 0;
     display: block;
@@ -4100,7 +4107,7 @@ header:after,
     right: 20px;
     display: none;
     cursor: pointer;
-    z-index: 10;
+    z-index: 99;
     transform: translateY(-50%);
 }
 
@@ -7245,6 +7252,27 @@ form .form-group label {
 
 .card_addrs_btm {
     padding: 70px 60px 0;
+}
+
+.card_addrs_btm .dropdown button{
+    margin-top: 20px;
+    background: #7D3B8A !important;
+    box-shadow: none !important;
+    width: 100%;
+}
+
+.card_addrs_btm .dropdown .dropdown-menu{
+    width: 100%;
+}
+
+.card_addrs_btm .dropdown .dropdown-item{
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.card_addrs_btm .dropdown .dropdown-item:hover{
+    background: #7D3B8A !important;
+    color: #fff;
 }
 
 .addrs_box {

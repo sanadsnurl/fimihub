@@ -31,9 +31,22 @@
                     </div>
                 </div>
 
+                <div class="col-md-12">
+                    <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Select Different Address
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="#"> <span class="name">Tushar Seth</span> &nbsp; <b>|</b> &nbsp; <span class="address">Door 95 Old Hope Road, Kingston, Jamaica Toyota ja Jamaica Toyota ja</span></a>
+                        <a class="dropdown-item" href="#"> <span class="name">Tushar Seth</span> &nbsp; <b>|</b> &nbsp; <span class="address">Door 95 Old Hope Road, Kingston, Jamaica Toyota ja Jamaica Toyota ja</span></a>
+                        <a class="dropdown-item" href="#"> <span class="name">Tushar Seth</span> &nbsp; <b>|</b> &nbsp; <span class="address">Door 95 Old Hope Road, Kingston, Jamaica Toyota ja Jamaica Toyota ja</span></a>
+                    </div>
+                    </div>
+                </div>
+
                 @foreach($user_address as $user_add)
                 @if($user_add->default_status == 1)
-                <div class="col-md-6 address_pad">
+                <div class="col-md-12 address_pad">
                     <div class="addrs_box saved_addrs address_border">
                         <h4>{{$user_data->name}} <i>(Default)</i></h4>
                         <p>{{$user_add->flat_no ?? ''}} {{$user_add->address ?? ''}}</p>
