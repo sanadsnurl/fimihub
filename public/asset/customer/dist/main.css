@@ -7255,10 +7255,10 @@ form .form-group label {
     font-size: 20px;
     font-weight: bold;
 }
-
+/* 
 .cart_login_inr .card_lft.card_addrs {
     padding-bottom: 360px;
-}
+} */
 
 .card_addrs p {
     font-size: 15px;
@@ -7275,8 +7275,10 @@ form .form-group label {
 
 .card_addrs_btm .dropdown button{
     margin-top: 20px;
-    background: #7D3B8A !important;
+    background: none !important;
     box-shadow: none !important;
+    border-color: #7D3B8A !important;
+    color: #7D3B8A !important;
     width: 100%;
 }
 
