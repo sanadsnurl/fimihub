@@ -30,11 +30,6 @@
                         </div>
                     </div>
                 </div>
-
-                @foreach($user_address as $user_add)
-                @if($user_add->default_status == 1)
-
-                @else
                 <div class="col-md-12">
                     <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
@@ -42,16 +37,21 @@
                             Select Different Address
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            @foreach($user_address as $user_add)
+                            @if($user_add->default_status == 1)
+
+                            @else
+
                             <a class="dropdown-item"
                                 href="{{url('addDefaultAddress')}}{{'?add_id='}}{{base64_encode($user_add->id)}}"> <span
                                     class="name">{{$user_data->name}}</span> &nbsp; <b>|</b> &nbsp; <span
                                     class="address">{{$user_add->flat_no ?? ''}} {{$user_add->address ?? ''}}</span></a>
+
+                            @endif
+                            @endforeach
                         </div>
                     </div>
                 </div>
-                @endif
-                @endforeach
-
                 @foreach($user_address as $user_add)
                 @if($user_add->default_status == 1)
                 <div class="col-md-12 address_pad">
