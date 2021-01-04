@@ -31,18 +31,26 @@
                     </div>
                 </div>
 
+                @foreach($user_address as $user_add)
+                @if($user_add->default_status == 1)
+
+                @else
                 <div class="col-md-12">
                     <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Select Different Address
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="#"> <span class="name">Tushar Seth</span> &nbsp; <b>|</b> &nbsp; <span class="address">Door 95 Old Hope Road, Kingston, Jamaica Toyota ja Jamaica Toyota ja</span></a>
-                        <a class="dropdown-item" href="#"> <span class="name">Tushar Seth</span> &nbsp; <b>|</b> &nbsp; <span class="address">Door 95 Old Hope Road, Kingston, Jamaica Toyota ja Jamaica Toyota ja</span></a>
-                        <a class="dropdown-item" href="#"> <span class="name">Tushar Seth</span> &nbsp; <b>|</b> &nbsp; <span class="address">Door 95 Old Hope Road, Kingston, Jamaica Toyota ja Jamaica Toyota ja</span></a>
-                    </div>
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Select Different Address
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item"
+                                href="{{url('addDefaultAddress')}}{{'?add_id='}}{{base64_encode($user_add->id)}}"> <span
+                                    class="name">{{$user_data->name}}</span> &nbsp; <b>|</b> &nbsp; <span
+                                    class="address">{{$user_add->flat_no ?? ''}} {{$user_add->address ?? ''}}</span></a>
+                        </div>
                     </div>
                 </div>
+                @endif
+                @endforeach
 
                 @foreach($user_address as $user_add)
                 @if($user_add->default_status == 1)
@@ -61,30 +69,29 @@
                     </div>
                 </div>
                 @else
-                <div class="col-md-6 address_pad">
+                {{-- <div class="col-md-6 address_pad">
                     <div class="addrs_box saved_addrs">
                         <h4>{{$user_data->name}}</h4>
-                        <p>{{$user_add->flat_no ?? ''}} {{$user_add->address ?? ''}}</p>
-                        <p>{{$user_add->landmark ?? ''}}</p>
-                        <br>
-                        <!-- <span><img src="{{url('asset/customer/assets/images/watch.svg')}}" alt="watch">20 Min</span> -->
-                        <div class="addrs_action_btns">
-                            <a href="{{url('deleteAddress')}}{{'?add_id='}}{{base64_encode($user_add->id)}}" class="f">
-                                <button type="button" class="btn_purple edit_btn mr-2 hover_effect1">Delete</button>
-                            </a>
-                            <a href="{{url('addDefaultAddress')}}{{'?add_id='}}{{base64_encode($user_add->id)}}"
-                                class="f">
-                                <button type="button" class="btn_purple deliver_btn hover_effect1">Deliver Here</button>
-                            </a>
-                        </div>
-                    </div>
+                <p>{{$user_add->flat_no ?? ''}} {{$user_add->address ?? ''}}</p>
+                <p>{{$user_add->landmark ?? ''}}</p>
+                <br>
+                <!-- <span><img src="{{url('asset/customer/assets/images/watch.svg')}}" alt="watch">20 Min</span> -->
+                <div class="addrs_action_btns">
+                    <a href="{{url('deleteAddress')}}{{'?add_id='}}{{base64_encode($user_add->id)}}" class="f">
+                        <button type="button" class="btn_purple edit_btn mr-2 hover_effect1">Delete</button>
+                    </a>
+                    <a href="{{url('addDefaultAddress')}}{{'?add_id='}}{{base64_encode($user_add->id)}}" class="f">
+                        <button type="button" class="btn_purple deliver_btn hover_effect1">Deliver Here</button>
+                    </a>
                 </div>
-                @endif
-                @endforeach
-
             </div>
-        </div>
+        </div> --}}
+        @endif
+        @endforeach
+
     </div>
+</div>
+</div>
 </div>
 
 @endsection
