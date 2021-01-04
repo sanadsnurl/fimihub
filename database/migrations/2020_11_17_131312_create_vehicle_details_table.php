@@ -25,6 +25,7 @@ class CreateVehicleDetailsTable extends Migration
             $table->string('vehicle_number')->nullable();
             $table->string('model_name')->nullable();
             $table->string('vehicle_image')->nullable();
+            $table->string('registration_number')->nullable();
             $table->string('color')->nullable();
             $table->string('id_proof')->nullable();
             $table->text('address')->nullable();
@@ -32,6 +33,10 @@ class CreateVehicleDetailsTable extends Migration
             $table->string('driving_license')->nullable();
             $table->string('background_check')->nullable();
             $table->string('food_permit')->nullable();
+            $table->string('policy_company')->nullable();
+            $table->string('insurance_company')->nullable();
+            $table->string('insurance_start_date')->nullable();
+            $table->string('insurance_end_date')->nullable();
             $table->string('dl_start_date')->nullable();
             $table->string('dl_end_date')->nullable();
             $table->string('registraion_start_date')->nullable();

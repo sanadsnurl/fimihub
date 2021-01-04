@@ -36,7 +36,7 @@ class UpdateLoginRequest extends FormRequest
             'color' => 'string',
             'id_proof' => 'nullable|mimes:png,jpg,jpeg|max:8192',
             'address' => 'string',
-            'pincode' => 'digits:6',
+            'pincode' => 'numeric',
             'driving_license' => 'nullable|mimes:png,jpg,jpeg|max:8192',
             'background_check' => 'mimes:png,jpg,jpeg,pdf|max:8192|nullable',
             'food_permit' => 'mimes:png,jpg,jpeg,pdf|max:8192|nullable',
@@ -51,6 +51,11 @@ class UpdateLoginRequest extends FormRequest
             'ifsc_code' => 'string|nullable',
             'lat' => 'required|numeric',
             'lng' => 'required|numeric',
+            'registration_number' => 'string|nullable',
+            'policy_company	' => 'string|nullable',
+            'insurance_company' => 'string|nullable',
+            'insurance_start_date' => 'string|nullable',
+            'insurance_end_date' => 'string|nullable',
         ];
         return $validator;
     }
