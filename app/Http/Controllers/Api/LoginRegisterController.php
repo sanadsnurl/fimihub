@@ -139,6 +139,11 @@ class LoginRegisterController extends Controller
                     $vehicle_data['driving_license'] = "";
                 }
             }
+            $vehicle_data['registration_number'] = $data['registration_number'];
+            $vehicle_data['policy_company'] = $data['policy_company'];
+            $vehicle_data['insurance_company'] = $data['insurance_company'];
+            $vehicle_data['insurance_start_date'] = $data['insurance_start_date'];
+            $vehicle_data['insurance_end_date'] = $data['insurance_end_date'];
             $vehicle_data['dl_start_date'] = $data['dl_start_date'];
             $vehicle_data['dl_end_date'] = $data['dl_end_date'];
             $vehicle_data['registraion_start_date'] = $data['registraion_start_date'];
@@ -257,66 +262,37 @@ class LoginRegisterController extends Controller
                     $status= true;
                     $message = "success";
                 }
-                if ($user_data->mobile_verified_at == NULL) {
-                    $otp = $this->OtpGeneration($user_data->mobile);
-                    $user_data->access_token = $accessToken;
-                    return response()->json([
-                        'verified' => false,
-                        'data' => $user_data,
-                        'bank_data' => $bank_data,
-                        'vehicle_data' => $vehicle_datas,
-                        'address_data' => $address_data,
-                        'message' => $message,
-                        'status' => $status
-                    ], $this->successStatus);
-                } else {
-                    $user_data->access_token = $accessToken;
-                    return response()->json([
-                        'verified' => true,
-                        'data' => $user_data,
-                        'bank_data' => $bank_data,
-                        'vehicle_data' => $vehicle_datas,
-                        'address_data' => $address_data,
-                        'message' => $message,
-                        'status' => $status
-                    ], $this->successStatus);
+                if($user_data->user_type == 2){
+                    if ($user_data->mobile_verified_at == NULL) {
+                        $otp = $this->OtpGeneration($user_data->mobile);
+                        $user_data->access_token = $accessToken;
+                        return response()->json([
+                            'verified' => false,
+                            'data' => $user_data,
+                            'bank_data' => $bank_data,
+                            'vehicle_data' => $vehicle_datas,
+                            'address_data' => $address_data,
+                            'message' => $message,
+                            'status' => $status
+                        ], $this->successStatus);
+                    } else {
+                        $user_data->access_token = $accessToken;
+                        return response()->json([
+                            'verified' => true,
+                            'data' => $user_data,
+                            'bank_data' => $bank_data,
+                            'vehicle_data' => $vehicle_datas,
+                            'address_data' => $address_data,
+                            'message' => $message,
+                            'status' => $status
+                        ], $this->successStatus);
+                    }
                 }
-            } else {
-                $userid = $email_set;
-                $user_data = auth()->user()->userData($userid);
-                unset($user_data->password);
+                else{
+                return response()->json(['message' => 'Invalid Account Type', 'status' => false], $this->failureStatus);
 
-                $rider_bank_detail = new rider_bank_detail;
-                $bank_data = $rider_bank_detail->getBankData($user_data->id);
-
-                $vehicle_detail = new vehicle_detail;
-                $vehicle_datas = $vehicle_detail->getVehicleData($user_data->id);
-
-                $user_address = new user_address;
-                $address_data = $user_address->getUserAddress($user_data->id);
-                if ($user_data->email_verified_at == NULL) {
-                    $user_data->access_token = $accessToken;
-                    return response()->json([
-                        'verified' => false,
-                        'data' => $user_data,
-                        'bank_data' => $bank_data,
-                        'vehicle_data' => $vehicle_datas,
-                        'address_data' => $address_data,
-                        'message' => 'success',
-                        'status' => true
-                    ], $this->successStatus);
-                } else {
-                    $user_data->access_token = $accessToken;
-                    return response()->json([
-                        'verified' => true,
-                        'data' => $user_data,
-                        'bank_data' => $bank_data,
-                        'vehicle_data' => $vehicle_datas,
-                        'address_data' => $address_data,
-                        'message' => 'success',
-                        'status' => true
-                    ], $this->successStatus);
                 }
+
             }
         } catch (\Throwable $th) {
             report($th);
@@ -512,6 +488,22 @@ class LoginRegisterController extends Controller
             if ($request->has('pincode')) {
                 $vehicle_update_data['pincode'] = $data['pincode'];
             }
+            if ($request->has('registration_number')) {
+                $vehicle_update_data['registration_number'] = $data['registration_number'];
+            }
+            if ($request->has('policy_company')) {
+                $vehicle_update_data['policy_company'] = $data['policy_company'];
+            }
+            if ($request->has('insurance_company')) {
+                $vehicle_update_data['insurance_company'] = $data['insurance_company'];
+            }
+            if ($request->has('insurance_start_date')) {
+                $vehicle_update_data['insurance_start_date'] = $data['insurance_start_date'];
+            }
+            if ($request->has('insurance_end_date')) {
+                $vehicle_update_data['insurance_end_date'] = $data['insurance_end_date'];
+            }
+
 
             if ($request->hasfile('driving_license')) {
                 $profile_pic = $request->file('driving_license');

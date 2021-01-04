@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Response;
 use Mail;
+use Twilio\Exceptions\TwilioException;
 
 class OtpManagerController extends Controller
 {
@@ -49,9 +50,12 @@ class OtpManagerController extends Controller
             } else {
                 return 2;
             }
-        } catch (Exception $e) {
-            return response()->json(['message'=> $e->getMessage()], $this->invalidStatus);
-
+        } catch (TwilioException $e) {
+            if ($e->getStatusCode() == 200) {
+                return 1;
+            } else {
+                return 2;
+            }
         }
 
 

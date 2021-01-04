@@ -26,6 +26,7 @@
                                         <th>Mobile</th>
                                         <th>Email</th>
                                         <th>Vehicle Number</th>
+                                        <th>Vehicle Registration</th>
                                         <th>Vehicle Image</th>
                                         <th>Model Name</th>
                                         <th>color</th>
@@ -33,10 +34,17 @@
                                         <th>Address</th>
                                         <th>Zip Code</th>
                                         <th>Driving License</th>
+                                        <th>Background Check</th>
+                                        <th>Food Permit</th>
                                         <th>DL Start Date</th>
                                         <th>DL End Date</th>
+                                        <th>Insurance Policy</th>
+                                        <th>Insurance Company</th>
+                                        <th>Insurance Start Date</th>
+                                        <th>Insurance End Date</th>
                                         <th>Registration Start Date</th>
                                         <th>Registration End Date</th>
+                                        <th>Bank Name</th>
                                         <th>Account Number</th>
                                         <th>Holder Name</th>
                                         <th>IFSC</th>
@@ -113,6 +121,15 @@
                         },
                     },
                     {
+                        data: 'vehicle_details',
+                        render: function(data, type, row) {
+                            if (row.vehicle_details) {
+                                return row.vehicle_details.registration_number;
+                            }
+                            return 'N.A';
+                        },
+                    },
+                    {
                         data: 'vehicle_image',
                         name: 'vehicle_image',
                         orderable: true,
@@ -136,7 +153,6 @@
                             return 'N.A';
                         },
                     },
-
                     {
                         data: 'id_proof',
                         name: 'id_proof'
@@ -164,6 +180,14 @@
                         name: 'driving_license'
                     },
                     {
+                        data: 'background_check',
+                        name: 'background_check'
+                    },
+                    {
+                        data: 'food_permit',
+                        name: 'food_permit'
+                    },
+                    {
                         data: 'vehicle_details',
                         render: function(data, type, row) {
                             if (row.vehicle_details) {
@@ -185,6 +209,42 @@
                         data: 'vehicle_details',
                         render: function(data, type, row) {
                             if (row.vehicle_details) {
+                                return row.vehicle_details.policy_company;
+                            }
+                            return 'N.A';
+                        },
+                    },
+                    {
+                        data: 'vehicle_details',
+                        render: function(data, type, row) {
+                            if (row.vehicle_details) {
+                                return row.vehicle_details.insurance_company;
+                            }
+                            return 'N.A';
+                        },
+                    },
+                    {
+                        data: 'vehicle_details',
+                        render: function(data, type, row) {
+                            if (row.vehicle_details) {
+                                return row.vehicle_details.insurance_start_date;
+                            }
+                            return 'N.A';
+                        },
+                    },
+                    {
+                        data: 'vehicle_details',
+                        render: function(data, type, row) {
+                            if (row.vehicle_details) {
+                                return row.vehicle_details.insurance_end_date;
+                            }
+                            return 'N.A';
+                        },
+                    },
+                    {
+                        data: 'vehicle_details',
+                        render: function(data, type, row) {
+                            if (row.vehicle_details) {
                                 return row.vehicle_details.registraion_start_date;
                             }
                             return 'N.A';
@@ -195,6 +255,15 @@
                         render: function(data, type, row) {
                             if (row.vehicle_details) {
                                 return row.vehicle_details.registraion_end_date;
+                            }
+                            return 'N.A';
+                        },
+                    },
+                    {
+                        data: 'rider_bank_details',
+                        render: function(data, type, row) {
+                            if (row.rider_bank_details) {
+                                return row.rider_bank_details.bank_name;
                             }
                             return 'N.A';
                         },
@@ -235,7 +304,6 @@
                             return 'N.A';
                         },
                     },
-
                     {
                         data: 'created_at',
                         name: 'created_at'

@@ -84,11 +84,14 @@ class Handler extends ExceptionHandler
             ],401);
         }
         if ($exception instanceof ModelNotFoundException) {
+
             return response()->json([
                 'message' => 'Model Not Found','status'=>false
             ],401);
         }
         if ($exception instanceof NotFoundHttpException) {
+            // dd($request->route()->getPrefix());
+            // return $exception->getPrefix();
             return response()->json([
                 'message' => 'Not Found','status'=>false
                 ],401);
