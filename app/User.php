@@ -247,6 +247,22 @@ class User extends Authenticatable
             dd($e);
         }
     }
+
+    public function allUserPaginateListRiderPendingData($user_type)
+    {
+        try {
+            $user_data=$this
+                ->where('users.visibility', 1)
+                ->where('users.user_type', $user_type)
+                ->orderBy('users.created_at','DESC');
+
+
+            return $user_data;
+        }
+        catch (Exception $e) {
+            dd($e);
+        }
+    }
     public function riderBankDetails()
     {
         return $this->hasOne(rider_bank_detail::class, 'user_id');

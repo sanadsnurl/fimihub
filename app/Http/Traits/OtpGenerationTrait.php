@@ -14,6 +14,7 @@ use Illuminate\Support\Str;
 use Response;
 use Mail;
 use Session;
+use Twilio\Exceptions\TwilioException;
 use Twilio\Rest\Client;
 
 trait OtpGenerationTrait
@@ -24,7 +25,7 @@ trait OtpGenerationTrait
         try {
             //Integrate SMS API here
             $country_Code = $user_data->country_code  ?? '+1876';
-            $mobile = $country_Code.$user_data->mobile;
+            $mobile = $country_Code .$user_data->mobile;
             $otp = $user_data->verification_code;
 
             // Your Account SID and Auth Token from twilio.com/console
@@ -52,24 +53,28 @@ trait OtpGenerationTrait
             } else {
                 return 2;
             }
-        } catch (Exception $e) {
-            return response()->json(['custom_error' => $e->getMessage()], $this->invalidStatus);
+        } catch (TwilioException $e) {
+            if ($e->getStatusCode() == 200) {
+                return 1;
+            } else {
+                return 2;
+            }
         }
     }
 
     public function emailSendOtp($user_data)
     {
         //Integrate SMTP here
-        $email = $user_data->email;
+        // $email = $user_data->email;
 
-        $data = array('name' => $user_data->name, "body" => $user_data->verification_code, "sendemail" => $email);
+        // $data = array('name' => $user_data->name, "body" => $user_data->verification_code, "sendemail" => $email);
 
-        Mail::send('emails.mail', $data, function ($message) use ($data) {
+        // Mail::send('emails.mail', $data, function ($message) use ($data) {
 
-            $message->to($data["sendemail"], 'Artisans Web')
-                ->subject('test otp');
-            $message->from('fimi@gmail.com', 'Fimihub');
-        });
+        //     $message->to($data["sendemail"], 'Artisans Web')
+        //         ->subject('test otp');
+        //     $message->from('fimi@gmail.com', 'Fimihub');
+        // });
     }
 
 
@@ -90,7 +95,7 @@ trait OtpGenerationTrait
                     return 1;
                 } else {
                     Session::flash('error_message', 'OTP not sent !');
-                    return 3;
+                    return 2;
                 }
                 //return response()->json(['otp' => $user_otp], $this->successStatusCreated);
 
