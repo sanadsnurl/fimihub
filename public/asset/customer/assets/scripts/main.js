@@ -220,4 +220,4 @@ $('.payment_options label').click(function() {
 //              }
 //          }
 //      })
- });
+//  });

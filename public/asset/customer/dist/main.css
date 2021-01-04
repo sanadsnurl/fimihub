@@ -3865,6 +3865,15 @@ header:after,
 
 
 /* Sections */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 80;
+    background: #fff;
+}
+
 
 .header .inner-wrap {
     padding: 10px 0;
@@ -4293,6 +4302,16 @@ header:after,
 @media (max-width: 767px) {
     .footer .row-wrap .col.col-links {
         padding-left: 15px;
+    }
+}
+
+.banner {
+    margin-top: 105px;
+}
+
+@media (max-width: 595px) {
+    .banner {
+        margin-top: 80px;
     }
 }
 
