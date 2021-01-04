@@ -26,7 +26,7 @@ class cart extends Model
                 ->where('visibility', 0)
                 ->where('user_id', $data)
                 ->first();
-            
+
             return $carts;
         }
         catch (Exception $e) {
@@ -40,7 +40,7 @@ class cart extends Model
             $carts=DB::table('carts')
                 ->where('id', $data)
                 ->first();
-            
+
             return $carts;
         }
         catch (Exception $e) {
@@ -55,7 +55,7 @@ class cart extends Model
                 ->where('visibility', 0)
                 ->where('id', $data['id'])
                 ->update($data);
-            
+
             return $carts;
         }
         catch (Exception $e) {
@@ -75,6 +75,23 @@ class cart extends Model
         $query_type="update";
     }
 
+    public function deleteCartAndMenu($data){
+        $cart_delete = array();
+        $cart_delete ['deleted_at'] = now();
+        $cart_delete ['user_id'] = $data;
+
+        $query_data = DB::table('carts')
+            ->where('user_id', $cart_delete['user_id'])
+            ->update(['visibility'=>2]);
+        $query_data = DB::table('cart_submenus')
+            ->where('user_id', $cart_delete['user_id'])
+            ->update(['visibility'=>2]);
+        $query_data = DB::table('cart_customizations')
+            ->where('user_id', $cart_delete['user_id'])
+            ->update(['visibility'=>2]);
+
+        return $query_data;
+    }
 
     public function cartItems()
     {

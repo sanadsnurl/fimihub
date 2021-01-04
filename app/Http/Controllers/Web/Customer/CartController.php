@@ -327,6 +327,9 @@ class CartController extends Controller
                             $total_amount = $total_amount + ($m_data->quantity * $m_data->price);
                         }
                     }
+                    if($item == 0){
+                        $cart_delete = $cart->deleteCartAndMenu($user->id);
+                    }
                     $sub_total = $total_amount + $custom_total;
                     $total_amount = $total_amount + $custom_total;
 

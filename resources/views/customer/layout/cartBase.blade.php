@@ -342,6 +342,11 @@
                 if (response.quantity == 0) {
                     $(remove_all_count).val(0);
                 }
+                if(response.items == 0){
+                    var url = window.location.protocol + '//' + window.location.host + '/cart';
+                    console.log(url);
+                    window.location.href = url;
+                }
                 $(item_count).html(response.items);
                 $(notfi_cart).html(response.items);
                 $(sub_total).html(sub_totals);
@@ -383,6 +388,7 @@
                 if ($(inputQuantityElement).val() == 0) {
                     $(inputQuantityElement).val(1);
                 }
+
                 $(item_count).html(response.items);
                 $(notfi_cart).html(response.items);
                 $(sub_total).html(sub_totals);
