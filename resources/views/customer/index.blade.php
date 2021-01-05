@@ -17,14 +17,14 @@
                         <br>
                         @if($s_data->link != NULL)
                         <a href="{{$s_data->link ?? ''}}" class="btn btn-lg btn-white">See More</a>
-                        @endifg
+                        @endif
                      <form role="form" method="POST" action="{{ url('/saveAddress') }}" onSubmit="return checkform()"
                             class="form save_adrs">
                             @csrf
                             <div class="search-bar">
                                  <div id="address-map-container" style="width:0%;height:0px; margin-bottom: 0px;">
                                         <div style="width: 0%; height: 0%;" id="address-map1"></div>
-                                    </div> 
+                                    </div>
                                 <div class="location-selector">
                                     <span>
                                         <!-- <input id="autocomplete" placeholder="Enter your address" onFocus="geolocate()"

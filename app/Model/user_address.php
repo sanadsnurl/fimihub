@@ -121,6 +121,6 @@ class user_address extends Model
 
     public function userDetails()
     {
-        return $this->belongsTo('App\User', 'user_id',);
+        return $this->belongsTo('App\User', 'user_id');
     }
 }
