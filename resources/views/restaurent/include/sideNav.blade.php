@@ -14,19 +14,19 @@
     <link rel="icon" href="{{asset('asset/customer/assets/images/logo.png')}}">
 
     <!-- Vector CSS -->
-    <link href="{{url('asset/admin/assets/plugins/vectormap/jquery-jvectormap-2.0.2.css')}}" rel="stylesheet" />
+    <link href="{{asset('asset/admin/assets/plugins/vectormap/jquery-jvectormap-2.0.2.css')}}" rel="stylesheet" />
     <!-- simplebar CSS-->
-    <link href="{{url('asset/admin/assets/plugins/simplebar/css/simplebar.css')}}" rel="stylesheet" />
+    <link href="{{asset('asset/admin/assets/plugins/simplebar/css/simplebar.css')}}" rel="stylesheet" />
     <!-- Bootstrap core CSS-->
-    <link href="{{url('asset/admin/assets/css/bootstrap.min.css')}}" rel="stylesheet" />
+    <link href="{{asset('asset/admin/assets/css/bootstrap.min.css')}}" rel="stylesheet" />
     <!-- animate CSS-->
-    <link href="{{url('asset/admin/assets/css/animate.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('asset/admin/assets/css/animate.css')}}" rel="stylesheet" type="text/css" />
     <!-- Icons CSS-->
-    <link href="{{url('asset/admin/assets/css/icons.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('asset/admin/assets/css/icons.css')}}" rel="stylesheet" type="text/css" />
     <!-- Sidebar CSS-->
-    <link href="{{url('asset/admin/assets/css/sidebar-menu.css')}}" rel="stylesheet" />
+    <link href="{{asset('asset/admin/assets/css/sidebar-menu.css')}}" rel="stylesheet" />
     <!-- Custom Style-->
-    <link href="{{url('asset/admin/assets/css/app-style.css')}}" rel="stylesheet" />
+    <link href="{{asset('asset/admin/assets/css/app-style.css')}}" rel="stylesheet" />
 
 </head>
 

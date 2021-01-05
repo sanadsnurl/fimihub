@@ -1,9 +1,9 @@
 @include('restaurent.include.sideNav')
 @include('restaurent.include.header')
 <!--Data Tables -->
-<link href="{{url('asset/admin/assets/plugins/bootstrap-datatable/css/dataTables.bootstrap4.min.css')}}"
+<link href="{{asset('asset/admin/assets/plugins/bootstrap-datatable/css/dataTables.bootstrap4.min.css')}}"
     rel="stylesheet" type="text/css">
-<link href="{{url('asset/admin/assets/plugins/bootstrap-datatable/css/buttons.bootstrap4.min.css')}}" rel="stylesheet"
+<link href="{{asset('asset/admin/assets/plugins/bootstrap-datatable/css/buttons.bootstrap4.min.css')}}" rel="stylesheet"
     type="text/css">
 
 <div class="clearfix"></div>
