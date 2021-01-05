@@ -64,4 +64,13 @@ class CmsController extends Controller
             'user_data' => $user,
         ]);
     }
+
+    public function indexMerchantQnA(Request $request)
+    {
+        $user = Auth::user();
+
+        return view('customer.pages.merchantQnA')->with([
+            'user_data' => $user,
+        ]);
+    }
 }

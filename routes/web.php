@@ -45,6 +45,8 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
     Route::get('/cardPolicy', 'Web\Customer\CmsController@indexCardPolicy');
     // T & C Page
     Route::get('/T&C', 'Web\Customer\CmsController@indexTandC');
+    // Merchant Q n A
+    Route::get('/mechantQnA', 'Web\Customer\CmsController@indexMerchantQnA');
     // Partner with us page
     Route::get('/partnerWithUs', function () {
         return view('customer.auth.partnerRegister');

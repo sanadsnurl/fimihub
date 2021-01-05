@@ -90,7 +90,7 @@
                 <h5>FAQ's</h5>
                 <ul class="links">
                     <li>
-                        <a href="#">Q&A for Merchants</a>
+                        <a href="{{url('mechantQnA')}}">Q&A for Merchants</a>
                     </li>
                     <li>
                         <a href="#">Q&A for Customers </a>
