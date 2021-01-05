@@ -17,20 +17,20 @@
                         <br>
                         @if($s_data->link != NULL)
                         <a href="{{$s_data->link ?? ''}}" class="btn btn-lg btn-white">See More</a>
-                        @endif
-                        {{-- <form role="form" method="POST" action="{{ url('/saveAddress') }}" onSubmit="return checkform()"
+                        @endifg
+                     <form role="form" method="POST" action="{{ url('/saveAddress') }}" onSubmit="return checkform()"
                             class="form save_adrs">
                             @csrf
-                            <div class="search-bar"> --}}
-                                {{-- <div id="address-map-container" style="width:0%;height:0px; margin-bottom: 0px;">
+                            <div class="search-bar">
+                                 <div id="address-map-container" style="width:0%;height:0px; margin-bottom: 0px;">
                                         <div style="width: 0%; height: 0%;" id="address-map1"></div>
-                                    </div> --}}
-                                {{-- <div class="location-selector">
+                                    </div> 
+                                <div class="location-selector">
                                     <span>
-                                        <input id="autocomplete" placeholder="Enter your address" onFocus="geolocate()"
-                                            type="text"> --}}
+                                        <!-- <input id="autocomplete" placeholder="Enter your address" onFocus="geolocate()"
+                                            type="text"> -->
 
-                                        {{-- <div class="field-wrap">
+                                        <div class="field-wrap">
                                             <div class="address_box_dyn">
                                                 <input type="text" id="address-input" name="address_address"
                                                     placeholder="Search Location" class="map-input1">
@@ -46,8 +46,8 @@
                                 @if(Session::has('address_error'))
                                 <div class="error">{{ Session::get('address_error') }}</div>
                                 @endif
-                            </div> --}}
-                            {{-- </span>
+                            </div>
+                             </span>
                     </div>
 
                     <div class="search-input">
@@ -58,7 +58,7 @@
                         </div>
                     </div>
                 </div>
-                </form> --}}
+                </form>
             </div>
         </div>
     </div>

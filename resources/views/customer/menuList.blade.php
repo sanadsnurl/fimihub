@@ -87,7 +87,7 @@
         </div>
         <div class="order-menu-row">
             <div class="col-menu">
-                <div class="menu-block">
+                <div class="menu-block sticky">
                     <h3>Our Menus</h3>
                     <ul>
                         @foreach($menu_cat as $m_cat)
@@ -112,6 +112,21 @@
 
                     </div> --}}
                     {{-- <span class="filter-btn show-sidepanel" id="filterPanel">Apply Filter</span> --}}
+                </div>
+
+                <div class="cart-block sticky" id="cart_flex" @if($total_amount !=0) style="display:flex;" @endif>
+                    <div class="col-left">
+                        <h4>
+                            <span class="totalItems" id="item_count">{{$item ?? '0'}}</span> Items
+                            <span class="sep">|</span>
+                            {{$user_data->currency ?? ''}} <span class="totalPrice" id="total_amount">{{$total_amount ?? '0'}}</span>
+                        </h4>
+                        <p>{{$resto_data->name ?? ''}}</p>
+                    </div>
+                    <div class="col-right">
+                        <h4><a href="{{url('/cart')}}">View Cart <img src="{{url('asset/customer/assets/images/cart_white.svg')}}"
+                                    alt="cart white"></a></h4>
+                    </div>
                 </div>
 
                 @foreach($menu_cat as $m_cat)
@@ -152,7 +167,6 @@
                 <input type="hidden" class="input-quantity" id="input-quantity"
                     value="{{base64_encode($resto_data->id)}}">
 
-
                 <div class="cart-block" id="cart_flex" @if($total_amount !=0) style="display:flex;" @endif>
                     <div class="col-left">
                         <h4>
@@ -167,6 +181,7 @@
                                     alt="cart white"></a></h4>
                     </div>
                 </div>
+
             </div>
 </section>
 @include('customer.include.footer')

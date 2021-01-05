@@ -5774,7 +5774,7 @@ header:after,
 .order-block .order-menu-row .col-order .filter-row {
     display: flex;
     flex-wrap: nowrap;
-    margin-bottom: 40px;
+    /* margin-bottom: 40px; */
 }
 
 .order-block .order-menu-row .col-order .filter-row .filter-btn {
@@ -6002,6 +6002,13 @@ header:after,
     padding: 20px 60px;
     align-items: center;
     display: none;
+    margin-bottom: 20px;
+}
+
+@media screen and (max-width:480px) {
+    .order-block .cart-block {
+        padding: 20px 30px;
+    }
 }
 
 .order-block .cart-block.show {
@@ -6642,6 +6649,13 @@ p {
     padding: 58px 0 65px;
     background: url(../assets/images/signup-banner.png) no-repeat;
     background-size: cover;
+    margin-top: 105px;
+}
+
+@media (max-width: 595px) {
+    .auth_banner {
+        margin-top: 80px;
+    }
 }
 
 .auth_form_wraper {
