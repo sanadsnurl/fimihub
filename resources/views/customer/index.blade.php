@@ -17,7 +17,7 @@
                         <br>
                         @if($s_data->link != NULL)
                         <a href="{{$s_data->link ?? ''}}" class="btn btn-lg btn-white">See More</a>
-                        @endif
+                        @endifg
                      <form role="form" method="POST" action="{{ url('/saveAddress') }}" onSubmit="return checkform()"
                             class="form save_adrs">
                             @csrf
