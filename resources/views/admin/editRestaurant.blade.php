@@ -219,7 +219,7 @@
 @include('admin.include.footer')
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-<script type="text/javascript" src="{{url('asset/customer/assets/scripts/mapInput.js')}}"></script>
+<script type="text/javascript" src="{{asset('asset/customer/assets/scripts/mapInput.js')}}"></script>
 <script
     src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}&libraries=places&callback=initialize"
     async defer></script>

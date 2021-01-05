@@ -65,7 +65,7 @@
                 </div>
                 <div class="col-md-6 pl-0">
                     <div class="auth_form_right h-100">
-                        <img src="{{url('asset/customer/assets/images/signup-banner-right.png')}}" alt="pizza image">
+                        <img src="{{asset('asset/customer/assets/images/signup-banner-right.png')}}" alt="pizza image">
                     </div>
                 </div>
             </div>

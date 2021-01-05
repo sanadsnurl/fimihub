@@ -11,7 +11,7 @@
     <meta name="author" content="" />
     <title>Fimihub - Restaurant</title>
     <!--favicon-->
-    <link rel="icon" href="{{url('asset/customer/assets/images/logo.png')}}">
+    <link rel="icon" href="{{asset('asset/customer/assets/images/logo.png')}}">
     <!-- Bootstrap core CSS-->
     <link href="{{url('asset/admin/assets/css/bootstrap.min.css')}}" rel="stylesheet" />
     <!-- animate CSS-->

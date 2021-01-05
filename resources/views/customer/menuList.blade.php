@@ -23,23 +23,23 @@
     <div class="slider-wrap">
         <div class="slide-item">
             <div class="bg-img">
-                <img src="{{url('asset/customer/assets/images/restaurant_detail_banner.png')}}" alt="banner">
+                <img src="{{asset('asset/customer/assets/images/restaurant_detail_banner.png')}}" alt="banner">
             </div>
         </div>
 
         <div class="slide-item">
             <div class="bg-img">
-                <img src="{{url('asset/customer/assets/images/restaurant_detail_banner.png')}}" alt="banner">
+                <img src="{{asset('asset/customer/assets/images/restaurant_detail_banner.png')}}" alt="banner">
             </div>
         </div>
         <div class="slide-item">
             <div class="bg-img">
-                <img src="{{url('asset/customer/assets/images/restaurant_detail_banner.png')}}" alt="banner">
+                <img src="{{asset('asset/customer/assets/images/restaurant_detail_banner.png')}}" alt="banner">
             </div>
         </div>
         <div class="slide-item">
             <div class="bg-img">
-                <img src="{{url('asset/customer/assets/images/restaurant_detail_banner.png')}}" alt="banner">
+                <img src="{{asset('asset/customer/assets/images/restaurant_detail_banner.png')}}" alt="banner">
             </div>
         </div>
     </div>
@@ -166,6 +166,22 @@
                 @endforeach
                 <input type="hidden" class="input-quantity" id="input-quantity"
                     value="{{base64_encode($resto_data->id)}}">
+
+                <div class="cart-block" id="cart_flex" @if($total_amount !=0) style="display:flex;" @endif>
+                    <div class="col-left">
+                        <h4>
+                            <span class="totalItems" id="item_count">{{$item ?? '0'}}</span> Items
+                            <span class="sep">|</span>
+                            {{$user_data->currency ?? ''}} <span class="totalPrice" id="total_amount">{{$total_amount ?? '0'}}</span>
+                        </h4>
+                        <p>{{$resto_data->name ?? ''}}</p>
+                    </div>
+                    <div class="col-right">
+                        <h4><a href="{{url('/cart')}}">View Cart <img src="{{asset('asset/customer/assets/images/cart_white.svg')}}"
+                                    alt="cart white"></a></h4>
+                    </div>
+                </div>
+
             </div>
 </section>
 @include('customer.include.footer')

@@ -11,7 +11,7 @@
     <meta name="author" content="" />
     <title>Fimihub - Restaurant</title>
     <!--favicon-->
-    <link rel="icon" href="{{url('asset/customer/assets/images/logo.png')}}">
+    <link rel="icon" href="{{asset('asset/customer/assets/images/logo.png')}}">
 
     <!-- Vector CSS -->
     <link href="{{url('asset/admin/assets/plugins/vectormap/jquery-jvectormap-2.0.2.css')}}" rel="stylesheet" />
@@ -39,7 +39,7 @@
         <div id="sidebar-wrapper" data-simplebar="" data-simplebar-auto-hide="true">
             <div class="brand-logo">
                 <a href="{{url('Restaurent/dashboard')}}">
-                    <img src="{{url('asset/customer/assets/images/logo.png')}}" class="logo-icon" alt="logo icon"
+                    <img src="{{asset('asset/customer/assets/images/logo.png')}}" class="logo-icon" alt="logo icon"
                         height="35px" width="25px">
                     <h5 class="logo-text">Fimihub</h5>
                 </a>

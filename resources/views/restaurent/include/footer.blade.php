@@ -16,26 +16,26 @@
 <!--End wrapper-->
 
 <!-- Bootstrap core JavaScript-->
-<script src="{{url('asset/admin/assets/js/jquery.min.js')}}"></script>
-<script src="{{url('asset/admin/assets/js/popper.min.js')}}"></script>
-<script src="{{url('asset/admin/assets/js/bootstrap.min.js')}}"></script>
+<script src="{{asset('asset/admin/assets/js/jquery.min.js')}}"></script>
+<script src="{{asset('asset/admin/assets/js/popper.min.js')}}"></script>
+<script src="{{asset('asset/admin/assets/js/bootstrap.min.js')}}"></script>
 
 <!-- simplebar js -->
-<script src="{{url('asset/admin/assets/plugins/simplebar/js/simplebar.js')}}"></script>
+<script src="{{asset('asset/admin/assets/plugins/simplebar/js/simplebar.js')}}"></script>
 <!-- waves effect js -->
-<script src="{{url('asset/admin/assets/js/waves.js')}}"></script>
+<script src="{{asset('asset/admin/assets/js/waves.js')}}"></script>
 <!-- sidebar-menu js -->
-{{-- <script src="{{url('asset/admin/assets/js/sidebar-menu.js')}}"></script> --}}
+{{-- <script src="{{asset('asset/admin/assets/js/sidebar-menu.js')}}"></script> --}}
 <!-- Custom scripts -->
-<script src="{{url('asset/admin/assets/js/app-script.js')}}"></script>
+<script src="{{asset('asset/admin/assets/js/app-script.js')}}"></script>
 
 <!-- Vector map JavaScript -->
-<script src="{{url('asset/admin/assets/plugins/vectormap/jquery-jvectormap-2.0.2.min.js')}}"></script>
-<script src="{{url('asset/admin/assets/plugins/vectormap/jquery-jvectormap-world-mill-en.js')}}"></script>
+<script src="{{asset('asset/admin/assets/plugins/vectormap/jquery-jvectormap-2.0.2.min.js')}}"></script>
+<script src="{{asset('asset/admin/assets/plugins/vectormap/jquery-jvectormap-world-mill-en.js')}}"></script>
 <!-- Chart js -->
-<script src="{{url('asset/admin/assets/plugins/Chart.js/Chart.min.js')}}"></script>
+<script src="{{asset('asset/admin/assets/plugins/Chart.js/Chart.min.js')}}"></script>
 <!-- Index js -->
-<script src="{{url('asset/admin/assets/js/index.js')}}"></script>
+<script src="{{asset('asset/admin/assets/js/index.js')}}"></script>
 
 </body>
 

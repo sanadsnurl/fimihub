@@ -1,7 +1,7 @@
 <!-- Bootstrap core JavaScript-->
-<script src="{{url('asset/admin/assets/js/jquery.min.js')}}"></script>
-<script src="{{url('asset/admin/assets/js/popper.min.js')}}"></script>
-<script src="{{url('asset/admin/assets/js/bootstrap.min.js')}}"></script>
+<script src="{{asset('asset/admin/assets/js/jquery.min.js')}}"></script>
+<script src="{{asset('asset/admin/assets/js/popper.min.js')}}"></script>
+<script src="{{asset('asset/admin/assets/js/bootstrap.min.js')}}"></script>
 
 </body>
 

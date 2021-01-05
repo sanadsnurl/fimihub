@@ -17,10 +17,10 @@
                 @csrf
                 <input type="radio" name="payment" id="stripe" value="1">
                 <label for="stripe" id="bank_transfer">
-                    <img src="{{url('asset/customer/assets/images/bank.svg')}}" class="mr-2" style="height: 25px;"
+                    <img src="{{asset('asset/customer/assets/images/bank.svg')}}" class="mr-2" style="height: 25px;"
                         alt="cash on delivery">
                     Bank Transfer
-                    {{-- <img src="{{url('asset/customer/assets/images/stripe.svg')}}" alt="stripe"> --}}
+                    {{-- <img src="{{asset('asset/customer/assets/images/stripe.svg')}}" alt="stripe"> --}}
                 </label>
                 <div class="bank_content">
                     <p>Please make your Bank Transfer using the following
@@ -40,12 +40,12 @@
 
                 <input type="radio" name="payment" id="paypal" value="2">
                 <label for="paypal">
-                    <img src="{{url('asset/customer/assets/images/paypal.svg')}}" alt="paypal">
+                    <img src="{{asset('asset/customer/assets/images/paypal.svg')}}" alt="paypal">
                 </label>
 
                 <input type="radio" name="payment" id="cash" value="3">
                 <label for="cash" id="cashondelivery">
-                    <img src="{{url('asset/customer/assets/images/cash-delivery.svg')}}" class="mr-2"
+                    <img src="{{asset('asset/customer/assets/images/cash-delivery.svg')}}" class="mr-2"
                         alt="cash on delivery">
                     CASH ON DELIVERY
                 </label>

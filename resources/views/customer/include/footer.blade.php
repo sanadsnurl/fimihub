@@ -143,17 +143,17 @@
                 <ul class="social-links">
                     <li>
                         <a href="#" target="_balnk">
-                            <img src="{{url('asset/customer/assets/images/twitter.svg')}}" alt="facebook">
+                            <img src="{{asset('asset/customer/assets/images/twitter.svg')}}" alt="facebook">
                         </a>
                     </li>
                     <li>
                         <a href="https://www.facebook.com/fimi.hub.3" target="_balnk">
-                            <img src="{{url('asset/customer/assets/images/facebook.svg')}}" alt="facebook">
+                            <img src="{{asset('asset/customer/assets/images/facebook.svg')}}" alt="facebook">
                         </a>
                     </li>
                     <li>
                         <a href="#" target="_balnk">
-                            <img src="{{url('asset/customer/assets/images/instagram.svg')}}" alt="instagram">
+                            <img src="{{asset('asset/customer/assets/images/instagram.svg')}}" alt="instagram">
                         </a>
                     </li>
                 </ul>
@@ -165,7 +165,7 @@
     <div class="inner-sidebar">
         <div class="title">
             <div class="icon close-sidepanel">
-                <img src="{{url('asset/customer/assets/images/cross.svg')}}" alt="cross">
+                <img src="{{asset('asset/customer/assets/images/cross.svg')}}" alt="cross">
             </div>
             <h4>Save delivery address</h4>
         </div>
@@ -221,10 +221,10 @@
         </form>
     </div>
 </div>
-<script type="text/javascript" src="{{url('asset/customer/assets/scripts/plugins/jquery-3.4.1.min.js')}}"></script>
-<script type="text/javascript" src="{{url('asset/customer/assets/scripts/plugins/slick.min.js')}}"></script>
-<script type="text/javascript" src="{{url('asset/customer/assets/scripts/plugins/wow.js')}}"></script>
-<script type="text/javascript" src="{{url('asset/customer/assets/scripts/main.js')}}"></script>
+<script type="text/javascript" src="{{asset('asset/customer/assets/scripts/plugins/jquery-3.4.1.min.js')}}"></script>
+<script type="text/javascript" src="{{asset('asset/customer/assets/scripts/plugins/slick.min.js')}}"></script>
+<script type="text/javascript" src="{{asset('asset/customer/assets/scripts/plugins/wow.js')}}"></script>
+<script type="text/javascript" src="{{asset('asset/customer/assets/scripts/main.js')}}"></script>
 </body>
 
 </html>
@@ -241,7 +241,7 @@
                     </h3>
                 </div>
                 <div class="modal_body_content modal_body_content2 successfull_mdl_bdy text-center">
-                    <img src="{{url('asset/customer/assets/images/check.png')}}" alt="checkmark">
+                    <img src="{{asset('asset/customer/assets/images/check.png')}}" alt="checkmark">
                     <div class="forgot_psw_btn">
                         <button type="button" class="btn_purple hover_effect1 auth_btn"
                             data-dismiss="modal">BACK</button>
@@ -261,7 +261,7 @@
         <div class="modal-content">
             <div class="modal-body text-center">
                 <h3>Order Confirmed!</h3>
-                <img src="{{url('asset/customer/assets/images/cup_icon.svg')}}" alt="cup">
+                <img src="{{asset('asset/customer/assets/images/cup_icon.svg')}}" alt="cup">
                 <h3 class="mt-3 mb-3">THANK YOU!</h3>
                 <p>Your order was successfully placed <br>and being prepared for delivery.</p>
                 <div class="d-flex align-items-center justify-content-center">
@@ -281,7 +281,7 @@
     <div class="inner-sidebar">
         <div class="title">
             <div class="icon close-sidepanel">
-                <img src="{{url('asset/customer/assets/images/cross.svg')}}" alt="cross">
+                <img src="{{asset('asset/customer/assets/images/cross.svg')}}" alt="cross">
             </div>
             <h4>Filters</h4>
         </div>
@@ -424,8 +424,8 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/jquery.validation/1.15.0/jquery.validate.min.js"></script>
 
-<script type="text/javascript" src="{{url('asset/customer/assets/scripts/mapInput.js')}}"></script>
-<script type="text/javascript" src="{{url('asset/customer/assets/scripts/searchMap.js')}}"></script>
+<script type="text/javascript" src="{{asset('asset/customer/assets/scripts/mapInput.js')}}"></script>
+<script type="text/javascript" src="{{asset('asset/customer/assets/scripts/searchMap.js')}}"></script>
 <script
     src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}&libraries=places&callback=initialize"
     async defer></script>

@@ -82,7 +82,7 @@
                     @elseif($order->order_status == 10)
                     Refunded
                     @endif on {{date('D, M d, Y, h:i A', strtotime($order->updated_at))}}
-                    <img src="{{url('asset/customer/assets/images/delivered.svg')}}" alt="delivered">
+                    <img src="{{asset('asset/customer/assets/images/delivered.svg')}}" alt="delivered">
                 </span>
                 <!-- <a href="#" class="show-sidepanel" id="orderPanel">View Details</a> -->
                 <span class="amt">Total Paid: {{$user_data->currency ?? '$'}} {{$order->total_amount ?? ''}}</span>
@@ -159,7 +159,7 @@
             </div>
             <div class="col-right">
                 <span class="status on-way">ETA: 10 Mins <img
-                        src="{{url('asset/customer/assets/images/delivered.svg')}}" alt="delivered"></span>
+                        src="{{asset('asset/customer/assets/images/delivered.svg')}}" alt="delivered"></span>
                 <!-- <a href="#" class="show-sidepanel" id="orderPanel">View Details</a> -->
                 <span class="amt">Total Paid: {{$user_data->currency ?? '$'}} {{$c_order->total_amount ?? ''}}</span>
             </div>
@@ -172,7 +172,7 @@
     <div class="inner-sidebar">
         <div class="title">
             <div class="icon close-sidepanel">
-                <img src="{{url('asset/customer/assets/images/cross.svg')}}" alt="cross">
+                <img src="{{asset('asset/customer/assets/images/cross.svg')}}" alt="cross">
             </div>
             <h4>Order #59908365721</h4>
         </div>

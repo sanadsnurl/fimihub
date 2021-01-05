@@ -23,7 +23,7 @@
         <div class="card-body">
             <div class="card-content p-2">
                 <div class="text-center">
-                    <img src="{{url('asset/customer/assets/images/logo.png')}}">
+                    <img src="{{asset('asset/customer/assets/images/logo.png')}}">
                 </div>
                 <div class="card-title text-uppercase text-center py-3">OTP Verfication
                     @if(Session::has('message'))
@@ -71,4 +71,4 @@
 <!--wrapper-->
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="{{url('asset\admin\assets\js\index.js')}}"></script>
+<script src="{{asset('asset\admin\assets\js\index.js')}}"></script>

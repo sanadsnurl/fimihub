@@ -79,7 +79,7 @@
                 <a href="#">
                     <div class="inner-wrap">
                         <div class="icon">
-                            <img src="{{url('asset/customer/assets/images/groceries.svg')}}" alt="groceries">
+                            <img src="{{asset('asset/customer/assets/images/groceries.svg')}}" alt="groceries">
                         </div>
                         <h5>Groceries, Essentials</h5>
                     </div>
@@ -89,7 +89,7 @@
                 <a href="{{url('/home')}}">
                     <div class="inner-wrap">
                         <div class="icon">
-                            <img src="{{url('asset/customer/assets/images/food.svg')}}" alt="food">
+                            <img src="{{asset('asset/customer/assets/images/food.svg')}}" alt="food">
                         </div>
                         <h5>Food Delivery</h5>
                     </div>
@@ -99,7 +99,7 @@
                 <a href="#">
                     <div class="inner-wrap">
                         <div class="icon">
-                            <img src="{{url('asset/customer/assets/images/delivery.svg')}}" alt="delivery">
+                            <img src="{{asset('asset/customer/assets/images/delivery.svg')}}" alt="delivery">
                         </div>
                         <h5>Errand</h5>
                     </div>
@@ -114,7 +114,7 @@
             <div class="col-wrap">
                 <div class="card-wrap">
                     <div class="icon">
-                        <img src="{{url('asset/customer/assets/images/secure.svg')}}" alt="secure">
+                        <img src="{{asset('asset/customer/assets/images/secure.svg')}}" alt="secure">
                     </div>
                     <h6>Delivered in 45 mins</h6>
                     <p>The quickest way to get things delivered</p>
@@ -123,7 +123,7 @@
             <div class="col-wrap">
                 <div class="card-wrap">
                     <div class="icon">
-                        <img src="{{url('asset/customer/assets/images/map.svg')}}" alt="map">
+                        <img src="{{asset('asset/customer/assets/images/map.svg')}}" alt="map">
                     </div>
                     <h6>Safety First</h6>
                     <p>Ensuring best practices to keep you and our partners safe at every step!</p>
@@ -132,7 +132,7 @@
             <div class="col-wrap">
                 <div class="card-wrap">
                     <div class="icon">
-                        <img src="{{url('asset/customer/assets/images/time.svg')}}" alt="time">
+                        <img src="{{asset('asset/customer/assets/images/time.svg')}}" alt="time">
                     </div>
                     <h6>Available 24x7</h6>
                     <p>Day or night, get it delivered</p>
@@ -147,7 +147,7 @@
             <div class="row-wrap">
                 <div class="col-img">
                     <div class="img-wrap">
-                        <img src="{{url('asset/customer/assets/images/member.png')}}" alt="member">
+                        <img src="{{asset('asset/customer/assets/images/member.png')}}" alt="member">
                     </div>
                 </div>
                 <div class="col-content">
@@ -161,7 +161,7 @@
             <div class="row-wrap img-right">
                 <div class="col-img">
                     <div class="img-wrap">
-                        <img src="{{url('asset/customer/assets/images/sell.png')}}" alt="sell">
+                        <img src="{{asset('asset/customer/assets/images/sell.png')}}" alt="sell">
                     </div>
                 </div>
                 <div class="col-content">
@@ -182,16 +182,16 @@
                 <div class="content-wrap">
                     <h2>Fimihub helps you to order food more easily</h2>
                     <ul class="links">
-                        <li><a href="#"><img src="{{url('asset/customer/assets/images/play_store.jpg')}}"
+                        <li><a href="#"><img src="{{asset('asset/customer/assets/images/play_store.jpg')}}"
                                     alt="play store"></a></li>
-                        <li><a href="#"><img src="{{url('asset/customer/assets/images/app_store.jpg')}}"
+                        <li><a href="#"><img src="{{asset('asset/customer/assets/images/app_store.jpg')}}"
                                     alt="app store"></a></li>
                     </ul>
                 </div>
             </div>
             <div class="col-img">
                 <div class="img-wrap">
-                    <img src="{{url('asset/customer/assets/images/fimihub.jpeg')}}" alt="fimihub">
+                    <img src="{{asset('asset/customer/assets/images/fimihub.jpeg')}}" alt="fimihub">
                 </div>
             </div>
         </div>
