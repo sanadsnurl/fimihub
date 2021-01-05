@@ -6,7 +6,7 @@
 <div class="col-md-7 padd_rht">
     <div class="card_lft card card_track">
         <div class="track_map">
-            <img src="{{url('asset/customer/assets/images/trackmap.png')}}" class="w-100" alt="map">
+            <img src="{{asset('asset/customer/assets/images/trackmap.png')}}" class="w-100" alt="map">
         </div>
         <div class="track_addrs_strip d-flex">
             <div>
@@ -42,7 +42,7 @@
                     </ul>
                 </div>
                 <div class="col-md-3">
-                    <img src="{{url('asset/customer/assets/images/burger_image.png')}}" class="w-100" alt="burger">
+                    <img src="{{asset('asset/customer/assets/images/burger_image.png')}}" class="w-100" alt="burger">
                 </div>
             </div>
         </div>

@@ -23,23 +23,23 @@
     <div class="slider-wrap">
         <div class="slide-item">
             <div class="bg-img">
-                <img src="{{url('asset/customer/assets/images/restaurant_detail_banner.png')}}" alt="banner">
+                <img src="{{asset('asset/customer/assets/images/restaurant_detail_banner.png')}}" alt="banner">
             </div>
         </div>
 
         <div class="slide-item">
             <div class="bg-img">
-                <img src="{{url('asset/customer/assets/images/restaurant_detail_banner.png')}}" alt="banner">
+                <img src="{{asset('asset/customer/assets/images/restaurant_detail_banner.png')}}" alt="banner">
             </div>
         </div>
         <div class="slide-item">
             <div class="bg-img">
-                <img src="{{url('asset/customer/assets/images/restaurant_detail_banner.png')}}" alt="banner">
+                <img src="{{asset('asset/customer/assets/images/restaurant_detail_banner.png')}}" alt="banner">
             </div>
         </div>
         <div class="slide-item">
             <div class="bg-img">
-                <img src="{{url('asset/customer/assets/images/restaurant_detail_banner.png')}}" alt="banner">
+                <img src="{{asset('asset/customer/assets/images/restaurant_detail_banner.png')}}" alt="banner">
             </div>
         </div>
     </div>
@@ -163,7 +163,7 @@
                         <p>{{$resto_data->name ?? ''}}</p>
                     </div>
                     <div class="col-right">
-                        <h4><a href="{{url('/cart')}}">View Cart <img src="{{url('asset/customer/assets/images/cart_white.svg')}}"
+                        <h4><a href="{{url('/cart')}}">View Cart <img src="{{asset('asset/customer/assets/images/cart_white.svg')}}"
                                     alt="cart white"></a></h4>
                     </div>
                 </div>

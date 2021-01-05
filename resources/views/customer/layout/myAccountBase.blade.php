@@ -55,7 +55,7 @@
                         </li>
                         <li>
                             <a href="{{url('logout')}}"><img
-                                    src="{{url('asset/customer/assets/images/logout_icon.svg')}}" alt="logout">
+                                    src="{{asset('asset/customer/assets/images/logout_icon.svg')}}" alt="logout">
                                 Logout</a>
                         </li>
                     </ul>

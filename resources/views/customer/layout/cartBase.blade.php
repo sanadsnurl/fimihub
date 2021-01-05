@@ -148,9 +148,9 @@
                         @if(request()->is('cart'))
                         {{-- <div class="aply_cupon ">
                             <a href="javascript:void(0)" class="d-flex accord_btn">
-                                <span><img src="{{url('asset/customer/assets/images/cuppon_icon.svg')}}" alt="icon">
+                                <span><img src="{{asset('asset/customer/assets/images/cuppon_icon.svg')}}" alt="icon">
                                     APPLY COUPON</span>
-                                <img src="{{url('asset/customer/assets/images/arrow_right.svg')}}" alt="arrow">
+                                <img src="{{asset('asset/customer/assets/images/arrow_right.svg')}}" alt="arrow">
                             </a>
                             <div class="apply_cpn_box">
                                 <form action="">
@@ -183,7 +183,7 @@
 
                             <div class="partner_fee">
                                 <span>Restaurent Discount <img
-                                        src="{{url('asset/customer/assets/images/info_icon.svg')}}" alt="info"></span>
+                                        src="{{asset('asset/customer/assets/images/info_icon.svg')}}" alt="info"></span>
                                 <span>{{$user_data->currency ?? ''}} {{$resto_data->discount ?? '0'}}</span>
                             </div>
                             @endif
@@ -191,21 +191,21 @@
                             @if($resto_data->tax != 0 || $resto_data->tax != Null)
                             <div class="partner_fee">
                                 <span>Restaurant Tax &nbsp;&nbsp;<img
-                                        src="{{url('asset/customer/assets/images/info_icon.svg')}}" alt="info"></span>
+                                        src="{{asset('asset/customer/assets/images/info_icon.svg')}}" alt="info"></span>
                                 <span>{{$user_data->currency ?? ''}} {{$resto_data->tax ?? '0'}}</span>
                             </div>
                             @endif
                             @if($service_data->service_tax != 0 || $service_data->service_tax != Null)
                             <div class="partner_fee">
                                 <span> Tax ({{$service_data->tax}} %)&nbsp;&nbsp;<img
-                                        src="{{url('asset/customer/assets/images/info_icon.svg')}}" alt="info"></span>
+                                        src="{{asset('asset/customer/assets/images/info_icon.svg')}}" alt="info"></span>
                                 <span>{{$user_data->currency ?? ''}} <span
                                         id="service_tax">{{number_format((float)$service_data->service_tax, 2) ?? '0'}}</span></span>
                             </div>
                             @endif
                             <div class="charges_tax">
                                 <span>Delivery partner fee <img
-                                        src="{{url('asset/customer/assets/images/info_icon.svg')}}" alt="info"></span>
+                                        src="{{asset('asset/customer/assets/images/info_icon.svg')}}" alt="info"></span>
                                 <span>{{$user_data->currency ?? ''}}
                                     <span>{{$resto_data->delivery_charge ?? '0'}}</span></span>
                             </div>

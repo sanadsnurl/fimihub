@@ -84,8 +84,8 @@
 <!--End content-wrapper-->
 @include('admin.include.footer')
 <!-- Bootstrap core JavaScript-->
-<script src="{{url('asset/admin/assets/js/jquery.min.js')}}"></script>
+<script src="{{asset('asset/admin/assets/js/jquery.min.js')}}"></script>
 <!-- waves effect js -->
-<script src="{{url('asset/admin/assets/js/waves.js')}}"></script>
+<script src="{{asset('asset/admin/assets/js/waves.js')}}"></script>
 
 <!--End content-wrapper-->
