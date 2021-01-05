@@ -153,18 +153,18 @@ $('.payment_options label').click(function() {
 })
 
  // sticky menu sidebar
- var stickyMenu = $(".order-block .order-menu-row .col-menu .menu-block");
+ var sticky = $(".order-block .order-menu-row .sticky");
 
  $(window).on("scroll", function(e){
-    stickyMenu.each(function(e){
+    sticky.each(function(e){
          let scrolled = $(window).scrollTop();
-         let startPos = $(this).parents(".col-menu").offset().top - 20;
-         let endPos = $(this).parents(".col-menu").offset().top + $(this).parents(".col-menu").height() - $(this).height() - 90;
+         let startPos = $(this).parents(".order-menu-row").offset().top - $(".header").height() - 20;
+         let endPos = $(this).parents(".order-menu-row").offset().top + $(this).parents(".order-menu-row").height() - $(this).height() - 90;
          if(window.matchMedia("(min-width: 768px)").matches) {
              if(scrolled > startPos && scrolled < endPos) {
                  $(this).css({
                      position: "fixed",
-                     top: 20,
+                     top: 120,
                      bottom: "auto",
                      width: $(this).parent().width()
                  })
@@ -187,37 +187,37 @@ $('.payment_options label').click(function() {
      })
  });
 
- // sticky cart block
-//  var stickyCart = $(".order-block .cart-block");
+//  sticky cart block
+// var stickyCart = $(".order-block .cart-block");
 
-//  $(window).on("scroll", function(e){
+// $(window).on("scroll", function(e){
 //     stickyCart.each(function(e){
-//          let scrolled = $(window).scrollTop();
-//          let startPos = $(this).parents(".col-order").offset().top - 20;
-//          let endPos = $(this).parents(".col-order").offset().top + $(this).parents(".col-order").height() - $(this).height() - 90;
-//          if(window.matchMedia("(min-width: 768px)").matches) {
-//              if(scrolled > startPos) {
-//                  $(this).css({
-//                      position: "fixed",
-//                      top: 20,
-//                      bottom: "auto",
-//                      width: $(this).parent().width()
-//                  })
-//              } 
-//              else if(scrolled > endPos) {
-//                  $(this).css({
-//                      position: "absolute",
-//                      bottom: 0,
-//                      top: "auto"
-//                  })
-//              } 
-//              else {
-//                  $(this).css({
-//                      position: "relative",
-//                      bottom: 0,
-//                      top: 0
-//                  })
-//              }
-//          }
-//      })
-//  });
+//         let scrolled = $(window).scrollTop();
+//         let startPos = $(this).parents(".col-order").offset().top - 20;
+//         let endPos = $(this).parents(".col-order").offset().top + $(this).parents(".col-order").height() - $(this).height() - 90;
+//         if(window.matchMedia("(min-width: 768px)").matches) {
+//             if(scrolled > startPos && scrolled < endPos) {
+//                 $(this).css({
+//                     position: "fixed",
+//                     top: startPos,
+//                     bottom: "auto",
+//                     width: $(this).parent().width()
+//                 })
+//             } 
+//             else if(scrolled > endPos) {
+//                 $(this).css({
+//                     position: "absolute",
+//                     bottom: 0,
+//                     top: "auto"
+//                 })
+//             } 
+//             else {
+//                 $(this).css({
+//                     position: "relative",
+//                     bottom: 0,
+//                     top: 0
+//                 })
+//             }
+//         }
+//     })
+// });
