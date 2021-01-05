@@ -5774,7 +5774,7 @@ header:after,
 .order-block .order-menu-row .col-order .filter-row {
     display: flex;
     flex-wrap: nowrap;
-    margin-bottom: 40px;
+    /* margin-bottom: 40px; */
 }
 
 .order-block .order-menu-row .col-order .filter-row .filter-btn {
@@ -6002,6 +6002,13 @@ header:after,
     padding: 20px 60px;
     align-items: center;
     display: none;
+    margin-bottom: 20px;
+}
+
+@media screen and (max-width:480px) {
+    .order-block .cart-block {
+        padding: 20px 30px;
+    }
 }
 
 .order-block .cart-block.show {
