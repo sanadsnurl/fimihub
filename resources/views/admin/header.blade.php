@@ -13,13 +13,13 @@
     <!--favicon-->
     <link rel="icon" href="{{asset('asset/customer/assets/images/logo.png')}}">
     <!-- Bootstrap core CSS-->
-    <link href="{{url('asset/admin/assets/css/bootstrap.min.css')}}" rel="stylesheet" />
+    <link href="{{asset('asset/admin/assets/css/bootstrap.min.css')}}" rel="stylesheet" />
     <!-- animate CSS-->
-    <link href="{{url('asset/admin/assets/css/animate.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('asset/admin/assets/css/animate.css')}}" rel="stylesheet" type="text/css" />
     <!-- Icons CSS-->
-    <link href="{{url('asset/admin/assets/css/icons.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('asset/admin/assets/css/icons.css')}}" rel="stylesheet" type="text/css" />
     <!-- Custom Style-->
-    <link href="{{url('asset/admin/assets/css/app-style.css')}}" rel="stylesheet" />
+    <link href="{{asset('asset/admin/assets/css/app-style.css')}}" rel="stylesheet" />
 
 </head>
 
