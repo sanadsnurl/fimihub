@@ -14,13 +14,21 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
-                    <div class="card-header"><i class="fa fa-table"></i> Rider List</div>
+                    <div class="card-header"><i class="fa fa-table"></i> Rider List
+                        @if(Session::has('message'))
+                        <div class="error" style="text-align:center;">
+                            <h4 class="error">{{ Session::get('message') }}</h4>
+                        </div>
+
+                        @endif
+                    </div>
+
                     <div class="card-body">
                         <div class="table-responsive">
                             <table id="example1" class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        {{-- <th>Action</th> --}}
+                                        <th>Action</th>
                                         <th>S.No.</th>
                                         <th>Name</th>
                                         <th>Mobile</th>
@@ -96,6 +104,12 @@
                 buttons: ['copy', 'excel', 'pdf', 'print'],
                 ajax: "{{url('adminfimihub/riderList')}}",
                 columns: [{
+                        data: 'action',
+                        name: 'action',
+                        orderable: true,
+                        searchable: false
+                    },
+                    {
                         data: 'DT_RowIndex',
                         name: 'id'
                     },

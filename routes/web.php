@@ -297,6 +297,8 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
         Route::get('pendingRider', 'Web\Admin\RiderController@pendingRider');
         // Approve Pending Restaurent Partner Requests
         Route::get('approveRider', 'Web\Admin\RiderController@approveRider');
+        //Delete Rider
+        Route::get('deleteRider', 'Web\Admin\RiderController@deleteRider');
     });
 
 });

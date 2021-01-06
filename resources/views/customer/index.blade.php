@@ -18,7 +18,7 @@
                         @if($s_data->link != NULL)
                         <a href="{{$s_data->link ?? ''}}" class="btn btn-lg btn-white">See More</a>
                         @endif
-                        <form role="form" method="POST" action="{{ url('/saveAddress') }}" onSubmit="return checkform()"
+                        {{-- <form role="form" method="POST" action="{{ url('/saveAddress') }}" onSubmit="return checkform()"
                             class="form save_adrs">
                             @csrf
                             <div class="search-bar">
@@ -60,7 +60,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </form>
+                        </form> --}}
                     </div>
                 </div>
             </div>

@@ -15,7 +15,14 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
-                    <div class="card-header"><i class="fa fa-table"></i> New Request List</div>
+                    <div class="card-header"><i class="fa fa-table"></i> New Request List
+                        @if(Session::has('message'))
+                        <div class="error" style="text-align:center;">
+                            <h4 class="error">{{ Session::get('message') }}</h4>
+                        </div>
+
+                        @endif
+                    </div>
                     <div class="card-body">
                         <div class="table-responsive">
                             <table id="example" class="table table-bordered">
