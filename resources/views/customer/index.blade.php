@@ -25,6 +25,7 @@
                                 <div id="address-map-container" style="width:0%;height:0px; margin-bottom: 0px;">
                                     <div style="width: 0%; height: 0%;" id="address-map1"></div>
                                 </div>
+
                                 <div class="location-selector">
                                     <span>
                                         <!-- <input id="autocomplete" placeholder="Enter your address" onFocus="geolocate()"
@@ -32,13 +33,14 @@
 
                                         <div class="field-wrap">
                                             <div class="address_box_dyn">
-                                                <input type="text" data-id="address-input" name="address_address"
+                                                <div class="error">Invalid Location</div>
+                                                <input type="text" data-id="location-input" name="address_address"
                                                     placeholder="Search Location" class="map-input">
 
                                             </div>
-                                            <input type="hidden" name="address_latitude" id="address-latitude"
+                                            <input type="hidden" name="address_latitude" id="location-latitude"
                                                 value="0" />
-                                            <input type="hidden" name="address_longitude" id="address-longitude"
+                                            <input type="hidden" name="address_longitude" id="location-longitude"
                                                 value="0" />
                                             @if($errors->has('address_address'))
                                             <div class="error">{{ $errors->first('address') }}</div>
