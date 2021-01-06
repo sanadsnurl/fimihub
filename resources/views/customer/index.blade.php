@@ -23,7 +23,7 @@
                             @csrf
                             <div class="search-bar">
                                 <div id="address-map-container" style="width:0%;height:0px; margin-bottom: 0px;">
-                                    <div style="width: 0%; height: 0%;" id="address-map1"></div>
+                                    <div style="width: 0%; height: 0%;" id="location-map"></div>
                                 </div>
 
                                 <div class="location-selector">
