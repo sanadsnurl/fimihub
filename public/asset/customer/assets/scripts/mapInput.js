@@ -151,5 +151,7 @@ $(".banner .save_adrs").submit(function(){
     if(langInput.val() == 0 && latInput.val() == 0) {
         $(".banner .address_box_dyn").addClass("invalid");
         return false
+    }else {
+        $(".banner .address_box_dyn").removeClass("invalid");
     }
 })
