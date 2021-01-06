@@ -98,7 +98,7 @@ class OtpManagerController extends Controller
                     return response()->json(['otp'=>$user_otp, 'message' => 'OTP Sent','status'=>true], $this->successStatusCreated);
                 }
                 else{
-                    return response()->json(['message' => 'OTP not sent','status'=>false], $this->failureStatus);
+                    return response()->json(['message' => 'OTP not sent','status'=>true], $this->failureStatus);
                 }
                 // return response()->json(['otp'=>(string)$user_otp, 'message' => 'OTP Sent','status'=>true], $this->successStatusCreated);
 

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Response;
 use File;
+use Imagick;
 
 trait MediaUploadTrait
 {
