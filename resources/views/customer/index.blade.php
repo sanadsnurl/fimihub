@@ -32,13 +32,14 @@
 
                                         <div class="field-wrap">
                                             <div class="address_box_dyn">
+                                                <div class="error">Invalid Location</div>
                                                 <input type="text" data-id="location-input" name="address_address"
                                                     placeholder="Search Location" class="map-input">
 
                                             </div>
-                                            <input type="text" name="address_latitude" id="location-latitude"
+                                            <input type="hidden" name="address_latitude" id="location-latitude"
                                                 value="0" />
-                                            <input type="text" name="address_longitude" id="location-longitude"
+                                            <input type="hidden" name="address_longitude" id="location-longitude"
                                                 value="0" />
                                             @if($errors->has('address_address'))
                                             <div class="error">{{ $errors->first('address') }}</div>

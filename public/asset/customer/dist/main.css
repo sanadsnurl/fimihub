@@ -8491,3 +8491,35 @@ span.deliver_btn {
     padding-left: 0 !important;
     border-radius: 37px;
 }
+
+.search-btn::before {
+    z-index: -1;
+}
+
+.address_box_dyn.invalid .error{
+    display: block;
+}
+
+.address_box_dyn.invalid input{
+    border-bottom: 1px solid red !important;
+}
+
+.address_box_dyn .error {
+    position: absolute;
+    padding: 7px 15px;
+    background: #fff;
+    box-shadow: 0 0px 20px rgba(0,0,0,.1);
+    top: -52px;
+    display: none;
+}
+
+.address_box_dyn .error::before {
+    position: absolute;
+    content: "";
+    top: 100%;
+    left: 50%;
+    border-width: 7px;
+    border-style: solid;
+    border-color: #fff transparent transparent transparent;
+    transform: translateX(-50%);
+}

@@ -24,8 +24,6 @@ function initialize() {
             center: { lat: latitude, lng: longitude },
             zoom: 13
         });
-
-        console.log(map)
         const marker = new google.maps.Marker({
             map: map,
             position: { lat: latitude, lng: longitude },
@@ -145,6 +143,13 @@ $('.show_address').click(function() {
     } else {
         alert('Location not find')
     }
+})
 
-
+$(".banner .save_adrs").submit(function(){
+    let langInput = $(".banner .search-bar  #location-longitude");
+    let latInput = $(".banner .search-bar #location-latitude");
+    if(langInput.val() == 0 && latInput.val() == 0) {
+        $(".banner .address_box_dyn").addClass("invalid");
+        return false
+    }
 })
