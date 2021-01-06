@@ -8,13 +8,13 @@ function initialize() {
         }
     });
     const locationInputs = document.getElementsByClassName("map-input");
-
     const autocompletes = [];
     const geocoder = new google.maps.Geocoder;
     for (let i = 0; i < locationInputs.length; i++) {
 
         const input = locationInputs[i];
-        const fieldKey = input.id.replace("-input", "");
+        // const fieldKey = input.id.replace("-input", "");
+        const fieldKey = input.getAttribute("data-id").replace("-input", "");
         const isEdit = document.getElementById(fieldKey + "-latitude").value != '' && document.getElementById(fieldKey + "-longitude").value != '';
 
         const latitude = parseFloat(document.getElementById(fieldKey + "-latitude").value) || -33.8688;

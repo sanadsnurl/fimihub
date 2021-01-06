@@ -184,7 +184,7 @@
             <div class="field-wrap">
                 <label for="address_address">Address</label>
                 <div class="address_box_dyn">
-                    <input type="text" id="address-input" name="address_address" placeholder="Address"
+                    <input type="text" data-id="address-input" name="address_address" placeholder="Address"
                         class="map-input">
                     <button type="button" class="show_address"><i class="fa fa-crosshairs"></i></button>
                     <span id="add" class="errors"></span>

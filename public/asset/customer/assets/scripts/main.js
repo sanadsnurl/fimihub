@@ -24,7 +24,6 @@
         e.preventDefault();
         e.stopPropagation();
         let id = $(this).attr("id");
-        console.log('check', id);
         $(".side-panel[data-panel-id=" + id + "]").addClass("show");
     })
     closeBtn.click(function() {
