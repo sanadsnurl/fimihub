@@ -8486,6 +8486,8 @@ span.deliver_btn {
 
 .search-btn input {
     background-color: transparent;
-    width: 100%;
+    width: 100% !important;
     height: 100%;
+    padding-left: 0 !important;
+    border-radius: 37px;
 }

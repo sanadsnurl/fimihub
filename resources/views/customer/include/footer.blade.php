@@ -190,8 +190,8 @@
                     <span id="add" class="errors"></span>
 
                 </div>
-                <input type="hidden" name="address_latitude" id="address-latitude" value="0" />
-                <input type="hidden" name="address_longitude" id="address-longitude" value="0" />
+                <input type="text" name="address_latitude" id="address-latitude" value="0" />
+                <input type="text" name="address_longitude" id="address-longitude" value="0" />
                 @if($errors->has('address_address'))
                 <div class="error">{{ $errors->first('address') }}</div>
                 @endif

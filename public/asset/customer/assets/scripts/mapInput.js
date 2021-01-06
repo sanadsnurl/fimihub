@@ -24,6 +24,8 @@ function initialize() {
             center: { lat: latitude, lng: longitude },
             zoom: 13
         });
+
+        console.log(map)
         const marker = new google.maps.Marker({
             map: map,
             position: { lat: latitude, lng: longitude },
