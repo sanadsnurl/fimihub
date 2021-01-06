@@ -4,7 +4,6 @@
 <link href="{{asset('asset/admin/assets/plugins/bootstrap-datatable/css/buttons.bootstrap4.min.css')}}" rel="stylesheet"
     type="text/css">
 
-
 @include('admin.include.sideNav')
 @include('admin.include.header')
 <div class="clearfix"></div>
@@ -15,7 +14,14 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
-                    <div class="card-header"><i class="fa fa-table"></i> Restaurant List</div>
+                    <div class="card-header"><i class="fa fa-table"></i> Restaurant List
+                        @if(Session::has('message'))
+                        <div class="error" style="text-align:center;">
+                            <h4 class="error">{{ Session::get('message') }}</h4>
+                        </div>
+
+                        @endif
+                    </div>
                     <div class="card-body">
                         <div class="table-responsive">
                             <table id="example" class="table table-bordered">
@@ -49,7 +55,6 @@
     </div>
     <!-- End container-fluid-->
 
-
     <!--End content-wrapper-->
     @include('admin.include.footer')
     <!-- Bootstrap core JavaScript-->
@@ -69,81 +74,75 @@
     <script src="{{asset('asset/admin/assets/plugins/bootstrap-datatable/js/buttons.colVis.min.js')}}"></script>
 
     <script>
-    $(document).ready(function() {
-        //Default data table
-        $('#default-datatable').DataTable();
-
-        var table = $('#example').DataTable({
-            lengthChange: true,
-            processing: true,
-            serverSide: true,
-            paging: true,
-            dom: 'lBfrtip',
-            buttons: ['copy', 'excel', 'pdf', 'print'],
-            ajax: "{{url('adminfimihub/retaurantList')}}",
-            columns: [{
-                    data: 'action',
-                    name: 'action',
-                    orderable: true,
-                    searchable: false
-                },
-                {
-                    data: 'DT_RowIndex',
-                    name: 'id'
-                },
-                {
-                    data: 'prop_name',
-                    name: 'prop_name'
-                },
-                {
-                    data: 'name',
-                    name: 'name'
-                },
-                {
-                    data: 'about',
-                    name: 'about'
-                },
-                {
-                    data: 'user_email',
-                    name: 'user_email'
-                },
-                {
-                    data: 'user_mobile',
-                    name: 'user_mobile'
-                },
-                {
-                    data: 'address',
-                    name: 'address'
-                },
-                {
-                    data: 'open_time',
-                    name: 'open_time'
-                },
-                {
-                    data: 'close_time',
-                    name: 'close_time'
-                },
-                {
-                    data: 'delivery_charge',
-                    name: 'delivery_charge'
-                },
-                {
-                    data: 'discount',
-                    name: 'discount'
-                },
-                {
-                    data: 'user_created_at',
-                    name: 'user_created_at'
-                },
-
-
-
-            ]
+        $(document).ready(function() {
+            //Default data table
+            $('#default-datatable').DataTable();
+            var table = $('#example').DataTable({
+                lengthChange: true,
+                processing: true,
+                serverSide: true,
+                paging: true,
+                dom: 'lBfrtip',
+                buttons: ['copy', 'excel', 'pdf', 'print'],
+                ajax: "{{url('adminfimihub/retaurantList')}}",
+                columns: [{
+                        data: 'action',
+                        name: 'action',
+                        orderable: true,
+                        searchable: false
+                    },
+                    {
+                        data: 'DT_RowIndex',
+                        name: 'id'
+                    },
+                    {
+                        data: 'prop_name',
+                        name: 'prop_name'
+                    },
+                    {
+                        data: 'name',
+                        name: 'name'
+                    },
+                    {
+                        data: 'about',
+                        name: 'about'
+                    },
+                    {
+                        data: 'user_email',
+                        name: 'user_email'
+                    },
+                    {
+                        data: 'user_mobile',
+                        name: 'user_mobile'
+                    },
+                    {
+                        data: 'address',
+                        name: 'address'
+                    },
+                    {
+                        data: 'open_time',
+                        name: 'open_time'
+                    },
+                    {
+                        data: 'close_time',
+                        name: 'close_time'
+                    },
+                    {
+                        data: 'delivery_charge',
+                        name: 'delivery_charge'
+                    },
+                    {
+                        data: 'discount',
+                        name: 'discount'
+                    },
+                    {
+                        data: 'user_created_at',
+                        name: 'user_created_at'
+                    },
+                ]
+            });
+            table.buttons().container()
+                .appendTo('#example_wrapper .col-md-6:eq(0)');
         });
-
-        table.buttons().container()
-            .appendTo('#example_wrapper .col-md-6:eq(0)');
-
-    });
     </script>
     <!--End content-wrapper-->

@@ -59,8 +59,8 @@ class DashboardController extends Controller
 
         if ($ip == '127.0.0.1') {
 
-            $lat = '28.6581196';
-            $lng = '77.14289509999999';
+            $lat = '18.4490849';
+            $lng = '-77.2419522';
         } else {
             $loc_data = Location::get($ip);
 

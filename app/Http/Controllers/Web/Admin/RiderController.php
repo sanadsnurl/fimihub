@@ -32,8 +32,7 @@ class RiderController extends Controller
             return Datatables::of($user_list)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $btn = '<a href="editResto?resto_user_id=' . base64_encode($row->resto_user_id) . '" class="btn btn-outline-secondary btn-sm btn-round waves-effect waves-light m-0">Edit</a>
-                    <a href="deleteResto?resto_user_id=' . base64_encode($row->resto_user_id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light mt-1">Delete</a>
+                    $btn = '<a href="deleteRider?rider_user_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light mt-1">Delete</a>
                     ';
                     return $btn;
                 })
@@ -216,5 +215,19 @@ class RiderController extends Controller
 
         return redirect()->back();
 
+    }
+
+    public function deleteRider(Request $request){
+        $user = Auth::user();
+        $rider_user_id = base64_decode(request('rider_user_id'));
+
+        $users = new User;
+        $delete_rider = array();
+        $delete_rider['id'] = $rider_user_id;
+
+        $delete_rider = $users->deleteUser($delete_rider);
+        Session::flash('message', 'Rider Deleted Successfully !');
+
+        return redirect()->back();
     }
 }
