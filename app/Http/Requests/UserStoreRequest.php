@@ -40,7 +40,7 @@ class UserStoreRequest extends FormRequest
             'color' => 'required|string',
             'id_proof' => 'required|mimes:png,jpg,jpeg|max:8192|nullable',
             'address' => 'required|string',
-            'pincode' => 'numeric',
+            'pincode' => 'numeric|nullable',
             'driving_license' => 'required|mimes:png,jpg,jpeg|max:8192|nullable',
             'background_check' => 'mimes:png,jpg,jpeg,pdf|max:8192|nullable',
             'food_permit' => 'mimes:png,jpg,jpeg,pdf|max:8192|nullable',

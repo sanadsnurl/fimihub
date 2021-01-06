@@ -17,24 +17,55 @@
                         </div>
                         <br>
                         @if($s_data->link != NULL)
-                            <a href="{{$s_data->link ?? ''}}" class="btn btn-lg btn-white">See More</a>
-                            @endif
-                        {{-- <div class="search-bar"> --}}
-                            {{-- <div class="location-selector">
-                                <span><input type="text" name="city" placeholder="Search Location"></span>
-                            </div> --}}
-                            {{-- <div class="search-input">
-                                <input type="text" placeholder="Search for restaurant, groceries,essentials & errand">
-                                <div class="search-btn"></div>
-                            </div> --}}
-                        {{-- </div> --}}
+                        <a href="{{$s_data->link ?? ''}}" class="btn btn-lg btn-white">See More</a>
+                        @endif
+                        <form role="form" method="GET" action="{{ url('/home') }}" onSubmit="return checkform()"
+                            class="form save_adrs">
+                            @csrf
+                            <div class="search-bar">
+                                <div id="address-map-container" style="width:0%;height:0px; margin-bottom: 0px;">
+                                    <div style="width: 0%; height: 0%;" id="address-map1"></div>
+                                </div>
+                                <div class="location-selector">
+                                    <span>
+                                        <!-- <input id="autocomplete" placeholder="Enter your address" onFocus="geolocate()"
+                                            type="text"> -->
+
+                                        <div class="field-wrap">
+                                            <div class="address_box_dyn">
+                                                <input type="text" data-id="address-input" name="address_address"
+                                                    placeholder="Search Location" class="map-input">
+
+                                            </div>
+                                            <input type="hidden" name="address_latitude" id="address-latitude"
+                                                value="0" />
+                                            <input type="hidden" name="address_longitude" id="address-longitude"
+                                                value="0" />
+                                            @if($errors->has('address_address'))
+                                            <div class="error">{{ $errors->first('address') }}</div>
+                                            @endif
+                                            @if(Session::has('address_error'))
+                                            <div class="error">{{ Session::get('address_error') }}</div>
+                                            @endif
+                                        </div>
+                                    </span>
+                                </div>
+
+                                <div class="search-input">
+                                    <input type="text" id="filter_name" name="search_field" placeholder="Search for restaurant, food">
+
+                                    <div class="search-btn">
+                                        <input type="submit" value=" ">
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
         @endif
         @endforeach
-
 
     </div>
 </section>

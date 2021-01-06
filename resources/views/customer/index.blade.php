@@ -18,13 +18,14 @@
                         @if($s_data->link != NULL)
                         <a href="{{$s_data->link ?? ''}}" class="btn btn-lg btn-white">See More</a>
                         @endif
-                     <form role="form" method="POST" action="{{ url('/saveAddress') }}" onSubmit="return checkform()"
+                        <form role="form" method="POST" action="{{ url('/saveAddress') }}" onSubmit="return checkform()"
                             class="form save_adrs">
                             @csrf
                             <div class="search-bar">
-                                 <div id="address-map-container" style="width:0%;height:0px; margin-bottom: 0px;">
-                                        <div style="width: 0%; height: 0%;" id="location-map"></div>
-                                    </div>
+                                <div id="address-map-container" style="width:0%;height:0px; margin-bottom: 0px;">
+                                    <div style="width: 0%; height: 0%;" id="address-map1"></div>
+                                </div>
+
                                 <div class="location-selector">
                                     <span>
                                         <!-- <input id="autocomplete" placeholder="Enter your address" onFocus="geolocate()"
@@ -43,29 +44,29 @@
                                                 value="0" />
                                             @if($errors->has('address_address'))
                                             <div class="error">{{ $errors->first('address') }}</div>
-                                @endif
-                                @if(Session::has('address_error'))
-                                <div class="error">{{ Session::get('address_error') }}</div>
-                                @endif
+                                            @endif
+                                            @if(Session::has('address_error'))
+                                            <div class="error">{{ Session::get('address_error') }}</div>
+                                            @endif
+                                        </div>
+                                    </span>
+                                </div>
+
+                                <div class="search-input">
+                                    <input type="text" id="filter_name" placeholder="Search for restaurant, food">
+
+                                    <div class="search-btn">
+                                        <input type="submit" value=" ">
+                                    </div>
+                                </div>
                             </div>
-                             </span>
-                    </div>
-
-                    <div class="search-input">
-                        <input type="text" id="filter_name" placeholder="Search for restaurant, food">
-
-                        <div class="search-btn">
-                            <input type="submit" value=" ">
-                        </div>
+                        </form>
                     </div>
                 </div>
-                </form>
             </div>
         </div>
-    </div>
-    </div>
-    @endif
-    @endforeach
+        @endif
+        @endforeach
 
     </div>
 </section>
