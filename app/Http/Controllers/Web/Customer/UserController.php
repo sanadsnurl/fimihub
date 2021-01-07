@@ -158,22 +158,29 @@ class UserController extends Controller
         return view('customer.contactUs')->with(['user_data' => $user_data]);
     }
 
+    public function getContactUsWebPage(Request $request)
+    {
+
+
+        return view('customer.pages.contactUs');
+    }
+
     public function contactUs(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
             'email' => 'email|nullable',
-            'mobile' => 'required|numeric|digits:10',
+            'mobile' => 'required|numeric',
             'message' => 'required|string',
 
 
         ]);
         if (!$validator->fails()) {
-            $user = Auth::user();
+            // $user = Auth::user();
             $email_to = 'tusharseth56@gmail.com';
             $data = $request->toarray();
-            $when = now()->addSeconds(5);
-            Mail::to($email_to)->send(new MailContactUs($data));
+            // $when = now()->addSeconds(5);
+            // Mail::to($email_to)->send(new MailContactUs($data));
             $contactUs = new contactUs();
             $contactUs->makeContactUs($data);
             Session::flash('modal_message', 'Message Sent ');
