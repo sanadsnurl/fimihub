@@ -55,7 +55,7 @@ class DashboardController extends Controller
             }
         }
 
-        $ip = isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : '127.0.0.1'; //Dynamic IP address get
+        $ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1'; //Dynamic IP address get
 
         if ($ip == '127.0.0.1') {
 
@@ -64,8 +64,8 @@ class DashboardController extends Controller
         } else {
             $loc_data = Location::get($ip);
 
-            $lat = $loc_data->latitude ??  '0';
-            $lng = $loc_data->longitude ?? '0';
+            $lat = $loc_data->latitude ??  '18.4490849';
+            $lng = $loc_data->longitude ?? '-77.2419522';
         }
 
         if ($lat == 0 || $lng == 0) {
@@ -112,10 +112,10 @@ class DashboardController extends Controller
         $slider_data = $slider_cms->getSlider($slider_array);
         $sl_data = array();
         foreach ($slider_data as $s_data) {
-            if (file_exists($s_data->media)) {
-                $s_data->media = url($s_data->media);
+            // if (file_exists($s_data->media)) {
+                $s_data->media = asset($s_data->media);
                 $sl_data[] =  $s_data;
-            }
+            // }
         }
 
         return view('customer.home')->with([

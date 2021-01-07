@@ -152,7 +152,7 @@
                             <div class="form-group row">
                                 <label for="input-4 address_address" class="col-sm-2 col-form-label">Address</label>
                                 <div class="col-sm-8">
-                                    <input type="text" id="address-input" name="address_address" placeholder="Address"
+                                    <input type="text" data-id="address-input" name="address_address" placeholder="Address"
                                         class="map-input form-control" value="{{$resto_add->address ?? ''}}">
 
                                     <input type="hidden" name="address_latitude" id="address-latitude"
