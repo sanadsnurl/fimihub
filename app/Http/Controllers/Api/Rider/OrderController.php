@@ -66,7 +66,7 @@ class OrderController extends Controller
             } else {
                 return response()->json(['message' =>'Unable to detect location', 'status' => false], $this->successStatus);
             }
-            $kmRadius = $this->max_distance_km;
+            $kmRadius = $this->max_distance_km_order;
             $order = $this->riderClosestOrders($user, $lat, $lng, $kmRadius)
             ->with('restaurentDetails.restroAddress','userAddress.userDetails')
             ->paginate(10);

@@ -47,7 +47,7 @@
                         <div class="card_rht_top">
                             <div class="row">
                                 <div class="col-md-4">
-                                    <img src="{{$resto_data->picture ?? url('asset/customer/assets/images/resto_thumbnail.png')}}"
+                                    <img src="{{$resto_data->picture ?? asset('asset/customer/assets/images/resto_thumbnail.png')}}"
                                         alt="image" class="w-100">
                                 </div>
                                 <div class="col-md-8">
@@ -237,7 +237,7 @@
                             <div class="d-flex align-items-start">
                                 <div class="d-flex align-items-center">
                                     <div>
-                                        <img src="{{$order_event_data->rider_details->picture ?? url('asset/customer/assets/images/user_dp.png')}}"
+                                        <img src="{{$order_event_data->rider_details->picture ?? asset('asset/customer/assets/images/user_dp.png')}}"
                                             alt="user">
                                     </div>
                                     <div>

@@ -175,13 +175,13 @@
                             <label for="">Password</label>
                             <input type="password" class="form-control" name="password">
                             <button type="button" class="psw_show_btn"><img
-                                    src="{{ url('asset/customer/assets/images/eye.svg') }}" alt="eye"></button>
+                                    src="{{ asset('asset/customer/assets/images/eye.svg') }}" alt="eye"></button>
                         </div>
                         <div class="form-group">
                             <label for="">Confirm password</label>
                             <input type="password" class="form-control" name="password_confirmation">
                             <button type="button" class="psw_show_btn"><img
-                                    src="{{ url('asset/customer/assets/images/eye.svg') }}" alt="eye"></button>
+                                    src="{{ asset('asset/customer/assets/images/eye.svg') }}" alt="eye"></button>
                         </div>
                         <input type="submit" class="signup_btn btn_purple hover_effect1 auth_btn" value="Change">
                         <!-- <button type="button" class="signup_btn btn_purple hover_effect1 auth_btn">Done</button> -->

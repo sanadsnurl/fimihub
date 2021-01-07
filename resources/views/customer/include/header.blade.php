@@ -83,7 +83,7 @@
                         </li>
                         <li>
                             <a href="#" class="icon-link user">
-                                <img src="{{$user_data->picture ?? url('asset/customer/assets/images/user_icon2.png')}}"
+                                <img src="{{$user_data->picture ?? asset('asset/customer/assets/images/user_icon2.png')}}"
                                     alt="user">
                                 {{$user_data->name ?? ''}}
                             </a>

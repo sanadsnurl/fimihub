@@ -9,7 +9,7 @@
     <div class="info-box">
         <div class="form-title">
             <h5>PERSONAL INFORMATION</h5>
-            
+
         </div>
         <div class="inner-wrap">
             <form role="form" method="POST" action="{{ url('/updateProfile') }}" class="form" enctype="multipart/form-data">
@@ -18,7 +18,7 @@
                     <div class="user-img">
                         <input type="file" name="picture">
 
-                        <img src="{{$user_data->picture ?? url('asset/customer/assets/images/img_upload.svg')}}"
+                        <img src="{{$user_data->picture ?? asset('asset/customer/assets/images/img_upload.svg')}}"
                             alt="img upload">
                         @if($errors->has('picture'))
                         <div class="error">{{ $errors->first('picture') }}</div>

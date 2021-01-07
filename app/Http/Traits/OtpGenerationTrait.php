@@ -30,14 +30,10 @@ trait OtpGenerationTrait
 
             // Your Account SID and Auth Token from twilio.com/console
             // To set up environmental variables, see http://twil.io/secure
-            echo $account_sid = env('TWILIO_ACCOUNT_SID');
-            echo $auth_token = env('TWILIO_AUTH_TOKEN');
-            echo $twilio_number = env('TWILIO_SENDER_NUMBER');
-            echo $twilio_number = env('APP_NAME');
-            echo $twilio_number = env('DB_DATABASE');
-            echo $twilio_number = env('ASSET_URL');
-            echo "g";
-            die;
+            $account_sid = env('TWILIO_ACCOUNT_SID');
+            $auth_token = env('TWILIO_AUTH_TOKEN');
+            $twilio_number = env('TWILIO_SENDER_NUMBER');
+
             // In production, these should be environment variables. E.g.:
 
             // A Twilio number you own with SMS capabilities
@@ -60,13 +56,11 @@ trait OtpGenerationTrait
             }
         } catch (TwilioException $e) {
 
-            echo $e;
-            die;
-            // if (!empty($e->getStatusCode()) && $e->getStatusCode() == 200) {
-            //     return 1;
-            // } else {
-            //     return 2;
-            // }
+            if (!empty($e->getStatusCode()) && $e->getStatusCode() == 200) {
+                return 1;
+            } else {
+                return 2;
+            }
         }
     }
 

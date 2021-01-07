@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use App\Http\Traits\OtpGenerationTrait;
 use App\Http\Traits\NotificationTrait;
+use App\Http\Traits\PaypalIntegrationTraits;
 use App\Model\cart_customization;
 use App\Model\menu_customization;
 use Response;
@@ -29,7 +30,7 @@ use Session;
 
 class OrderController extends Controller
 {
-    use NotificationTrait, GetBasicPageDataTraits;
+    use NotificationTrait, GetBasicPageDataTraits ,PaypalIntegrationTraits;
 
     public function getPaymentPage(Request $request)
     {
@@ -250,7 +251,23 @@ class OrderController extends Controller
 
                 $order_id = base64_encode($make_order_id);
                 $cart_delete = $cart->deleteCart($user->id);
+                if(request('payment') == 2){
+                    $make_payment_array=['business'=>'clergio-facilitator@gmail.com',
+                                        'item_name'=>'food',
+                                        'item_number'=>1,
+                                        '_token'=>request('_token'),
+                                        'amount'=>$total_amount,
+                                        'no_shipping'=>1,
+                                        'currency_code'=>'USD',
+                                        'notify_url'=>'http://sitename/paypal-payment-gateway-integration-in-php/notify.php',
+                                        'cancel_return'=>url('makePaypalOrder').'?order_check='.base64_encode('netset').'&order_check_token='.base64_encode($make_order_id),
+                                        'return'=>url('makePaypalOrder').'?order_check='.base64_encode('netsetwork').'&order_check_token='.base64_encode($make_order_id),
+                                        'cmd'=>'_xclick'
+                                    ];
+                    $payment = $this->makePayment($make_payment_array);
+                return  redirect($payment);
 
+                }
                 Session::flash('modal_check_order', 'open');
                 Session::flash('order_id', $order_id);
                 return redirect('/myOrder');
@@ -384,5 +401,29 @@ class OrderController extends Controller
         } else {
             return redirect()->back()->withInput()->withErrors($validator);
         }
+    }
+
+    public function changePaypalOrderStatus(Request $request)
+    {
+        $order_check = base64_decode(request('order_check'));
+        $order_check_token = base64_decode(request('order_check_token'));
+        $orders = new order;
+        if($order_check == 'netsetwork'){
+            $payment_status = 2;
+        // dd($order_check);
+
+            $order_status_update = $orders->updatePaymentStatus($order_check_token, $payment_status);
+            Session::flash('modal_check_order', 'open');
+                Session::flash('order_id', $order_check_token);
+
+        }else{
+            $payment_status = 3;
+            $order_status_update = $orders->updatePaymentStatus($order_check_token, $payment_status);
+           Session::flash('modal_check_order', 'open');
+            Session::flash('order_id', $order_check_token);
+
+        }
+
+            return redirect('/myOrder');
     }
 }

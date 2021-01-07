@@ -346,7 +346,7 @@
                 <div class="mdl_top">
                     <div class="row">
                         <div class="col-md-4">
-                            <img src="{{$resto_data->picture ?? url('asset/customer/assets/images/resto_thumbnail.png')}}"
+                            <img src="{{$resto_data->picture ?? asset('asset/customer/assets/images/resto_thumbnail.png')}}"
                                 alt="image" class="w-100">
                         </div>
                         <div class="col-md-8">
@@ -389,7 +389,7 @@
                     <h4>Rate Rider</h4>
                     <div class="rider_review">
                         <p class="text-center"><img
-                                src="{{$order_event_data->rider_details->picture ?? url('asset/customer/assets/images/user_dp.png')}}"
+                                src="{{$order_event_data->rider_details->picture ?? asset('asset/customer/assets/images/user_dp.png')}}"
                                 alt="image"> {{$order_event_data->rider_details->name ?? '---'}}</p>
                     </div>
                     <fieldset>

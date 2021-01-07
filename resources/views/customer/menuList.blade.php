@@ -124,7 +124,7 @@
                         <p>{{$resto_data->name ?? ''}}</p>
                     </div>
                     <div class="col-right">
-                        <h4><a href="{{url('/cart')}}">View Cart <img src="{{url('asset/customer/assets/images/cart_white.svg')}}"
+                        <h4><a href="{{url('/cart')}}">View Cart <img src="{{asset('asset/customer/assets/images/cart_white.svg')}}"
                                     alt="cart white"></a></h4>
                     </div>
                 </div>
@@ -136,7 +136,7 @@
                     @if($m_data->cat_name == $m_cat->cat_name)
                     <div class="card-wrap">
                         <div class="img-wrap">
-                            <img src="{{$m_data->picture ?? url('asset/customer/assets/images/food_thumb2.png')}}"
+                            <img src="{{$m_data->picture ?? asset('asset/customer/assets/images/food_thumb2.png')}}"
                                 alt="food1">
                         </div>
                         <div class="text-wrap">

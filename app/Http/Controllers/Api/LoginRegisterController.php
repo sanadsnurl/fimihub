@@ -660,7 +660,7 @@ class LoginRegisterController extends Controller
                     $file_url = url($destinationPath . $input['imagename']);
                     $user->picture = $file_url;
                 } else {
-                    // $user->picture = url('asset/customer/assets/icons/user.png');
+                    // $user->picture = asset('asset/customer/assets/icons/user.png');
                     $user->picture = null;
                     $user->save();
                     // return response()->json(['message'=>'Update default picture','status'=>true], $this->successStatusCreated);
@@ -668,7 +668,7 @@ class LoginRegisterController extends Controller
                 $user->save();
                 // return response()->json(['message'=>'Profile picture updated.','status'=>true], $this->successStatusCreated);
             } else {
-                // $user->picture = url('asset/customer/assets/icons/user.png');
+                // $user->picture = asset('asset/customer/assets/icons/user.png');
                 $user->picture = null;
                 $user->save();
             }

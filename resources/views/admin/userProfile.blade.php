@@ -16,7 +16,7 @@
                 <div class="profile-card-3">
                     <div class="card">
                         <div class="user-fullimage">
-                            <img src="{{$user_profile_data->profile_picture ?? url('asset/admin/assets/images/avatars/user.png')}}"
+                            <img src="{{$user_profile_data->profile_picture ?? asset('asset/admin/assets/images/avatars/user.png')}}"
                                 alt="user avatar" class="card-img-top">
                             <div class="details" style="background-color: black; padding: 2px; opacity: 0.7;">
                                 <h5 class="mb-1 text-white ml-3">
