@@ -45,8 +45,12 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
     Route::get('/cardPolicy', 'Web\Customer\CmsController@indexCardPolicy');
     // T & C Page
     Route::get('/T&C', 'Web\Customer\CmsController@indexTandC');
+    //Merchant T & C Page
+    Route::get('/merchantT&C', 'Web\Customer\CmsController@indexMerchantTandC');
     // Merchant Q n A
     Route::get('/mechantQnA', 'Web\Customer\CmsController@indexMerchantQnA');
+    // Privacy Policy
+    Route::get('/privacyPolicyPage', 'Web\Customer\CmsController@indexPrivacyPolicy');
     // Partner with us page
     Route::get('/partnerWithUs', function () {
         return view('customer.auth.partnerRegister');
@@ -54,6 +58,7 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
     // Test Payment page
     Route::get('/testPayment', function () {
         $ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1';
+
         return $_SERVER['REMOTE_ADDR'];
         return view('customer.testPaymentPage');
     });
@@ -79,9 +84,11 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
     Route::get('logout', 'Web\Customer\LoginRegisterController@logout');
     // Customer Subscribed
     Route::post('subscribeProcess', 'Web\Customer\DashboardController@subscribe');
+    //Contact Us Page
+    Route::get('contactUsPage', 'Web\Customer\UserController@getContactUsWebPage');
+    //Contact Us Process
+    Route::post('contactUs', 'Web\Customer\UserController@contactUs');
 
-    Route::get('/autocomplete', 'DashboardController@index');
-    Route::post('/autocomplete/fetch', 'DashboardController@fetch')->name('autocomplete.fetch');
     //========================================== Session Customer Auth Routes ===================================================
 
     Route::group(['middleware' => 'customerauth'], function () {
@@ -102,8 +109,7 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
         Route::post('changePassword', 'Web\Customer\UserController@changePassword');
         //Contact Us Page
         Route::get('contactUs', 'Web\Customer\UserController@getContactUsPage');
-        //Contact Us Process
-        Route::post('contactUs', 'Web\Customer\UserController@contactUs');
+
         //Saved Address Page
         Route::get('saveaddress', 'Web\Customer\UserController@getSaveAddressPage');
         //My Order Page

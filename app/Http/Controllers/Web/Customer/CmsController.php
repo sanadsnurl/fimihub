@@ -73,4 +73,22 @@ class CmsController extends Controller
             'user_data' => $user,
         ]);
     }
+
+    public function indexPrivacyPolicy(Request $request)
+    {
+        $user = Auth::user();
+
+        return view('customer.pages.privacyPolicy')->with([
+            'user_data' => $user,
+        ]);
+    }
+
+    public function indexMerchantTandC(Request $request)
+    {
+        $user = Auth::user();
+
+        return view('customer.pages.merchantT&C')->with([
+            'user_data' => $user,
+        ]);
+    }
 }

@@ -105,13 +105,13 @@
                 <h5>Other Page content</h5>
                 <ul class="links">
                     <li>
-                        <a href="{{url('asset/customer/assets/document/Privacy Policy.pdf')}}">Privacy Policy </a>
+                        <a href="{{url('privacyPolicyPage')}}">Privacy Policy </a>
                     </li>
                     <li>
                         <a href="{{url('T&C')}}">Terms & Conditions </a>
                     </li>
                     <li>
-                        <a href="{{url('asset/customer/assets/document/MERCHANT AGREEMENT- FIMI HUB.pdf')}}">Merchant Terms & Conditions </a>
+                        <a href="{{url('merchantT&C')}}">Merchant Terms & Conditions </a>
                     </li>
                     <li>
                         <a href="{{url('aboutUsPage')}}">About Us </a>
@@ -122,10 +122,14 @@
                 </ul>
             </div>
             <div class="col col-info">
-                <h5>Contacts</h5>
+                {{-- <h5>Contacts</h5> --}}
                 <p>Main Street, Claremont P.O. St. Ann, Jamaica</p>
                 {{-- <p>+1 (234) 567-89-90</p> --}}
-                <p>support@fimihub.com</p>
+                <a href="{{url('contactUsPage')}}" class="f">
+                    <span>Contact Us</span>
+
+                </a>
+                {{-- <p>support@fimihub.com</p> --}}
             </div>
             <div class="col col-form">
                 <h5>Newsletter</h5>
