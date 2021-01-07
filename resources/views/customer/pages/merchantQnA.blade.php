@@ -4,8 +4,8 @@
 
     </div>
     <div class="md_container">
-        <div class="row-wrap" style="margin-left: 20%;">
-            <div class="content-col">
+        <div class="row-wrap">
+            <div class="content-col single-col">
                 <div class="info-box">
                     <div class="form-title">
                         <h5>Merchant Q&A</h5>
