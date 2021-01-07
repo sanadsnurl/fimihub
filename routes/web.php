@@ -53,8 +53,8 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
     });
     // Test Payment page
     Route::get('/testPayment', function () {
-        $ip = isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : '127.0.0.1';
-        return $_SERVER;
+        $ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1';
+        return $_SERVER['REMOTE_ADDR'];
         return view('customer.testPaymentPage');
     });
     // Partner with us Process
