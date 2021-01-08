@@ -16,14 +16,14 @@
             <div class="col-lg-8">
                 <div class="card">
                     <div class="card-body">
-                        <form role="form" method="POST" action="{{ url('Restaurent/addMenu')}}" id="personal-info"
+                        <form role="form" method="POST" action="{{ url('Restaurent/addCustomMenu')}}" id="personal-info"
                             enctype="multipart/form-data">
                             @csrf
                             <h4 class="form-header text-uppercase">
                                 <i class="fa fa-cutlery"></i>
-                                Add Dish
-                                <a href="{{url('Restaurent/menuCategory')}}" class="" target="_blank">
-                                    <span class="btn btn-danger" style="float: right;">+ Add Food Category</span>
+                                Add Customization
+                                <a href="{{url('Restaurent/menuCustomCategory')}}" class="" target="_blank">
+                                    <span class="btn btn-danger" style="float: right;">+ Add Customization Category</span>
 
                                 </a>
 
@@ -34,21 +34,11 @@
                             </div>
 
                             @endif
-                            <div class="form-group row">
-                                <label for="input-1" class="col-sm-2 col-form-label">Dish Picture</label>
-                                <div class="col-sm-10">
-                                    <input type="file" class="form-control" id="input-1" name="picture">
-                                    @if($errors->has('picture'))
-                                    <div class="error">{{ $errors->first('picture') }}</div>
-                                    @endif
-                                </div>
-
-                            </div>
 
                             <div class="form-group row">
-                                <label for="input-1" class="col-sm-2 col-form-label">Dish Name</label>
+                                <label for="input-1" class="col-sm-2 col-form-label">Customization Name</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="input-1" name="name">
+                                    <input type="text" class="form-control" id="input-1" name="name" value="{{old('name')}}">
                                     @if($errors->has('name'))
                                     <div class="error">{{ $errors->first('name') }}</div>
                                     @endif
@@ -56,62 +46,22 @@
 
                             </div>
                             <div class="form-group row">
-                                <label for="input-1" class="col-sm-2 col-form-label">Food Category</label>
+                                <label for="input-1" class="col-sm-2 col-form-label">Customization Category</label>
                                 <div class="col-sm-10">
-                                    <select name="menu_category_id" id="" class="form-control">
+                                    <select name="resto_custom_cat_id" id="" class="form-control">
                                         <option value="">-- Select Food Category --</option>
                                         @foreach($cat_data as $c_data)
                                         <option value="{{$c_data->id}}">{{$c_data->cat_name}}</option>
                                         @endforeach
                                     </select>
 
-                                    @if($errors->has('menu_category_id'))
-                                    <div class="error">{{ $errors->first('menu_category_id') }}</div>
+                                    @if($errors->has('resto_custom_cat_id'))
+                                    <div class="error">{{ $errors->first('resto_custom_cat_id') }}</div>
                                     @endif
                                 </div>
 
                             </div>
-                            <div class="form-group row">
-                                <label for="input-1" class="col-sm-2 col-form-label">Food Variant</label>
-                                <div class="col-sm-10">
-                                    <select name="product_variant_id" id="" class="form-control">
-                                        <option value="">-- Select Food Variant --</option>
-                                        @foreach($resto_cate_variant as $cs_data)
-                                        <option value="{{$cs_data->id}}">{{$cs_data->cat_name}}</option>
-                                        @endforeach
-                                    </select>
 
-                                    @if($errors->has('product_variant_id'))
-                                    <div class="error">{{ $errors->first('product_variant_id') }}</div>
-                                    @endif
-                                </div>
-
-                            </div>
-                            <div class="form-group row">
-                                <label for="input-4" class="col-sm-2 col-form-label">Add On</label>
-                                @foreach($resto_cate_add_on as $css_data)
-                                <div class="demo-checkbox ml-4">
-                                    <input type="checkbox" id="user-checkboxs{{$css_data->id}}"
-                                        class="filled-in chk-col-primary" value="{{$css_data->id}}"
-                                        name="product_add_on_id[]">
-                                    <label for="user-checkboxs{{$css_data->id}}">{{$css_data->cat_name}}</label>
-                                </div>
-                                @endforeach
-
-                                @if($errors->has('product_add_on_id'))
-                                <div class="error">{{ $errors->first('product_add_on_id') }}</div>
-                                @endif
-                            </div>
-                            <div class="form-group row">
-                                <label for="input-1" class="col-sm-2 col-form-label">About Dish</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="input-1" name="about">
-                                    @if($errors->has('about'))
-                                    <div class="error">{{ $errors->first('about') }}</div>
-                                    @endif
-                                </div>
-
-                            </div>
                             <div class="form-group row">
                                 <label for="input-4" class="col-sm-2 col-form-label">Dish Type</label>
                                 <div class="demo-checkbox ml-4">
@@ -128,17 +78,17 @@
                                 <div class="error">{{ $errors->first('dish_type') }}</div>
                                 @endif
                             </div>
-
                             <div class="form-group row">
                                 <label for="input-1" class="col-sm-2 col-form-label">Price (Rs)</label>
                                 <div class="col-sm-10">
-                                    <input type="number" class="form-control" id="input-1" name="price">
+                                    <input type="number" class="form-control" id="input-1" name="price" value="{{old('price')}}">
                                     @if($errors->has('price'))
                                     <div class="error">{{ $errors->first('price') }}</div>
                                     @endif
                                 </div>
 
                             </div>
+
                             <!-- <div class="form-group row">
                                 <label for="input-1" class="col-sm-2 col-form-label">Discount (%)</label>
                                 <div class="col-sm-10">
@@ -162,7 +112,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
-                    <div class="card-header"><i class="fa fa-table"></i> Menu List
+                    <div class="card-header"><i class="fa fa-table"></i> Add-On List
                         @if(Session::has('menu_message'))
                         <span class="error" style="text-align:center;font-size:16px;">
                             -> {{ Session::get('menu_message') }}</span>
@@ -174,15 +124,13 @@
                                 <thead>
                                     <tr>
                                         <!-- <th>S.no</th> -->
-                                        <th>Action</th>
                                         <th>S.No.</th>
-                                        <th>Dish Name</th>
+                                        <th>Customization Name</th>
                                         <th>Category</th>
                                         <th>Price</th>
-                                        <th>About</th>
                                         <th>Dish Type</th>
-                                        <!-- <th>Discount (%)</th> -->
                                         <th>Create At</th>
+                                        {{-- <th>Action</th> --}}
 
                                     </tr>
                                 </thead>
@@ -200,7 +148,11 @@
 
 </div>
 
+
+
+
 <!-- End container-fluid-->
+
 
 <!--End content-wrapper-->
 @include('restaurent.include.footer')
@@ -221,56 +173,52 @@
 <script src="{{asset('asset/admin/assets/plugins/bootstrap-datatable/js/buttons.colVis.min.js')}}"></script>
 
 <script>
-    $(document).ready(function() {
-        //Default data table
-        $('#default-datatable').DataTable();
-        var table = $('#example').DataTable({
-            lengthChange: true,
-            processing: true,
-            serverSide: true,
-            paging: true,
-            dom: 'lBfrtip',
-            buttons: ['copy', 'excel', 'pdf', 'print'],
-            ajax: "{{url('Restaurent/menuList')}}",
-            columns: [ {
-                    data: 'action',
-                    name: 'action',
-                    orderable: true,
-                    searchable: false
-                },
-                {
-                    data: 'DT_RowIndex',
-                    name: 'id'
-                },
-                {
-                    data: 'name',
-                    name: 'name'
-                },
-                {
-                    data: 'cat_name',
-                    name: 'cat_name'
-                },
-                {
-                    data: 'price',
-                    name: 'price'
-                },
-                {
-                    data: 'about',
-                    name: 'about'
-                },
-                {
-                    data: 'dish_type',
-                    name: 'dish_type'
-                },
-                {
-                    data: 'created_at',
-                    name: 'created_at'
-                },
+$(document).ready(function() {
+    //Default data table
+    $('#default-datatable').DataTable();
+    var table = $('#example').DataTable({
+        lengthChange: true,
+        processing: true,
+        serverSide: true,
+        paging: true,
+        dom: 'lBfrtip',
+        buttons: ['copy', 'excel', 'pdf', 'print'],
+        ajax: "{{url('Restaurent/menuCustomList')}}",
+        columns: [{
+                data: 'DT_RowIndex',
+                name: 'id'
+            },
+            {
+                data: 'name',
+                name: 'name'
+            },
+            {
+                data: 'cat_name',
+                name: 'cat_name'
+            },
+            {
+                data: 'price',
+                name: 'price'
+            },
+            {
+                data: 'dish_type',
+                name: 'dish_type'
+            },
 
-            ]
-        });
-        table.buttons().container()
-            .appendTo('#example_wrapper .col-md-6:eq(0)');
+            {
+                data: 'created_at',
+                name: 'created_at'
+            },
+            // {
+            //     data: 'action',
+            //     name: 'action',
+            //     orderable: true,
+            //     searchable: false
+            // },
+        ]
     });
+    table.buttons().container()
+        .appendTo('#example_wrapper .col-md-6:eq(0)');
+});
 </script>
 <!--End content-wrapper-->

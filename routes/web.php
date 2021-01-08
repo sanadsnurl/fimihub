@@ -174,12 +174,20 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
         Route::post('addRestaurentDetails', 'Web\Restaurent\RestaurentController@addRestaurentDetails');
         // Menu Category
         Route::get('menuCategory', 'Web\Restaurent\RestaurentController@categoryDetails');
+        // Menu Custom Category
+        Route::get('menuCustomCategory', 'Web\Restaurent\RestaurentController@categoryCustomDetails');
         // Menu Category update or insert
         Route::post('addCategory', 'Web\Restaurent\RestaurentController@addCategoryProcess');
+        // Menu Custom Category update or insert
+        Route::post('addCustomCategory', 'Web\Restaurent\RestaurentController@addCustomCategoryProcess');
         // Menu List
         Route::get('menuList', 'Web\Restaurent\RestaurentController@getMenuList');
+        // Menu Custom List
+        Route::get('menuCustomList', 'Web\Restaurent\RestaurentController@getMenuCustomList');
         // Menu Category update or insert
         Route::post('addMenu', 'Web\Restaurent\RestaurentController@menuListProcess');
+        // Menu Custom Category update or insert
+        Route::post('addCustomMenu', 'Web\Restaurent\RestaurentController@menuCustomListProcess');
         // Customer Order List
         Route::get('customerOrder', 'Web\Restaurent\OrderController@getCustomerOrderList');
         //Accept Customer Order

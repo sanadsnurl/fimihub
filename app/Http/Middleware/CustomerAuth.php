@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Session;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 
 class CustomerAuth
 {
@@ -17,11 +17,11 @@ class CustomerAuth
      */
     public function handle($request, Closure $next)
     {
-        // dd(session('user'));
-        if(!$request->session()->exists('user')){
-            
+        $user = Auth::user();
+        if(!$request->session()->exists('user') && Auth::check()){
+
             // user value cannot be found in session
-            Session::flash('message', 'Please Login First!'); 
+            Session::flash('message', 'Please Login First!');
             return redirect('/login');
         }
         else
@@ -30,25 +30,45 @@ class CustomerAuth
             {
                 Auth::logout();
                 Session::flush();
-                Session::flash('message', 'Service Violation (Please Try Again)!'); 
+                Session::flash('message', 'Service Violation (Please Try Again)!');
                 return redirect('login');
             }
             else
-            {     
-                if(session('user')->user_type !=3){
-                
-                    Session::flash('message', 'User Type Invalid !'); 
+            {
+                if($user->user_type !=3){
+
+                    Session::flash('message', 'User Type Invalid !');
                     return redirect('/login');
                 }
-                elseif(session('user')->mobile_verified_at ==NULL){
-                    Session::flash('error_message', 'Please verify your account !'); 
-                    Session::flash('modal_check2', 'open'); 
+                elseif($user->mobile_verified_at ==NULL){
+                    Session::flash('error_message', 'Please verify your account !');
+                    Session::flash('modal_check2', 'open');
                     return redirect('/login');
-        
+
+                }
+                elseif($user->visibility ==2){
+                    Session::flash('message', 'Account Deleted !');
+                    return redirect('/login');;
+
+                }
+                elseif($user->visibility ==1){
+                    Session::flash('message', 'Account Pending !');
+                    return redirect('/login');;
+
+                }
+                elseif($user->visibility ==3){
+                    Session::flash('message', 'Account Rejeted or Revoked !');
+                    return redirect('/login');;
+
+                }
+                elseif($user->visibility ==4){
+                    Session::flash('message', 'Account Blocked !');
+                    return redirect('/login');;
+
                 }
             }
         }
-        
+
 
         return $next($request);
     }

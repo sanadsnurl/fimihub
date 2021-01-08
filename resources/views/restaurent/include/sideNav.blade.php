@@ -71,6 +71,18 @@
 
                     </ul>
                 </li>
+                <li>
+                    <a href="#" class="waves-effect">
+                        <i class="fa fa-cutlery"></i> <span>Add-On </span> <i
+                            class="fa fa-angle-right pull-right"></i>
+                    </a>
+                    <ul class="sidebar-submenu">
+                        <li><a href="{{url('Restaurent/menuCustomCategory')}}"><i class="fa fa-circle-o"></i> Category</a></li>
+                        <li><a href="{{url('Restaurent/menuCustomList')}}"><i class="fa fa-circle-o"></i> Add-On Items</a></li>
+
+
+                    </ul>
+                </li>
 
 
                 <li>
