@@ -159,64 +159,61 @@ $('.payment_options label').click(function() {
          let scrolled = $(window).scrollTop();
          let startPos = $(this).parents(".order-menu-row").offset().top - $(".header").height() - 20;
          let endPos = $(this).parents(".order-menu-row").offset().top + $(this).parents(".order-menu-row").height() - $(this).height() - 90;
-         if(window.matchMedia("(min-width: 768px)").matches) {
-             if(scrolled > startPos && scrolled < endPos) {
-                 $(this).css({
-                     position: "fixed",
-                     top: 120,
-                     bottom: "auto",
-                     width: $(this).parent().width()
-                 })
-             } 
-             else if(scrolled > endPos) {
-                 $(this).css({
-                     position: "absolute",
-                     bottom: 0,
-                     top: "auto"
-                 })
-             } 
-             else {
-                 $(this).css({
-                     position: "relative",
-                     bottom: 0,
-                     top: 0
-                 })
-             }
-         }
+         if(scrolled > startPos && scrolled < endPos) {
+            if(window.matchMedia("(min-width: 576px)").matches) {
+                $(this).css({
+                    position: "fixed",
+                    top: 120,
+                    bottom: "auto",
+                    width: $(this).parent().width()
+                })
+            }else {
+                if($(this).hasClass("menu-block")) {
+                    $(this).css({
+                        position: "fixed",
+                        top: 0,
+                        bottom: "auto",
+                        width: $(this).parent().width()
+                    })
+                }else {
+                    $(this).css({
+                        position: "fixed",
+                        top: 55,
+                        bottom: "auto",
+                        width: $(this).parent().width()
+                    })
+                }
+            }
+        } 
+        else if(scrolled > endPos) {
+            $(this).css({
+                position: "absolute",
+                bottom: 0,
+                top: "auto"
+            })
+        } 
+        else {
+            $(this).css({
+                position: "relative",
+                bottom: 0,
+                top: 0
+            })
+        }
      })
  });
 
-//  sticky cart block
-// var stickyCart = $(".order-block .cart-block");
+// product size dropdown
+$(".order-block .order-menu-row .card-wrap .opt-dropdown .selected").click(function(){
+    $(this).parent().toggleClass("open");
+    $(this).next(".menu").slideToggle();
+})
 
-// $(window).on("scroll", function(e){
-//     stickyCart.each(function(e){
-//         let scrolled = $(window).scrollTop();
-//         let startPos = $(this).parents(".col-order").offset().top - 20;
-//         let endPos = $(this).parents(".col-order").offset().top + $(this).parents(".col-order").height() - $(this).height() - 90;
-//         if(window.matchMedia("(min-width: 768px)").matches) {
-//             if(scrolled > startPos && scrolled < endPos) {
-//                 $(this).css({
-//                     position: "fixed",
-//                     top: startPos,
-//                     bottom: "auto",
-//                     width: $(this).parent().width()
-//                 })
-//             } 
-//             else if(scrolled > endPos) {
-//                 $(this).css({
-//                     position: "absolute",
-//                     bottom: 0,
-//                     top: "auto"
-//                 })
-//             } 
-//             else {
-//                 $(this).css({
-//                     position: "relative",
-//                     bottom: 0,
-//                     top: 0
-//                 })
-//             }
-//         }
-//     })
-// });
+$(".order-block .order-menu-row .card-wrap .opt-dropdown .size").click(function(){
+    let sizePrice = $(this).find(".price").text();
+    $(this).parents(".card-wrap").find(".text-wrap h6.price").text(sizePrice);
+})
+
+// about tab collapsible
+$(".order-block .restaurant-info .collapse-tab").click(function(){
+    $(this).next().slideToggle();
+})

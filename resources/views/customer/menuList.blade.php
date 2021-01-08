@@ -74,9 +74,10 @@
                     <h4 class="eta">{{$resto_data->avg_time ?? ''}} Min</h4>
                 </div>
             </div>
+            <span class="collapse-tab">About</span>
             <div class="about-wrap">
                 <div class="col-wrap">
-                    <h4>About</h4>
+                    <!-- <h4>About</h4> -->
                     <p>{{$resto_data->about ?? ''}}</p>
                 </div>
                 <div class="col-wrap">
@@ -135,30 +136,87 @@
                     @foreach($menu_data as $m_data)
                     @if($m_data->cat_name == $m_cat->cat_name)
                     <div class="card-wrap">
-                        <div class="img-wrap">
-                            <img src="{{$m_data->picture ?? url('asset/customer/assets/images/food_thumb2.png')}}"
-                                alt="food1">
-                        </div>
-                        <div class="text-wrap">
-                            <h6> {{$user_data->currency ?? ''}} {{$m_data->price ?? ''}}</h6>
-                            @if($m_data->dish_type == 2)
-                            <h4 class="green_dot"><i class="fa fa-stop-circle-o" style="font-size:18px;color:green"></i>
-                                {{$m_data->name ?? ''}}</h5>
-                            @else
-                            <h5 class="red_dot"><i class="fa fa-stop-circle-o" style="font-size:18px;color:red"></i>
-                                {{$m_data->name ?? ''}}</h5>
-                            @endif
-                            <p>{{$m_data->about ?? ''}}</p>
-                        </div>
-                        <ul class="add-to-cart">
-                            <div onClick="decrement_quantity('{{base64_encode($m_data->id)}}')">
-                                <li>-</li>
+                        <div class="inner-row">
+                            <div class="img-wrap">
+                                <!-- <img src="{{$m_data->picture ?? url('asset/customer/assets/images/food_thumb2.png')}}"
+                                    alt="food1"> -->
+                                    <img src="{{url('asset/customer/assets/images/food_thumb2.png')}}"
+                                    alt="food1"> 
                             </div>
-                            <li id="input-quantity-{{$m_data->id}}">{{$m_data->quantity ?? '0'}}</li>
-                            <div onClick="increment_quantity('{{base64_encode($m_data->id)}}')">
-                                <li>+</li>
+                            <div class="text-wrap">
+                                <!-- <h6> {{$user_data->currency ?? ''}} {{$m_data->price ?? ''}}</h6> -->
+                                <h6 class="price"> {{$user_data->currency ?? ''}} {{$m_data->price ?? ''}}</h6>
+                                @if($m_data->dish_type == 2)
+                                <h4 class="green_dot"><i class="fa fa-stop-circle-o" style="font-size:18px;color:green"></i>
+                                    {{$m_data->name ?? ''}}</h5>
+                                @else
+                                <h5 class="red_dot"><i class="fa fa-stop-circle-o" style="font-size:18px;color:red"></i>
+                                    {{$m_data->name ?? ''}}</h5>
+                                @endif
+                                <p>{{$m_data->about ?? ''}}</p>
                             </div>
-                        </ul>
+                            <ul class="add-to-cart">
+                                <div onClick="decrement_quantity('{{base64_encode($m_data->id)}}')">
+                                    <li>-</li>
+                                </div>
+                                <li id="input-quantity-{{$m_data->id}}">{{$m_data->quantity ?? '0'}}</li>
+                                <div onClick="increment_quantity('{{base64_encode($m_data->id)}}')">
+                                    <li>+</li>
+                                </div>
+                            </ul>
+                        </div>
+                        <div class="dropdown-grp">
+                            <div class="opt-dropdown">
+                                <span class="selected">
+                                    Select Size    
+                                </span>
+                                <div class="menu">
+                                    <fieldset id="{{$m_data->name ?? ''}}">
+                                        <label class="size" for="small-{{$m_data->name ?? ''}}"><input type="radio" id="small-{{$m_data->name ?? ''}}" name="{{$m_data->name ?? ''}}" value="small" checked>Small <span class="price">{{$user_data->currency ?? ''}} {{$m_data->price ?? ''}}</span></label>
+                                        <label class="size" for="midium-{{$m_data->name ?? ''}}"><input type="radio" id="midium-{{$m_data->name ?? ''}}" name="{{$m_data->name ?? ''}}" value="midium">Midium <span class="price">{{$user_data->currency ?? ''}} 1100</span></label>
+                                        <label class="size" for="large-{{$m_data->name ?? ''}}"><input type="radio" id="large-{{$m_data->name ?? ''}}" name="{{$m_data->name ?? ''}}" value="large">Large <span class="price">{{$user_data->currency ?? ''}} 1300</span></label>
+                                    </fieldset>
+                                </div>
+                            </div>
+                            <div class="opt-dropdown">
+                                <span class="selected">
+                                    Customization   
+                                </span>
+                                <div class="menu">
+                                    <div class="accordion" id="accordionExample">
+                                        <div class="card">
+                                            <div class="card-header" id="headingOne">
+                                            <h2 class="mb-0">
+                                                <a class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                    Cheese
+                                                </a>
+                                            </h2>
+                                            </div>
+
+                                            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                                                <div class="card-body">
+                                                    <label for="cheese-{{$m_data->name ?? ''}}"><input type="checkbox" id="cheese-{{$m_data->name ?? ''}}" name="{{  $m_data->name  }}" value="cheese" class="extras">Cheese <span class="price">$ 5</span></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card">
+                                            <div class="card-header" id="headingTwo">
+                                                <h2 class="mb-0">
+                                                    <a class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                                        Bacon
+                                                    </a>
+                                                </h2>
+                                            </div>
+                                            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                                                <div class="card-body">
+                                                    <label for="bacon-{{$m_data->name ?? ''}}"><input type="checkbox" id="bacon-{{$m_data->name ?? ''}}" name="{{$m_data->name ?? ''}}" value="bacon" class="extras">Bacon <span class="price">$ 10</span></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     @endif
                     @endforeach
