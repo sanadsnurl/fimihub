@@ -77,7 +77,7 @@
 <footer class="footer">
     <div class="md_container">
         <div class="row row-wrap">
-            <div class="col col-content">
+            <div class="col-wrap col-xl col-sm-4 col-content">
                 <h4><a href="./index.html">Fimihub</a></h4>
                 <div class="content-wrap">
                     <p>FiMi Hub is the most convenient way for customers to get the food
@@ -86,7 +86,7 @@
                     <p>© 2020-2021, FiMi Hub</p>
                 </div>
             </div>
-            <div class="col col-links">
+            <div class="col-wrap col-xl col-sm-4 col-links">
                 <h5>FAQ's</h5>
                 <ul class="links">
                     <li>
@@ -101,7 +101,7 @@
 
                 </ul>
             </div>
-            <div class="col col-links">
+            <div class="col-wrap col-xl col-sm-4 col-links">
                 <h5>Other Page content</h5>
                 <ul class="links">
                     <li>
@@ -121,8 +121,8 @@
                     </li>
                 </ul>
             </div>
-            <div class="col col-info">
-                {{-- <h5>Contacts</h5> --}}
+            <div class="col-wrap col-xl col-sm-4 col-info">
+                <h5>Contacts</h5>
                 <p>Main Street, Claremont P.O. St. Ann, Jamaica</p>
                 {{-- <p>+1 (234) 567-89-90</p> --}}
                 <a href="{{url('contactUsPage')}}" class="f">
@@ -131,7 +131,7 @@
                 </a>
                 {{-- <p>support@fimihub.com</p> --}}
             </div>
-            <div class="col col-form">
+            <div class="col-wrap col-xl col-sm-4 col-form">
                 <h5>Newsletter</h5>
                 <form role="form" method="POST" action="{{ url('/subscribeProcess') }}" class="subscribe-form">
                     @csrf
