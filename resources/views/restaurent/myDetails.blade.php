@@ -37,7 +37,7 @@
                                 <label for="input-1" class="col-sm-2 col-form-label">Restaurant Name</label>
                                 <div class="col-sm-10">
                                     <input type="text" class="form-control" id="input-1" name="name"
-                                        value="{{$resto_data->name ?? ''}}">
+                                        value="{{$resto_data->name ?? old('name')}}">
                                     @if($errors->has('name'))
                                     <div class="error">{{ $errors->first('name') }}</div>
                                     @endif
@@ -49,7 +49,7 @@
                                 <label for="input-3" class="col-sm-2 col-form-label">About Us</label>
                                 <div class="col-sm-10">
                                     <textarea name="about" class="form-control" cols="100"
-                                        rows="3">{{$resto_data->about ?? ''}}</textarea>
+                                        rows="3">{{$resto_data->about ?? old('about')}}</textarea>
 
                                     @if($errors->has('about'))
                                     <div class="error">{{ $errors->first('about') }}</div>
@@ -60,7 +60,7 @@
                                 <label for="input-3" class="col-sm-2 col-form-label">Other Details</label>
                                 <div class="col-sm-10">
                                     <textarea name="other_details" class="form-control" cols="100"
-                                        rows="3">{{$resto_data->other_details ?? ''}}</textarea>
+                                        rows="3">{{$resto_data->other_details ?? old('other_details')}}</textarea>
 
                                     @if($errors->has('other_details'))
                                     <div class="error">{{ $errors->first('other_details') }}</div>
@@ -71,7 +71,7 @@
                                 <label for="input-4" class="col-sm-2 col-form-label">Official Number</label>
                                 <div class="col-sm-10">
                                     <input type="number" class="form-control" id="input-4" name="official_number"
-                                        value="{{$resto_data->official_number ?? ''}}">
+                                        value="{{$resto_data->official_number ?? old('official_number')}}">
                                     @if($errors->has('official_number'))
                                     <div class="error">{{ $errors->first('official_number') }}</div>
                                     @endif
@@ -83,6 +83,8 @@
                                     <input type="radio" id="user-checkbox" class="filled-in chk-col-primary" value="2"
                                         name="resto_type" @if(isset($resto_data->resto_type))
                                     {{$resto_data->resto_type == 2 ? 'checked' : ''}}
+                                    @else
+                                    {{old('resto_type') == 2 ? 'checked':''}}
                                     @endif
                                     >
                                     <label for="user-checkbox">Veg</label>
@@ -91,6 +93,8 @@
                                     <input type="radio" id="user-checkbox1" class="filled-in chk-col-primary" value="1"
                                         name="resto_type" @if(isset($resto_data->resto_type))
                                     {{$resto_data->resto_type == 1 ? 'checked' : ''}}
+                                    @else
+                                    {{old('resto_type') == 1 ? 'checked':''}}
                                     @endif
                                     >
                                     <label for="user-checkbox1">Non-Veg</label>
@@ -99,8 +103,9 @@
                                     <input type="radio" id="user-checkbox2" class="filled-in chk-col-primary" value="3"
                                         name="resto_type" @if(isset($resto_data->resto_type))
                                     {{$resto_data->resto_type == 3 ? 'checked' : ''}}
+                                    @else
+                                    {{old('resto_type') == 3 ? 'checked':''}}
                                     @endif>
-
                                     <label for="user-checkbox2">Both</label>
                                 </div>
                                 @if($errors->has('resto_type'))
@@ -112,7 +117,7 @@
                                 <label for="input-4" class="col-sm-2 col-form-label">Average Cost</label>
                                 <div class="col-sm-10">
                                     <input type="number" class="form-control" id="input-4" name="avg_cost"
-                                        value="{{$resto_data->avg_cost ?? ''}}">
+                                        value="{{$resto_data->avg_cost ?? old('avg_cost')}}">
                                     @if($errors->has('avg_cost'))
                                     <div class="error">{{ $errors->first('avg_cost') }}</div>
                                     @endif
@@ -122,7 +127,7 @@
                                 <label for="input-4" class="col-sm-2 col-form-label">Average Time</label>
                                 <div class="col-sm-10">
                                     <input type="number" class="form-control" id="input-4" name="avg_time"
-                                        value="{{$resto_data->avg_time ?? ''}}">
+                                        value="{{$resto_data->avg_time ?? old('avg_time')}}">
                                     @if($errors->has('avg_time'))
                                     <div class="error">{{ $errors->first('avg_time') }}</div>
                                     @endif
@@ -132,7 +137,7 @@
                                 <label for="input-4" class="col-sm-2 col-form-label">Open Time</label>
                                 <div class="col-sm-10">
                                     <input type="time" class="form-control" id="input-4" name="open_time"
-                                        value="{{$resto_data->open_time ?? ''}}">
+                                        value="{{$resto_data->open_time ?? old('open_time')}}">
                                     @if($errors->has('open_time'))
                                     <div class="error">{{ $errors->first('open_time') }}</div>
                                     @endif
@@ -142,7 +147,7 @@
                                 <label for="input-4" class="col-sm-2 col-form-label">Close Time</label>
                                 <div class="col-sm-10">
                                     <input type="time" class="form-control" id="input-4" name="close_time"
-                                        value="{{$resto_data->close_time ?? ''}}">
+                                        value="{{$resto_data->close_time ?? old('close_time')}}">
                                     @if($errors->has('close_time'))
                                     <div class="error">{{ $errors->first('close_time') }}</div>
                                     @endif
@@ -153,12 +158,12 @@
                                 <label for="input-4 address_address" class="col-sm-2 col-form-label">Address</label>
                                 <div class="col-sm-8">
                                     <input type="text" data-id="address-input" name="address_address" placeholder="Address"
-                                        class="map-input form-control" value="{{$resto_add->address ?? ''}}">
+                                        class="map-input form-control" value="{{$resto_add->address ?? old('address')}}">
 
                                     <input type="hidden" name="address_latitude" id="address-latitude"
-                                        value="{{$resto_add->latitude ?? '0'}}" />
+                                        value="{{$resto_add->latitude ?? old('latitude')}}" />
                                     <input type="hidden" name="address_longitude" id="address-longitude"
-                                        value="{{$resto_add->longitude ?? '0'}}" />
+                                        value="{{$resto_add->longitude ?? old('longitude')}}" />
                                     @if($errors->has('address_address'))
                                     <div class="error">{{ $errors->first('address_address') }}</div>
                                     @endif
@@ -178,19 +183,9 @@
                                 <label for="input-4" class="col-sm-2 col-form-label">Zip Code</label>
                                 <div class="col-sm-10">
                                     <input type="number" class="form-control" id="input-4" name="pincode"
-                                        value="{{$resto_data->pincode ?? ''}}">
+                                        value="{{$resto_data->pincode ?? old('pincode')}}">
                                     @if($errors->has('pincode'))
                                     <div class="error">{{ $errors->first('pincode') }}</div>
-                                    @endif
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="input-4" class="col-sm-2 col-form-label">Delivery Charge/KM</label>
-                                <div class="col-sm-10">
-                                    <input type="number" class="form-control" id="input-4" name="delivery_charge"
-                                        value="{{$resto_data->delivery_charge ?? ''}}">
-                                    @if($errors->has('delivery_charge'))
-                                    <div class="error">{{ $errors->first('delivery_charge') }}</div>
                                     @endif
                                 </div>
                             </div>

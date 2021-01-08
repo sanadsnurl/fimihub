@@ -25,16 +25,16 @@ class menu_list extends Model
     public function menuPaginationData($data)
     {
         $menu_list=DB::table('menu_list')
-        ->join('resto_menu_categories as mc', 'mc.id', '=', 'menu_list.menu_category_id')
-        ->leftJoin('menu_categories', function($join) use ($data)
-                        {
-                            $join->on('menu_categories.id', '=', 'mc.menu_category_id');
+            ->join('resto_menu_categories as mc', 'mc.id', '=', 'menu_list.menu_category_id')
+            ->leftJoin('menu_categories', function($join) use ($data)
+                            {
+                                $join->on('menu_categories.id', '=', 'mc.menu_category_id');
 
-                        })
-        ->where('menu_list.visibility', 0)
-        ->where('menu_list.restaurent_id', $data)
-        ->select('menu_list.*','menu_categories.name as cat_name','menu_categories.discount as cat_discount')
-        ->orderBy('name');
+                            })
+            ->where('menu_list.visibility', 0)
+            ->where('menu_list.restaurent_id', $data)
+            ->select('menu_list.*','menu_categories.name as cat_name')
+            ->orderBy('name');
 
         return $menu_list;
 
@@ -90,7 +90,7 @@ class menu_list extends Model
                         })
         ->where('menu_list.visibility', 0)
         ->where('menu_list.id', $data)
-        ->select('menu_list.*','menu_categories.name as cat_name','menu_categories.discount as cat_discount','mc.id as cat_id')
+        ->select('menu_list.*','menu_categories.name as cat_name','mc.id as cat_id')
         ->orderBy('cat_name')
         ->first();
 
