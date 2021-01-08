@@ -125,7 +125,7 @@
                         <p>{{$resto_data->name ?? ''}}</p>
                     </div>
                     <div class="col-right">
-                        <h4><a href="{{url('/cart')}}">View Cart <img src="{{url('asset/customer/assets/images/cart_white.svg')}}"
+                        <h4><a href="{{url('/cart')}}">View Cart <img src="{{asset('asset/customer/assets/images/cart_white.svg')}}"
                                     alt="cart white"></a></h4>
                     </div>
                 </div>
@@ -136,6 +136,7 @@
                     @foreach($menu_data as $m_data)
                     @if($m_data->cat_name == $m_cat->cat_name)
                     <div class="card-wrap">
+
                         <div class="inner-row">
                             <div class="img-wrap">
                                 <!-- <img src="{{$m_data->picture ?? url('asset/customer/assets/images/food_thumb2.png')}}"
@@ -164,6 +165,22 @@
                                     <li>+</li>
                                 </div>
                             </ul>
+
+                        <div class="img-wrap">
+                            <img src="{{$m_data->picture ?? asset('asset/customer/assets/images/food_thumb2.png')}}"
+                                alt="food1">
+                        </div>
+                        <div class="text-wrap">
+                            <h6> {{$user_data->currency ?? ''}} {{$m_data->price ?? ''}}</h6>
+                            @if($m_data->dish_type == 2)
+                            <h4 class="green_dot"><i class="fa fa-stop-circle-o" style="font-size:18px;color:green"></i>
+                                {{$m_data->name ?? ''}}</h5>
+                            @else
+                            <h5 class="red_dot"><i class="fa fa-stop-circle-o" style="font-size:18px;color:red"></i>
+                                {{$m_data->name ?? ''}}</h5>
+                            @endif
+                            <p>{{$m_data->about ?? ''}}</p>
+
                         </div>
                         <div class="dropdown-grp">
                             <div class="opt-dropdown">

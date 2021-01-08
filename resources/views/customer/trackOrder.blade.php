@@ -31,13 +31,16 @@
                         <li
                             class="{{ in_array($order_data->order_status,array(4)) ? 'order_cancel' : 'order_status_hide rest_den'}} ">
                             <span></span> Restaurant Denied</li>
+
                         <li class="{{ in_array($order_data->order_status,array(5,6,7,8,9,10,11,12)) ? 'active' : ''}}">
                             <span></span> Order placed</li>
+
                         @if(isset($order_event_data->rider->order_status) && $order_event_data->rider->order_status >= 1
                         && $order_data->order_status < 6) <li
                             class="{{ in_array($order_event_data->rider->order_status,array(1,2)) ? 'active' : ''}}">
                             <span></span> Order has been accepted by {{$order_event_data->rider_details->name ?? '---'}}
                             </li>
+
                             <li
                                 class="{{ in_array($order_event_data->rider->order_status,array(1,2)) ? 'active' : ''}}">
                                 <span></span> {{$order_event_data->rider_details->name ?? '---'}} is one is way to the
@@ -68,6 +71,13 @@
                             <li
                                 class="{{ in_array($order_data->order_status,array(6,7,8,9,10,11,12)) ? 'active' : ''}}">
                                 <span></span> Order packed</li>
+                                <li
+                                >
+                                <span></span> --- is one is way to the
+                                restaurant </li>
+                                <li >
+                                    <span></span> --- has arrived at
+                                    restaurant</li>
                             @endif
                             <li
                                 class="{{ in_array($order_data->order_status,array(8)) ? 'order_cancel' : 'order_status_hide'}} ">

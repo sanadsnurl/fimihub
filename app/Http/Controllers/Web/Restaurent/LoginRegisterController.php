@@ -24,14 +24,14 @@ class LoginRegisterController extends Controller
         $validator = Validator::make($request->all(), [
             'password' => 'required|string|min:6',
             'user_id' => 'required|numeric',
-            
+
         ]);
         if(!$validator->fails()){
             $user_id = $request->input('user_id');
             $password = $request->input('password');
             $mobile_set = "";
             $email_set = "";
-            
+
             if(is_numeric($user_id))
             {
                 $loginData =["mobile"=>$user_id,"password"=>$password];
@@ -44,7 +44,7 @@ class LoginRegisterController extends Controller
 
             if(!auth()->attempt($loginData))
             {
-                Session::flash('message', 'Invalid Credentials !'); 
+                Session::flash('message', 'Invalid Credentials !');
                 return redirect()->back()->withInput();
             }
             else{
@@ -63,16 +63,19 @@ class LoginRegisterController extends Controller
                     $this->OtpGeneration($userid);
                     return redirect('/resendOtp');
 
+                }elseif($user_data->visibility != 0){
+                    Session::flash('message', 'Account Deleted !');
+                    return redirect()->back();
                 }
                 else
                 {
                     return redirect('Restaurent/dashboard');
                 }
             }
-            
+
         }
         else{
-        	return redirect()->back()->withInput()->withErrors($validator);  
+        	return redirect()->back()->withInput()->withErrors($validator);
         }
     }
 
@@ -82,7 +85,7 @@ class LoginRegisterController extends Controller
         Session::flush();
         return redirect('Restaurent/login');
     }
-    
+
     public function resendOtp(Request $request)
     {
         $userid = session('userid');
@@ -93,11 +96,11 @@ class LoginRegisterController extends Controller
 
     public function verifyOtp(Request $request)
     {
-        
+
         $validator = Validator::make($request->all(), [
             'otp' => 'required|digits:4',
-            
-            
+
+
         ]);
         if(!$validator->fails()){
             $otp=$request->input('otp');
@@ -105,7 +108,7 @@ class LoginRegisterController extends Controller
             $data['userid']=session('userid');
             //dd($data);
             $otp_verified_status=$this->OtpVerification($data);
-            
+
             if($otp_verified_status==2){
                 Session::flash('message', 'Invalid OTP');
 
@@ -120,13 +123,13 @@ class LoginRegisterController extends Controller
             }else{
                 return redirect('Restaurent/login');
             }
-        
+
         }
         else{
             //dd($validator);
 
-        	return redirect()->back()->withErrors($validator);  
+        	return redirect()->back()->withErrors($validator);
         }
-        
+
     }
 }

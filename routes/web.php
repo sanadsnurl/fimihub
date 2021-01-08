@@ -57,9 +57,6 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
     });
     // Test Payment page
     Route::get('/testPayment', function () {
-        $ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1';
-
-        return $_SERVER['REMOTE_ADDR'];
         return view('customer.testPaymentPage');
     });
     // Partner with us Process
@@ -88,6 +85,8 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
     Route::get('contactUsPage', 'Web\Customer\UserController@getContactUsWebPage');
     //Contact Us Process
     Route::post('contactUs', 'Web\Customer\UserController@contactUs');
+    //Contact Us Process
+    Route::get('makePaypalOrder', 'Web\Customer\OrderController@changePaypalOrderStatus');
 
     //========================================== Session Customer Auth Routes ===================================================
 

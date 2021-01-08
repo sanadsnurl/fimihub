@@ -189,6 +189,7 @@ trait LatLongRadiusScopeTrait
             // ->where('users.user_type', 2)
             ->having('distance', '<=', $max_distance_km_resto)
             ->whereNotNull('ua.user_id')
+            ->where('restaurent_details.visibility', 0)
             ->having('dish_count', '>', 0)
             ->orderBy('distance', 'ASC' )
             ->groupBy('ml.restaurent_id')

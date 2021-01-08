@@ -17,7 +17,7 @@
             <div class="col-left">
                 <div class="text-with-img">
                     <div class="img-wrap">
-                        <img src="{{$order->resto_picture ?? url('asset/customer/assets/images/resto_thumbnail.png')}}"
+                        <img src="{{$order->resto_picture ?? asset('asset/customer/assets/images/resto_thumbnail.png')}}"
                             alt="order1">
                     </div>
                     <div class="text-wrap">
@@ -102,7 +102,7 @@
             <div class="col-left">
                 <div class="text-with-img">
                     <div class="img-wrap">
-                        <img src="{{$c_order->resto_picture ?? url('asset/customer/assets/images/resto_thumbnail.png')}}"
+                        <img src="{{$c_order->resto_picture ?? asset('asset/customer/assets/images/resto_thumbnail.png')}}"
                             alt="order2">
                     </div>
                     <div class="text-wrap">

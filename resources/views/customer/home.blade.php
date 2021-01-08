@@ -87,7 +87,7 @@
                     <div class="card-wrap">
                         <a href="{{url('restaurentDetails')}}{{'?resto_id='}}{{base64_encode($r_data->id)}}">
                             <div class="img-wrap">
-                                <img src="{{$r_data->picture ?? url('asset/customer/assets/images/resto_thumbnail.png')}}"
+                                <img src="{{$r_data->picture ?? asset('asset/customer/assets/images/resto_thumbnail.png')}}"
                                     alt="restaurant">
                                 <div class="img-cutout"></div>
                                 <span class="rating">4.1 (60+)</span>
@@ -120,7 +120,7 @@
                         <div class="card-wrap">
                             <a href="{{url('restaurentDetails')}}{{'?resto_id='}}{{base64_encode($r_data->id)}}">
                                 <div class="img-wrap">
-                                    <img src="{{$r_data->picture ?? url('asset/customer/assets/images/resto_thumbnail.png')}}"
+                                    <img src="{{$r_data->picture ?? asset('asset/customer/assets/images/resto_thumbnail.png')}}"
                                         alt="restaurant">
                                     <div class="img-cutout"></div>
                                     <span class="rating">4.1 (60+)</span>
@@ -154,7 +154,7 @@
                         <div class="card-wrap">
                             <a href="{{url('restaurentDetails')}}{{'?resto_id='}}{{base64_encode($r_data->id)}}">
                                 <div class="img-wrap">
-                                    <img src="{{$r_data->picture ?? url('asset/customer/assets/images/resto_thumbnail.png')}}"
+                                    <img src="{{$r_data->picture ?? asset('asset/customer/assets/images/resto_thumbnail.png')}}"
                                         alt="restaurant">
                                     <div class="img-cutout"></div>
                                     <span class="rating">4.1 (60+)</span>
