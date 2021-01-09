@@ -77,7 +77,7 @@
             <span class="collapse-tab">About</span>
             <div class="about-wrap">
                 <div class="col-wrap">
-                    <!-- <h4>About</h4> -->
+                    <h4>About</h4>
                     <p>{{$resto_data->about ?? ''}}</p>
                 </div>
                 <div class="col-wrap">
