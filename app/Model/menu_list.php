@@ -8,23 +8,24 @@ use Illuminate\Support\Facades\DB;
 
 class menu_list extends Model
 {
-    protected $table = 'menu_list';
+    public $table = 'menu_list';
+
 
     public function makeMenu($data)
     {
-        $count=DB::table('menu_list')->max('listing_order');
+        $count=$this->max('listing_order');
         $unique_id=$count+1;
         $data['listing_order']=$unique_id;
         $data['updated_at'] = now();
         $data['created_at'] = now();
             unset($data['_token']);
-        $query_data = DB::table('menu_list')->insertGetId($data);
+        $query_data = $this->insertGetId($data);
         return $query_data;
     }
 
     public function menuPaginationData($data)
     {
-        $menu_list=DB::table('menu_list')
+        $menu_list=$this
             ->join('resto_menu_categories as mc', 'mc.id', '=', 'menu_list.menu_category_id')
             ->leftJoin('menu_categories', function($join) use ($data)
                             {
@@ -42,7 +43,7 @@ class menu_list extends Model
 
     public function menuCategory($data)
     {
-        $menu_list=DB::table('menu_list')
+        $menu_list=$this
         ->join('resto_menu_categories as mc', 'mc.id', '=', 'menu_list.menu_category_id')
         ->leftJoin('menu_categories', function($join) use ($data)
                         {
@@ -52,7 +53,7 @@ class menu_list extends Model
         ->distinct('menu_list.menu_category_id')
         ->where('menu_list.visibility', 0)
         ->where('menu_list.restaurent_id', $data)
-        ->select('mc.id as cat_id','menu_categories.name as cat_name','menu_categories.discount as cat_discount')
+        ->select('mc.id as cat_id','menu_categories.name as cat_name')
         ->orderBy('cat_name')
         ->get();
 
@@ -62,7 +63,7 @@ class menu_list extends Model
 
     public function menuList($data)
     {
-        $menu_list=DB::table('menu_list')
+        $menu_list=$this
         ->join('resto_menu_categories as mc', 'mc.id', '=', 'menu_list.menu_category_id')
         ->leftJoin('menu_categories', function($join) use ($data)
                         {
@@ -71,7 +72,7 @@ class menu_list extends Model
                         })
         ->where('menu_list.visibility', 0)
         ->where('menu_list.restaurent_id', $data)
-        ->select('menu_list.*','menu_categories.name as cat_name','menu_categories.discount as cat_discount')
+        ->select('menu_list.*','menu_categories.name as cat_name')
         ->orderBy('cat_name')
         ->get();
 
@@ -81,7 +82,7 @@ class menu_list extends Model
 
     public function menuListById($data)
     {
-        $menu_list=DB::table('menu_list')
+        $menu_list=$this
         ->join('resto_menu_categories as mc', 'mc.id', '=', 'menu_list.menu_category_id')
         ->leftJoin('menu_categories', function($join) use ($data)
                         {
@@ -100,7 +101,7 @@ class menu_list extends Model
 
     public function orderMenuListById($data)
     {
-        $menu_list=DB::table('menu_list')
+        $menu_list=$this
         ->join('resto_menu_categories as mc', 'mc.id', '=', 'menu_list.menu_category_id')
         ->leftJoin('menu_categories', function($join) use ($data)
                         {
@@ -108,7 +109,7 @@ class menu_list extends Model
 
                         })
         ->where('menu_list.id', $data)
-        ->select('menu_list.*','menu_categories.name as cat_name','menu_categories.discount as cat_discount')
+        ->select('menu_list.*','menu_categories.name as cat_name')
         ->orderBy('cat_name')
         ->first();
 
@@ -125,16 +126,16 @@ class menu_list extends Model
 
         if($cart_exist->count() == 0)
         {
-            $menu_list=DB::table('menu_list')
+            $menu_list=$this
             ->join('resto_menu_categories as mc', 'mc.id', '=', 'menu_list.menu_category_id')
             ->leftJoin('menu_categories', function($join) use ($data)
-                            {
-                                $join->on('menu_categories.id', '=', 'mc.menu_category_id');
+                        {
+                            $join->on('menu_categories.id', '=', 'mc.menu_category_id');
 
-                            })
+                        })
                     ->where('menu_list.visibility', 0)
                     ->where('menu_list.restaurent_id', $data['restaurent_id'])
-                    ->select('menu_list.*','menu_categories.name as cat_name','menu_categories.discount as cat_discount')
+                    ->select('menu_list.*','menu_categories.name as cat_name')
                     ->orderBy('cat_name')
                     ->get();
         }
@@ -143,7 +144,7 @@ class menu_list extends Model
             $cart_exist = $cart_exist->first();
             $data['cart_exist_id'] = $cart_exist->id;
             // dd($data['cart_exist_id']);
-            $menu_list = DB::table('menu_list')
+            $menu_list = $this
                     ->leftJoin('cart_submenus', function($join) use ($data)
                         {
                             $join->on('cart_submenus.menu_id', '=', 'menu_list.id');
@@ -160,7 +161,7 @@ class menu_list extends Model
 
                         })
                     ->where('menu_list.visibility', 0)
-                    ->select('menu_list.*','cart_submenus.quantity as quantity','menu_categories.name as cat_name','menu_categories.discount as cat_discount')
+                    ->select('menu_list.*','cart_submenus.quantity as quantity','menu_categories.name as cat_name')
                     ->get();
         }
 
@@ -177,7 +178,7 @@ class menu_list extends Model
             ->where('menu_list_id', $data['id'])
             ->update(['visibility'=> 2,'deleted_at' => $data['deleted_at']]);
 
-        $query_data = DB::table('menu_list')
+        $query_data = $this
             ->where('id', $data['id'])
             ->update(['visibility'=> 2,'deleted_at' => $data['deleted_at']]);
 
@@ -189,11 +190,24 @@ class menu_list extends Model
         $data['updated_at'] = now();
         unset($data['_token']);
 
-        $query_data = DB::table('menu_list')
+        $query_data = $this
             ->where('id', $data['id'])
             ->update($data);
 
         return $query_data;
     }
+
+    public function getNameAttributes($value)
+    {
+        return ucfirst($value);
+    }
+
+
+    public function getPriceAttribute($value)
+    {
+        return $value +(( DB::table('service_catagories')->where('service_catagories.id', 1)->first()->tax / 100) * $value);
+
+    }
+
 
 }

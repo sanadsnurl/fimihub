@@ -1,24 +1,22 @@
 @include('customer.include.header')
 <style>
-
     .rating_star .fa {
-      position: relative;
-      font-size: 32px;
-      color: #7d3b8a;
+        position: relative;
+        font-size: 32px;
+        color: #7d3b8a;
     }
 
     .rating_star .fa-star-percentage {
-      position: absolute;
-      left: 0;
-      top: 0;
-      overflow: hidden;
+        position: absolute;
+        left: 0;
+        top: 0;
+        overflow: hidden;
     }
 
     .rating_star .fa-star {
         color: #7d3b8a;
     }
-
-    </style>
+</style>
 <section class="banner restaurant-detail food-banner no-padding">
     <div class="slider-wrap">
         <div class="slide-item">
@@ -74,10 +72,10 @@
                     <h4 class="eta">{{$resto_data->avg_time ?? ''}} Min</h4>
                 </div>
             </div>
-            <span class="collapse-tab">About</span>
+            <span class="collapse-tab">Details</span>
             <div class="about-wrap">
                 <div class="col-wrap">
-                    <!-- <h4>About</h4> -->
+                    <h4>About</h4>
                     <p>{{$resto_data->about ?? ''}}</p>
                 </div>
                 <div class="col-wrap">
@@ -115,18 +113,21 @@
                     {{-- <span class="filter-btn show-sidepanel" id="filterPanel">Apply Filter</span> --}}
                 </div>
 
-                <div class="cart-block sticky" id="cart_flex" @if($total_amount !=0) style="display:flex; position: relative;" @endif>
+                <div class="cart-block sticky" id="cart_flex" @if($total_amount !=0)
+                    style="display:flex; position: relative;" @endif>
                     <div class="col-left">
                         <h4>
                             <span class="totalItems" id="item_count">{{$item ?? '0'}}</span> Items
                             <span class="sep">|</span>
-                            {{$user_data->currency ?? ''}} <span class="totalPrice" id="total_amount">{{$total_amount ?? '0'}}</span>
+                            {{$user_data->currency ?? ''}} <span class="totalPrice"
+                                id="total_amount">{{$total_amount ?? '0'}}</span>
                         </h4>
                         <p>{{$resto_data->name ?? ''}}</p>
                     </div>
                     <div class="col-right">
-                        <h4><a href="{{url('/cart')}}">View Cart <img src="{{asset('asset/customer/assets/images/cart_white.svg')}}"
-                                    alt="cart white"></a></h4>
+                        <h4><a href="{{url('/cart')}}">View Cart <img
+                                    src="{{asset('asset/customer/assets/images/cart_white.svg')}}" alt="cart white"></a>
+                        </h4>
                     </div>
                 </div>
 
@@ -135,106 +136,127 @@
                     <h5>{{$m_cat->cat_name}}</h5>
                     @foreach($menu_data as $m_data)
                     @if($m_data->cat_name == $m_cat->cat_name)
-                    <div class="card-wrap">
+                    <form action="" id="menu_form-{{$m_data->id ?? ''}}">
+                        <div class="card-wrap">
 
-                        <div class="inner-row">
-                            <div class="img-wrap">
-                                <!-- <img src="{{$m_data->picture ?? url('asset/customer/assets/images/food_thumb2.png')}}"
-                                    alt="food1"> -->
-                                    <img src="{{url('asset/customer/assets/images/food_thumb2.png')}}"
-                                    alt="food1"> 
+                            <div class="inner-row">
+                                <div class="img-wrap">
+                                    <img src="{{$m_data->picture ?? url('asset/customer/assets/images/food_thumb2.png')}}"
+                                        alt="food1">
+                                </div>
+                                <div class="text-wrap">
+                                    <h6 class="price"> {{$user_data->currency ?? ''}} {{$m_data->price ?? ''}}</h6>
+                                    @if($m_data->dish_type == 2)
+                                    <h4 class="green_dot"><i class="fa fa-stop-circle-o"
+                                            style="font-size:18px;color:green"></i>
+                                        {{$m_data->name ?? ''}}</h5>
+                                        @else
+                                        <h5 class="red_dot"><i class="fa fa-stop-circle-o"
+                                                style="font-size:18px;color:red"></i>
+                                            {{$m_data->name ?? ''}}</h5>
+                                        @endif
+                                        <p>{{$m_data->about ?? ''}}</p>
+                                </div>
+                                <ul class="add-to-cart">
+                                    <div onClick="decrement_quantity('{{base64_encode($m_data->id)}}')">
+                                        <li>-</li>
+                                    </div>
+                                    <li id="input-quantity-{{$m_data->id}}">{{$m_data->quantity ?? '0'}}</li>
+                                    <div onClick="increment_quantity('{{base64_encode($m_data->id)}}')">
+                                        <li>+</li>
+                                    </div>
+                                </ul>
+
                             </div>
-                            <div class="text-wrap">
-                                <!-- <h6> {{$user_data->currency ?? ''}} {{$m_data->price ?? ''}}</h6> -->
-                                <h6 class="price"> {{$user_data->currency ?? ''}} {{$m_data->price ?? ''}}</h6>
-                                @if($m_data->dish_type == 2)
-                                <h4 class="green_dot"><i class="fa fa-stop-circle-o" style="font-size:18px;color:green"></i>
-                                    {{$m_data->name ?? ''}}</h5>
-                                @else
-                                <h5 class="red_dot"><i class="fa fa-stop-circle-o" style="font-size:18px;color:red"></i>
-                                    {{$m_data->name ?? ''}}</h5>
+                            <div class="dropdown-grp">
+                                {{-- Product variant --}}
+
+                                @if(count($m_data->variant_data))
+                                <div class="opt-dropdown">
+                                    <span class="selected">
+                                        {!! $m_data->variant_data_cat->cat_name ?? 'Select' !!}
+                                    </span>
+                                    <div class="menu">
+                                        <fieldset id="{{$m_data->name ?? ''}}">
+                                            @foreach($m_data->variant_data as $v_data)
+                                            <label class="size" for="small-{{$m_data->id ?? ''}}-{{$v_data->id ?? ''}}" >
+                                                <input type="radio" class="small-{{$m_data->id ?? ''}}" onClick="increment_quantity('{{base64_encode($m_data->id)}}')"
+                                                    id="small-{{$m_data->id ?? ''}}-{{$v_data->id ?? ''}}"
+                                                    name="{{$m_data->id ?? ''}}-variant" value="{{$v_data->id ?? ''}}"
+                                                    @if($loop->index==0)
+                                                checked
+                                                @endif
+                                                >
+                                                {{$v_data->name ?? '' }} <span class="price">
+                                                    {{$user_data->currency ?? ''}}
+                                                    {{$v_data->price ?? '' }}
+                                                </span>
+                                            </label>
+                                            @endforeach
+
+                                        </fieldset>
+                                    </div>
+                                </div>
                                 @endif
-                                <p>{{$m_data->about ?? ''}}</p>
-                            </div>
-                            <ul class="add-to-cart">
-                                <div onClick="decrement_quantity('{{base64_encode($m_data->id)}}')">
-                                    <li>-</li>
-                                </div>
-                                <li id="input-quantity-{{$m_data->id}}">{{$m_data->quantity ?? '0'}}</li>
-                                <div onClick="increment_quantity('{{base64_encode($m_data->id)}}')">
-                                    <li>+</li>
-                                </div>
-                            </ul>
+                                {{-- Customization --}}
+                                @if(count($m_data->add_on))
+                                <div class="opt-dropdown">
+                                    <span class="selected">
+                                        Customization
+                                    </span>
+                                    <div class="menu">
+                                        <div class="accordion" id="accordionExample">
+                                            @foreach($m_data->add_ons_cat as $add_cat)
+                                            <div class="card">
+                                                <div class="card-header" id="heading-{{$m_data->id}}-{{$add_cat->id}}">
+                                                    <h2 class="mb-0">
+                                                        <a class="btn btn-link" data-toggle="collapse"
+                                                            data-target="#collapse-{{$m_data->id}}-{{$add_cat->id}}"
+                                                            aria-expanded="true"
+                                                            aria-controls="collapse-{{$m_data->id}}-{{$add_cat->id}}">
+                                                            {{$add_cat->cat_name ?? ''}}
+                                                        </a>
+                                                    </h2>
+                                                </div>
 
-                        <div class="img-wrap">
-                            <img src="{{$m_data->picture ?? asset('asset/customer/assets/images/food_thumb2.png')}}"
-                                alt="food1">
-                        </div>
-                        <div class="text-wrap">
-                            <h6> {{$user_data->currency ?? ''}} {{$m_data->price ?? ''}}</h6>
-                            @if($m_data->dish_type == 2)
-                            <h4 class="green_dot"><i class="fa fa-stop-circle-o" style="font-size:18px;color:green"></i>
-                                {{$m_data->name ?? ''}}</h5>
-                            @else
-                            <h5 class="red_dot"><i class="fa fa-stop-circle-o" style="font-size:18px;color:red"></i>
-                                {{$m_data->name ?? ''}}</h5>
-                            @endif
-                            <p>{{$m_data->about ?? ''}}</p>
+                                                <div id="collapse-{{$m_data->id}}-{{$add_cat->id}}" class="collapse
+                                                @if($loop->index == 0)
+                                                show
+                                                @endif
+                                                " aria-labelledby="heading-{{$m_data->id}}-{{$add_cat->id}}"
+                                                    data-parent="#accordionExample">
+                                                    <div class="card-body">
+                                                        @foreach($m_data->add_on as $add_onss)
+                                                        @foreach($add_onss as $add_ons)
+                                                        @if($add_cat->cat_name == $add_ons->cat_name)
+                                                        <label for="cheese-{{$m_data->id}}-{{$add_ons->id ?? ''}}">
+                                                            <input type="checkbox" onClick="increment_quantity('{{base64_encode($m_data->id)}}')"
+                                                                id="cheese-{{$m_data->id}}-{{$add_ons->id ?? ''}}"
+                                                                name="custom_data" value="{{$add_ons->id ?? ''}}"
+                                                                class="extras">
+                                                            {{$add_ons->name ?? '' }}
+                                                            <span class="price">
+                                                                {{$user_data->currency ?? ''}}
+                                                                {{$add_ons->price ?? '' }}
+                                                            </span>
+                                                        </label>
+                                                        @endif
+                                                        @endforeach
+                                                        @endforeach
 
-                        </div>
-                        <div class="dropdown-grp">
-                            <div class="opt-dropdown">
-                                <span class="selected">
-                                    Select Size    
-                                </span>
-                                <div class="menu">
-                                    <fieldset id="{{$m_data->name ?? ''}}">
-                                        <label class="size" for="small-{{$m_data->name ?? ''}}"><input type="radio" id="small-{{$m_data->name ?? ''}}" name="{{$m_data->name ?? ''}}" value="small" checked>Small <span class="price">{{$user_data->currency ?? ''}} {{$m_data->price ?? ''}}</span></label>
-                                        <label class="size" for="midium-{{$m_data->name ?? ''}}"><input type="radio" id="midium-{{$m_data->name ?? ''}}" name="{{$m_data->name ?? ''}}" value="midium">Midium <span class="price">{{$user_data->currency ?? ''}} 1100</span></label>
-                                        <label class="size" for="large-{{$m_data->name ?? ''}}"><input type="radio" id="large-{{$m_data->name ?? ''}}" name="{{$m_data->name ?? ''}}" value="large">Large <span class="price">{{$user_data->currency ?? ''}} 1300</span></label>
-                                    </fieldset>
-                                </div>
-                            </div>
-                            <div class="opt-dropdown">
-                                <span class="selected">
-                                    Customization   
-                                </span>
-                                <div class="menu">
-                                    <div class="accordion" id="accordionExample">
-                                        <div class="card">
-                                            <div class="card-header" id="headingOne">
-                                            <h2 class="mb-0">
-                                                <a class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                                    Cheese
-                                                </a>
-                                            </h2>
-                                            </div>
-
-                                            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-                                                <div class="card-body">
-                                                    <label for="cheese-{{$m_data->name ?? ''}}"><input type="checkbox" id="cheese-{{$m_data->name ?? ''}}" name="{{  $m_data->name  }}" value="cheese" class="extras">Cheese <span class="price">$ 5</span></label>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="card">
-                                            <div class="card-header" id="headingTwo">
-                                                <h2 class="mb-0">
-                                                    <a class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                                        Bacon
-                                                    </a>
-                                                </h2>
-                                            </div>
-                                            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
-                                                <div class="card-body">
-                                                    <label for="bacon-{{$m_data->name ?? ''}}"><input type="checkbox" id="bacon-{{$m_data->name ?? ''}}" name="{{$m_data->name ?? ''}}" value="bacon" class="extras">Bacon <span class="price">$ 10</span></label>
-                                                </div>
-                                            </div>
+                                            @endforeach
+
                                         </div>
                                     </div>
                                 </div>
+                                @endif
                             </div>
                         </div>
-                    </div>
+                    </form>
+
                     @endif
                     @endforeach
                 </div>
@@ -242,114 +264,105 @@
                 <input type="hidden" class="input-quantity" id="input-quantity"
                     value="{{base64_encode($resto_data->id)}}">
 
-
-
             </div>
 </section>
 @include('customer.include.footer')
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script>
-function increment_quantity(menu_id) {
-    var resto_id = $("#input-quantity").val();
-    var menu_decode_id = atob(menu_id);
-    var inputQuantityElement = $("#input-quantity-" + menu_decode_id);
-    var item_count = $("#item_count");
-    var total_amount = $("#total_amount");
-    var cart_flex = document.getElementById('cart_flex');
-    var notfi_cart =  document.getElementById('notfi_cart');
-
-
-    $.ajax({
-        url: "addMenuItem",
-        data: "menu_id=" + menu_id + "&resto_id=" + resto_id,
-        type: 'get',
-        beforeSend: function() {
-            $("#loading-overlay").show();
-        },
-        success: function(response) {
-
-            if(response.items >0){
-                cart_flex.style.display = 'flex';
-            }else{
-                cart_flex.style.display = 'none';
-
+    function increment_quantity(menu_id) {
+        var resto_id = $("#input-quantity").val();
+        var menu_decode_id = atob(menu_id);
+        var inputQuantityElement = $("#input-quantity-" + menu_decode_id);
+        var variant_menu = $(".small-" + menu_decode_id).val();
+        var menu_form_data = $('#menu_form-'+ menu_decode_id).serialize();
+        console.log(menu_form_data);
+        var item_count = $("#item_count");
+        var total_amount = $("#total_amount");
+        var cart_flex = document.getElementById('cart_flex');
+        var notfi_cart = document.getElementById('notfi_cart');
+        $.ajax({
+            url: "addMenuItem",
+            data: menu_form_data,
+            type: 'get',
+            beforeSend: function() {
+                $("#loading-overlay").show();
+            },
+            success: function(response) {
+                alert("something went wrong");
+                console.log(response);
+                if (response.items > 0) {
+                    cart_flex.style.display = 'flex';
+                } else {
+                    cart_flex.style.display = 'none';
+                }
+                $(inputQuantityElement).html(response.quantity);
+                $(item_count).html(response.items);
+                $(notfi_cart).html(response.items);
+                $(total_amount).html(response.sub_total);
+                $("#loading-overlay").hide();
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                $("#loading-overlay").hide();
+                alert("something went wrong");
             }
-            $(inputQuantityElement).html(response.quantity);
-            $(item_count).html(response.items);
-            $(notfi_cart).html(response.items);
-            $(total_amount).html(response.sub_total);
-            $("#loading-overlay").hide();
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            $("#loading-overlay").hide();
-            alert("something went wrong");
-        }
-    });
-}
+        });
+    }
 
-function decrement_quantity(menu_id) {
-    var resto_id = $("#input-quantity").val();
-    var menu_decode_id = atob(menu_id);
-    var inputQuantityElement = $("#input-quantity-" + menu_decode_id);
-    var item_count = $("#item_count");
-    var total_amount = $("#total_amount");
-    var cart_flex = document.getElementById('cart_flex');
-    var notfi_cart =  document.getElementById('notfi_cart');
-
-    $.ajax({
-        url: "subtractMenuItem",
-        data: "menu_id=" + menu_id + "&resto_id=" + resto_id,
-        type: 'get',
-        beforeSend: function() {
-            $("#loading-overlay").show();
-        },
-        success: function(response) {
-
-            if(response.items >0){
-                cart_flex.style.display = 'flex';
-            }else{
-                cart_flex.style.display = 'none';
+    function decrement_quantity(menu_id) {
+        var resto_id = $("#input-quantity").val();
+        var menu_decode_id = atob(menu_id);
+        var inputQuantityElement = $("#input-quantity-" + menu_decode_id);
+        var item_count = $("#item_count");
+        var total_amount = $("#total_amount");
+        var cart_flex = document.getElementById('cart_flex');
+        var notfi_cart = document.getElementById('notfi_cart');
+        $.ajax({
+            url: "subtractMenuItem",
+            data: "menu_id=" + menu_id + "&resto_id=" + resto_id,
+            type: 'get',
+            beforeSend: function() {
+                $("#loading-overlay").show();
+            },
+            success: function(response) {
+                if (response.items > 0) {
+                    cart_flex.style.display = 'flex';
+                } else {
+                    cart_flex.style.display = 'none';
+                }
+                $(inputQuantityElement).html(response.quantity);
+                $(item_count).html(response.items);
+                $(notfi_cart).html(response.items);
+                $(total_amount).html(response.sub_total);
+                $("#loading-overlay").hide();
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                $("#loading-overlay").hide();
+                alert("something went wrong");
             }
-            $(inputQuantityElement).html(response.quantity);
-            $(item_count).html(response.items);
-            $(notfi_cart).html(response.items);
-            $(total_amount).html(response.sub_total);
-            $("#loading-overlay").hide();
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            $("#loading-overlay").hide();
-            alert("something went wrong");
-        }
+        });
+    }
+    /* display rating in form of stars */
+    $.fn.makeStars = function() {
+        $(this).each(function() {
+            var rating = $(this).data('rating'),
+                starNumber = $(this).children().length,
+                fullStars = Math.floor(rating),
+                halfStarPerc = (rating - fullStars) * 100;
+            if (rating > 0) {
+                $(this).children().each(function(index) {
+                    $(this).addClass('fa-star');
+                    $(this).removeClass('fa-star-o');
+                    return ((index + 1) < fullStars);
+                });
+            }
+            if (halfStarPerc !== 0 && fullStars < starNumber) {
+                var halfStar = $(this).children(":nth-child(" + parseInt(fullStars + 1, 10) + ")");
+                $('<span class="fa fa-star fa-star-percentage"></span>').width(halfStarPerc + '%').appendTo(
+                    halfStar);
+            }
+        });
+    };
+    $(document).ready(function() {
+        $('.js-star-rating').makeStars();
     });
-}
-
-
-/* display rating in form of stars */
-$.fn.makeStars = function() {
-    $(this).each( function() {
-        var rating       = $(this).data('rating'),
-            starNumber   = $(this).children().length,
-            fullStars    = Math.floor(rating),
-            halfStarPerc = (rating - fullStars) * 100;
-
-        if(rating > 0) {
-            $(this).children().each(function (index) {
-                $(this).addClass('fa-star');
-                $(this).removeClass('fa-star-o');
-                return ( (index + 1) < fullStars );
-            });
-        }
-
-        if ( halfStarPerc !== 0 && fullStars < starNumber ) {
-            var halfStar = $(this).children(":nth-child(" + parseInt(fullStars+1, 10) + ")");
-
-            $('<span class="fa fa-star fa-star-percentage"></span>').width(halfStarPerc + '%').appendTo(halfStar);
-        }
-
-    });
-};
-
-$(document).ready( function() {
-    $('.js-star-rating').makeStars();
-});
 </script>

@@ -163,33 +163,6 @@ class CreateRestaurentManagementTable extends Migration
             $table->timestamp('deleted_at', 0)->nullable();
             $table->timestamps();
         });
-// menu Add-On ie -fries,cheese
-        Schema::create('menu_customizations', function (Blueprint $table) {
-            $table->engine = 'InnoDB';
-            $table->charset = 'utf16';
-            $table->collation = 'utf16_general_ci';
-            $table->increments('id');
-            // foreign key of resto_custom_menu_categories table
-            $table->integer('resto_custom_id')->unsigned();
-            $table->foreign('resto_custom_id')->references('id')->on('resto_custom_menu_categories')->onDelete('cascade')->onUpdate('cascade');
-            // foreign key of restaurent_details table
-            $table->integer('restaurent_id')->unsigned();
-            $table->foreign('restaurent_id')->references('id')->on('restaurent_details')->onDelete('cascade')->onUpdate('cascade');
-            // foreign key of menu_categories table
-            $table->integer('menu_list_id')->unsigned();
-            $table->foreign('menu_list_id')->references('id')->on('menu_list')->onDelete('cascade')->onUpdate('cascade');
-            //rest attributes
-            $table->string('name');
-            $table->string('picture')->nullable();
-            $table->decimal('price', 8, 2)->nullable();
-            $table->tinyInteger('customization_type')->comment('1-Non-Veg,2-Veg,3-other')->nullable();
-            $table->tinyInteger('buy_limit')->nullable();
-            $table->tinyInteger('listing_order')->nullable();
-            $table->tinyInteger('visibility')->default('0');
-            $table->timestamp('deleted_at', 0)->nullable();
-            $table->timestamps();
-        });
-
 
 //customization main menu list
     Schema::create('menu_custom_list', function (Blueprint $table) {
