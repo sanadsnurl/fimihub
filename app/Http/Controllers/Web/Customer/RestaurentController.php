@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use App\Http\Traits\OtpGenerationTrait;
+use App\Model\menu_custom_list;
 use Response;
 use Session;
 
@@ -26,7 +27,6 @@ class RestaurentController extends Controller
         $user = Auth::user();
 
         $user = $this->getBasicCount($user);
-        // dd($user);
         $resto_id = base64_decode(request('resto_id'));
         $restaurent_detail = new restaurent_detail;
         $resto_data = $restaurent_detail->getRestoDataOnId($resto_id);
@@ -41,11 +41,23 @@ class RestaurentController extends Controller
         $item=0;
 
         foreach($menu_data as $m_data){
-            $ServiceCategories = new ServiceCategory;
-            $service_data = $ServiceCategories->getServiceById(1);
-            $percentage = $service_data->commission;
+            $add_ons = array();
+            $add_ons_cat = array();
+            $menu_custom_list = new menu_custom_list();
+            $m_data->variant_data = $menu_custom_list->menuCustomPaginationData($m_data->restaurent_id)
+                                        ->where('resto_custom_cat_id',$m_data->product_variant_id)->get();
+            $m_data->variant_data_cat = $menu_custom_list->menuCustomCategoryData($m_data->restaurent_id)
+                                        ->where('resto_custom_cat_id',$m_data->product_variant_id)->first();
+            $m_data->product_add_on_id = json_decode($m_data->product_add_on_id);
 
-            $m_data->price = $m_data->price + (($percentage / 100) * $m_data->price);
+            foreach($m_data->product_add_on_id as $add_on){
+                $add_ons[] = $menu_custom_list->menuCustomPaginationData($m_data->restaurent_id)
+                                        ->where('resto_custom_cat_id',$add_on)->get();
+                $add_ons_cat[] = $menu_custom_list->menuCustomCategoryData($m_data->restaurent_id)
+                                        ->where('resto_custom_cat_id',$add_on)->first();
+            }
+            $m_data->add_on = ($add_ons);
+            $m_data->add_ons_cat = $add_ons_cat;
             if(!isset($m_data->quantity)){
                 $m_data->quantity=NULL;
             }
@@ -54,7 +66,9 @@ class RestaurentController extends Controller
                 $total_amount = $total_amount + ($m_data->quantity * $m_data->price);
             }
         }
-        // dd($menu_data);
+        // dd($m_data->add_on);
+
+        // dd($menu_data->toArray());
         $menu_cat = $menu_list->menuCategory($resto_id);
         $user->currency=$this->currency;
         return view('customer.menuList')->with(['user_data'=>$user,

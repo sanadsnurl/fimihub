@@ -28,7 +28,6 @@ class CartController extends Controller
     use GetBasicPageDataTraits;
     public function index(Request $request)
     {
-
         $user = Auth::user();
         $user = $this->getBasicCount($user);
 
@@ -127,7 +126,9 @@ class CartController extends Controller
     {
         $user = Auth::user();
         $resto_id = base64_decode(request('resto_id'));
-        $menu_id = base64_decode(request('menu_id'));
+        $menu_id = (request('2-variant'));
+        // dd($menu_id);
+        return ($menu_id);
         $restaurent_detail = new restaurent_detail;
 
         $resto_data = $restaurent_detail->getRestoDataOnId($resto_id);
