@@ -141,7 +141,6 @@ class CreateOrdersTable extends Migration
     public function down()
     {
         Schema::dropIfExists('order_events');
-        Schema::dropIfExists('cart_customizations');
         Schema::dropIfExists('orders');
         Schema::dropIfExists('cart_submenus');
         Schema::dropIfExists('carts');
