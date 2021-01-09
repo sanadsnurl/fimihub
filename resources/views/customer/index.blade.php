@@ -35,7 +35,7 @@
                                             <div class="address_box_dyn">
                                                 <div class="error">Invalid Location</div>
                                                 <input type="text" data-id="location-input" name="address_address"
-                                                    placeholder="Search Location" class="map-input">
+                                                    placeholder="Search Location" value="Test" class="map-input">
 
                                             </div>
                                             <input type="hidden" name="address_latitude" id="location-latitude"

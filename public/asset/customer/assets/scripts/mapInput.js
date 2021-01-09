@@ -145,13 +145,16 @@ $('.show_address').click(function() {
     }
 })
 
-$(".banner .save_adrs").submit(function(){
+var searchInput = $(".banner .search-bar .location-selector input#location-input");
+
+$(".banner .save_adrs").on("submit", function(){
     let langInput = $(".banner .search-bar  #location-longitude");
     let latInput = $(".banner .search-bar #location-latitude");
-    if(langInput.val() == 0 && latInput.val() == 0) {
+    if((langInput.val() == 0 && latInput.val() == 0) && (searchInput.val().length !== 0) ) {
         $(".banner .address_box_dyn").addClass("invalid");
         return false
     }else {
         $(".banner .address_box_dyn").removeClass("invalid");
     }
 })
+

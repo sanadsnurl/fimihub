@@ -5704,6 +5704,9 @@ header:after,
         max-width: 100%;
         width: 100%;
     }
+    .order-block .restaurant-info .about-wrap .col-wrap:first-child h4 {
+        display: none;
+    }
 }
 
 .order-block .restaurant-info .about-wrap .col-wrap h4 {
