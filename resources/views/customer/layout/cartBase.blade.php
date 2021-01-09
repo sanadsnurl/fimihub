@@ -69,7 +69,10 @@
                                         @else
                                         <h4>{{$m_data->name ?? ''}}</h4>
                                         @endif
-                                        <p>{{$m_data->about ?? ''}}</p>
+                                        <!-- <p>{{$m_data->about ?? ''}}</p> -->
+                                        <p>Size: <span class="size">Midium</span></p>
+                                        <p>Cheese: <span class="custom">Extra Cheese</span></p>
+                                        <p>Bacon: <span class="custom">Extra Bacon</span></p>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
