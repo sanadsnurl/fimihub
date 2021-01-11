@@ -69,10 +69,22 @@
                                         @else
                                         <h4>{{$m_data->name ?? ''}}</h4>
                                         @endif
-                                        <!-- <p>{{$m_data->about ?? ''}}</p> -->
-                                        <p>Size: <span class="size">Midium</span></p>
-                                        <p>Cheese: <span class="custom">Extra Cheese</span></p>
-                                        <p>Bacon: <span class="custom">Extra Bacon</span></p>
+
+                                        @if(!empty($m_data->cart_variant_id))
+                                        @foreach($m_data->variant_data as $v_data)
+                                        @if($m_data->cart_variant_id == $v_data->id)
+                                        <p>{{$v_data->cat_name ?? '--'}}: <span class="size">{{$v_data->name}}</span></p>
+                                        @endif
+                                        @endforeach
+                                        @endif
+
+                                        @if(!empty($m_data->product_adds_id))
+                                        @foreach($m_data->add_on as $ad_data)
+                                        @if(in_array($ad_data->id,($m_data->product_adds_id) ?? [],FALSE))
+                                        <p>{{$ad_data->cat_name ?? '--'}}: <span class="size">{{$ad_data->name}}</span></p>
+                                        @endif
+                                        @endforeach
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -91,7 +103,7 @@
                                     </div>
                                 </div>
                             </div>
-                            @if(count($m_data->add_on_data))
+                            @if(!empty($m_data->add_on_data))
                             <div class="collapsible">
                                 <a href="#" data-toggle="collapse" data-target="#collapseExample{{$m_data->id}}"
                                     aria-expanded="false" aria-controls="collapseExample">
