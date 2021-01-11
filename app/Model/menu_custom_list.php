@@ -34,8 +34,7 @@ class menu_custom_list extends Model
                         })
         ->where('menu_custom_list.visibility', 0)
         ->where('menu_custom_list.restaurent_id', $data)
-        ->select('menu_custom_list.*','custom_menu_categories.name as cat_name')
-        ->orderBy('name');
+        ->select('menu_custom_list.*','custom_menu_categories.name as cat_name');
 
         return $menu_custom_list;
 
@@ -57,6 +56,26 @@ class menu_custom_list extends Model
         ->orderBy('custom_menu_categories.name');
 
         return $menu_custom_list;
+    }
+
+    public function getCustomListPrice($value)
+    {
+        $menu_custom_list=DB::table('menu_custom_list')
+                ->where('id',$value)
+                ->first();
+
+        return $menu_custom_list;
+
+
+    }
+    public function getCustomListPriceWithPer($value)
+    {
+        $menu_custom_list=$this
+                ->where('id',$value)
+                ->first();
+
+        return $menu_custom_list;
+
     }
 
     public function getPriceAttribute($value)

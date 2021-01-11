@@ -120,7 +120,7 @@
                             <span class="totalItems" id="item_count">{{$item ?? '0'}}</span> Items
                             <span class="sep">|</span>
                             {{$user_data->currency ?? ''}} <span class="totalPrice"
-                                id="total_amount">{{$total_amount ?? '0'}}</span>
+                                id="total_amount">{{$sub_total ?? '0'}}</span>
                         </h4>
                         <p>{{$resto_data->name ?? ''}}</p>
                     </div>
@@ -138,7 +138,6 @@
                     @if($m_data->cat_name == $m_cat->cat_name)
                     <form action="" id="menu_form-{{$m_data->id ?? ''}}">
                         <div class="card-wrap">
-
                             <div class="inner-row">
                                 <div class="img-wrap">
                                     <img src="{{$m_data->picture ?? url('asset/customer/assets/images/food_thumb2.png')}}"
@@ -158,11 +157,11 @@
                                         <p>{{$m_data->about ?? ''}}</p>
                                 </div>
                                 <ul class="add-to-cart">
-                                    <div onClick="decrement_quantity('{{base64_encode($m_data->id)}}')">
+                                    <div onClick="increment_quantity('{{base64_encode($m_data->id)}}',1)">
                                         <li>-</li>
                                     </div>
                                     <li id="input-quantity-{{$m_data->id}}">{{$m_data->quantity ?? '0'}}</li>
-                                    <div onClick="increment_quantity('{{base64_encode($m_data->id)}}')">
+                                    <div onClick="increment_quantity('{{base64_encode($m_data->id)}}',2)">
                                         <li>+</li>
                                     </div>
                                 </ul>
@@ -179,11 +178,14 @@
                                     <div class="menu">
                                         <fieldset id="{{$m_data->name ?? ''}}">
                                             @foreach($m_data->variant_data as $v_data)
-                                            <label class="size" for="small-{{$m_data->id ?? ''}}-{{$v_data->id ?? ''}}" >
-                                                <input type="radio" class="small-{{$m_data->id ?? ''}}" onClick="increment_quantity('{{base64_encode($m_data->id)}}')"
+                                            <label class="size" for="small-{{$m_data->id ?? ''}}-{{$v_data->id ?? ''}}">
+                                                <input type="radio" class="small-{{$m_data->id ?? ''}}"
+                                                    onClick="increment_quantity('{{base64_encode($m_data->id)}}')"
                                                     id="small-{{$m_data->id ?? ''}}-{{$v_data->id ?? ''}}"
                                                     name="{{$m_data->id ?? ''}}-variant" value="{{$v_data->id ?? ''}}"
-                                                    @if($loop->index==0)
+                                                    @if(!empty($m_data->cart_variant_id))
+                                                {{$v_data->id == $m_data->cart_variant_id ? 'checked' : ''}}
+                                                @elseif($loop->index==0)
                                                 checked
                                                 @endif
                                                 >
@@ -230,10 +232,11 @@
                                                         @foreach($add_onss as $add_ons)
                                                         @if($add_cat->cat_name == $add_ons->cat_name)
                                                         <label for="cheese-{{$m_data->id}}-{{$add_ons->id ?? ''}}">
-                                                            <input type="checkbox" onClick="increment_quantity('{{base64_encode($m_data->id)}}')"
+                                                            <input type="checkbox"
+                                                                onClick="increment_quantity('{{base64_encode($m_data->id)}}')"
                                                                 id="cheese-{{$m_data->id}}-{{$add_ons->id ?? ''}}"
-                                                                name="custom_data" value="{{$add_ons->id ?? ''}}"
-                                                                class="extras">
+                                                                name="custom_data[]" value="{{$add_ons->id ?? ''}}"
+                                                                class="extras" @if(in_array($add_ons->id,($m_data->product_adds_id) ?? [],FALSE)) checked @endif>
                                                             {{$add_ons->name ?? '' }}
                                                             <span class="price">
                                                                 {{$user_data->currency ?? ''}}
@@ -269,26 +272,26 @@
 @include('customer.include.footer')
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script>
-    function increment_quantity(menu_id) {
+    function increment_quantity(menu_id, click_type = false) {
         var resto_id = $("#input-quantity").val();
         var menu_decode_id = atob(menu_id);
         var inputQuantityElement = $("#input-quantity-" + menu_decode_id);
         var variant_menu = $(".small-" + menu_decode_id).val();
-        var menu_form_data = $('#menu_form-'+ menu_decode_id).serialize();
-        console.log(menu_form_data);
+        var menu_form_data = $('#menu_form-' + menu_decode_id).serialize();
         var item_count = $("#item_count");
         var total_amount = $("#total_amount");
         var cart_flex = document.getElementById('cart_flex');
         var notfi_cart = document.getElementById('notfi_cart');
         $.ajax({
             url: "addMenuItem",
-            data: menu_form_data,
+            data: "menu_id=" + menu_id + "&resto_id=" + resto_id + "&menu_data=" + menu_form_data +
+                "&click_event=" + click_type,
             type: 'get',
             beforeSend: function() {
                 $("#loading-overlay").show();
             },
             success: function(response) {
-                alert("something went wrong");
+                // alert("something went wrong");
                 console.log(response);
                 if (response.items > 0) {
                     cart_flex.style.display = 'flex';
@@ -318,7 +321,8 @@
         var notfi_cart = document.getElementById('notfi_cart');
         $.ajax({
             url: "subtractMenuItem",
-            data: "menu_id=" + menu_id + "&resto_id=" + resto_id,
+            data: "menu_id=" + menu_id + "&resto_id=" + resto_id + "&menu_data=" + resto_id + "&menu_data=" +
+                resto_id,
             type: 'get',
             beforeSend: function() {
                 $("#loading-overlay").show();
