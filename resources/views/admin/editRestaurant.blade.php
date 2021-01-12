@@ -189,16 +189,6 @@
                                     @endif
                                 </div>
                             </div>
-                            <div class="form-group row">
-                                <label for="input-4" class="col-sm-2 col-form-label">Delivery Charge/KM</label>
-                                <div class="col-sm-10">
-                                    <input type="number" class="form-control" id="input-4" name="delivery_charge"
-                                        value="{{$resto_data->delivery_charge ?? ''}}">
-                                    @if($errors->has('delivery_charge'))
-                                    <div class="error">{{ $errors->first('delivery_charge') }}</div>
-                                    @endif
-                                </div>
-                            </div>
 
                             <div class="form-footer">
                                 <input type="submit" class="btn btn-primary" value="Save Data"></input>
