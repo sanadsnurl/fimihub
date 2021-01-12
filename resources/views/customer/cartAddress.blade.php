@@ -10,6 +10,15 @@
             <p>You have a saved address in this location</p>
 
         </div>
+        <div id="map"></div>
+        <input type="hidden" id="user_lat" name="user_lat" value="{{$user_add_def->latitude ?? ''}}">
+        <input type="hidden" id="user_long" name="user_long" value="{{$user_add_def->longitude ?? ''}}">
+        <input type="hidden" id="resto_lat" name="resto_lat" value="{{$resto_add_def[0]->latitude ?? ''}}">
+        <input type="hidden" id="resto_long" name="resto_long" value="{{$resto_add_def[0]->longitude ?? ''}}">
+        <input type="hidden" id="flat_rate" name="flat_rate" value="{{$service_data->flat_delivery_charge ?? ''}}">
+        <input type="hidden" id="flat_km" name="flat_km" value="{{$service_data->on_km ?? ''}}">
+        <input type="hidden" id="after_flat_rate" name="after_flat_rate"
+            value="{{$service_data->after_flat_delivery_charge ?? ''}}">
 
         <div class="card_addrs_btm">
             @if(Session::has('message'))
@@ -17,6 +26,14 @@
                 <h4 class="error">{{ Session::get('message') }}</h4>
             </div>
             @endif
+            <div class="error" style="text-align:center;">
+
+                <span id="add_error" class="error" style="text-align:center;font-size: 20px;
+            font-weight: 600;">
+
+                </span>
+            </div>
+
             <div class="row">
                 <div class="col-md-12">
                     <div class="addrs_box new_addrs_box h-100">
@@ -34,7 +51,7 @@
                     <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Select Different Address
+                            Select Address
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             @foreach($user_address as $user_add)
@@ -94,4 +111,7 @@
 </div>
 </div>
 
+<script>
+
+</script>
 @endsection

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 //custom import
 use Illuminate\Support\Facades\DB;
 use Auth;
+use function GuzzleHttp\json_decode;
 
 class menu_custom_list extends Model
 {
@@ -62,6 +63,7 @@ class menu_custom_list extends Model
     {
         $menu_custom_list=DB::table('menu_custom_list')
                 ->where('id',$value)
+                ->where('visibility',0)
                 ->first();
 
         return $menu_custom_list;
@@ -72,6 +74,7 @@ class menu_custom_list extends Model
     {
         $menu_custom_list=$this
                 ->where('id',$value)
+                ->where('visibility',0)
                 ->first();
 
         return $menu_custom_list;

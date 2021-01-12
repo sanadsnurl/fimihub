@@ -59,6 +59,39 @@
                                 </div>
 
                             </div>
+                            <div class="form-group row">
+                                <label for="input-1" class="col-sm-3 col-form-label">Flat rate</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="input-1" name="flat_delivery_charge"
+                                        value="{{$service_data->flat_delivery_charge ?? ''}}">
+                                    @if($errors->has('flat_delivery_charge'))
+                                    <div class="error">{{ $errors->first('flat_delivery_charge') }}</div>
+                                    @endif
+                                </div>
+
+                            </div>
+                            <div class="form-group row">
+                                <label for="input-1" class="col-sm-3 col-form-label">Flat Km</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="input-1" name="on_km"
+                                        value="{{$service_data->on_km ?? ''}}">
+                                    @if($errors->has('on_km'))
+                                    <div class="error">{{ $errors->first('on_km') }}</div>
+                                    @endif
+                                </div>
+
+                            </div>
+                            <div class="form-group row">
+                                <label for="input-1" class="col-sm-3 col-form-label">After Flat Km (Per/Km ,$)</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="input-1" name="after_flat_delivery_charge"
+                                        value="{{$service_data->after_flat_delivery_charge ?? ''}}">
+                                    @if($errors->has('after_flat_delivery_charge'))
+                                    <div class="error">{{ $errors->first('after_flat_delivery_charge') }}</div>
+                                    @endif
+                                </div>
+
+                            </div>
 
                             <div class="form-footer">
                                 <input type="submit" class="btn btn-primary" value="Update"></input>

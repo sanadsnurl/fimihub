@@ -120,7 +120,7 @@
                             <span class="totalItems" id="item_count">{{$item ?? '0'}}</span> Items
                             <span class="sep">|</span>
                             {{$user_data->currency ?? ''}} <span class="totalPrice"
-                                id="total_amount">{{$sub_total ?? '0'}}</span>
+                                id="total_amount">{{$total_amount ?? '0'}}</span>
                         </h4>
                         <p>{{$resto_data->name ?? ''}}</p>
                     </div>
@@ -170,13 +170,14 @@
                             <div class="dropdown-grp">
                                 {{-- Product variant --}}
 
-                                @if(count($m_data->variant_data))
+                                @if(count($m_data->variant_data) )
                                 <div class="opt-dropdown">
                                     <span class="selected">
                                         {!! $m_data->variant_data_cat->cat_name ?? 'Select' !!}
                                     </span>
                                     <div class="menu">
                                         <fieldset id="{{$m_data->name ?? ''}}">
+                                            @if(count($m_data->variant_data))
                                             @foreach($m_data->variant_data as $v_data)
                                             <label class="size" for="small-{{$m_data->id ?? ''}}-{{$v_data->id ?? ''}}">
                                                 <input type="radio" class="small-{{$m_data->id ?? ''}}"
@@ -195,20 +196,22 @@
                                                 </span>
                                             </label>
                                             @endforeach
-
+                                            @endif
                                         </fieldset>
                                     </div>
                                 </div>
                                 @endif
                                 {{-- Customization --}}
-                                @if(count($m_data->add_on))
-                                <div class="opt-dropdown">
+                                @if(count($m_data->add_on) && isset($m_data->add_ons_cat[0]))
+                                <div class="opt-dropdown" style="dislay:none;">
                                     <span class="selected">
                                         Customization
                                     </span>
                                     <div class="menu">
                                         <div class="accordion" id="accordionExample">
+                                            {{-- @if(count($m_data->add_ons_cat)) --}}
                                             @foreach($m_data->add_ons_cat as $add_cat)
+                                            @if(!empty($add_cat))
                                             <div class="card">
                                                 <div class="card-header" id="heading-{{$m_data->id}}-{{$add_cat->id}}">
                                                     <h2 class="mb-0">
@@ -228,6 +231,7 @@
                                                 " aria-labelledby="heading-{{$m_data->id}}-{{$add_cat->id}}"
                                                     data-parent="#accordionExample">
                                                     <div class="card-body">
+                                                        @if(count($m_data->add_on))
                                                         @foreach($m_data->add_on as $add_onss)
                                                         @foreach($add_onss as $add_ons)
                                                         @if($add_cat->cat_name == $add_ons->cat_name)
@@ -236,7 +240,9 @@
                                                                 onClick="increment_quantity('{{base64_encode($m_data->id)}}')"
                                                                 id="cheese-{{$m_data->id}}-{{$add_ons->id ?? ''}}"
                                                                 name="custom_data[]" value="{{$add_ons->id ?? ''}}"
-                                                                class="extras" @if(in_array($add_ons->id,($m_data->product_adds_id) ?? [],FALSE)) checked @endif>
+                                                                class="extras"
+                                                                @if(in_array($add_ons->id,($m_data->product_adds_id) ??
+                                                            [],FALSE)) checked @endif>
                                                             {{$add_ons->name ?? '' }}
                                                             <span class="price">
                                                                 {{$user_data->currency ?? ''}}
@@ -246,12 +252,13 @@
                                                         @endif
                                                         @endforeach
                                                         @endforeach
-
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
+                                            @endif
                                             @endforeach
-
+                                            {{-- @endif --}}
                                         </div>
                                     </div>
                                 </div>
@@ -277,7 +284,8 @@
         var menu_decode_id = atob(menu_id);
         var inputQuantityElement = $("#input-quantity-" + menu_decode_id);
         var variant_menu = $(".small-" + menu_decode_id).val();
-        var menu_form_data = $('#menu_form-' + menu_decode_id).serialize();
+        var menu_form_data = JSON.stringify( $('#menu_form-' + menu_decode_id).serializeArray());
+
         var item_count = $("#item_count");
         var total_amount = $("#total_amount");
         var cart_flex = document.getElementById('cart_flex');
@@ -301,7 +309,7 @@
                 $(inputQuantityElement).html(response.quantity);
                 $(item_count).html(response.items);
                 $(notfi_cart).html(response.items);
-                $(total_amount).html(response.sub_total);
+                $(total_amount).html(response.total_amount  );
                 $("#loading-overlay").hide();
             },
             error: function(jqXHR, textStatus, errorThrown) {
@@ -311,40 +319,6 @@
         });
     }
 
-    function decrement_quantity(menu_id) {
-        var resto_id = $("#input-quantity").val();
-        var menu_decode_id = atob(menu_id);
-        var inputQuantityElement = $("#input-quantity-" + menu_decode_id);
-        var item_count = $("#item_count");
-        var total_amount = $("#total_amount");
-        var cart_flex = document.getElementById('cart_flex');
-        var notfi_cart = document.getElementById('notfi_cart');
-        $.ajax({
-            url: "subtractMenuItem",
-            data: "menu_id=" + menu_id + "&resto_id=" + resto_id + "&menu_data=" + resto_id + "&menu_data=" +
-                resto_id,
-            type: 'get',
-            beforeSend: function() {
-                $("#loading-overlay").show();
-            },
-            success: function(response) {
-                if (response.items > 0) {
-                    cart_flex.style.display = 'flex';
-                } else {
-                    cart_flex.style.display = 'none';
-                }
-                $(inputQuantityElement).html(response.quantity);
-                $(item_count).html(response.items);
-                $(notfi_cart).html(response.items);
-                $(total_amount).html(response.sub_total);
-                $("#loading-overlay").hide();
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                $("#loading-overlay").hide();
-                alert("something went wrong");
-            }
-        });
-    }
     /* display rating in form of stars */
     $.fn.makeStars = function() {
         $(this).each(function() {
