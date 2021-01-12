@@ -430,6 +430,7 @@
 
 <script type="text/javascript" src="{{asset('asset/customer/assets/scripts/mapInput.js')}}"></script>
 <script type="text/javascript" src="{{asset('asset/customer/assets/scripts/searchMap.js')}}"></script>
+<script type="text/javascript" src="{{asset('asset/customer/assets/scripts/mapDistance.js')}}"></script>
 <script
     src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}&libraries=places&callback=initialize"
     async defer></script>
@@ -450,7 +451,42 @@
 
 <script>
     $(document).ready(function() {
-        $('[data-toggle="tooltip"]').tooltip();
+        // $('[data-toggle="tooltip"]').tooltip();
+
+        //
+        var user = {};
+        var resto = {};
+        var service_data = {};
+
+        user.lat = parseFloat($("#user_lat").val());
+        user.lng = parseFloat($("#user_long").val());
+        resto.lat = parseFloat($("#resto_lat").val());
+        resto.lng = parseFloat($("#resto_long").val());
+        service_data.flat_rate = parseFloat($("#flat_rate").val());
+        service_data.flat_km = parseFloat($("#flat_km").val());
+        service_data.after_flat_rate = parseFloat($("#after_flat_rate").val());
+
+
+        var add_details = kilomiter(user, resto,service_data);
+        // console.log(add_details, 'resto');
+        // console.log(resto, 'resto');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     });
     // $('.accord_btn').click(function() {
     //     $(this).next('.apply_cpn_box').slideToggle();

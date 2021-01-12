@@ -27,25 +27,25 @@ class ServiceController extends Controller
             return Datatables::of($service_list)
                 ->addIndexColumn()
                 ->addColumn('action', function($row){
-                    $btn = '<a href="editService?service_id='.base64_encode($row->id).'" class="btn btn-outline-success btn-sm btn-round waves-effect waves-light m-0">Edit</a> 
+                    $btn = '<a href="editService?service_id='.base64_encode($row->id).'" class="btn btn-outline-success btn-sm btn-round waves-effect waves-light m-0">Edit</a>
                         ';
                     return $btn;
                 })
                 ->addColumn('created_at', function($row){
-                    
+
                     return date('d F Y', strtotime($row->created_at));
                 })
                 ->rawColumns(['action'])
                 ->make(true);
-                
+
         }
         $user['currency']=$this->currency;
-        $service_list = $service_list->get();        
+        $service_list = $service_list->get();
         return view('admin.serviceList')->with(['data'=>$user]);
-        
+
     }
 
-    public function editService(Request $request){  
+    public function editService(Request $request){
         $user = Auth::user();
         $service_id = base64_decode(request('service_id'));
 
@@ -57,18 +57,21 @@ class ServiceController extends Controller
 
     }
 
-    public function editServiceProcess(Request $request){  
+    public function editServiceProcess(Request $request){
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:150',
             'commission' => 'numeric|max:100.00',
             'tax' => 'numeric|max:100.00',
-            
+            'flat_delivery_charge' => 'numeric|min:0',
+            'on_km' => 'numeric|min:1',
+            'after_flat_delivery_charge' => 'numeric|min:0',
+
         ]);
         if(!$validator->fails()){
 
         }
         else{
-        	return redirect()->back()->withInput()->withErrors($validator);  
+        	return redirect()->back()->withInput()->withErrors($validator);
         }
         $user = Auth::user();
         $data=$request->toArray();
@@ -76,7 +79,7 @@ class ServiceController extends Controller
         $ServiceCategories = new ServiceCategory;
         $service_data = $ServiceCategories->editService($data);
 
-        Session::flash('message', 'Service Updated !'); 
+        Session::flash('message', 'Service Updated !');
         return redirect()->back();
 
     }

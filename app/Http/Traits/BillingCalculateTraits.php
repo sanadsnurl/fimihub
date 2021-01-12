@@ -46,28 +46,30 @@ trait BillingCalculateTraits
 
         if($billing_data_arary['menu_id']){
             $menu_datass = $menu_list->menuListByQuantityById($quant_details);
+            // dd($menu_datass->toArray());
             $menu_total=0;
             $item=0;
-            foreach($menu_datass as $m_data){
+            if( !empty($menu_datass)){
+                foreach($menu_datass as $m_data){
                 $add_ons = array();
                 $add_ons_cat = array();
                 $add_ons_select = array();
                 $add_ons_cat_select = array();
                 $menu_custom_list = new menu_custom_list();
-                $m_data->variant_data = $menu_custom_list->menuCustomPaginationData($m_data->restaurent_id)
-                                            ->where('resto_custom_cat_id',$m_data->product_variant_id)->get();
-                $m_data->variant_data_cat = $menu_custom_list->menuCustomCategoryData($m_data->restaurent_id)
-                                            ->where('resto_custom_cat_id',$m_data->product_variant_id)->first();
-                $var_sin_data = $menu_custom_list->menuCustomPaginationData($m_data->restaurent_id)
-                                        ->where('resto_custom_cat_id',$m_data->product_variant_id)->first();
-                $m_data->product_add_on_id = json_decode($m_data->product_add_on_id);
+                $m_data->variant_data = $menu_custom_list->menuCustomPaginationData($m_data->restaurent_id ?? 0)
+                                            ->where('resto_custom_cat_id',$m_data->product_variant_id ?? 0)->get() ?? 0;
+                $m_data->variant_data_cat = $menu_custom_list->menuCustomCategoryData($m_data->restaurent_id ?? 0)
+                                            ->where('resto_custom_cat_id',$m_data->product_variant_id ?? 0)->first() ?? 0;
+                $var_sin_data = $menu_custom_list->menuCustomPaginationData($m_data->restaurent_id ?? 0)
+                                        ->where('resto_custom_cat_id',$m_data->product_variant_id ?? 0)->first() ??0;
+                $m_data->product_add_on_id = json_decode($m_data->product_add_on_id ?? 0) ?? 0;
 
-                if(!empty($m_data->variant_data)){
-                    if(!empty($m_data->quantity)){
-                        $var_d = $menu_custom_list->getCustomListPrice($m_data->cart_variant_id);
+                if(!empty($m_data->variant_data) && count($m_data->variant_data) ){
+                    if(!empty($m_data->quantity)  && !empty($m_data->cart_variant_id)){
+                        $var_d = $menu_custom_list->getCustomListPriceWithPer($m_data->cart_variant_id);
                         $m_data->price = $var_d->price;
                     }else{
-                        $var_d = $menu_custom_list->getCustomListPrice($var_sin_data->id);
+                        $var_d = $menu_custom_list->getCustomListPriceWithPer($var_sin_data->id);
                         $m_data->price = $var_d->price;
                     }
                 }
@@ -104,7 +106,8 @@ trait BillingCalculateTraits
                     $menu_total = $menu_total + ($m_data->quantity * $m_data->price);
                 }
 
-            }
+            }}
+
 
         }
             $menu_data = $menu_list->menuListByQuantity($quant_details);
@@ -127,11 +130,13 @@ trait BillingCalculateTraits
             $var_sin_data = $menu_custom_list->menuCustomPaginationData($m_data->restaurent_id)
                                     ->where('resto_custom_cat_id',$m_data->product_variant_id)->first();
             $m_data->product_add_on_id = json_decode($m_data->product_add_on_id);
-
-            if(!empty($m_data->variant_data)){
-                if(!empty($m_data->quantity)){
+            if(count($m_data->variant_data)){
+                if(!empty($m_data->quantity) && !empty($m_data->cart_variant_id)){
                     $var_d = $menu_custom_list->getCustomListPrice($m_data->cart_variant_id);
+// echo $m_data->cart_variant_id.'<br>';
+
                     $m_data->price = $var_d->price;
+                    // echo $var_d->price ;
                 }else{
                     $var_d = $menu_custom_list->getCustomListPrice($var_sin_data->id);
                     $m_data->price = $var_d->price;
@@ -175,15 +180,20 @@ trait BillingCalculateTraits
         $quantity = 0;
         if($billing_data_arary['menu_id']){
             $menu_data = $menu_datass ;
-            $quantity = $menu_data[0]->quantity;
+            if(isset($menu_data[0]->quantity)){
+                $quantity = $menu_data[0]->quantity;
+
+            }
         }
         // // return $menu_data;
+        $total_amount_last = ($total_amount ) + $service_tax;
 
         $response =(['menu_data'=>$menu_data,
                         'quantity'=>$quantity,
                         'cart_menu'=>$quantity,
-                        'menu_total'=>$menu_total,
-                        'total_amount'=>$total_amount,
+                        'menu_total'=>round($menu_total,2),
+                        'total_amount'=>round($total_amount,2),
+                        'total_amount_last'=>round($total_amount_last,2),
                         'service_data'=>$service_data,
                         'sub_total'=>round($sub_total,2),
                         'item'=>$item,

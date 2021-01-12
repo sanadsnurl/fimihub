@@ -135,11 +135,10 @@ class cart_submenu extends Model
                             ->where('cart_id', $data['cart_id'])
                             ->update($data);
 
-                $query_data = DB::table('cart_customizations')
-                        ->where('menu_id', $data['menu_id'])
+                $query_data = DB::table('carts')
                         ->where('user_id', $data['user_id'])
-                        ->where('cart_id', $data['cart_id'])
-                        ->update(['quantity'=>0 ,'visibility'=> 2]);
+                        ->where('id', $data['cart_id'])
+                        ->update(['visibility'=> 2]);
             }
 
         }else{
@@ -178,5 +177,10 @@ class cart_submenu extends Model
     public function menuItems()
     {
         return $this->belongsTo(menuList::class, 'menu_id');
+    }
+    public function getPriceAttribute($value)
+    {
+        return $value +(( DB::table('service_catagories')->where('service_catagories.id', 1)->first()->tax / 100) * $value);
+
     }
 }

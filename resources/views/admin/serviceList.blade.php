@@ -25,6 +25,9 @@
                                         <th>Service Name</th>
                                         <th>Commission (in %)</th>
                                         <th>Tax (in %)</th>
+                                        <th>Flat rate</th>
+                                        <th>Flat Km</th>
+                                        <th>After Flat Km (Per/Km ,$)</th>
                                         <th>Create At</th>
                                         <th>Action</th>
 
@@ -89,6 +92,18 @@
                 {
                     data: 'tax',
                     name: 'tax'
+                },
+                {
+                    data: 'flat_delivery_charge',
+                    name: 'flat_delivery_charge'
+                },
+                {
+                    data: 'on_km',
+                    name: 'on_km'
+                },
+                {
+                    data: 'after_flat_delivery_charge',
+                    name: 'after_flat_delivery_charge'
                 },
                 {
                     data: 'created_at',

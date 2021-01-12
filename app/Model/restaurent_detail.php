@@ -163,4 +163,10 @@ class restaurent_detail extends Model
     {
         return $this->belongsTo(user_address::class, 'user_id', 'user_id');
     }
+
+    public function getPriceAttribute($value)
+    {
+        return $value +(( DB::table('service_catagories')->where('service_catagories.id', 1)->first()->tax / 100) * $value);
+
+    }
 }

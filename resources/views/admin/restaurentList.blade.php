@@ -37,8 +37,6 @@
                                         <th>Address</th>
                                         <th>Open Time</th>
                                         <th>Close Time</th>
-                                        <th>Delivery Charge </th>
-                                        <th>Discount</th>
                                         <th>Create At</th>
 
                                     </tr>
@@ -127,14 +125,7 @@
                         data: 'close_time',
                         name: 'close_time'
                     },
-                    {
-                        data: 'delivery_charge',
-                        name: 'delivery_charge'
-                    },
-                    {
-                        data: 'discount',
-                        name: 'discount'
-                    },
+
                     {
                         data: 'user_created_at',
                         name: 'user_created_at'

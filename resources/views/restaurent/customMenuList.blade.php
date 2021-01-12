@@ -62,22 +62,7 @@
 
                             </div>
 
-                            <div class="form-group row">
-                                <label for="input-4" class="col-sm-2 col-form-label">Dish Type</label>
-                                <div class="demo-checkbox ml-4">
-                                    <input type="radio" id="user-checkbox" class="filled-in chk-col-primary" value="2"
-                                        name="dish_type">
-                                    <label for="user-checkbox">Veg</label>
-                                </div>
-                                <div class="demo-checkbox">
-                                    <input type="radio" id="user-checkbox1" class="filled-in chk-col-primary" value="1"
-                                        name="dish_type">
-                                    <label for="user-checkbox1">Non-Veg</label>
-                                </div>
-                                @if($errors->has('dish_type'))
-                                <div class="error">{{ $errors->first('dish_type') }}</div>
-                                @endif
-                            </div>
+
                             <div class="form-group row">
                                 <label for="input-1" class="col-sm-2 col-form-label">Price (Rs)</label>
                                 <div class="col-sm-10">
@@ -128,7 +113,6 @@
                                         <th>Customization Name</th>
                                         <th>Category</th>
                                         <th>Price</th>
-                                        <th>Dish Type</th>
                                         <th>Create At</th>
                                         {{-- <th>Action</th> --}}
 
@@ -200,11 +184,6 @@ $(document).ready(function() {
                 data: 'price',
                 name: 'price'
             },
-            {
-                data: 'dish_type',
-                name: 'dish_type'
-            },
-
             {
                 data: 'created_at',
                 name: 'created_at'

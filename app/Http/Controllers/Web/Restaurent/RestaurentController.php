@@ -415,7 +415,7 @@ class RestaurentController extends Controller
             'picture' => 'mimes:png,jpg,jpeg|nullable',
             'about' => 'string|nullable',
             'discount' => 'numeric|nullable',
-            'price' => 'numeric|nullable',
+            'price' => 'numeric|not_in:0',
             'dish_type' => 'required|in:1,2|nullable',
             'menu_category_id' => 'required|exists:resto_menu_categories,id|nullable',
             'product_variant_id' => 'integer',
@@ -762,8 +762,7 @@ class RestaurentController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|nullable',
-            'price' => 'required|numeric|not_in:0',
-            'dish_type' => 'required|in:1,2,3|nullable',
+            'price' => 'required|numeric',
             'resto_custom_cat_id' => 'required|exists:resto_custom_menu_categories,id|nullable',
 
         ]);
