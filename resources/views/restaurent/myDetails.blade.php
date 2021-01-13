@@ -166,9 +166,20 @@
                                     <div class="error">{{ Session::get('address_error') }}</div>
                                     @endif
                                 </div>
+                            </div>
+                            {{-- <div class="form-group row">
                                 <div class="col-sm-6">
                                     <div id="address-map-container"
-                                        style="width:0%;height:0px; margin-bottom: -115px;">
+                                        style="width:10%;height:100px; margin-bottom: -115px;">
+                                        <div style="width: 100%; height: 60%;" id="address-map"></div>
+                                    </div>
+                                </div>
+                            </div> --}}
+                            <div class="form-group row">
+                                <label for="input-4" class="col-sm-2 col-form-label"></label>
+                                <div class="col-sm-6">
+                                    <div id="address-map-container"
+                                        style="width:100%;height:220px; margin-bottom: -87px;">
                                         <div style="width: 100%; height: 60%;" id="address-map"></div>
                                     </div>
                                 </div>
