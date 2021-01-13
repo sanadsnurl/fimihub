@@ -8,13 +8,13 @@ function initialize() {
         }
     });
     const locationInputs = document.getElementsByClassName("map-input");
-
     const autocompletes = [];
     const geocoder = new google.maps.Geocoder;
     for (let i = 0; i < locationInputs.length; i++) {
 
         const input = locationInputs[i];
-        const fieldKey = input.id.replace("-input", "");
+        // const fieldKey = input.id.replace("-input", "");
+        const fieldKey = input.getAttribute("data-id").replace("-input", "");
         const isEdit = document.getElementById(fieldKey + "-latitude").value != '' && document.getElementById(fieldKey + "-longitude").value != '';
 
         const latitude = parseFloat(document.getElementById(fieldKey + "-latitude").value) || -33.8688;
@@ -143,6 +143,18 @@ $('.show_address').click(function() {
     } else {
         alert('Location not find')
     }
-
-
 })
+
+var searchInput = $(".banner .search-bar .location-selector input#location-input");
+
+$(".banner .save_adrs").on("submit", function(){
+    let langInput = $(".banner .search-bar  #location-longitude");
+    let latInput = $(".banner .search-bar #location-latitude");
+    if((langInput.val() == 0 && latInput.val() == 0) && (searchInput.val().length !== 0) ) {
+        $(".banner .address_box_dyn").addClass("invalid");
+        return false
+    }else {
+        $(".banner .address_box_dyn").removeClass("invalid");
+    }
+})
+

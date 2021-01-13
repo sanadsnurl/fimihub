@@ -24,9 +24,11 @@ class menu_categories extends Model
     {
         $menu_categories=DB::table('menu_categories')
         ->where('visibility', 0);
-        
-    
+
+
         return $menu_categories;
-    
+
     }
+
+
 }

@@ -24,7 +24,6 @@
         e.preventDefault();
         e.stopPropagation();
         let id = $(this).attr("id");
-        console.log('check', id);
         $(".side-panel[data-panel-id=" + id + "]").addClass("show");
     })
     closeBtn.click(function() {
@@ -35,46 +34,6 @@
     })
     $(document).click(function() {
         $(".side-panel").removeClass("show");
-    })
-
-    // manage order quantity
-    var incBtn = $(".order-block .order-menu-row .col-order .card-wrap .add-to-cart #inc");
-    var decBtn = $(".order-block .order-menu-row .col-order .card-wrap .add-to-cart #dec");
-    var qty = $(".order-block .order-menu-row .col-order .card-wrap .add-to-cart #qty");
-    var cartBlock = $(".order-block .cart-block");
-    var totalItemsEl = $(".order-block .cart-block h4 .totalItems");
-    var totalPriceEl = $(".order-block .cart-block h4 .totalPrice");
-    var totalQty = 0;
-    var totalPrice = 0;
-
-    incBtn.click(function() {
-        let inititalQty = +$(this).parent().find("#qty").text();
-        inititalQty += 1;
-        totalQty += 1;
-        totalPrice = +$(this).parents(".card-wrap").find(".text-wrap h6").text().replace("$ ", "") * totalQty;
-        $(this).parent().find("#qty").text(inititalQty);
-        totalItemsEl.text(totalQty);
-        totalPriceEl.text(totalPrice);
-        if (totalQty > 0) {
-            cartBlock.addClass("show");
-        } else {
-            cartBlock.removeClass("show");
-        }
-    })
-    decBtn.click(function() {
-        let inititalQty = +$(this).parent().find("#qty").text();
-        inititalQty -= 1;
-        if (inititalQty < 0) {
-            inititalQty = 0;
-        }
-        totalQty -= 1;
-        $(this).parent().find("#qty").text(inititalQty);
-        totalItemsEl.text(totalQty);
-        if (totalQty > 0) {
-            cartBlock.addClass("show");
-        } else {
-            cartBlock.removeClass("show");
-        }
     })
 
     //order category menuBlock
@@ -190,4 +149,71 @@ $('.payment_options label').click(function() {
             $('#bank_transfer').next('.bank_content').slideUp();
         }
     }, 100)
+})
+
+ // sticky menu sidebar
+ var sticky = $(".order-block .order-menu-row .sticky");
+
+ $(window).on("scroll", function(e){
+    sticky.each(function(e){
+         let scrolled = $(window).scrollTop();
+         let startPos = $(this).parents(".order-menu-row").offset().top - $(".header").height() - 20;
+         let endPos = $(this).parents(".order-menu-row").offset().top + $(this).parents(".order-menu-row").height() - $(this).height() - 90;
+         if(scrolled > startPos && scrolled < endPos) {
+            if(window.matchMedia("(min-width: 576px)").matches) {
+                $(this).css({
+                    position: "fixed",
+                    top: 120,
+                    bottom: "auto",
+                    width: $(this).parent().width()
+                })
+            }else {
+                if($(this).hasClass("menu-block")) {
+                    $(this).css({
+                        position: "fixed",
+                        top: 0,
+                        bottom: "auto",
+                        width: $(this).parent().width()
+                    })
+                }else {
+                    $(this).css({
+                        position: "fixed",
+                        top: 55,
+                        bottom: "auto",
+                        width: $(this).parent().width()
+                    })
+                }
+            }
+        } 
+        else if(scrolled > endPos) {
+            $(this).css({
+                position: "absolute",
+                bottom: 0,
+                top: "auto"
+            })
+        } 
+        else {
+            $(this).css({
+                position: "relative",
+                bottom: 0,
+                top: 0
+            })
+        }
+     })
+ });
+
+// product size dropdown
+$(".order-block .order-menu-row .card-wrap .opt-dropdown .selected").click(function(){
+    $(this).parent().toggleClass("open");
+    $(this).next(".menu").slideToggle();
+})
+
+$(".order-block .order-menu-row .card-wrap .opt-dropdown .size").click(function(){
+    let sizePrice = $(this).find(".price").text();
+    $(this).parents(".card-wrap").find(".text-wrap h6.price").text(sizePrice);
+})
+
+// about tab collapsible
+$(".order-block .restaurant-info .collapse-tab").click(function(){
+    $(this).next().slideToggle();
 })

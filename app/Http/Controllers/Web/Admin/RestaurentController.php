@@ -240,7 +240,6 @@ class RestaurentController extends Controller
             'open_time' => 'string|nullable',
             'close_time' => 'string|nullable',
             'address_address' => 'required|string',
-            'delivery_charge' => 'string|nullable',
             'pincode' => 'string|nullable',
             'resto_type' => 'in:1,2,3|nullable',
 

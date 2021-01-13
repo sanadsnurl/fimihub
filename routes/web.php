@@ -45,6 +45,12 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
     Route::get('/cardPolicy', 'Web\Customer\CmsController@indexCardPolicy');
     // T & C Page
     Route::get('/T&C', 'Web\Customer\CmsController@indexTandC');
+    //Merchant T & C Page
+    Route::get('/merchantT&C', 'Web\Customer\CmsController@indexMerchantTandC');
+    // Merchant Q n A
+    Route::get('/mechantQnA', 'Web\Customer\CmsController@indexMerchantQnA');
+    // Privacy Policy
+    Route::get('/privacyPolicyPage', 'Web\Customer\CmsController@indexPrivacyPolicy');
     // Partner with us page
     Route::get('/partnerWithUs', function () {
         return view('customer.auth.partnerRegister');
@@ -75,9 +81,13 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
     Route::get('logout', 'Web\Customer\LoginRegisterController@logout');
     // Customer Subscribed
     Route::post('subscribeProcess', 'Web\Customer\DashboardController@subscribe');
+    //Contact Us Page
+    Route::get('contactUsPage', 'Web\Customer\UserController@getContactUsWebPage');
+    //Contact Us Process
+    Route::post('contactUs', 'Web\Customer\UserController@contactUs');
+    //Contact Us Process
+    Route::get('makePaypalOrder', 'Web\Customer\OrderController@changePaypalOrderStatus');
 
-    Route::get('/autocomplete', 'DashboardController@index');
-    Route::post('/autocomplete/fetch', 'DashboardController@fetch')->name('autocomplete.fetch');
     //========================================== Session Customer Auth Routes ===================================================
 
     Route::group(['middleware' => 'customerauth'], function () {
@@ -98,8 +108,7 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
         Route::post('changePassword', 'Web\Customer\UserController@changePassword');
         //Contact Us Page
         Route::get('contactUs', 'Web\Customer\UserController@getContactUsPage');
-        //Contact Us Process
-        Route::post('contactUs', 'Web\Customer\UserController@contactUs');
+
         //Saved Address Page
         Route::get('saveaddress', 'Web\Customer\UserController@getSaveAddressPage');
         //My Order Page
@@ -165,12 +174,20 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
         Route::post('addRestaurentDetails', 'Web\Restaurent\RestaurentController@addRestaurentDetails');
         // Menu Category
         Route::get('menuCategory', 'Web\Restaurent\RestaurentController@categoryDetails');
+        // Menu Custom Category
+        Route::get('menuCustomCategory', 'Web\Restaurent\RestaurentController@categoryCustomDetails');
         // Menu Category update or insert
         Route::post('addCategory', 'Web\Restaurent\RestaurentController@addCategoryProcess');
+        // Menu Custom Category update or insert
+        Route::post('addCustomCategory', 'Web\Restaurent\RestaurentController@addCustomCategoryProcess');
         // Menu List
         Route::get('menuList', 'Web\Restaurent\RestaurentController@getMenuList');
+        // Menu Custom List
+        Route::get('menuCustomList', 'Web\Restaurent\RestaurentController@getMenuCustomList');
         // Menu Category update or insert
         Route::post('addMenu', 'Web\Restaurent\RestaurentController@menuListProcess');
+        // Menu Custom Category update or insert
+        Route::post('addCustomMenu', 'Web\Restaurent\RestaurentController@menuCustomListProcess');
         // Customer Order List
         Route::get('customerOrder', 'Web\Restaurent\OrderController@getCustomerOrderList');
         //Accept Customer Order
@@ -295,9 +312,14 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
         Route::get('pendingRider', 'Web\Admin\RiderController@pendingRider');
         // Approve Pending Restaurent Partner Requests
         Route::get('approveRider', 'Web\Admin\RiderController@approveRider');
+
         // Approve Pending Restaurent Partner Requests
         Route::get('envSetting', 'Web\Admin\EnvSettingCtroller@envSettingAdd');
         Route::post('envSetting', 'Web\Admin\EnvSettingCtroller@envSettingStore');
+
+        //Delete Rider
+        Route::get('deleteRider', 'Web\Admin\RiderController@deleteRider');
+
     });
 
 });

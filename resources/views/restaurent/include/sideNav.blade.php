@@ -11,22 +11,22 @@
     <meta name="author" content="" />
     <title>Fimihub - Restaurant</title>
     <!--favicon-->
-    <link rel="icon" href="{{url('asset/customer/assets/images/logo.png')}}">
+    <link rel="icon" href="{{asset('asset/customer/assets/images/logo.png')}}">
 
     <!-- Vector CSS -->
-    <link href="{{url('asset/admin/assets/plugins/vectormap/jquery-jvectormap-2.0.2.css')}}" rel="stylesheet" />
+    <link href="{{asset('asset/admin/assets/plugins/vectormap/jquery-jvectormap-2.0.2.css')}}" rel="stylesheet" />
     <!-- simplebar CSS-->
-    <link href="{{url('asset/admin/assets/plugins/simplebar/css/simplebar.css')}}" rel="stylesheet" />
+    <link href="{{asset('asset/admin/assets/plugins/simplebar/css/simplebar.css')}}" rel="stylesheet" />
     <!-- Bootstrap core CSS-->
-    <link href="{{url('asset/admin/assets/css/bootstrap.min.css')}}" rel="stylesheet" />
+    <link href="{{asset('asset/admin/assets/css/bootstrap.min.css')}}" rel="stylesheet" />
     <!-- animate CSS-->
-    <link href="{{url('asset/admin/assets/css/animate.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('asset/admin/assets/css/animate.css')}}" rel="stylesheet" type="text/css" />
     <!-- Icons CSS-->
-    <link href="{{url('asset/admin/assets/css/icons.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('asset/admin/assets/css/icons.css')}}" rel="stylesheet" type="text/css" />
     <!-- Sidebar CSS-->
-    <link href="{{url('asset/admin/assets/css/sidebar-menu.css')}}" rel="stylesheet" />
+    <link href="{{asset('asset/admin/assets/css/sidebar-menu.css')}}" rel="stylesheet" />
     <!-- Custom Style-->
-    <link href="{{url('asset/admin/assets/css/app-style.css')}}" rel="stylesheet" />
+    <link href="{{asset('asset/admin/assets/css/app-style.css')}}" rel="stylesheet" />
 
 </head>
 
@@ -39,7 +39,7 @@
         <div id="sidebar-wrapper" data-simplebar="" data-simplebar-auto-hide="true">
             <div class="brand-logo">
                 <a href="{{url('Restaurent/dashboard')}}">
-                    <img src="{{url('asset/customer/assets/images/logo.png')}}" class="logo-icon" alt="logo icon"
+                    <img src="{{asset('asset/customer/assets/images/logo.png')}}" class="logo-icon" alt="logo icon"
                         height="35px" width="25px">
                     <h5 class="logo-text">Fimihub</h5>
                 </a>
@@ -67,6 +67,18 @@
                         <li><a href="{{url('Restaurent/myDetails')}}"><i class="fa fa-circle-o"></i> Details</a></li>
                         <li><a href="{{url('Restaurent/menuCategory')}}"><i class="fa fa-circle-o"></i> Category</a></li>
                         <li><a href="{{url('Restaurent/menuList')}}"><i class="fa fa-circle-o"></i> Menu</a></li>
+
+
+                    </ul>
+                </li>
+                <li>
+                    <a href="#" class="waves-effect">
+                        <i class="fa fa-cutlery"></i> <span>Add-On </span> <i
+                            class="fa fa-angle-right pull-right"></i>
+                    </a>
+                    <ul class="sidebar-submenu">
+                        <li><a href="{{url('Restaurent/menuCustomCategory')}}"><i class="fa fa-circle-o"></i> Category</a></li>
+                        <li><a href="{{url('Restaurent/menuCustomList')}}"><i class="fa fa-circle-o"></i> Add-On Items</a></li>
 
 
                     </ul>

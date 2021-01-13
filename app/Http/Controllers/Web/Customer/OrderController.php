@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Http\Traits\BillingCalculateTraits;
 use App\Http\Traits\GetBasicPageDataTraits;
 use Illuminate\Http\Request;
 //custom import
@@ -22,14 +23,18 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use App\Http\Traits\OtpGenerationTrait;
 use App\Http\Traits\NotificationTrait;
+use App\Http\Traits\PaypalIntegrationTraits;
 use App\Model\cart_customization;
+use App\Model\menu_custom_list;
 use App\Model\menu_customization;
 use Response;
 use Session;
 
+use function GuzzleHttp\json_decode;
+
 class OrderController extends Controller
 {
-    use NotificationTrait, GetBasicPageDataTraits;
+    use NotificationTrait, GetBasicPageDataTraits ,PaypalIntegrationTraits,BillingCalculateTraits;
 
     public function getPaymentPage(Request $request)
     {
@@ -47,10 +52,7 @@ class OrderController extends Controller
 
             $cart = new cart;
             $cart_avail = $cart->checkCartAvaibility($user->id);
-            $upadte_cart = array();
-            $upadte_cart['id'] = $cart_avail->id;
-            $upadte_cart['address_id'] = $user_default_add->id;
-            $update_cart_add = $cart->updateCart($upadte_cart);
+
 
             if ($cart_avail == NULL) {
                 return view('customer.cart')->with([
@@ -58,9 +60,15 @@ class OrderController extends Controller
                     'user_address' => $user_add
                 ]);;
             } else {
+
+                $upadte_cart = array();
+                $upadte_cart['id'] = $cart_avail->id;
+                $upadte_cart['address_id'] = $user_default_add->id;
+                $update_cart_add = $cart->updateCart($upadte_cart);
                 $restaurent_detail = new restaurent_detail;
                 $resto_data = $restaurent_detail->getRestoDataOnId($cart_avail->restaurent_id);
-
+                $user_add_def = $user_address->getDefaultAddress($user->id) ?? '';
+                $resto_add_def = $user_address->getUserAddress($resto_data->user_id) ?? '';
                 $cart_submenu = new cart_submenu;
                 $quant_details = array();
                 $quant_details['user_id'] = $user->id;
@@ -69,65 +77,68 @@ class OrderController extends Controller
                 $cart_menu_data = $cart_submenu->getCartMenuList($quant_details);
 
                 if ($cart_menu_data != NULL) {
-                    $total_amount = 0;
-                    $item = 0;
-                    $custom_count = 0;
-                    $custom_total = 0;
-
                     foreach ($cart_menu_data as $m_data) {
-                        $ServiceCategories = new ServiceCategory;
-                        $service_data = $ServiceCategories->getServiceById(1);
-                        $percentage = $service_data->commission;
-                        //==================================================================================
-                        $menu_customizations = new menu_customization();
-                        $m_data->add_on_data = $menu_customizations->getAddOnData($m_data->id)->get();
 
-                        foreach ($m_data->add_on_data as $add_data) {
-                            $cart_customizations = new cart_customization();
-                            $quant_details['custom_id'] = $add_data->id;
-                            $cart_add_data = $cart_customizations->getCartCustomDataBySubMenu($quant_details)->first();
-                            $add_data->price = $add_data->price + (($percentage / 100) * $add_data->price);
-                            if (isset($cart_add_data)) {
-                                if (isset($cart_add_data->quantity) || $cart_add_data->quantity != 0) {
-                                    $add_data->quantity = $cart_add_data->quantity;
-                                    $custom_count = $custom_count + $cart_add_data->quantity;
-                                    $custom_total = $custom_total + ($cart_add_data->quantity * $add_data->price);
-                                } else {
-                                    $add_data->quantity = 0;
-                                }
-                            } else {
-                                $add_data->quantity = 0;
+                        $add_ons = array();
+                        $add_ons_cat = array();
+                        $add_ons_select = array();
+                        $add_ons_cat_select = array();
+                        $menu_custom_list = new menu_custom_list();
+                        $m_data->variant_data = $menu_custom_list->menuCustomPaginationData($m_data->restaurent_id)
+                                                    ->where('resto_custom_cat_id',$m_data->product_variant_id)->get();
+                        $m_data->variant_data_cat = $menu_custom_list->menuCustomCategoryData($m_data->restaurent_id)
+                                                    ->where('resto_custom_cat_id',$m_data->product_variant_id)->first();
+                        $var_sin_data = $menu_custom_list->menuCustomPaginationData($m_data->restaurent_id)
+                                                ->where('resto_custom_cat_id',$m_data->product_variant_id)->first();
+                        $m_data->product_add_on_id = json_decode($m_data->product_add_on_id);
+
+                        if(!empty($m_data->variant_data)  && !empty($m_data->cart_variant_id)){
+                            $var_d = $menu_custom_list->getCustomListPriceWithPer($m_data->cart_variant_id);
+                            $m_data->price = $var_d->price;
+                        }
+
+                        foreach($m_data->product_add_on_id as $add_on){
+                            $add_ons[] = $menu_custom_list->menuCustomPaginationData($m_data->restaurent_id)
+                                                    ->where('resto_custom_cat_id',$add_on)->get();
+                            $add_ons_cat[] = $menu_custom_list->menuCustomCategoryData($m_data->restaurent_id)
+                                                    ->where('resto_custom_cat_id',$add_on)->first();
+                        }
+                        if($m_data->product_adds_id){
+                            $m_data->product_adds_id = json_decode($m_data->product_adds_id);
+                            foreach($m_data->product_adds_id as $add_on_cart){
+                                $var_ds = $menu_custom_list->getCustomListPriceWithPer($add_on_cart);
+
                             }
                         }
-                        //===================================================================
-                        $m_data->price = $m_data->price + (($percentage / 100) * $m_data->price);
 
-                        if ($m_data->quantity != NULL) {
-                            $item = $item + $m_data->quantity;
-                            $total_amount = $total_amount + ($m_data->quantity * $m_data->price);
-                        }
+                        $m_data->add_on = ($add_ons);
+                        $m_data->add_ons_cat = $add_ons_cat;
+
+
+
                     }
-                    $sub_total = $total_amount + $custom_total;
-                    $total_amount = $total_amount + $custom_total;
+                    $billing_data_arary = ['menu_id' =>false,
+                'order_id' =>false,
+                'user_id' =>$user->id,
+                'resto_id' =>$quant_details['restaurent_id']
+                ];
+                $billing_balance = ($this->getBilling($billing_data_arary));
+                // return $billing_balance;
+                $user->currency = $this->currency;
+                return view('customer.cartPayment')->with([
+                    'user_data' => $user,
+                    'menu_data' => $cart_menu_data,
+                    'user_add_def' => $user_add_def,
+                    'resto_add_def' => $resto_add_def,
+                    'total_amount' => $billing_balance['total_amount'],
+                    'total_amount_last' => $billing_balance['total_amount_last'],
+                    'item' => $billing_balance['item'],
+                    'service_data' => $billing_balance['service_data'],
+                    'sub_total' => $billing_balance['sub_total'],
+                    'resto_data' => $resto_data,
+                    'user_address' => $user_add
+                ]);
 
-                    $ServiceCategories = new ServiceCategory;
-                    $service_data = $ServiceCategories->getServiceById(1);
-                    $service_tax = (($service_data->tax / 100) * $total_amount);
-                    $service_data->service_tax = $service_tax;
-                    //add delivery charge and tax in total amount
-                    $total_amount = ($total_amount - $resto_data->discount) + $resto_data->delivery_charge + $resto_data->tax + $service_tax;
-                    $user->currency = $this->currency;
-
-                    return view('customer.cartPayment')->with([
-                        'user_data' => $user,
-                        'menu_data' => $cart_menu_data,
-                        'total_amount' => $total_amount,
-                        'item' => $item,
-                        'sub_total' => $sub_total,
-                        'service_data' => $service_data,
-                        'resto_data' => $resto_data,
-                        'user_address' => $user_add
-                    ]);
                 } else {
                     return view('customer.cart')->with([
                         'user_data' => $user,
@@ -146,7 +157,11 @@ class OrderController extends Controller
 
         $validator = Validator::make($request->all(), [
             'payment' => 'required|in:1,2,3',
+            'delivery_fee' => 'required|not_in:0',
 
+        ],[
+            'delivery_fee.required' => 'Invalid Address',
+            'delivery_fee.not_in:0' => 'Invalid Address'
         ]);
         if (!$validator->fails()) {
             $user = Auth::user();
@@ -162,55 +177,54 @@ class OrderController extends Controller
             $cart_menu_data = $cart_submenu->getCartMenuList($quant_details);
 
             if ($cart_menu_data != NULL) {
-                $total_amount = 0;
-                $item = 0;
-                $custom_count = 0;
-                $custom_total = 0;
-
-                $restaurent_detail = new restaurent_detail;
-                $resto_data = $restaurent_detail->getRestoDataOnId($cart_avail->restaurent_id);
-
                 foreach ($cart_menu_data as $m_data) {
-                    $ServiceCategories = new ServiceCategory;
-                    $service_data = $ServiceCategories->getServiceById(1);
-                    $percentage = $service_data->commission;
-                    //==================================================================================
-                    $menu_customizations = new menu_customization();
-                    $m_data->add_on_data = $menu_customizations->getAddOnData($m_data->id)->get();
 
-                    foreach ($m_data->add_on_data as $add_data) {
-                        $cart_customizations = new cart_customization();
-                        $quant_details['custom_id'] = $add_data->id;
-                        $cart_add_data = $cart_customizations->getCartCustomDataBySubMenu($quant_details)->first();
-                        $add_data->price = $add_data->price + (($percentage / 100) * $add_data->price);
-                        if (isset($cart_add_data)) {
-                            if (isset($cart_add_data->quantity) || $cart_add_data->quantity != 0) {
-                                $add_data->quantity = $cart_add_data->quantity;
-                                $custom_count = $custom_count + $cart_add_data->quantity;
-                                $custom_total = $custom_total + ($cart_add_data->quantity * $add_data->price);
-                            } else {
-                                $add_data->quantity = 0;
-                            }
-                        } else {
-                            $add_data->quantity = 0;
+                    $add_ons = array();
+                    $add_ons_cat = array();
+                    $add_ons_select = array();
+                    $add_ons_cat_select = array();
+                    $menu_custom_list = new menu_custom_list();
+                    $m_data->variant_data = $menu_custom_list->menuCustomPaginationData($m_data->restaurent_id)
+                                                ->where('resto_custom_cat_id',$m_data->product_variant_id)->get();
+                    $m_data->variant_data_cat = $menu_custom_list->menuCustomCategoryData($m_data->restaurent_id)
+                                                ->where('resto_custom_cat_id',$m_data->product_variant_id)->first();
+                    $var_sin_data = $menu_custom_list->menuCustomPaginationData($m_data->restaurent_id)
+                                            ->where('resto_custom_cat_id',$m_data->product_variant_id)->first();
+                    $m_data->product_add_on_id = json_decode($m_data->product_add_on_id);
+
+                    if(!empty($m_data->variant_data)  && !empty($m_data->cart_variant_id)){
+                        $var_d = $menu_custom_list->getCustomListPriceWithPer($m_data->cart_variant_id);
+                        $m_data->price = $var_d->price;
+                    }
+
+                    foreach($m_data->product_add_on_id as $add_on){
+                        $add_ons[] = $menu_custom_list->menuCustomPaginationData($m_data->restaurent_id)
+                                                ->where('resto_custom_cat_id',$add_on)->get();
+                        $add_ons_cat[] = $menu_custom_list->menuCustomCategoryData($m_data->restaurent_id)
+                                                ->where('resto_custom_cat_id',$add_on)->first();
+                    }
+                    if($m_data->product_adds_id){
+                        $m_data->product_adds_id = json_decode($m_data->product_adds_id);
+                        foreach($m_data->product_adds_id as $add_on_cart){
+                            $var_ds = $menu_custom_list->getCustomListPriceWithPer($add_on_cart);
+
                         }
                     }
-                    //===================================================================
-                    $m_data->price = $m_data->price + (($percentage / 100) * $m_data->price);
-                    if ($m_data->quantity != NULL) {
-                        $item = $item + $m_data->quantity;
-                        $total_amount = $total_amount + ($m_data->quantity * $m_data->price);
-                    }
-                }
-                $sub_total = $total_amount + $custom_total;
-                $total_amount = $total_amount + $custom_total;
-                //add delivery charge and tax in total amount
-                $ServiceCategories = new ServiceCategory;
-                $service_data = $ServiceCategories->getServiceById(1);
-                $service_tax = (($service_data->tax / 100) * $total_amount);
-                $service_data->service_tax = $service_tax;
 
-                $total_amount = ($total_amount - $resto_data->discount) + $resto_data->delivery_charge + $resto_data->tax + $service_tax;
+                    $m_data->add_on = ($add_ons);
+                    $m_data->add_ons_cat = $add_ons_cat;
+
+
+
+                }
+                // dd($cart_menu_data->toArray());
+
+                $billing_data_arary = ['menu_id' =>false,
+                'order_id' =>false,
+                'user_id' =>$user->id,
+                'resto_id' =>$quant_details['restaurent_id']
+                ];
+                $billing_balance = ($this->getBilling($billing_data_arary));
                 $user['currency'] = $this->currency;
 
                 $orders = new order;
@@ -222,10 +236,10 @@ class OrderController extends Controller
                 $add_order['customer_name'] =  $user->name;
                 $add_order['ordered_menu'] = json_encode($cart_menu_data);
                 $add_order['mobile'] =  $user->mobile;
-                $add_order['total_amount'] = $total_amount;
-                $add_order['delivery_fee'] = $cart_avail->delivery_fee;
-                $add_order['service_tax'] = $service_data->tax;
-                $add_order['service_commission'] = $service_data->commission;
+                $add_order['total_amount'] = $billing_balance['total_amount_last'];
+                $add_order['delivery_fee'] = request('delivery_fee')?? 0;
+                $add_order['service_tax'] = $billing_balance['service_data']->tax;
+                $add_order['service_commission'] = $billing_balance['service_data']->commission;
                 $add_order['tax'] = $cart_avail->tax;
                 $add_order['order_status'] = 3;
                 $add_order['payment_type'] = request('payment');
@@ -250,7 +264,23 @@ class OrderController extends Controller
 
                 $order_id = base64_encode($make_order_id);
                 $cart_delete = $cart->deleteCart($user->id);
+                if(request('payment') == 2){
+                    $make_payment_array=['business'=>'clergio-facilitator@gmail.com',
+                                        'item_name'=>'food',
+                                        'item_number'=>1,
+                                        '_token'=>request('_token'),
+                                        'amount'=>$billing_balance['total_amount_last'],
+                                        'no_shipping'=>1,
+                                        'currency_code'=>'USD',
+                                        'notify_url'=>'http://sitename/paypal-payment-gateway-integration-in-php/notify.php',
+                                        'cancel_return'=>url('makePaypalOrder').'?order_check='.base64_encode('netset').'&order_check_token='.base64_encode($make_order_id),
+                                        'return'=>url('makePaypalOrder').'?order_check='.base64_encode('netsetwork').'&order_check_token='.base64_encode($make_order_id),
+                                        'cmd'=>'_xclick'
+                                    ];
+                    $payment = $this->makePayment($make_payment_array);
+                return  redirect($payment);
 
+                }
                 Session::flash('modal_check_order', 'open');
                 Session::flash('order_id', $order_id);
                 return redirect('/myOrder');
@@ -291,14 +321,13 @@ class OrderController extends Controller
                 $menu_data_list->quantity = $m_data->quantity;
                 $menu_data_list->price = $m_data->price;
                 $total_cart_value = $total_cart_value + $m_data->price * $m_data->quantity;
+                // dd($m_data->add_on);
                 $add_on_data = array();
-                foreach ($m_data->add_on_data as $add_data) {
+                foreach ($m_data->add_on as $add_data) {
 
-                    if ($add_data->quantity != 0 && $add_data->menu_list_id == $m_data->id) {
-                        $total_cart_value = $total_cart_value + $add_data->price * $add_data->quantity;
+                        // $total_cart_value = $total_cart_value + $add_data->price * $add_data->quantity;
                         $add_on_data[] = $add_data;
 
-                    }
                 }
                 $menu_data_list->add_on_data = $add_on_data;
                 $menu_data[] = $menu_data_list;
@@ -318,7 +347,7 @@ class OrderController extends Controller
         $service_data = json_encode($service_data);
         $service_data = json_decode($service_data);
         // $total_amount = ($total_amount - $resto_data->discount) + $resto_data->delivery_charge + $resto_data->tax
-        $service_tax = $order_data->total_amount - $total_cart_value - $resto_data->delivery_charge + $resto_data->discount;
+        $service_tax = $order_data->total_amount;
         $service_data->service_tax = $service_tax;
         $sub_total = $total_cart_value;
         $user['currency'] = $this->currency;
@@ -336,19 +365,29 @@ class OrderController extends Controller
                     $event_data['rider_details'] = $ride_event_data;
                 }
             }
+            $total_amount =$order_data->total_amount;
+            $ServiceCategories = new ServiceCategory();
+            $service_data = $ServiceCategories->getServiceById(1);
+
+            $sub_total = $total_amount / (1+ ($order_data->service_tax / 100));
+
+            $service_tax = (($order_data->service_tax / 100) * $sub_total);
+            $service_data->service_tax = $service_tax;
+
             $event_data = json_encode($event_data);
             $event_data = json_decode($event_data);
-            // dd($event_data);
+            // dd($order_data->total_amount);
             return view('customer.trackOrder')->with([
                 'user_data' => $user,
                 'order_data' => $order_data,
                 'add_on_data' => ($add_on_data),
-                'menu_data' => $menu_data,
+                'menu_data' => json_decode($order_data->ordered_menu),
                 'resto_data' => $resto_data,
+                'total_amount_last' =>$order_data->total_amount,
                 'order_event_data' => $event_data,
                 'sub_total' => $sub_total,
                 'service_data' => $service_data,
-                'total_amount' => $order_data->total_amount,
+                'total_amount' => $sub_total,
                 'item' => $item
             ]);
         } else {
@@ -384,5 +423,29 @@ class OrderController extends Controller
         } else {
             return redirect()->back()->withInput()->withErrors($validator);
         }
+    }
+
+    public function changePaypalOrderStatus(Request $request)
+    {
+        $order_check = base64_decode(request('order_check'));
+        $order_check_token = base64_decode(request('order_check_token'));
+        $orders = new order;
+        if($order_check == 'netsetwork'){
+            $payment_status = 2;
+        // dd($order_check);
+
+            $order_status_update = $orders->updatePaymentStatus($order_check_token, $payment_status);
+            Session::flash('modal_check_order', 'open');
+                Session::flash('order_id', $order_check_token);
+
+        }else{
+            $payment_status = 3;
+            $order_status_update = $orders->updatePaymentStatus($order_check_token, $payment_status);
+           Session::flash('modal_check_order', 'open');
+            Session::flash('order_id', $order_check_token);
+
+        }
+
+            return redirect('/myOrder');
     }
 }

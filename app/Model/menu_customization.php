@@ -67,4 +67,6 @@ class menu_customization extends Model
 
         return $query_data;
     }
+
+
 }

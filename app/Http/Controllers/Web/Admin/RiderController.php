@@ -32,8 +32,7 @@ class RiderController extends Controller
             return Datatables::of($user_list)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $btn = '<a href="editResto?resto_user_id=' . base64_encode($row->resto_user_id) . '" class="btn btn-outline-secondary btn-sm btn-round waves-effect waves-light m-0">Edit</a>
-                    <a href="deleteResto?resto_user_id=' . base64_encode($row->resto_user_id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light mt-1">Delete</a>
+                    $btn = '<a href="deleteRider?rider_user_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light mt-1">Delete</a>
                     ';
                     return $btn;
                 })
@@ -66,12 +65,44 @@ class RiderController extends Controller
                     } else {
                         $btns = 'N.A';
                     }
+                    return $btns;
+
+                })
+                ->addColumn('background_check', function ($row) {
+                    if ($row->vehicleDetails != NUll) {
+                        $url = $row->vehicleDetails->background_check;
+
+                        $btns = '<a href="' . $url . '" class="btn btn-outline-secondary btn-sm btn-round waves-effect waves-light m-0">View</a>';
+                    } else {
+                        $btns = 'N.A';
+                    }
+                    return $btns;
+
+                })
+                ->addColumn('food_permit', function ($row) {
+                    if ($row->vehicleDetails != NUll) {
+                        $url = $row->vehicleDetails->food_permit;
+
+                        $btns = '<a href="' . $url . '" class="btn btn-outline-secondary btn-sm btn-round waves-effect waves-light m-0">View</a>';
+                    } else {
+                        $btns = 'N.A';
+                    }
+                    return $btns;
+
                 })
                 ->addColumn('created_at', function ($row) {
 
                     return date('d F Y', strtotime($row->created_at));
                 })
-                ->rawColumns(['action', 'vehicle_image', 'id_proof', 'driving_license'])
+                ->addColumn('mobile', function ($row) {
+                    if($row->country_code != NULL){
+                        return '('.$row->country_code.')'.$row->mobile;
+                    }else{
+                        return $row->mobile;
+
+                    }
+                })
+                ->rawColumns(['action', 'vehicle_image', 'id_proof', 'driving_license', 'background_check', 'food_permit'])
                 ->make(true);
         }
         $user['currency'] = $this->currency;
@@ -86,24 +117,86 @@ class RiderController extends Controller
         $user = Auth::user();
 
         $users = new user;
-        $pending_user = $users->pendingUserPaginateList(2);
+        $pending_user = $users->allUserPaginateListRiderPendingData(2)
+                    ->with('riderBankDetails', 'vehicleDetails');
         if ($request->ajax()) {
             return Datatables::of($pending_user)
                 ->addIndexColumn()
-                ->addColumn('action', function($row){
+                ->addColumn('action', function ($row) {
                     $btn = '
-                        <a href="approveRider?user_id='.base64_encode($row->id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Approve</a>';
-                    return $btn;
+                    <a href="approveRider?user_id='.base64_encode($row->id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Approve</a>';
+                return $btn;
                 })
-                ->addColumn('created_at', function($row){
+                ->addColumn('vehicle_image', function ($row) {
+                    if ($row->vehicleDetails != NUll) {
+                        $url = $row->vehicleDetails->vehicle_image;
+                        $btns = '<a href="' . $url . '" class="btn btn-outline-secondary btn-sm btn-round waves-effect waves-light m-0">View Image</a>';
+                    } else {
+                        $btns = 'N.A';
+                    }
+                    return $btns;
+                })
+                ->addColumn('id_proof', function ($row) {
+
+
+                    if ($row->vehicleDetails != NUll) {
+                        $url = $row->vehicleDetails->id_proof;
+
+                        $btns = '<a href="' . $url . '" class="btn btn-outline-secondary btn-sm btn-round waves-effect waves-light m-0">View</a>';
+                    } else {
+                        $btns = 'N.A';
+                    }
+                    return $btns;
+                })
+                ->addColumn('driving_license', function ($row) {
+                    if ($row->vehicleDetails != NUll) {
+                        $url = $row->vehicleDetails->driving_license;
+
+                        $btns = '<a href="' . $url . '" class="btn btn-outline-secondary btn-sm btn-round waves-effect waves-light m-0">View</a>';
+                    } else {
+                        $btns = 'N.A';
+                    }
+                    return $btns;
+
+                })
+                ->addColumn('background_check', function ($row) {
+                    if ($row->vehicleDetails != NUll) {
+                        $url = $row->vehicleDetails->background_check;
+
+                        $btns = '<a href="' . $url . '" class="btn btn-outline-secondary btn-sm btn-round waves-effect waves-light m-0">View</a>';
+                    } else {
+                        $btns = 'N.A';
+                    }
+                    return $btns;
+
+                })
+                ->addColumn('food_permit', function ($row) {
+                    if ($row->vehicleDetails != NUll) {
+                        $url = $row->vehicleDetails->food_permit;
+
+                        $btns = '<a href="' . $url . '" class="btn btn-outline-secondary btn-sm btn-round waves-effect waves-light m-0">View</a>';
+                    } else {
+                        $btns = 'N.A';
+                    }
+                    return $btns;
+
+                })
+                ->addColumn('created_at', function ($row) {
 
                     return date('d F Y', strtotime($row->created_at));
                 })
-                ->rawColumns(['action'])
-                ->make(true);
+                ->addColumn('mobile', function ($row) {
+                    if($row->country_code != NULL){
+                        return '('.$row->country_code.')'.$row->mobile;
+                    }else{
+                        return $row->mobile;
 
+                    }
+                })
+                ->rawColumns(['action', 'vehicle_image', 'id_proof', 'driving_license', 'background_check', 'food_permit'])
+                ->make(true);
         }
-        $user['currency']=$this->currency;
+                $user['currency']=$this->currency;
 
         $pending_user = $pending_user->get();
         return view('admin.riderRequest')->with(['data'=>$user,'pending_user'=>$pending_user]);
@@ -122,5 +215,19 @@ class RiderController extends Controller
 
         return redirect()->back();
 
+    }
+
+    public function deleteRider(Request $request){
+        $user = Auth::user();
+        $rider_user_id = base64_decode(request('rider_user_id'));
+
+        $users = new User;
+        $delete_rider = array();
+        $delete_rider['id'] = $rider_user_id;
+
+        $delete_rider = $users->deleteUser($delete_rider);
+        Session::flash('message', 'Rider Deleted Successfully !');
+
+        return redirect()->back();
     }
 }

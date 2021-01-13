@@ -10,7 +10,7 @@
             <div class="side-menu-col">
                 <div class="user-info">
                     <div class="img-wrap">
-                        <img src="{{$user_data->picture ?? url('asset/customer/assets/images/user_icon2.png')}}"
+                        <img src="{{$user_data->picture ?? asset('asset/customer/assets/images/user_icon2.png')}}"
                             alt="user">
                     </div>
                     <div class="info-wrap">
@@ -55,7 +55,7 @@
                         </li>
                         <li>
                             <a href="{{url('logout')}}"><img
-                                    src="{{url('asset/customer/assets/images/logout_icon.svg')}}" alt="logout">
+                                    src="{{asset('asset/customer/assets/images/logout_icon.svg')}}" alt="logout">
                                 Logout</a>
                         </li>
                     </ul>

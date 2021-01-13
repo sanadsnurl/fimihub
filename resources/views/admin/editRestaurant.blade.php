@@ -157,7 +157,7 @@
                             <div class="form-group row">
                                 <label for="input-4 address_address" class="col-sm-2 col-form-label">Address</label>
                                 <div class="col-sm-8">
-                                    <input type="text" id="address-input" name="address_address" placeholder="Address"
+                                    <input type="text" data-id="address-input" name="address_address" placeholder="Address"
                                         class="map-input form-control" value="{{$resto_add->address ?? ''}}">
 
                                     <input type="hidden" name="address_latitude" id="address-latitude"
@@ -189,16 +189,6 @@
                                     @endif
                                 </div>
                             </div>
-                            <div class="form-group row">
-                                <label for="input-4" class="col-sm-2 col-form-label">Delivery Charge/KM</label>
-                                <div class="col-sm-10">
-                                    <input type="number" class="form-control" id="input-4" name="delivery_charge"
-                                        value="{{$resto_data->delivery_charge ?? ''}}">
-                                    @if($errors->has('delivery_charge'))
-                                    <div class="error">{{ $errors->first('delivery_charge') }}</div>
-                                    @endif
-                                </div>
-                            </div>
 
                             <div class="form-footer">
                                 <input type="submit" class="btn btn-primary" value="Save Data"></input>
@@ -219,7 +209,7 @@
 @include('admin.include.footer')
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-<script type="text/javascript" src="{{url('asset/customer/assets/scripts/mapInput.js')}}"></script>
+<script type="text/javascript" src="{{asset('asset/customer/assets/scripts/mapInput.js')}}"></script>
 <script
     src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}&libraries=places&callback=initialize"
     async defer></script>

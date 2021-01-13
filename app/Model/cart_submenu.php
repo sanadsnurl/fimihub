@@ -13,7 +13,7 @@ class cart_submenu extends Model
     public function makeCartSubMenu($data)
     {
 
-        $value=DB::table('cart_submenus')
+        $value=$this
                 ->where('menu_id', $data['menu_id'])
                 ->where('user_id', $data['user_id'])
                 ->where('cart_id', $data['cart_id'])
@@ -26,7 +26,7 @@ class cart_submenu extends Model
             $data['updated_at'] = now();
             $data['created_at'] = now();
             unset($data['_token']);
-            $query_data = DB::table('cart_submenus')->insert($data);
+            $query_data = $this->insert($data);
             $query_type="insert";
 
         }
@@ -38,7 +38,42 @@ class cart_submenu extends Model
             $data['quantity']= $quantity;
             $data['updated_at'] = now();
             unset($data['_token']);
-            $query_data = DB::table('cart_submenus')
+            $query_data = $this
+                        ->where('menu_id', $data['menu_id'])
+                        ->where('user_id', $data['user_id'])
+                        ->where('cart_id', $data['cart_id'])
+                        ->update($data);
+        }
+
+        return $query_data;
+    }
+
+    public function changeCartExtraSubMenu($data)
+    {
+
+        $value=$this
+                ->where('menu_id', $data['menu_id'])
+                ->where('user_id', $data['user_id'])
+                ->where('cart_id', $data['cart_id'])
+                ->where('visibility', 0);
+
+        if($value->count() == 0)
+        {
+
+            $data['quantity']=1;
+            $data['updated_at'] = now();
+            $data['created_at'] = now();
+            unset($data['_token']);
+            $query_data = $this->insert($data);
+            $query_type="insert";
+
+        }
+        else
+        {
+            $values = $value->first();
+            $data['updated_at'] = now();
+            unset($data['_token']);
+            $query_data = $this
                         ->where('menu_id', $data['menu_id'])
                         ->where('user_id', $data['user_id'])
                         ->where('cart_id', $data['cart_id'])
@@ -51,7 +86,7 @@ class cart_submenu extends Model
     public function getCartValue($data)
     {
         try {
-            $carts=DB::table('cart_submenus')
+            $carts=$this
                 ->where('visibility', 0)
                 ->where('cart_id', $data['cart_id'])
                 ->where('menu_id', $data['menu_id'])
@@ -68,7 +103,7 @@ class cart_submenu extends Model
     public function removeCartSubMenu($data)
     {
 
-        $value=DB::table('cart_submenus')
+        $value=$this
                 ->where('menu_id', $data['menu_id'])
                 ->where('user_id', $data['user_id'])
                 ->where('cart_id', $data['cart_id'])
@@ -84,7 +119,7 @@ class cart_submenu extends Model
                 $data['quantity']= $quantity;
                 $data['updated_at'] = now();
                 unset($data['_token']);
-                $query_data = DB::table('cart_submenus')
+                $query_data = $this
                         ->where('menu_id', $data['menu_id'])
                         ->where('user_id', $data['user_id'])
                         ->where('cart_id', $data['cart_id'])
@@ -94,17 +129,16 @@ class cart_submenu extends Model
                 $data['updated_at'] = now();
                 $data['visibility'] = 2;
                 unset($data['_token']);
-                $query_data = DB::table('cart_submenus')
+                $query_data = $this
                             ->where('menu_id', $data['menu_id'])
                             ->where('user_id', $data['user_id'])
                             ->where('cart_id', $data['cart_id'])
                             ->update($data);
 
-                $query_data = DB::table('cart_customizations')
-                        ->where('menu_id', $data['menu_id'])
+                $query_data = DB::table('carts')
                         ->where('user_id', $data['user_id'])
-                        ->where('cart_id', $data['cart_id'])
-                        ->update(['quantity'=>0 ,'visibility'=> 2]);
+                        ->where('id', $data['cart_id'])
+                        ->update(['visibility'=> 2]);
             }
 
         }else{
@@ -117,7 +151,7 @@ class cart_submenu extends Model
     public function getCartMenuList($data)
     {
         try {
-            $cart_menu_list = DB::table('cart_submenus')
+            $cart_menu_list = $this
                 ->Join('menu_list', function($join) use ($data)
                 {
                     $join->on('menu_list.id', '=', 'cart_submenus.menu_id');
@@ -128,7 +162,10 @@ class cart_submenu extends Model
                 ->where('cart_submenus.cart_id',  $data['cart_id'])
                 ->where('cart_submenus.user_id',  $data['user_id'])
                 ->where('cart_submenus.visibility', 0)
-                ->select('menu_list.*','cart_submenus.quantity as quantity','cart_submenus.id as sub_menu_id')
+                ->select('menu_list.*','cart_submenus.quantity as quantity',
+                'cart_submenus.product_variant_id as cart_variant_id',
+                    'cart_submenus.product_add_on_id as product_adds_id',
+                'cart_submenus.id as sub_menu_id')
                 ->get();
             return $cart_menu_list;
         }
@@ -140,5 +177,10 @@ class cart_submenu extends Model
     public function menuItems()
     {
         return $this->belongsTo(menuList::class, 'menu_id');
+    }
+    public function getPriceAttribute($value)
+    {
+        return $value +(( DB::table('service_catagories')->where('service_catagories.id', 1)->first()->tax / 100) * $value);
+
     }
 }

@@ -1,7 +1,7 @@
 <!--Data Tables -->
-<link href="{{url('asset/admin/assets/plugins/bootstrap-datatable/css/dataTables.bootstrap4.min.css')}}"
+<link href="{{asset('asset/admin/assets/plugins/bootstrap-datatable/css/dataTables.bootstrap4.min.css')}}"
     rel="stylesheet" type="text/css">
-<link href="{{url('asset/admin/assets/plugins/bootstrap-datatable/css/buttons.bootstrap4.min.css')}}" rel="stylesheet"
+<link href="{{asset('asset/admin/assets/plugins/bootstrap-datatable/css/buttons.bootstrap4.min.css')}}" rel="stylesheet"
     type="text/css">
 
 
@@ -25,6 +25,9 @@
                                         <th>Service Name</th>
                                         <th>Commission (in %)</th>
                                         <th>Tax (in %)</th>
+                                        <th>Flat rate</th>
+                                        <th>Flat Km</th>
+                                        <th>After Flat Km (Per/Km ,$)</th>
                                         <th>Create At</th>
                                         <th>Action</th>
 
@@ -46,20 +49,20 @@
     <!--End content-wrapper-->
     @include('admin.include.footer')
     <!-- Bootstrap core JavaScript-->
-    <script src="{{url('asset/admin/assets/js/jquery.min.js')}}"></script>
+    <script src="{{asset('asset/admin/assets/js/jquery.min.js')}}"></script>
     <!-- waves effect js -->
-    <script src="{{url('asset/admin/assets/js/waves.js')}}"></script>
+    <script src="{{asset('asset/admin/assets/js/waves.js')}}"></script>
     <!--Data Tables js-->
-    <script src="{{url('asset/admin/assets/plugins/bootstrap-datatable/js/jquery.dataTables.min.js')}}"></script>
-    <script src="{{url('asset/admin/assets/plugins/bootstrap-datatable/js/dataTables.bootstrap4.min.js')}}"></script>
-    <script src="{{url('asset/admin/assets/plugins/bootstrap-datatable/js/dataTables.buttons.min.js')}}"></script>
-    <script src="{{url('asset/admin/assets/plugins/bootstrap-datatable/js/buttons.bootstrap4.min.js')}}"></script>
-    <script src="{{url('asset/admin/assets/plugins/bootstrap-datatable/js/jszip.min.js')}}"></script>
-    <script src="{{url('asset/admin/assets/plugins/bootstrap-datatable/js/pdfmake.min.js')}}"></script>
-    <script src="{{url('asset/admin/assets/plugins/bootstrap-datatable/js/vfs_fonts.js')}}"></script>
-    <script src="{{url('asset/admin/assets/plugins/bootstrap-datatable/js/buttons.html5.min.js')}}"></script>
-    <script src="{{url('asset/admin/assets/plugins/bootstrap-datatable/js/buttons.print.min.js')}}"></script>
-    <script src="{{url('asset/admin/assets/plugins/bootstrap-datatable/js/buttons.colVis.min.js')}}"></script>
+    <script src="{{asset('asset/admin/assets/plugins/bootstrap-datatable/js/jquery.dataTables.min.js')}}"></script>
+    <script src="{{asset('asset/admin/assets/plugins/bootstrap-datatable/js/dataTables.bootstrap4.min.js')}}"></script>
+    <script src="{{asset('asset/admin/assets/plugins/bootstrap-datatable/js/dataTables.buttons.min.js')}}"></script>
+    <script src="{{asset('asset/admin/assets/plugins/bootstrap-datatable/js/buttons.bootstrap4.min.js')}}"></script>
+    <script src="{{asset('asset/admin/assets/plugins/bootstrap-datatable/js/jszip.min.js')}}"></script>
+    <script src="{{asset('asset/admin/assets/plugins/bootstrap-datatable/js/pdfmake.min.js')}}"></script>
+    <script src="{{asset('asset/admin/assets/plugins/bootstrap-datatable/js/vfs_fonts.js')}}"></script>
+    <script src="{{asset('asset/admin/assets/plugins/bootstrap-datatable/js/buttons.html5.min.js')}}"></script>
+    <script src="{{asset('asset/admin/assets/plugins/bootstrap-datatable/js/buttons.print.min.js')}}"></script>
+    <script src="{{asset('asset/admin/assets/plugins/bootstrap-datatable/js/buttons.colVis.min.js')}}"></script>
 
     <script>
     $(document).ready(function() {
@@ -91,6 +94,18 @@
                     name: 'tax'
                 },
                 {
+                    data: 'flat_delivery_charge',
+                    name: 'flat_delivery_charge'
+                },
+                {
+                    data: 'on_km',
+                    name: 'on_km'
+                },
+                {
+                    data: 'after_flat_delivery_charge',
+                    name: 'after_flat_delivery_charge'
+                },
+                {
                     data: 'created_at',
                     name: 'created_at'
                 },
@@ -100,7 +115,7 @@
                     orderable: true,
                     searchable: false
                 },
-                
+
 
 
             ]

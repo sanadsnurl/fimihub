@@ -25,26 +25,47 @@ use phpDocumentor\Reflection\Types\Null_;
 
 class DashboardController extends Controller
 {
-    use LatLongRadiusScopeTrait ,GetBasicPageDataTraits;
+    use LatLongRadiusScopeTrait, GetBasicPageDataTraits;
     public function index(Request $request)
     {
         $user = Auth::user();
         $user_data = auth()->user()->userByIdData($user->id);
-
         $user_data = $this->getBasicCount($user);
-        // dd($user_data);
+        if ($request->has('address_latitude')) {
+            if(request('search_field') != NULL){
+                $search_field = request('search_field');
 
-        $ip = isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : '127.0.0.1'; //Dynamic IP address get
+            }else{
+                unset($request['search_field']);
+            }
+        }
+
+        $lat_lng_array = array();
+        if ($request->has('address_latitude')) {
+            $lat_lng_array['address_latitude'] = request('address_latitude');
+            if ($lat_lng_array['address_latitude'] == 0) {
+                $lat_lng_array['address_latitude'] = NULL;
+            }
+        }
+
+        if ($request->has('address_longitude')) {
+            $lat_lng_array['address_longitude'] = request('address_longitude');
+            if ($lat_lng_array['address_longitude'] == 0) {
+                $lat_lng_array['address_longitude'] = NULL;
+            }
+        }
+
+        $ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1'; //Dynamic IP address get
 
         if ($ip == '127.0.0.1') {
 
-            $lat = '28.6581196';
-            $lng = '77.14289509999999';
+            $lat = '18.4490849';
+            $lng = '-77.2419522';
         } else {
             $loc_data = Location::get($ip);
 
-            $lat = $loc_data->latitude ??  '0';
-            $lng = $loc_data->longitude ?? '0';
+            $lat = $loc_data->latitude ??  '18.4490849';
+            $lng = $loc_data->longitude ?? '-77.2419522';
         }
 
         if ($lat == 0 || $lng == 0) {
@@ -55,14 +76,35 @@ class DashboardController extends Controller
             $nonveg_resto_data = [];
             $veg_resto_data = [];
         } else {
-            $kmRadius = $this->max_distance_km;
-            $resto = $this->closestRestaurant($user, $lat, $lng, $kmRadius);
+            $lats = $lat_lng_array['address_latitude'] ??  $lat;
+            $lngs = $lat_lng_array['address_longitude'] ?? $lng;
+            // print($lats);
+            $kmRadius = $this->max_distance_km_resto;
+            $resto = $this->closestRestaurant($user, $lats, $lngs, $kmRadius);
 
             $restaurent_detail = new restaurent_detail;
-            $resto_data = $this->closestRestaurant($user, $lat, $lng, $kmRadius)->get();
+            //all restaurants
+            $resto_data_query = $this->closestRestaurant($user, $lats, $lngs, $kmRadius);
+            if ($request->has('search_field')) {
+                $resto_data_query = $resto_data_query->where('ml.name', 'like', '%' . $search_field . '%')
+                    ->orWhere('restaurent_details.name', 'like', '%' . $search_field . '%');
+            }
+            $resto_data = $resto_data_query->get();
+            //all nonveg restaurants
+            $nonveg_resto_data_query = $this->closestRestaurant($user, $lats, $lngs, $kmRadius)->whereIn('resto_type', [1,3]);
+            if ($request->has('search_field')) {
+                $nonveg_resto_data_query = $nonveg_resto_data_query->where('ml.name', 'like', '%' . $search_field . '%')
+                    ->orWhere('restaurent_details.name', 'like', '%' . $search_field . '%');
+            }
+            $nonveg_resto_data = $nonveg_resto_data_query->get();
 
-            $nonveg_resto_data = $this->closestRestaurant($user, $lat, $lng, $kmRadius)->where('resto_type', 1)->get();
-            $veg_resto_data = $this->closestRestaurant($user, $lat, $lng, $kmRadius)->where('resto_type', 2)->get();
+            //all veg restaurants
+            $veg_resto_data_query = $this->closestRestaurant($user, $lats, $lngs, $kmRadius)->whereIn('resto_type', [2,3]);
+            if ($request->has('search_field')) {
+                $veg_resto_data_query = $veg_resto_data_query->where('ml.name', 'like', '%' . $search_field . '%')
+                    ->orWhere('restaurent_details.name', 'like', '%' . $search_field . '%');
+            }
+            $veg_resto_data = $veg_resto_data_query->get();
         }
 
         $slider_cms = new slider_cms;
@@ -70,10 +112,10 @@ class DashboardController extends Controller
         $slider_data = $slider_cms->getSlider($slider_array);
         $sl_data = array();
         foreach ($slider_data as $s_data) {
-            if (file_exists($s_data->media)) {
-                $s_data->media = url($s_data->media);
+            // if (file_exists($s_data->media)) {
+                $s_data->media = asset($s_data->media);
                 $sl_data[] =  $s_data;
-            }
+            // }
         }
 
         return view('customer.home')->with([
@@ -84,25 +126,7 @@ class DashboardController extends Controller
             'veg' => $veg_resto_data
         ]);
     }
-    function fetch(Request $request)
-    {
-     if($request->get('query'))
-     {
-      $query = $request->get('query');
-      $data = DB::table('restaurent_details')
-        ->where('name', 'LIKE', "%{$query}%")
-        ->get();
-      $output = '<ul class="dropdown-menu" style="display:block; position:relative">';
-      foreach($data as $row)
-      {
-       $output .= '
-       <li><a href="#">'.$row->country_name.'</a></li>
-       ';
-      }
-      $output .= '</ul>';
-      echo $output;
-     }
-    }
+
     public function subscribe(Request $request)
     {
 

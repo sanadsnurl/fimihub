@@ -41,7 +41,7 @@
                                     <input type="text" class="form-control" id="input-1" name="name"
                                         value="{{$menu_data->name ?? ''}}">
                                     <input type="hidden" class="form-control" id="input-1" name="id"
-                                    value="{{$menu_data->id ?? ''}}">
+                                        value="{{$menu_data->id ?? ''}}">
                                     @if($errors->has('name'))
                                     <div class="error">{{ $errors->first('name') }}</div>
                                     @endif
@@ -65,6 +65,39 @@
                                     @endif
                                 </div>
 
+                            </div>
+                            <div class="form-group row">
+                                <label for="input-1" class="col-sm-2 col-form-label">Food Variant</label>
+                                <div class="col-sm-10">
+                                    <select name="product_variant_id" id="" class="form-control">
+                                        <option value="">-- Select Food Variant --</option>
+                                        @foreach($resto_cate_variant as $cs_data)
+                                        <option value="{{$cs_data->id}}"
+                                            {{ ( $menu_data->product_variant_id == $cs_data->id ) ? 'selected' : '' }}>
+                                            {{$cs_data->cat_name}}</option>
+                                        @endforeach
+                                    </select>
+
+                                    @if($errors->has('product_variant_id'))
+                                    <div class="error">{{ $errors->first('product_variant_id') }}</div>
+                                    @endif
+                                </div>
+
+                            </div>
+                            <div class="form-group row">
+                                <label for="input-4" class="col-sm-2 col-form-label">Add On</label>
+                                @foreach($resto_cate_add_on as $css_data)
+                                <div class="demo-checkbox ml-4">
+                                    <input type="checkbox" id="user-checkboxs{{$css_data->id}}"
+                                        class="filled-in chk-col-primary" value="{{$css_data->id}}"
+                                        name="product_add_on_id[]" {{in_array($css_data->id,$menu_data->product_add_on_id) ? 'checked':''}}>
+                                    <label for="user-checkboxs{{$css_data->id}}">{{$css_data->cat_name}}</label>
+                                </div>
+                                @endforeach
+
+                                @if($errors->has('product_add_on_id'))
+                                <div class="error">{{ $errors->first('product_add_on_id') }}</div>
+                                @endif
                             </div>
                             <div class="form-group row">
                                 <label for="input-1" class="col-sm-2 col-form-label">About Dish</label>
@@ -134,17 +167,13 @@
 
 </div>
 
-
-
-
 <!-- End container-fluid-->
-
 
 <!--End content-wrapper-->
 @include('restaurent.include.footer')
 <!-- Bootstrap core JavaScript-->
-<script src="{{url('asset/admin/assets/js/jquery.min.js')}}"></script>
+<script src="{{asset('asset/admin/assets/js/jquery.min.js')}}"></script>
 <!-- waves effect js -->
-<script src="{{url('asset/admin/assets/js/waves.js')}}"></script>
+<script src="{{asset('asset/admin/assets/js/waves.js')}}"></script>
 
 <!--End content-wrapper-->

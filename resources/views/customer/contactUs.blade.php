@@ -4,7 +4,6 @@
 
 @section('content')
 
-
 <div class="content-col">
     <div class="info-box">
         <div class="form-title">
@@ -13,8 +12,8 @@
         <div class="inner-wrap">
             <div class="title-wrap">
                 <h4>Have Some Question?</h4>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-                    et dolore</p>
+                <p>Please use the form fields below to contact us. We will respond to
+                    you within 24 hours.</p>
                 @if(Session::has('message'))
                 <div class="error" style="text-align:center;">
                     <h4 class="error">{{ Session::get('message') }}</h4>
@@ -56,8 +55,7 @@
                     </div>
                 </div>
                 <div class="input-wrap">
-                    <textarea cols="100" rows="3" placeholder="Message" name="message"
-                        >{{ old('message') }}</textarea>
+                    <textarea cols="100" rows="3" placeholder="Message" name="message">{{ old('message') }}</textarea>
                     @if($errors->has('message'))
                     <div class="error">{{ $errors->first('message') }}</div>
                     @endif

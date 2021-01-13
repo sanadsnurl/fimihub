@@ -1,9 +1,9 @@
 @include('restaurent.include.sideNav')
 @include('restaurent.include.header')
 <!--Data Tables -->
-<link href="{{url('asset/admin/assets/plugins/bootstrap-datatable/css/dataTables.bootstrap4.min.css')}}"
+<link href="{{asset('asset/admin/assets/plugins/bootstrap-datatable/css/dataTables.bootstrap4.min.css')}}"
     rel="stylesheet" type="text/css">
-<link href="{{url('asset/admin/assets/plugins/bootstrap-datatable/css/buttons.bootstrap4.min.css')}}" rel="stylesheet"
+<link href="{{asset('asset/admin/assets/plugins/bootstrap-datatable/css/buttons.bootstrap4.min.css')}}" rel="stylesheet"
     type="text/css">
 
 <div class="clearfix"></div>
@@ -72,6 +72,37 @@
 
                             </div>
                             <div class="form-group row">
+                                <label for="input-1" class="col-sm-2 col-form-label">Food Variant</label>
+                                <div class="col-sm-10">
+                                    <select name="product_variant_id" id="" class="form-control">
+                                        <option value="">-- Select Food Variant --</option>
+                                        @foreach($resto_cate_variant as $cs_data)
+                                        <option value="{{$cs_data->id}}">{{$cs_data->cat_name}}</option>
+                                        @endforeach
+                                    </select>
+
+                                    @if($errors->has('product_variant_id'))
+                                    <div class="error">{{ $errors->first('product_variant_id') }}</div>
+                                    @endif
+                                </div>
+
+                            </div>
+                            <div class="form-group row">
+                                <label for="input-4" class="col-sm-2 col-form-label">Add On</label>
+                                @foreach($resto_cate_add_on as $css_data)
+                                <div class="demo-checkbox ml-4">
+                                    <input type="checkbox" id="user-checkboxs{{$css_data->id}}"
+                                        class="filled-in chk-col-primary" value="{{$css_data->id}}"
+                                        name="product_add_on_id[]">
+                                    <label for="user-checkboxs{{$css_data->id}}">{{$css_data->cat_name}}</label>
+                                </div>
+                                @endforeach
+
+                                @if($errors->has('product_add_on_id'))
+                                <div class="error">{{ $errors->first('product_add_on_id') }}</div>
+                                @endif
+                            </div>
+                            <div class="form-group row">
                                 <label for="input-1" class="col-sm-2 col-form-label">About Dish</label>
                                 <div class="col-sm-10">
                                     <input type="text" class="form-control" id="input-1" name="about">
@@ -97,6 +128,7 @@
                                 <div class="error">{{ $errors->first('dish_type') }}</div>
                                 @endif
                             </div>
+
                             <div class="form-group row">
                                 <label for="input-1" class="col-sm-2 col-form-label">Price (Rs)</label>
                                 <div class="col-sm-10">
@@ -142,6 +174,7 @@
                                 <thead>
                                     <tr>
                                         <!-- <th>S.no</th> -->
+                                        <th>Action</th>
                                         <th>S.No.</th>
                                         <th>Dish Name</th>
                                         <th>Category</th>
@@ -150,7 +183,6 @@
                                         <th>Dish Type</th>
                                         <!-- <th>Discount (%)</th> -->
                                         <th>Create At</th>
-                                        <th>Action</th>
 
                                     </tr>
                                 </thead>
@@ -168,81 +200,77 @@
 
 </div>
 
-
-
-
 <!-- End container-fluid-->
-
 
 <!--End content-wrapper-->
 @include('restaurent.include.footer')
 <!-- Bootstrap core JavaScript-->
-<script src="{{url('asset/admin/assets/js/jquery.min.js')}}"></script>
+<script src="{{asset('asset/admin/assets/js/jquery.min.js')}}"></script>
 <!-- waves effect js -->
-<script src="{{url('asset/admin/assets/js/waves.js')}}"></script>
+<script src="{{asset('asset/admin/assets/js/waves.js')}}"></script>
 <!--Data Tables js-->
-<script src="{{url('asset/admin/assets/plugins/bootstrap-datatable/js/jquery.dataTables.min.js')}}"></script>
-<script src="{{url('asset/admin/assets/plugins/bootstrap-datatable/js/dataTables.bootstrap4.min.js')}}"></script>
-<script src="{{url('asset/admin/assets/plugins/bootstrap-datatable/js/dataTables.buttons.min.js')}}"></script>
-<script src="{{url('asset/admin/assets/plugins/bootstrap-datatable/js/buttons.bootstrap4.min.js')}}"></script>
-<script src="{{url('asset/admin/assets/plugins/bootstrap-datatable/js/jszip.min.js')}}"></script>
-<script src="{{url('asset/admin/assets/plugins/bootstrap-datatable/js/pdfmake.min.js')}}"></script>
-<script src="{{url('asset/admin/assets/plugins/bootstrap-datatable/js/vfs_fonts.js')}}"></script>
-<script src="{{url('asset/admin/assets/plugins/bootstrap-datatable/js/buttons.html5.min.js')}}"></script>
-<script src="{{url('asset/admin/assets/plugins/bootstrap-datatable/js/buttons.print.min.js')}}"></script>
-<script src="{{url('asset/admin/assets/plugins/bootstrap-datatable/js/buttons.colVis.min.js')}}"></script>
+<script src="{{asset('asset/admin/assets/plugins/bootstrap-datatable/js/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('asset/admin/assets/plugins/bootstrap-datatable/js/dataTables.bootstrap4.min.js')}}"></script>
+<script src="{{asset('asset/admin/assets/plugins/bootstrap-datatable/js/dataTables.buttons.min.js')}}"></script>
+<script src="{{asset('asset/admin/assets/plugins/bootstrap-datatable/js/buttons.bootstrap4.min.js')}}"></script>
+<script src="{{asset('asset/admin/assets/plugins/bootstrap-datatable/js/jszip.min.js')}}"></script>
+<script src="{{asset('asset/admin/assets/plugins/bootstrap-datatable/js/pdfmake.min.js')}}"></script>
+<script src="{{asset('asset/admin/assets/plugins/bootstrap-datatable/js/vfs_fonts.js')}}"></script>
+<script src="{{asset('asset/admin/assets/plugins/bootstrap-datatable/js/buttons.html5.min.js')}}"></script>
+<script src="{{asset('asset/admin/assets/plugins/bootstrap-datatable/js/buttons.print.min.js')}}"></script>
+<script src="{{asset('asset/admin/assets/plugins/bootstrap-datatable/js/buttons.colVis.min.js')}}"></script>
 
 <script>
-$(document).ready(function() {
-    //Default data table
-    $('#default-datatable').DataTable();
-    var table = $('#example').DataTable({
-        lengthChange: true,
-        processing: true,
-        serverSide: true,
-        paging: true,
-        dom: 'lBfrtip',
-        buttons: ['copy', 'excel', 'pdf', 'print'],
-        ajax: "{{url('Restaurent/menuList')}}",
-        columns: [{
-                data: 'DT_RowIndex',
-                name: 'id'
-            },
-            {
-                data: 'name',
-                name: 'name'
-            },
-            {
-                data: 'cat_name',
-                name: 'cat_name'
-            },
-            {
-                data: 'price',
-                name: 'price'
-            },
-            {
-                data: 'about',
-                name: 'about'
-            },
-            {
-                data: 'dish_type',
-                name: 'dish_type'
-            },
-            
-            {
-                data: 'created_at',
-                name: 'created_at'
-            },
-            {
-                data: 'action',
-                name: 'action',
-                orderable: true,
-                searchable: false
-            },
-        ]
+    $(document).ready(function() {
+        //Default data table
+        $('#default-datatable').DataTable();
+        var table = $('#example').DataTable({
+            lengthChange: true,
+            processing: true,
+            serverSide: true,
+            paging: true,
+            dom: 'lBfrtip',
+            buttons: ['copy', 'excel', 'pdf', 'print'],
+            ajax: "{{url('Restaurent/menuList')}}",
+            columns: [ {
+                    data: 'action',
+                    name: 'action',
+                    orderable: true,
+                    searchable: false
+                },
+                {
+                    data: 'DT_RowIndex',
+                    name: 'id'
+                },
+                {
+                    data: 'name',
+                    name: 'name'
+                },
+                {
+                    data: 'cat_name',
+                    name: 'cat_name'
+                },
+                {
+                    data: 'price',
+                    name: 'price'
+                },
+                {
+                    data: 'about',
+                    name: 'about'
+                },
+                {
+                    data: 'dish_type',
+                    name: 'dish_type'
+                },
+                {
+                    data: 'created_at',
+                    name: 'created_at'
+                },
+
+            ]
+        });
+        table.buttons().container()
+            .appendTo('#example_wrapper .col-md-6:eq(0)');
     });
-    table.buttons().container()
-        .appendTo('#example_wrapper .col-md-6:eq(0)');
-});
 </script>
 <!--End content-wrapper-->

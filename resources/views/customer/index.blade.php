@@ -21,50 +21,52 @@
                         {{-- <form role="form" method="POST" action="{{ url('/saveAddress') }}" onSubmit="return checkform()"
                             class="form save_adrs">
                             @csrf
-                            <div class="search-bar"> --}}
-                                {{-- <div id="address-map-container" style="width:0%;height:0px; margin-bottom: 0px;">
-                                        <div style="width: 0%; height: 0%;" id="address-map1"></div>
-                                    </div> --}}
-                                {{-- <div class="location-selector">
-                                    <span>
-                                        <input id="autocomplete" placeholder="Enter your address" onFocus="geolocate()"
-                                            type="text"> --}}
+                            <div class="search-bar">
+                                <div id="address-map-container" style="width:0%;height:0px; margin-bottom: 0px;">
+                                    <div style="width: 0%; height: 0%;" id="location-map"></div>
+                                </div>
 
-                                        {{-- <div class="field-wrap">
+                                <div class="location-selector">
+                                    <span>
+                                        <!-- <input id="autocomplete" placeholder="Enter your address" onFocus="geolocate()"
+                                            type="text"> -->
+
+                                        <div class="field-wrap">
                                             <div class="address_box_dyn">
-                                                <input type="text" id="address-input" name="address_address"
-                                                    placeholder="Search Location" class="map-input1">
+                                                <div class="error">Invalid Location</div>
+                                                <input type="text" data-id="location-input" name="address_address"
+                                                    placeholder="Search Location" value="Test" class="map-input">
 
                                             </div>
-                                            <input type="hidden" name="address_latitude" id="address-latitude1"
+                                            <input type="hidden" name="address_latitude" id="location-latitude"
                                                 value="0" />
-                                            <input type="hidden" name="address_longitude" id="address-longitude1"
+                                            <input type="hidden" name="address_longitude" id="location-longitude"
                                                 value="0" />
                                             @if($errors->has('address_address'))
                                             <div class="error">{{ $errors->first('address') }}</div>
-                                @endif
-                                @if(Session::has('address_error'))
-                                <div class="error">{{ Session::get('address_error') }}</div>
-                                @endif
-                            </div> --}}
-                            {{-- </span>
-                    </div>
+                                            @endif
+                                            @if(Session::has('address_error'))
+                                            <div class="error">{{ Session::get('address_error') }}</div>
+                                            @endif
+                                        </div>
+                                    </span>
+                                </div>
 
-                    <div class="search-input">
-                        <input type="text" id="filter_name" placeholder="Search for restaurant, food">
+                                <div class="search-input">
+                                    <input type="text" id="filter_name" placeholder="Search for restaurant, food">
 
-                        <div class="search-btn">
-                            <input type="submit" value=" ">
-                        </div>
+                                    <div class="search-btn">
+                                        <input type="submit" value=" ">
+                                    </div>
+                                </div>
+                            </div>
+                        </form> --}}
                     </div>
                 </div>
-                </form> --}}
             </div>
         </div>
-    </div>
-    </div>
-    @endif
-    @endforeach
+        @endif
+        @endforeach
 
     </div>
 </section>
@@ -79,7 +81,7 @@
                 <a href="#">
                     <div class="inner-wrap">
                         <div class="icon">
-                            <img src="{{url('asset/customer/assets/images/groceries.svg')}}" alt="groceries">
+                            <img src="{{asset('asset/customer/assets/images/groceries.svg')}}" alt="groceries">
                         </div>
                         <h5>Groceries, Essentials</h5>
                     </div>
@@ -89,7 +91,7 @@
                 <a href="{{url('/home')}}">
                     <div class="inner-wrap">
                         <div class="icon">
-                            <img src="{{url('asset/customer/assets/images/food.svg')}}" alt="food">
+                            <img src="{{asset('asset/customer/assets/images/food.svg')}}" alt="food">
                         </div>
                         <h5>Food Delivery</h5>
                     </div>
@@ -99,7 +101,7 @@
                 <a href="#">
                     <div class="inner-wrap">
                         <div class="icon">
-                            <img src="{{url('asset/customer/assets/images/delivery.svg')}}" alt="delivery">
+                            <img src="{{asset('asset/customer/assets/images/delivery.svg')}}" alt="delivery">
                         </div>
                         <h5>Errand</h5>
                     </div>
@@ -114,7 +116,7 @@
             <div class="col-wrap">
                 <div class="card-wrap">
                     <div class="icon">
-                        <img src="{{url('asset/customer/assets/images/secure.svg')}}" alt="secure">
+                        <img src="{{asset('asset/customer/assets/images/secure.svg')}}" alt="secure">
                     </div>
                     <h6>Delivered in 45 mins</h6>
                     <p>The quickest way to get things delivered</p>
@@ -123,7 +125,7 @@
             <div class="col-wrap">
                 <div class="card-wrap">
                     <div class="icon">
-                        <img src="{{url('asset/customer/assets/images/map.svg')}}" alt="map">
+                        <img src="{{asset('asset/customer/assets/images/map.svg')}}" alt="map">
                     </div>
                     <h6>Safety First</h6>
                     <p>Ensuring best practices to keep you and our partners safe at every step!</p>
@@ -132,7 +134,7 @@
             <div class="col-wrap">
                 <div class="card-wrap">
                     <div class="icon">
-                        <img src="{{url('asset/customer/assets/images/time.svg')}}" alt="time">
+                        <img src="{{asset('asset/customer/assets/images/time.svg')}}" alt="time">
                     </div>
                     <h6>Available 24x7</h6>
                     <p>Day or night, get it delivered</p>
@@ -147,7 +149,7 @@
             <div class="row-wrap">
                 <div class="col-img">
                     <div class="img-wrap">
-                        <img src="{{url('asset/customer/assets/images/member.png')}}" alt="member">
+                        <img src="{{asset('asset/customer/assets/images/member.png')}}" alt="member">
                     </div>
                 </div>
                 <div class="col-content">
@@ -161,7 +163,7 @@
             <div class="row-wrap img-right">
                 <div class="col-img">
                     <div class="img-wrap">
-                        <img src="{{url('asset/customer/assets/images/sell.png')}}" alt="sell">
+                        <img src="{{asset('asset/customer/assets/images/sell.png')}}" alt="sell">
                     </div>
                 </div>
                 <div class="col-content">
@@ -182,49 +184,21 @@
                 <div class="content-wrap">
                     <h2>Fimihub helps you to order food more easily</h2>
                     <ul class="links">
-                        <li><a href="#"><img src="{{url('asset/customer/assets/images/play_store.jpg')}}"
+                        <li><a href="#"><img src="{{asset('asset/customer/assets/images/play_store.jpg')}}"
                                     alt="play store"></a></li>
-                        <li><a href="#"><img src="{{url('asset/customer/assets/images/app_store.jpg')}}"
+                        <li><a href="#"><img src="{{asset('asset/customer/assets/images/app_store.jpg')}}"
                                     alt="app store"></a></li>
                     </ul>
                 </div>
             </div>
             <div class="col-img">
                 <div class="img-wrap">
-                    <img src="{{url('asset/customer/assets/images/fimihub.jpeg')}}" alt="fimihub">
+                    <img src="{{asset('asset/customer/assets/images/fimihub.jpeg')}}" alt="fimihub">
                 </div>
             </div>
         </div>
     </div>
 </section>
-<script
-    src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}&libraries=places&callback=initAutocomplete"
-    async defer></script>
+
 @include('customer.include.footer')
 
-<script>
-    $(document).ready(function() {
-        $('#filter_name').keyup(function() {
-            var query = $(this).val();
-            if (query != '') {
-                var _token = $('input[name="_token"]').val();
-                $.ajax({
-                    url: "{{ route('autocomplete.fetch') }}",
-                    method: "POST",
-                    data: {
-                        query: query,
-                        _token: _token
-                    },
-                    success: function(data) {
-                        $('#countryList').fadeIn();
-                        $('#countryList').html(data);
-                    }
-                });
-            }
-        });
-        $(document).on('click', 'li', function() {
-            $('#filter_name').val($(this).text());
-            $('#countryList').fadeOut();
-        });
-    });
-</script>

@@ -77,7 +77,7 @@
 <footer class="footer">
     <div class="md_container">
         <div class="row row-wrap">
-            <div class="col col-content">
+            <div class="col-wrap col-xl col-sm-4 col-content">
                 <h4><a href="./index.html">Fimihub</a></h4>
                 <div class="content-wrap">
                     <p>FiMi Hub is the most convenient way for customers to get the food
@@ -86,11 +86,11 @@
                     <p>© 2020-2021, FiMi Hub</p>
                 </div>
             </div>
-            <div class="col col-links">
+            <div class="col-wrap col-xl col-sm-4 col-links">
                 <h5>FAQ's</h5>
                 <ul class="links">
                     <li>
-                        <a href="#">Q&A for Merchants</a>
+                        <a href="{{url('mechantQnA')}}">Q&A for Merchants</a>
                     </li>
                     <li>
                         <a href="#">Q&A for Customers </a>
@@ -101,17 +101,17 @@
 
                 </ul>
             </div>
-            <div class="col col-links">
+            <div class="col-wrap col-xl col-sm-4 col-links">
                 <h5>Other Page content</h5>
                 <ul class="links">
                     <li>
-                        <a href="{{url('asset/customer/assets/document/Privacy Policy.pdf')}}">Privacy Policy </a>
+                        <a href="{{url('privacyPolicyPage')}}">Privacy Policy </a>
                     </li>
                     <li>
                         <a href="{{url('T&C')}}">Terms & Conditions </a>
                     </li>
                     <li>
-                        <a href="{{url('asset/customer/assets/document/MERCHANT AGREEMENT- FIMI HUB.pdf')}}">Merchant Terms & Conditions </a>
+                        <a href="{{url('merchantT&C')}}">Merchant Terms & Conditions </a>
                     </li>
                     <li>
                         <a href="{{url('aboutUsPage')}}">About Us </a>
@@ -121,13 +121,17 @@
                     </li>
                 </ul>
             </div>
-            <div class="col col-info">
+            <div class="col-wrap col-xl col-sm-4 col-info">
                 <h5>Contacts</h5>
                 <p>Main Street, Claremont P.O. St. Ann, Jamaica</p>
                 {{-- <p>+1 (234) 567-89-90</p> --}}
-                <p>support@fimihub.com</p>
+                <a href="{{url('contactUsPage')}}" class="f">
+                    <span>Contact Us</span>
+
+                </a>
+                {{-- <p>support@fimihub.com</p> --}}
             </div>
-            <div class="col col-form">
+            <div class="col-wrap col-xl col-sm-4 col-form">
                 <h5>Newsletter</h5>
                 <form role="form" method="POST" action="{{ url('/subscribeProcess') }}" class="subscribe-form">
                     @csrf
@@ -143,17 +147,17 @@
                 <ul class="social-links">
                     <li>
                         <a href="#" target="_balnk">
-                            <img src="{{url('asset/customer/assets/images/twitter.svg')}}" alt="facebook">
+                            <img src="{{asset('asset/customer/assets/images/twitter.svg')}}" alt="facebook">
                         </a>
                     </li>
                     <li>
                         <a href="https://www.facebook.com/fimi.hub.3" target="_balnk">
-                            <img src="{{url('asset/customer/assets/images/facebook.svg')}}" alt="facebook">
+                            <img src="{{asset('asset/customer/assets/images/facebook.svg')}}" alt="facebook">
                         </a>
                     </li>
                     <li>
                         <a href="#" target="_balnk">
-                            <img src="{{url('asset/customer/assets/images/instagram.svg')}}" alt="instagram">
+                            <img src="{{asset('asset/customer/assets/images/instagram.svg')}}" alt="instagram">
                         </a>
                     </li>
                 </ul>
@@ -165,7 +169,7 @@
     <div class="inner-sidebar">
         <div class="title">
             <div class="icon close-sidepanel">
-                <img src="{{url('asset/customer/assets/images/cross.svg')}}" alt="cross">
+                <img src="{{asset('asset/customer/assets/images/cross.svg')}}" alt="cross">
             </div>
             <h4>Save delivery address</h4>
         </div>
@@ -184,7 +188,7 @@
             <div class="field-wrap">
                 <label for="address_address">Address</label>
                 <div class="address_box_dyn">
-                    <input type="text" id="address-input" name="address_address" placeholder="Address"
+                    <input type="text" data-id="address-input" name="address_address" placeholder="Address"
                         class="map-input">
                     <button type="button" class="show_address"><i class="fa fa-crosshairs"></i></button>
                     <span id="add" class="errors"></span>
@@ -221,10 +225,10 @@
         </form>
     </div>
 </div>
-<script type="text/javascript" src="{{url('asset/customer/assets/scripts/plugins/jquery-3.4.1.min.js')}}"></script>
-<script type="text/javascript" src="{{url('asset/customer/assets/scripts/plugins/slick.min.js')}}"></script>
-<script type="text/javascript" src="{{url('asset/customer/assets/scripts/plugins/wow.js')}}"></script>
-<script type="text/javascript" src="{{url('asset/customer/assets/scripts/main.js')}}"></script>
+<script type="text/javascript" src="{{asset('asset/customer/assets/scripts/plugins/jquery-3.4.1.min.js')}}"></script>
+<script type="text/javascript" src="{{asset('asset/customer/assets/scripts/plugins/slick.min.js')}}"></script>
+<script type="text/javascript" src="{{asset('asset/customer/assets/scripts/plugins/wow.js')}}"></script>
+<script type="text/javascript" src="{{asset('asset/customer/assets/scripts/main.js')}}"></script>
 </body>
 
 </html>
@@ -241,7 +245,7 @@
                     </h3>
                 </div>
                 <div class="modal_body_content modal_body_content2 successfull_mdl_bdy text-center">
-                    <img src="{{url('asset/customer/assets/images/check.png')}}" alt="checkmark">
+                    <img src="{{asset('asset/customer/assets/images/check.png')}}" alt="checkmark">
                     <div class="forgot_psw_btn">
                         <button type="button" class="btn_purple hover_effect1 auth_btn"
                             data-dismiss="modal">BACK</button>
@@ -261,7 +265,7 @@
         <div class="modal-content">
             <div class="modal-body text-center">
                 <h3>Order Confirmed!</h3>
-                <img src="{{url('asset/customer/assets/images/cup_icon.svg')}}" alt="cup">
+                <img src="{{asset('asset/customer/assets/images/cup_icon.svg')}}" alt="cup">
                 <h3 class="mt-3 mb-3">THANK YOU!</h3>
                 <p>Your order was successfully placed <br>and being prepared for delivery.</p>
                 <div class="d-flex align-items-center justify-content-center">
@@ -281,7 +285,7 @@
     <div class="inner-sidebar">
         <div class="title">
             <div class="icon close-sidepanel">
-                <img src="{{url('asset/customer/assets/images/cross.svg')}}" alt="cross">
+                <img src="{{asset('asset/customer/assets/images/cross.svg')}}" alt="cross">
             </div>
             <h4>Filters</h4>
         </div>
@@ -342,7 +346,7 @@
                 <div class="mdl_top">
                     <div class="row">
                         <div class="col-md-4">
-                            <img src="{{$resto_data->picture ?? url('asset/customer/assets/images/resto_thumbnail.png')}}"
+                            <img src="{{$resto_data->picture ?? asset('asset/customer/assets/images/resto_thumbnail.png')}}"
                                 alt="image" class="w-100">
                         </div>
                         <div class="col-md-8">
@@ -385,7 +389,7 @@
                     <h4>Rate Rider</h4>
                     <div class="rider_review">
                         <p class="text-center"><img
-                                src="{{$order_event_data->rider_details->picture ?? url('asset/customer/assets/images/user_dp.png')}}"
+                                src="{{$order_event_data->rider_details->picture ?? asset('asset/customer/assets/images/user_dp.png')}}"
                                 alt="image"> {{$order_event_data->rider_details->name ?? '---'}}</p>
                     </div>
                     <fieldset>
@@ -424,8 +428,9 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/jquery.validation/1.15.0/jquery.validate.min.js"></script>
 
-<script type="text/javascript" src="{{url('asset/customer/assets/scripts/mapInput.js')}}"></script>
-<script type="text/javascript" src="{{url('asset/customer/assets/scripts/searchMap.js')}}"></script>
+<script type="text/javascript" src="{{asset('asset/customer/assets/scripts/mapInput.js')}}"></script>
+<script type="text/javascript" src="{{asset('asset/customer/assets/scripts/searchMap.js')}}"></script>
+<script type="text/javascript" src="{{asset('asset/customer/assets/scripts/mapDistance.js')}}"></script>
 <script
     src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}&libraries=places&callback=initialize"
     async defer></script>
@@ -446,7 +451,42 @@
 
 <script>
     $(document).ready(function() {
-        $('[data-toggle="tooltip"]').tooltip();
+        // $('[data-toggle="tooltip"]').tooltip();
+
+        //
+        var user = {};
+        var resto = {};
+        var service_data = {};
+
+        user.lat = parseFloat($("#user_lat").val());
+        user.lng = parseFloat($("#user_long").val());
+        resto.lat = parseFloat($("#resto_lat").val());
+        resto.lng = parseFloat($("#resto_long").val());
+        service_data.flat_rate = parseFloat($("#flat_rate").val());
+        service_data.flat_km = parseFloat($("#flat_km").val());
+        service_data.after_flat_rate = parseFloat($("#after_flat_rate").val());
+
+
+        var add_details = kilomiter(user, resto,service_data);
+        // console.log(add_details, 'resto');
+        // console.log(resto, 'resto');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     });
     // $('.accord_btn').click(function() {
     //     $(this).next('.apply_cpn_box').slideToggle();

@@ -229,6 +229,14 @@ class User extends Authenticatable
             ->where('user_id', $data['id'])
             ->update(['visibility'=> 2,'deleted_at' => $data['deleted_at']]);
 
+        $query_data = DB::table('rider_bank_details')
+            ->where('user_id', $data['id'])
+            ->update(['visibility'=> 2,'deleted_at' => $data['deleted_at']]);
+
+        $query_data = DB::table('vehicle_details')
+            ->where('user_id', $data['id'])
+            ->update(['visibility'=> 2,'deleted_at' => $data['deleted_at']]);
+
         return $query_data;
     }
 
@@ -237,6 +245,22 @@ class User extends Authenticatable
         try {
             $user_data=$this
                 ->where('users.visibility', 0)
+                ->where('users.user_type', $user_type)
+                ->orderBy('users.created_at','DESC');
+
+
+            return $user_data;
+        }
+        catch (Exception $e) {
+            dd($e);
+        }
+    }
+
+    public function allUserPaginateListRiderPendingData($user_type)
+    {
+        try {
+            $user_data=$this
+                ->where('users.visibility', 1)
                 ->where('users.user_type', $user_type)
                 ->orderBy('users.created_at','DESC');
 

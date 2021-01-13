@@ -50,6 +50,7 @@ class user_address extends Model
             $user_address=DB::table('user_address')
                 ->where('visibility', 0)
                 ->where('user_id', $userid)
+                ->orderBy('default_status', 'asc')
                 ->get();
 
             return $user_address;
@@ -120,6 +121,6 @@ class user_address extends Model
 
     public function userDetails()
     {
-        return $this->belongsTo('App\User', 'user_id',);
+        return $this->belongsTo('App\User', 'user_id');
     }
 }

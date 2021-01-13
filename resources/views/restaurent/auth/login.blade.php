@@ -6,7 +6,7 @@
         <div class="card-body">
             <div class="card-content p-2">
                 <div class="text-center">
-                    <img src="{{url('asset/customer/assets/images/logo.png')}}">
+                    <img src="{{asset('asset/customer/assets/images/logo.png')}}">
                 </div>
                 <div class="card-title text-uppercase text-center py-3">Sign In
                     @if(Session::has('message'))

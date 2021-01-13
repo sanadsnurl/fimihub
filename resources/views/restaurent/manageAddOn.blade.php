@@ -1,9 +1,9 @@
 @include('restaurent.include.sideNav')
 @include('restaurent.include.header')
 <!--Data Tables -->
-<link href="{{url('asset/admin/assets/plugins/bootstrap-datatable/css/dataTables.bootstrap4.min.css')}}"
+<link href="{{asset('asset/admin/assets/plugins/bootstrap-datatable/css/dataTables.bootstrap4.min.css')}}"
     rel="stylesheet" type="text/css">
-<link href="{{url('asset/admin/assets/plugins/bootstrap-datatable/css/buttons.bootstrap4.min.css')}}" rel="stylesheet"
+<link href="{{asset('asset/admin/assets/plugins/bootstrap-datatable/css/buttons.bootstrap4.min.css')}}" rel="stylesheet"
     type="text/css">
 
 <div class="clearfix"></div>
@@ -55,22 +55,7 @@
                                 </div>
 
                             </div>
-                            <div class="form-group row">
-                                <label for="input-4" class="col-sm-2 col-form-label">Customization Type</label>
-                                <div class="demo-checkbox ml-4">
-                                    <input type="radio" id="user-checkbox" class="filled-in chk-col-primary" value="2"
-                                        @if (old('customization_type')==2) checked @endif name="customization_type">
-                                    <label for="user-checkbox">Veg</label>
-                                </div>
-                                <div class="demo-checkbox">
-                                    <input type="radio" id="user-checkbox1" class="filled-in chk-col-primary" value="1"
-                                        @if (old('customization_type')==1) checked @endif name="customization_type">
-                                    <label for="user-checkbox1">Non-Veg</label>
-                                </div>
-                                @if($errors->has('customization_type'))
-                                <div class="error">{{ $errors->first('customization_type') }}</div>
-                                @endif
-                            </div>
+
                             <div class="form-group row">
                                 <label for="input-1" class="col-sm-2 col-form-label">Price (Rs)</label>
                                 <div class="col-sm-10">
@@ -112,7 +97,6 @@
                                         <th>Customization Name</th>
                                         <th>About</th>
                                         <th>Price</th>
-                                        <th>Customization Type</th>
                                         <th>Create At</th>
                                         <th>Action</th>
 
@@ -137,20 +121,20 @@
 <!--End content-wrapper-->
 @include('restaurent.include.footer')
 <!-- Bootstrap core JavaScript-->
-<script src="{{url('asset/admin/assets/js/jquery.min.js')}}"></script>
+<script src="{{asset('asset/admin/assets/js/jquery.min.js')}}"></script>
 <!-- waves effect js -->
-<script src="{{url('asset/admin/assets/js/waves.js')}}"></script>
+<script src="{{asset('asset/admin/assets/js/waves.js')}}"></script>
 <!--Data Tables js-->
-<script src="{{url('asset/admin/assets/plugins/bootstrap-datatable/js/jquery.dataTables.min.js')}}"></script>
-<script src="{{url('asset/admin/assets/plugins/bootstrap-datatable/js/dataTables.bootstrap4.min.js')}}"></script>
-<script src="{{url('asset/admin/assets/plugins/bootstrap-datatable/js/dataTables.buttons.min.js')}}"></script>
-<script src="{{url('asset/admin/assets/plugins/bootstrap-datatable/js/buttons.bootstrap4.min.js')}}"></script>
-<script src="{{url('asset/admin/assets/plugins/bootstrap-datatable/js/jszip.min.js')}}"></script>
-<script src="{{url('asset/admin/assets/plugins/bootstrap-datatable/js/pdfmake.min.js')}}"></script>
-<script src="{{url('asset/admin/assets/plugins/bootstrap-datatable/js/vfs_fonts.js')}}"></script>
-<script src="{{url('asset/admin/assets/plugins/bootstrap-datatable/js/buttons.html5.min.js')}}"></script>
-<script src="{{url('asset/admin/assets/plugins/bootstrap-datatable/js/buttons.print.min.js')}}"></script>
-<script src="{{url('asset/admin/assets/plugins/bootstrap-datatable/js/buttons.colVis.min.js')}}"></script>
+<script src="{{asset('asset/admin/assets/plugins/bootstrap-datatable/js/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('asset/admin/assets/plugins/bootstrap-datatable/js/dataTables.bootstrap4.min.js')}}"></script>
+<script src="{{asset('asset/admin/assets/plugins/bootstrap-datatable/js/dataTables.buttons.min.js')}}"></script>
+<script src="{{asset('asset/admin/assets/plugins/bootstrap-datatable/js/buttons.bootstrap4.min.js')}}"></script>
+<script src="{{asset('asset/admin/assets/plugins/bootstrap-datatable/js/jszip.min.js')}}"></script>
+<script src="{{asset('asset/admin/assets/plugins/bootstrap-datatable/js/pdfmake.min.js')}}"></script>
+<script src="{{asset('asset/admin/assets/plugins/bootstrap-datatable/js/vfs_fonts.js')}}"></script>
+<script src="{{asset('asset/admin/assets/plugins/bootstrap-datatable/js/buttons.html5.min.js')}}"></script>
+<script src="{{asset('asset/admin/assets/plugins/bootstrap-datatable/js/buttons.print.min.js')}}"></script>
+<script src="{{asset('asset/admin/assets/plugins/bootstrap-datatable/js/buttons.colVis.min.js')}}"></script>
 
 <script>
     $(document).ready(function() {
@@ -179,10 +163,6 @@
                 {
                     data: 'price',
                     name: 'price'
-                },
-                {
-                    data: 'customization_type',
-                    name: 'customization_type'
                 },
                 {
                     data: 'created_at',

@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Response;
 use Mail;
+use Twilio\Exceptions\TwilioException;
+use Twilio\Rest\Client;
 
 class OtpManagerController extends Controller
 {
@@ -49,9 +51,12 @@ class OtpManagerController extends Controller
             } else {
                 return 2;
             }
-        } catch (Exception $e) {
-            return response()->json(['message'=> $e->getMessage()], $this->invalidStatus);
-
+        } catch (TwilioException $e) {
+            if ($e->getStatusCode() == 200) {
+                return 1;
+            } else {
+                return 2;
+            }
         }
 
 
@@ -93,7 +98,7 @@ class OtpManagerController extends Controller
                     return response()->json(['otp'=>$user_otp, 'message' => 'OTP Sent','status'=>true], $this->successStatusCreated);
                 }
                 else{
-                    return response()->json(['message' => 'OTP not sent','status'=>false], $this->failureStatus);
+                    return response()->json(['message' => 'OTP not sent','status'=>true], $this->failureStatus);
                 }
                 // return response()->json(['otp'=>(string)$user_otp, 'message' => 'OTP Sent','status'=>true], $this->successStatusCreated);
 

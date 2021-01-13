@@ -198,7 +198,7 @@ class OrderController extends Controller
         // ================================== get rider by restaurant location ====================
         $lat = $resto_add[0]->latitude;
         $lng = $resto_add[0]->longitude;
-        $kmRadius = $this->max_distance_km;
+        $kmRadius = $this->max_distance_km_rider;
         $rider = $this->closestRiders($user, $lat, $lng, $kmRadius)->get();
 
         foreach ($rider as $rid) {
@@ -450,7 +450,7 @@ class OrderController extends Controller
             }
         }
         $event_data = json_encode($event_data);
-            $event_data = json_decode($event_data);
+        $event_data = json_decode($event_data);
 
         // dd($order_data->address_id);
         return view('restaurent.viewOrder')->with(['data' => $user,
@@ -458,4 +458,5 @@ class OrderController extends Controller
                                             'event_data' => $event_data,
                                             'add_datas' => $add_datas]);
     }
+
 }

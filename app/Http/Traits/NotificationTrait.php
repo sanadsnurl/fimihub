@@ -31,7 +31,7 @@ trait NotificationTrait
                 "to" : "'.$firebase_token.'",
                     "notification" : {
                         "title":"'.$title.'",
-                        "text" : "'.strip_tags($notifications).'",
+                        "body" : "'.strip_tags($notifications).'",
                         "page_token" : "'.$page_token.'"
                     },
                 "data" : {
