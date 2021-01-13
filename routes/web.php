@@ -312,8 +312,14 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
         Route::get('pendingRider', 'Web\Admin\RiderController@pendingRider');
         // Approve Pending Restaurent Partner Requests
         Route::get('approveRider', 'Web\Admin\RiderController@approveRider');
+
+        // Approve Pending Restaurent Partner Requests
+        Route::get('envSetting', 'Web\Admin\EnvSettingCtroller@envSettingAdd');
+        Route::post('envSetting', 'Web\Admin\EnvSettingCtroller@envSettingStore');
+
         //Delete Rider
         Route::get('deleteRider', 'Web\Admin\RiderController@deleteRider');
+
     });
 
 });
