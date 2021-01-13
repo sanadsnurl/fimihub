@@ -46,18 +46,18 @@ trait BillingCalculateTraits
 
         if($billing_data_arary['menu_id']){
             $menu_datass = $menu_list->menuListByQuantityById($quant_details);
-            // dd($menu_datass->toArray());
             $menu_total=0;
             $item=0;
-            if( !empty($menu_datass)){
+            if(count($menu_datass)){
                 foreach($menu_datass as $m_data){
                 $add_ons = array();
                 $add_ons_cat = array();
                 $add_ons_select = array();
                 $add_ons_cat_select = array();
+
                 $menu_custom_list = new menu_custom_list();
-                $m_data->variant_data = $menu_custom_list->menuCustomPaginationData($m_data->restaurent_id ?? 0)
-                                            ->where('resto_custom_cat_id',$m_data->product_variant_id ?? 0)->get() ?? 0;
+                $m_data->variant_data = ($menu_custom_list->menuCustomPaginationData($m_data->restaurent_id ?? 0)
+                                            ->where('resto_custom_cat_id',$m_data->product_variant_id ?? 0)->get()) ?? '[]';
                 $m_data->variant_data_cat = $menu_custom_list->menuCustomCategoryData($m_data->restaurent_id ?? 0)
                                             ->where('resto_custom_cat_id',$m_data->product_variant_id ?? 0)->first() ?? 0;
                 $var_sin_data = $menu_custom_list->menuCustomPaginationData($m_data->restaurent_id ?? 0)

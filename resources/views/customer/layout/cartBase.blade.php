@@ -179,7 +179,7 @@
                                 <span>Delivery partner fee <img
                                         src="{{asset('asset/customer/assets/images/info_icon.svg')}}" alt="info"></span>
                                 <span>{{$user_data->currency ?? ''}}
-                                    <span id="delivery_charge">{{$resto_data->delivery_charge ?? '0'}}</span></span>
+                                    <span id="delivery_charge">{{$order_data->delivery_fee ?? '--'}}</span></span>
                             </div>
                         </div>
                         <input type="hidden" class="input-quantity" id="input-quantity"
@@ -274,14 +274,20 @@
             },
             success: function(response) {
                 // alert("something went wrong");
+            var delivery_charge = parseFloat($("#delivery_charge").text());
+
                 var total_amnt = (response.total_amount + response.service_data.service_tax);
                 total_amnt = total_amnt.toFixed(2);
                 var service_taxs = response.service_data.service_tax.toFixed(2);
                 var sub_totals = response.sub_total.toFixed(2);
+                if (isNaN(delivery_charge)) {
 
-                console.log(response);
+                }else{
+                    total_amnt = parseFloat(total_amnt) + delivery_charge;
+                }
+                console.log(total_amnt);
                 if (response.quantity == 0) {
-                    $(remove_all_count).val(0);
+                    // $(remove_all_count).val(0);
                 }
                 if(response.items == 0){
                     var url = window.location.protocol + '//' + window.location.host + '/cart';

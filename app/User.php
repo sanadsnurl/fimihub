@@ -68,7 +68,20 @@ class User extends Authenticatable
         }
     }
 
-
+    public function userDataWithCountryCode($userid,$country_code)
+    {
+        try {
+            $user_data=DB::table('users')
+                ->where('mobile', $userid)
+                ->Where('country_code',$country_code)
+                ->first();
+            unset($user_data->password);
+            return $user_data;
+        }
+        catch (Exception $e) {
+            dd($e);
+        }
+    }
 
     public function generateOTP($userid)
     {

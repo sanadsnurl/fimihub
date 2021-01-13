@@ -93,7 +93,7 @@ class OrderController extends Controller
                         $m_data->product_add_on_id = json_decode($m_data->product_add_on_id);
 
                         if(!empty($m_data->variant_data)  && !empty($m_data->cart_variant_id)){
-                            $var_d = $menu_custom_list->getCustomListPriceWithPer($m_data->cart_variant_id);
+                            $var_d = $menu_custom_list->getCustomListPrice($m_data->cart_variant_id);
                             $m_data->price = $var_d->price;
                         }
 
@@ -106,7 +106,7 @@ class OrderController extends Controller
                         if($m_data->product_adds_id){
                             $m_data->product_adds_id = json_decode($m_data->product_adds_id);
                             foreach($m_data->product_adds_id as $add_on_cart){
-                                $var_ds = $menu_custom_list->getCustomListPriceWithPer($add_on_cart);
+                                $var_ds = $menu_custom_list->getCustomListPrice($add_on_cart);
 
                             }
                         }
@@ -193,7 +193,7 @@ class OrderController extends Controller
                     $m_data->product_add_on_id = json_decode($m_data->product_add_on_id);
 
                     if(!empty($m_data->variant_data)  && !empty($m_data->cart_variant_id)){
-                        $var_d = $menu_custom_list->getCustomListPriceWithPer($m_data->cart_variant_id);
+                        $var_d = $menu_custom_list->getCustomListPrice($m_data->cart_variant_id);
                         $m_data->price = $var_d->price;
                     }
 
@@ -206,7 +206,7 @@ class OrderController extends Controller
                     if($m_data->product_adds_id){
                         $m_data->product_adds_id = json_decode($m_data->product_adds_id);
                         foreach($m_data->product_adds_id as $add_on_cart){
-                            $var_ds = $menu_custom_list->getCustomListPriceWithPer($add_on_cart);
+                            $var_ds = $menu_custom_list->getCustomListPrice($add_on_cart);
 
                         }
                     }
@@ -236,7 +236,7 @@ class OrderController extends Controller
                 $add_order['customer_name'] =  $user->name;
                 $add_order['ordered_menu'] = json_encode($cart_menu_data);
                 $add_order['mobile'] =  $user->mobile;
-                $add_order['total_amount'] = $billing_balance['total_amount_last'];
+                $add_order['total_amount'] = $billing_balance['total_amount_last'] + request('delivery_fee')?? 0;
                 $add_order['delivery_fee'] = request('delivery_fee')?? 0;
                 $add_order['service_tax'] = $billing_balance['service_data']->tax;
                 $add_order['service_commission'] = $billing_balance['service_data']->commission;
@@ -269,7 +269,7 @@ class OrderController extends Controller
                                         'item_name'=>'food',
                                         'item_number'=>1,
                                         '_token'=>request('_token'),
-                                        'amount'=>$billing_balance['total_amount_last'],
+                                        'amount'=>$billing_balance['total_amount_last']  + request('delivery_fee')?? 0,
                                         'no_shipping'=>1,
                                         'currency_code'=>'USD',
                                         'notify_url'=>'http://sitename/paypal-payment-gateway-integration-in-php/notify.php',
@@ -365,7 +365,7 @@ class OrderController extends Controller
                     $event_data['rider_details'] = $ride_event_data;
                 }
             }
-            $total_amount =$order_data->total_amount;
+            $total_amount = abs($order_data->total_amount - $order_data->delivery_fee);
             $ServiceCategories = new ServiceCategory();
             $service_data = $ServiceCategories->getServiceById(1);
 

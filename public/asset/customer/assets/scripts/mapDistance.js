@@ -1,4 +1,4 @@
-function kilomiter(dakota, frick, service_data) {
+function kilomiter(dakota, frick, service_data, total_amount) {
     // console.log(dakota, 'dakota');
     // console.log(frick, 'frick');
     var directionsData = {};
@@ -67,7 +67,7 @@ function kilomiter(dakota, frick, service_data) {
                     var dis = parseFloat(diskm.replace(",", ''));
                     // console.log(dis, 'dis');
                     // console.log(directionsData.distance.text, 'directionsData.distance.text');
-                    if (dis <= 50) {
+                    if (dis <= 10000) {
                         if (dis <= service_data.flat_km) {
                             // console.log(service_data.flat_rate, 'll');
                             var deliveryCharge = service_data.flat_rate;
@@ -83,10 +83,13 @@ function kilomiter(dakota, frick, service_data) {
                         $('#add_error').html('No Nearby Restaurant Located !');
 
                     }
+                    console.log(total_amount, 'bb');
 
-
+                    var total = deliveryCharge + total_amount;
+                    console.log(total, 'aa');
                     $('#delivery_charge').html(deliveryCharge);
                     $('#delivery_charge_input').val(deliveryCharge);
+                    $("#total_amount").html(total);
 
                 }
             }

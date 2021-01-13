@@ -13,7 +13,7 @@
 
         <!-- End Breadcrumb-->
         <div class="row">
-            <div class="col-lg-8">
+            <div class="col-lg-10">
                 <div class="card">
                     <div class="card-body">
                         <form role="form" method="POST" action="{{ url('Restaurent/addMenu')}}" id="personal-info"
@@ -130,9 +130,9 @@
                             </div>
 
                             <div class="form-group row">
-                                <label for="input-1" class="col-sm-2 col-form-label">Price (Rs)</label>
+                                <label for="input-1" class="col-sm-2 col-form-label">Price ($)</label>
                                 <div class="col-sm-10">
-                                    <input type="number" class="form-control" id="input-1" name="price">
+                                    <input type="text" class="form-control" name="price">
                                     @if($errors->has('price'))
                                     <div class="error">{{ $errors->first('price') }}</div>
                                     @endif

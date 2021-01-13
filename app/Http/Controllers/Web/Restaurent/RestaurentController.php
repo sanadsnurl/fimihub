@@ -350,7 +350,9 @@ class RestaurentController extends Controller
 
         $menu_lists = new menu_list;
         $menu_data = $menu_lists->menuListById($dish_id);
+
         $menu_data->product_add_on_id = json_decode($menu_data->product_add_on_id);
+        // dd($menu_data);
         return view('restaurent.editMenu')->with(['data' => $user,
                                             'menu_data' => $menu_data,
                                             'resto_cate_variant'=>$resto_cate_variant,

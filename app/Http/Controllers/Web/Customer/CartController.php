@@ -87,7 +87,7 @@ class CartController extends Controller
                     $m_data->product_add_on_id = json_decode($m_data->product_add_on_id);
 
                     if(!empty($m_data->variant_data)  && !empty($m_data->cart_variant_id)){
-                        $var_d = $menu_custom_list->getCustomListPriceWithPer($m_data->cart_variant_id);
+                        $var_d = $menu_custom_list->getCustomListPrice($m_data->cart_variant_id);
                         $m_data->price = $var_d->price;
                     }
 
@@ -100,7 +100,7 @@ class CartController extends Controller
                     if($m_data->product_adds_id){
                         $m_data->product_adds_id = json_decode($m_data->product_adds_id);
                         foreach($m_data->product_adds_id as $add_on_cart){
-                            $var_ds = $menu_custom_list->getCustomListPriceWithPer($add_on_cart);
+                            $var_ds = $menu_custom_list->getCustomListPrice($add_on_cart);
 
                         }
                     }

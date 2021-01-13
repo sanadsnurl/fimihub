@@ -214,12 +214,13 @@ class LoginRegisterController extends Controller
 
             $user_id = $request->input('userid');
             $password = $request->input('password');
+            $country_code = $request->input('country_code');
             $mobile_set = "";
             $email_set = "";
 
 
             if (is_numeric($user_id)) {
-                $loginData = ["mobile" => $user_id, "password" => $password];
+                $loginData = ["mobile" => $user_id,"country_code" => $country_code, "password" => $password];
                 $mobile_set = $user_id;
             } else {
                 $loginData = ["email" => $user_id, "password" => $password];
@@ -341,10 +342,11 @@ class LoginRegisterController extends Controller
             $userid = $request->input('userid');
             $verification_code = $request->input('verification_code');
             $password = $request->input('password');
+            $country_code = $request->input('country_code');
             $user = new User();
-            $user_data = $user->userData($userid);
+            $user_data = $user->userData($userid,$country_code);
 
-            $data = ['userid' => $userid, 'password' => $password];
+            $data = ['userid' => $userid,'country_code' => $country_code, 'password' => $password];
             if ($user_data != NULL) {
                 if ($user_data->verification_code == $verification_code) {
                     $user = new User();
