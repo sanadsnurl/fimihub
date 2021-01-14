@@ -3,6 +3,7 @@
 @section('title', 'My Account')
 
 @section('content')
+<script src="{{asset('asset/customer/assets/scripts/plugins/creditly.js')}}"></script>
 <div class="col-md-7 padd_rht">
     <div id="map"></div>
         <input type="hidden" id="user_lat" name="user_lat" value="{{$user_add_def->latitude ?? ''}}">
@@ -44,7 +45,7 @@
                     Bank Transfer
                     {{-- <img src="{{asset('asset/customer/assets/images/stripe.svg')}}" alt="stripe"> --}}
                 </label>
-                <div class="bank_content">
+                <div class="bank_content content">
                     <p>Please make your Bank Transfer using the following
                         banking details below. When you are through, please
                         send us the confirmation number and amount
@@ -71,10 +72,51 @@
                         alt="cash on delivery">
                     CASH ON DELIVERY
                 </label>
+
+                <input type="radio" name="payment" id="atlantic" value="4">
+                <label for="atlantic" id="atlantic">
+                    <img src="{{asset('asset/customer/assets/images/bank.svg')}}" class="mr-2" style="height: 25px;"
+                        alt="cash on delivery">
+                        First Atlantic Commerce
+                </label>
+                <div class="content">
+                    <div class="creditly-wrapper">
+                        <div class="credit-card-wrapper">
+                            <div class="first-row form-group">
+                            <div class="col-12 col-sm-8 controls">
+                                <label class="control-label">Card Number</label>
+                                <input class="number credit-card-number form-control"
+                                type="text" name="number"
+                                inputmode="numeric" autocomplete="cc-number" autocompletetype="cc-number" x-autocompletetype="cc-number"
+                                placeholder="&#149;&#149;&#149;&#149; &#149;&#149;&#149;&#149; &#149;&#149;&#149;&#149; &#149;&#149;&#149;&#149;">
+                            </div>
+                            <div class="col-12 col-sm-4 controls">
+                                <label class="control-label">CVV</label>
+                                <input class="security-code form-control"·
+                                inputmode="numeric"
+                                type="text" name="security-code"
+                                placeholder="&#149;&#149;&#149;">
+                            </div>
+                            </div>
+                            <div class="second-row form-group">
+                            <div class="col-12 col-sm-8 controls">
+                                <label class="control-label">Name on Card</label>
+                                <input class="billing-address-name form-control"
+                                type="text" name="name"
+                                placeholder="John Smith">
+                            </div>
+                            <div class="col-12 col-sm-4 controls">
+                                <label class="control-label">Expiration</label>
+                                <input class="expiration-month-and-year form-control"
+                                type="text" name="expiration-month-and-year"
+                                placeholder="MM / YY">
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <input type="hidden" name="delivery_fee" id="delivery_charge_input" value="">
-
                 <input type="submit" class="btn_purple auth_btn hover_effect1 paynow_btn" value="Pay Now">
-
             </form>
         </div>
     </div>
