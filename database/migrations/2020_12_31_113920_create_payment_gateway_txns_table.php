@@ -30,7 +30,7 @@ class CreatePaymentGatewayTxnsTable extends Migration
             $table->tinyInteger('txn_type')->comment('1-Credited,2-Debited');
             $table->decimal('amount', 8, 3)->default(0);
             $table->tinyInteger('status')->comment('1-success,2-failure,3-pending');
-            $table->tinyInteger('payment_type')->comment('1-bank_manual,2-paypal,3-net_bank');
+            $table->tinyInteger('payment_type')->comment('1-bank_manual,2-paypal,3-net_bank,4-First Atlantic');
             $table->string('comment')->nullable();
             $table->json('bank_response')->nullable();
             $table->tinyInteger('visibility')->default('0');

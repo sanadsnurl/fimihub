@@ -10,6 +10,7 @@ use App\Model\MyEarning;
 use App\Model\Notification;
 use App\Model\order;
 use App\Model\OrderEvent;
+use App\Model\ServiceCategory;
 use App\User;
 use Auth, Validator;
 
@@ -133,21 +134,23 @@ class OrderController extends Controller
                 // To do
                 $price = $orderDetails->total_amount;
                 $collectedPrice = $request->input('price');
+                $ServiceCategories = new ServiceCategory();
+                $service_data = $ServiceCategories->getServiceById(1);
+              $rider_earning = (($service_data->rider_commission / 100) * $orderDetails->delivery_fee);
             if($request->input('payment_type') == 3) {
-                if($price <= $collectedPrice) {
                     $earning = array(
                         'user_id' => $id,
                         'order_id' => $orderId,
-                        'ride_price' => $orderDetails->delivery_fee,
-                        'cash_price' => $collectedPrice,
+                        'ride_price' => $rider_earning,
+                        'cash_price' => $price,
                     );
                     $this->myEarning->updateEarning($earning, $orderId);
-                }
+
             } else {
                 $earning = array(
                     'user_id' => $id,
                     'order_id' => $orderId,
-                    'ride_price' => $orderDetails->delivery_fee,
+                    'ride_price' => $rider_earning,
                     'cash_price' => null,
                 );
                 $this->myEarning->updateEarning($earning, $orderId);

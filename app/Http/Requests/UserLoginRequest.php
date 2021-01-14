@@ -29,10 +29,11 @@ class UserLoginRequest extends FormRequest
         $validator = [
             'userid' => 'required',
             'email'=>'email',
+            'country_code'=>'string|nullable',
             'mobile'=>'numeric|digits:10',
             'password'=>'required|min:6',
             'new_password'=>'min:6'
-            
+
         ];
         return $validator;
     }
