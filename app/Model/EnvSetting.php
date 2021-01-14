@@ -3,6 +3,8 @@
 namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
+//custom import
+use Illuminate\Support\Facades\DB;
 
 class EnvSetting extends Model
 {
@@ -16,4 +18,16 @@ class EnvSetting extends Model
         'type',
         'value',
     ];
+
+    static public function getEnvVar()
+    {
+        try {
+            $env_data = self::all();
+
+            return $env_data;
+        } catch (\Exception $e) {
+            dd($e);
+        }
+    }
+
 }

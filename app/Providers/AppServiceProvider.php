@@ -4,6 +4,9 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\URL;
+use App\Model\EnvSetting;
+use Config;
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -28,5 +31,12 @@ class AppServiceProvider extends ServiceProvider
         if (env('APP_ENV') !== 'local') {
             URL::forceScheme('https');
         }
+
+        $env_insta = new EnvSetting();
+        foreach( $env_insta->getEnvVar() as $value) {
+            // dd($value->value);
+            Config::set([$value->key => $value->value]);
+        }
+
     }
 }
