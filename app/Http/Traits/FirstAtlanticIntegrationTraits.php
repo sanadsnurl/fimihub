@@ -24,6 +24,11 @@ trait FirstAtlanticIntegrationTraits
     {
         $order_id = $payment_data['order_unique_id'].'-'.$payment_data['order_id'].'-';
         $amt = round($payment_data['amount'],2);
+        $date_process = str_replace(" ", '',$payment_data['card_expiry_date']);
+        $date_process = str_replace("/", '',$date_process);
+        $card_exp_date = trim($date_process);
+        $card_process = str_replace(" ", '',$payment_data['card_number']);
+        $card_number_input = trim($card_process);
 
         // Payment authantication
         //phpinfo(); die;
@@ -77,7 +82,7 @@ trait FirstAtlanticIntegrationTraits
         $orderNumber = $order_id. msTimeStamp();
         // 12 chars, always, no decimal place, 'RI'.str_pad(1, 8, "0", STR_PAD_LEFT);
 
-        $total_amounts = str_replace(".", '',$amt);
+        $total_amounts = round($amt)*100;
         $amount =  str_pad($total_amounts, 12, "0", STR_PAD_LEFT);
         // $amount = '000000001350';
         // 840 = USD, put your currency code here
@@ -89,8 +94,8 @@ trait FirstAtlanticIntegrationTraits
         // Card Details. Arrays serialise to elements in XML/SOAP
         $CardDetails = array(
             'CardCVV2' => $payment_data['card_ccv'],
-            'CardExpiryDate' => $payment_data['card_expiry_date'],
-            'CardNumber' => $payment_data['card_number'],
+            'CardExpiryDate' => $card_exp_date,
+            'CardNumber' => $card_number_input,
             'IssueNumber' => $payment_data['issue_number'],
             'StartDate' => $payment_data['start_date']
         );

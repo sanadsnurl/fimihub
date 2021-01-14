@@ -28,6 +28,8 @@ use App\Http\Traits\FirstAtlanticIntegrationTraits;
 use App\Model\cart_customization;
 use App\Model\menu_custom_list;
 use App\Model\menu_customization;
+use App\Model\payment_gateway_txn;
+use Illuminate\Support\Facades\DB;
 use Response;
 use Session;
 
@@ -159,6 +161,10 @@ class OrderController extends Controller
         $validator = Validator::make($request->all(), [
             'payment' => 'required|in:1,2,3,4',
             'delivery_fee' => 'required|not_in:0',
+            'cvv' => 'required_if:payment,4|digits:3',
+            'card_expiry_date' => 'required_if:payment,4',
+            'card_number' => 'required_if:payment,4',
+            'person_name' => 'required_if:payment,4|string'
 
         ], [
             'delivery_fee.required' => 'Invalid Address',
@@ -246,6 +252,7 @@ class OrderController extends Controller
                 } else {
                     $add_order['payment_status'] = 1;
                 }
+                // dd("dd");
                 $make_order_id = $orders->makeOrder($add_order);
 
                 // ============================================= PUSH NOTIFICATION=======================================
@@ -261,8 +268,8 @@ class OrderController extends Controller
 
                 $order_id = base64_encode($make_order_id);
                 $cart_delete = $cart->deleteCart($user->id);
-                $order_data = $orders->getOrder($order_id);
-
+                $order_data = $orders->getOrderData($make_order_id);
+// dd($order_data);
                 // Paypal Payload
                 if (request('payment') == 2) {
                     $make_payment_array = [
@@ -285,7 +292,7 @@ class OrderController extends Controller
                 if (request('payment') == 4) {
                     $make_payment_array = [
                         'order_id' => $order_data->order_id,
-                        'order_unique_id' => $order_id,
+                        'order_unique_id' => $make_order_id,
                         '_token' => request('_token'),
                         'amount' => $billing_balance['total_amount_last']  + request('delivery_fee') ?? 0,
                         'card_ccv' => $data['cvv'],
@@ -299,15 +306,47 @@ class OrderController extends Controller
                     $payment = (json_decode(json_encode($payment)));
                     $payment_auth_result = $payment->AuthorizeResult;
                     $payment_result = $payment_auth_result->CreditCardTransactionResults;
+                    $order_number_bank = $payment_auth_result->OrderNumber;
                     $response_code = $payment_result->ReasonCode;
+                    $txn_array = [
+                        'txn_id' => $order_number_bank,
+                        'user_id' => $user->id,
+                        'order_id' => $make_order_id,
+                        'txn_type' => 1,
+                        'amount' => $billing_balance['total_amount_last']  + request('delivery_fee') ?? 0,
+                        'status' => 1,
+                        'payment_type' => 4,
+                        'bank_response'=> json_encode($payment)
+                    ];
+                    // Start transaction
+                    DB::beginTransaction();
                     if ($response_code == 1) {
                         // Success
+                        $orders = new order();
                         $payment_status = 2;
-                        $order_status_update = $orders->updatePaymentStatus($order_id, $payment_status);
+                        $order_status_update = $orders->updatePaymentStatus($make_order_id, $payment_status);
+                        $payment_gateway_txns = new payment_gateway_txn();
+                        $txn_done = $payment_gateway_txns->insertUpdateTxn($txn_array);
+
                     } else {
                         // Failed
+                        $orders = new order();
                         $payment_status = 3;
-                        $order_status_update = $orders->updatePaymentStatus($order_id, $payment_status);
+                        $order_status_update = $orders->updatePaymentStatus($make_order_id, $payment_status);
+                        $payment_gateway_txns = new payment_gateway_txn();
+                        $txn_done = $payment_gateway_txns->insertUpdateTxn($txn_array);
+                    }
+                    if ($order_status_update && $txn_done) {
+                        //Commit
+                        DB::commit();
+                    } else {
+                        //rollback
+                        DB::rollBack();
+                        Session::flash('modal_message', 'Payment failed !');
+
+                        Session::flash('modal_check_subscribe', 'open');
+                        return redirect()->back();
+
                     }
                 }
                 Session::flash('modal_check_order', 'open');
