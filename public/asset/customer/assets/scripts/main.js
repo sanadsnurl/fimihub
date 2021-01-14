@@ -151,6 +151,11 @@ $('.payment_options label').click(function() {
     }, 100)
 })
 
+$('.payment_options label').click(function(e) {
+    e.stopPropagation();
+    $(this).next(".content").slideToggle();
+})
+
  // sticky menu sidebar
  var sticky = $(".order-block .order-menu-row .sticky");
 
@@ -217,3 +222,20 @@ $(".order-block .order-menu-row .card-wrap .opt-dropdown .size").click(function(
 $(".order-block .restaurant-info .collapse-tab").click(function(){
     $(this).next().slideToggle();
 })
+
+$(function() {
+    var creditly = Creditly.initialize(
+        '.creditly-wrapper .expiration-month-and-year',
+        '.creditly-wrapper .credit-card-number',
+        '.creditly-wrapper .security-code',
+        '.creditly-wrapper .card-type');
+
+    $(".payment_options .paynow_btn").click(function(e){
+        if($(".payment_options #atlantic").is(":checked")) {
+            let output = creditly.validate();
+            if(!output) {
+                e.preventDefault();
+            }
+        }
+    })    
+});
