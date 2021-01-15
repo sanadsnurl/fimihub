@@ -161,10 +161,10 @@ class OrderController extends Controller
         $validator = Validator::make($request->all(), [
             'payment' => 'required|in:1,2,3,4',
             'delivery_fee' => 'required|not_in:0',
-            'cvv' => 'required_if:payment,4|digits:3',
-            'card_expiry_date' => 'required_if:payment,4',
-            'card_number' => 'required_if:payment,4',
-            'person_name' => 'required_if:payment,4|string'
+            'cvv' => 'required_if:payment,4|digits:3|nullable',
+            'card_expiry_date' => 'required_if:payment,4|nullable',
+            'card_number' => 'required_if:payment,4|nullable',
+            'person_name' => 'required_if:payment,4|string|nullable'
 
         ], [
             'delivery_fee.required' => 'Invalid Address',
@@ -355,7 +355,6 @@ class OrderController extends Controller
             } else {
             }
         } else {
-
             return redirect()->back()->withInput()->withErrors($validator);
         }
     }
@@ -502,12 +501,14 @@ class OrderController extends Controller
 
             $order_status_update = $orders->updatePaymentStatus($order_check_token, $payment_status);
             Session::flash('modal_check_order', 'open');
-            Session::flash('order_id', $order_check_token);
+            Session::flash('order_id', request('order_check_token'));
         } else {
             $payment_status = 3;
+            $order_status = 1;
             $order_status_update = $orders->updatePaymentStatus($order_check_token, $payment_status);
+            $order_status_updates = $orders->updateOrderStatus($order_check_token, $order_status);
             Session::flash('modal_check_order', 'open');
-            Session::flash('order_id', $order_check_token);
+            Session::flash('order_id', request('order_check_token'));
         }
 
         return redirect('/myOrder');

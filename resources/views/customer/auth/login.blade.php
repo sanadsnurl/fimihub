@@ -21,7 +21,9 @@
                             @csrf
                             <div class="form-group">
                                 <label for="">Phone No.</label>
-                                <input type="text" class="form-control" name="user_id" value="{{ old('user_id') }}">
+                                <input type="text" class="form-control telInput" name="user_id" value="{{ old('user_id') }}">
+                                <input type="hidden" class="country_code" name="country_code">
+
                                 @if($errors->has('user_id'))
                                 <div class="error">{{ $errors->first('user_id') }}</div>
                                 @endif
@@ -78,6 +80,8 @@
                             <label for="">Phone No.</label>
                             <input type="number" class="form-control" name="phone_number"
                                 value="{{ old('phone_number') }}">
+                                {{-- <input type="hidden" class="country_code" name="country_code"> --}}
+
                             @if($errors->has('phone_number'))
                             <div class="error">{{ $errors->first('phone_number') }}</div>
                             @endif

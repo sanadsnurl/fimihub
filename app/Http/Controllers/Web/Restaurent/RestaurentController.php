@@ -294,7 +294,10 @@ class RestaurentController extends Controller
                 ->addColumn('dish_type', function ($row) {
                     if ($row->dish_type == 1) {
                         return "Non-Veg";
-                    } else {
+                    } elseif($row->dish_type == 3) {
+                        return "Beverage";
+                    }
+                    else {
                         return "Veg";
                     }
                 })
@@ -368,7 +371,7 @@ class RestaurentController extends Controller
             'about' => 'string|nullable',
             'discount' => 'numeric|nullable',
             'price' => 'required|numeric|not_in:0',
-            'dish_type' => 'required|in:1,2|nullable',
+            'dish_type' => 'required|in:1,2,3|nullable',
             'menu_category_id' => 'required|exists:resto_menu_categories,id|nullable',
 
         ]);
@@ -377,7 +380,12 @@ class RestaurentController extends Controller
             $id = $user->id;
             $data = $request->toarray();
 
+            if ($request->has('product_add_on_id') && !empty('product_add_on_id')) {
+                $data['product_add_on_id'] = json_encode($data['product_add_on_id']);
 
+            }else{
+                $data['product_add_on_id'] = json_encode([]);
+            }
             if ($request->hasfile('picture')) {
                 $profile_pic = $request->file('picture');
                 $input['imagename'] = $data['name'] . time() . '.' . $profile_pic->getClientOriginalExtension();
@@ -418,18 +426,19 @@ class RestaurentController extends Controller
             'about' => 'string|nullable',
             'discount' => 'numeric|nullable',
             'price' => 'numeric|not_in:0',
-            'dish_type' => 'required|in:1,2|nullable',
+            'dish_type' => 'required|in:1,2,3|nullable',
             'menu_category_id' => 'required|exists:resto_menu_categories,id|nullable',
-            'product_variant_id' => 'integer',
+            'product_variant_id' => 'integer|nullable',
 
         ]);
         if (!$validator->fails()) {
             $user = Auth::user();
             $id = $user->id;
             $data = $request->toarray();
+            if ($request->has('product_add_on_id') && !empty('product_add_on_id')) {
+                $data['product_add_on_id'] = json_encode($data['product_add_on_id']);
 
-            $data['product_add_on_id'] = json_encode($data['product_add_on_id']);
-
+            }
             if ($request->hasfile('picture')) {
                 $profile_pic = $request->file('picture');
                 $input['imagename'] = $data['name'] . time() . '.' . $profile_pic->getClientOriginalExtension();
@@ -764,7 +773,7 @@ class RestaurentController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|nullable',
-            'price' => 'required|numeric',
+            'price' => 'numeric',
             'resto_custom_cat_id' => 'required|exists:resto_custom_menu_categories,id|nullable',
 
         ]);

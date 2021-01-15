@@ -82,7 +82,7 @@ trait FirstAtlanticIntegrationTraits
         $orderNumber = $order_id. msTimeStamp();
         // 12 chars, always, no decimal place, 'RI'.str_pad(1, 8, "0", STR_PAD_LEFT);
 
-        $total_amounts = round($amt)*100;
+        $total_amounts = round($amt,2)*100;
         $amount =  str_pad($total_amounts, 12, "0", STR_PAD_LEFT);
         // $amount = '000000001350';
         // 840 = USD, put your currency code here

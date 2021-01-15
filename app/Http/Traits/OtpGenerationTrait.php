@@ -86,7 +86,6 @@ trait OtpGenerationTrait
         $userid = $request;
         $user = new User();
         $user_data = $user->userData($userid);
-
         if ($user_data != NULL) {
 
             $user_otp = $user->generateOTP($userid);

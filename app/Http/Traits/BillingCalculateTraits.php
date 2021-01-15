@@ -81,13 +81,14 @@ trait BillingCalculateTraits
                                             ->where('resto_custom_cat_id',$add_on)->first();
                 }
                 if($m_data->product_adds_id){
-                    $add_ons_select[] = $menu_custom_list->menuCustomPaginationData($m_data->restaurent_id)
-                                            ->where('resto_custom_cat_id',$add_on)->get();
-                    $add_ons_cat_select[] = $menu_custom_list->menuCustomCategoryData($m_data->restaurent_id)
-                                            ->where('resto_custom_cat_id',$add_on)->first();
-
                     $m_data->product_adds_id = json_decode($m_data->product_adds_id);
+
+
                     foreach($m_data->product_adds_id as $add_on_cart){
+                        $add_ons_select[] = $menu_custom_list->menuCustomPaginationData($m_data->restaurent_id)
+                                                ->where('resto_custom_cat_id',$add_on)->get();
+                        $add_ons_cat_select[] = $menu_custom_list->menuCustomCategoryData($m_data->restaurent_id)
+                                                ->where('resto_custom_cat_id',$add_on)->first();
                         $var_ds = $menu_custom_list->getCustomListPriceWithPer($add_on_cart);
                         // $m_data->price = $var_d->price;
                         $menu_total = $menu_total + (1 * $var_ds->price);

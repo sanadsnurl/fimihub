@@ -65,6 +65,8 @@ class OrderController extends Controller
                         return "Paypal";
                     } elseif ($row->payment_type == 3) {
                         return "COD";
+                    } elseif ($row->payment_type == 4) {
+                        return "Credit/Debit Card";
                     } else {
                         return "N.A";
                     }
@@ -97,17 +99,34 @@ class OrderController extends Controller
                     foreach ($row->ordered_menu as $ordered_menu) {
                         if ($loop_count == 1) {
                             $order_menu .= "(" . $ordered_menu->name . " x " . $ordered_menu->quantity;
-                            if (isset($ordered_menu->add_on_data) && $ordered_menu->add_on_data != NULL) {
+                            if (isset($ordered_menu->cart_variant_id) && $ordered_menu->cart_variant_id != NULL) {
                                 $order_menu .= " [";
                                 $loop_count_add = 1;
 
 
-                                foreach ($ordered_menu->add_on_data as $add_data) {
-                                    if ($add_data->quantity != 0) {
+                                foreach ($ordered_menu->variant_data as $v_data) {
+                                    if ($ordered_menu->cart_variant_id == $v_data->id) {
                                         if ($loop_count == 1) {
-                                            $order_menu .= "(" . $add_data->name . " x " . $add_data->quantity . ")";
+                                            $order_menu .= "(" . $v_data->cat_name . ' : ' . $v_data->name . ")";
                                         } else {
-                                            $order_menu .= "/(" . $add_data->name . " x " . $add_data->quantity . ")";
+                                            $order_menu .= "/(" . $v_data->cat_name . ' : ' . $v_data->name . ")";
+                                        }
+                                        $loop_count_add += 1;
+                                    }
+                                }
+                                $order_menu .= "] ";
+                            }
+                            if (isset($ordered_menu->product_adds_id) && $ordered_menu->product_adds_id != NULL) {
+                                $order_menu .= " [";
+                                $loop_count_add = 1;
+
+
+                                foreach ($ordered_menu->add_on[0] as $add_data) {
+                                    if (in_array($add_data->id, ($ordered_menu->product_adds_id) ?? [], FALSE)) {
+                                        if ($loop_count == 1) {
+                                            $order_menu .= "(" . $add_data->cat_name . ' : ' . $add_data->name . ")";
+                                        } else {
+                                            $order_menu .= "/(" . $add_data->cat_name . ' : ' . $add_data->name . ")";
                                         }
                                         $loop_count_add += 1;
                                     }
@@ -117,17 +136,34 @@ class OrderController extends Controller
                             $order_menu .= ")";
                         } else {
                             $order_menu .= "/(" . $ordered_menu->name . " x " . $ordered_menu->quantity;
-                            if (isset($ordered_menu->add_on_data) && $ordered_menu->add_on_data != NULL) {
+                            if (isset($ordered_menu->cart_variant_id) && $ordered_menu->cart_variant_id != NULL) {
                                 $order_menu .= " [";
                                 $loop_count_add = 1;
 
 
-                                foreach ($ordered_menu->add_on_data as $add_data) {
-                                    if ($add_data->quantity != 0) {
+                                foreach ($ordered_menu->variant_data as $v_data) {
+                                    if ($ordered_menu->cart_variant_id == $v_data->id) {
                                         if ($loop_count == 1) {
-                                            $order_menu .= "(" . $add_data->name . " x " . $add_data->quantity . ")";
+                                            $order_menu .= "(" . $v_data->cat_name . ' : ' . $v_data->name . ")";
                                         } else {
-                                            $order_menu .= "/(" . $add_data->name . " x " . $add_data->quantity . ")";
+                                            $order_menu .= "/(" . $v_data->cat_name . ' : ' . $v_data->name . ")";
+                                        }
+                                        $loop_count_add += 1;
+                                    }
+                                }
+                                $order_menu .= "] ";
+                            }
+                            if (isset($ordered_menu->product_adds_id) && $ordered_menu->product_adds_id != NULL) {
+                                $order_menu .= " [";
+                                $loop_count_add = 1;
+
+
+                                foreach ($ordered_menu->add_on[0] as $add_data) {
+                                    if (in_array($add_data->id, ($ordered_menu->product_adds_id) ?? [], FALSE)) {
+                                        if ($loop_count == 1) {
+                                            $order_menu .= "(" . $add_data->cat_name . ' : ' . $add_data->name . ")";
+                                        } else {
+                                            $order_menu .= "/(" . $add_data->cat_name . ' : ' . $add_data->name . ")";
                                         }
                                         $loop_count_add += 1;
                                     }
@@ -361,17 +397,34 @@ class OrderController extends Controller
             foreach ($order_data->ordered_menu as $ordered_menu) {
                 if ($loop_count == 1) {
                     $order_menu .= "(" . $ordered_menu->name . " x " . $ordered_menu->quantity;
-                    if (isset($ordered_menu->add_on_data) && $ordered_menu->add_on_data != NULL) {
+                    if (isset($ordered_menu->cart_variant_id) && $ordered_menu->cart_variant_id != NULL) {
                         $order_menu .= " [";
                         $loop_count_add = 1;
 
 
-                        foreach ($ordered_menu->add_on_data as $add_data) {
-                            if ($add_data->quantity != 0) {
+                        foreach ($ordered_menu->variant_data as $v_data) {
+                            if ($ordered_menu->cart_variant_id == $v_data->id) {
                                 if ($loop_count == 1) {
-                                    $order_menu .= "(" . $add_data->name . " x " . $add_data->quantity . ")";
+                                    $order_menu .= "(" . $v_data->cat_name . ' : ' . $v_data->name . ")";
                                 } else {
-                                    $order_menu .= "/(" . $add_data->name . " x " . $add_data->quantity . ")";
+                                    $order_menu .= "/(" . $v_data->cat_name . ' : ' . $v_data->name . ")";
+                                }
+                                $loop_count_add += 1;
+                            }
+                        }
+                        $order_menu .= "] ";
+                    }
+                    if (isset($ordered_menu->product_adds_id) && $ordered_menu->product_adds_id != NULL) {
+                        $order_menu .= " [";
+                        $loop_count_add = 1;
+
+
+                        foreach ($ordered_menu->add_on[0] as $add_data) {
+                            if (in_array($add_data->id, ($ordered_menu->product_adds_id) ?? [], FALSE)) {
+                                if ($loop_count == 1) {
+                                    $order_menu .= "(" . $add_data->cat_name . ' : ' . $add_data->name . ")";
+                                } else {
+                                    $order_menu .= "/(" . $add_data->cat_name . ' : ' . $add_data->name . ")";
                                 }
                                 $loop_count_add += 1;
                             }
@@ -381,17 +434,34 @@ class OrderController extends Controller
                     $order_menu .= ")";
                 } else {
                     $order_menu .= "/(" . $ordered_menu->name . " x " . $ordered_menu->quantity;
-                    if (isset($ordered_menu->add_on_data) && $ordered_menu->add_on_data != NULL) {
+                    if (isset($ordered_menu->cart_variant_id) && $ordered_menu->cart_variant_id != NULL) {
                         $order_menu .= " [";
                         $loop_count_add = 1;
 
 
-                        foreach ($ordered_menu->add_on_data as $add_data) {
-                            if ($add_data->quantity != 0) {
+                        foreach ($ordered_menu->variant_data as $v_data) {
+                            if ($ordered_menu->cart_variant_id == $v_data->id) {
                                 if ($loop_count == 1) {
-                                    $order_menu .= "(" . $add_data->name . " x " . $add_data->quantity . ")";
+                                    $order_menu .= "(" . $v_data->cat_name . ' : ' . $v_data->name . ")";
                                 } else {
-                                    $order_menu .= "/(" . $add_data->name . " x " . $add_data->quantity . ")";
+                                    $order_menu .= "/(" . $v_data->cat_name . ' : ' . $v_data->name . ")";
+                                }
+                                $loop_count_add += 1;
+                            }
+                        }
+                        $order_menu .= "] ";
+                    }
+                    if (isset($ordered_menu->product_adds_id) && $ordered_menu->product_adds_id != NULL) {
+                        $order_menu .= " [";
+                        $loop_count_add = 1;
+
+
+                        foreach ($ordered_menu->add_on[0] as $add_data) {
+                            if (in_array($add_data->id, ($ordered_menu->product_adds_id) ?? [], FALSE)) {
+                                if ($loop_count == 1) {
+                                    $order_menu .= "(" . $add_data->cat_name . ' : ' . $add_data->name . ")";
+                                } else {
+                                    $order_menu .= "/(" . $add_data->cat_name . ' : ' . $add_data->name . ")";
                                 }
                                 $loop_count_add += 1;
                             }
@@ -429,6 +499,8 @@ class OrderController extends Controller
                 $order_data->payment_type = "Paypal";
             } elseif ($order_data->payment_type == 3) {
                 $order_data->payment_type = "COD";
+            } elseif ($order_data->payment_type == 4) {
+                $order_data->payment_type = "Credit/Debit Card";
             } else {
                 $order_data->payment_type = "N.A";
             }
@@ -453,10 +525,11 @@ class OrderController extends Controller
         $event_data = json_decode($event_data);
 
         // dd($order_data->address_id);
-        return view('restaurent.viewOrder')->with(['data' => $user,
-                                            'order_data' => $order_data,
-                                            'event_data' => $event_data,
-                                            'add_datas' => $add_datas]);
+        return view('restaurent.viewOrder')->with([
+            'data' => $user,
+            'order_data' => $order_data,
+            'event_data' => $event_data,
+            'add_datas' => $add_datas
+        ]);
     }
-
 }
