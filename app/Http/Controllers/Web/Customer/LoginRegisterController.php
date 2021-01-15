@@ -24,7 +24,8 @@ class LoginRegisterController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:150',
             'password' => 'required|confirmed|string|min:6',
-            'mobile' => 'required|numeric|unique:users|digits:10',
+            'mobile' => 'required|numeric|unique:users',
+            'country_code' => 'required|string',
             'terms'=> 'required',
         ]);
         if(!$validator->fails()){
@@ -56,17 +57,19 @@ class LoginRegisterController extends Controller
         $validator = Validator::make($request->all(), [
             'password' => 'required|string|min:6',
             'user_id' => 'required',
+            'country_code' => 'required|string',
 
         ]);
         if(!$validator->fails()){
             $user_id = $request->input('user_id');
             $password = $request->input('password');
+            $country_code = $request->input('country_code');
             $mobile_set = "";
             $email_set = "";
 
             if(is_numeric($user_id))
             {
-                $loginData =["mobile"=>$user_id,"password"=>$password];
+                $loginData =["mobile"=>$user_id,"password"=>$password,"country_code"=>$country_code];
                 $mobile_set = $user_id;
             }
             else{
@@ -216,7 +219,8 @@ class LoginRegisterController extends Controller
     public function sendOtp(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'phone_number'=>'required|digits:10',
+            'phone_number'=>'required',
+            'country_code'=>'required|string',
 
         ]);
         if(!$validator->fails()){
@@ -227,7 +231,7 @@ class LoginRegisterController extends Controller
 
             if($otp_verified_status==2){
                 Session::flash('forget_pwd_snd_otp_modal_check', 'open');
-                Session::flash('error_message', 'Invalid Phone Number');
+                Session::flash('error_message', 'OTP Not Sent');
 
                 return redirect()->back();
             }

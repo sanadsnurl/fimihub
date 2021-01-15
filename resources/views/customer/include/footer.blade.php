@@ -228,6 +228,7 @@
 <script type="text/javascript" src="{{asset('asset/customer/assets/scripts/plugins/jquery-3.4.1.min.js')}}"></script>
 <script type="text/javascript" src="{{asset('asset/customer/assets/scripts/plugins/slick.min.js')}}"></script>
 <script type="text/javascript" src="{{asset('asset/customer/assets/scripts/plugins/wow.js')}}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/12.1.6/js/intlTelInput.min.js"></script>
 <script type="text/javascript" src="{{asset('asset/customer/assets/scripts/main.js')}}"></script>
 </body>
 
@@ -427,6 +428,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/jquery.validation/1.15.0/jquery.validate.min.js"></script>
+
 
 <script type="text/javascript" src="{{asset('asset/customer/assets/scripts/mapInput.js')}}"></script>
 <script type="text/javascript" src="{{asset('asset/customer/assets/scripts/searchMap.js')}}"></script>

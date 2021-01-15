@@ -237,3 +237,21 @@ $(function() {
         }
     })
 });
+
+var telInput = $('.telInput');
+telInput.intlTelInput({
+    initialCountry: 'jm',
+    preferredCountries: ['us', 'gb', 'br', 'ru', 'cn', 'es', 'jm'],
+    autoPlaceholder: '',
+    separateDialCode: true,
+    // nationalMode:false,
+    // utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/12.1.6/js/utils.js"
+});
+
+$('.telInput').on('focus', function() {
+    var code = $('.selected-dial-code').text()
+    $('.country_code').val(code);
+});
+
+var jdcode = $('.selected-dial-code').text()
+$('.country_code').val(jdcode);

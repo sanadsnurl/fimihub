@@ -124,6 +124,11 @@
                                         name="dish_type">
                                     <label for="user-checkbox1">Non-Veg</label>
                                 </div>
+                                <div class="demo-checkbox">
+                                    <input type="radio" id="user-checkbox2" class="filled-in chk-col-primary" value="3"
+                                        name="dish_type">
+                                    <label for="user-checkbox2">Beverage</label>
+                                </div>
                                 @if($errors->has('dish_type'))
                                 <div class="error">{{ $errors->first('dish_type') }}</div>
                                 @endif
@@ -223,7 +228,7 @@
 <script>
     $(document).ready(function() {
         //Default data table
-        $('#default-datatable').DataTable();
+        //$('#default-datatable').DataTable();
         var table = $('#example').DataTable({
             lengthChange: true,
             processing: true,

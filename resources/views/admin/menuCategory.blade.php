@@ -149,7 +149,7 @@
 <script>
 $(document).ready(function() {
     //Default data table
-    $('#default-datatable').DataTable();
+    //$('#default-datatable').DataTable();
 
     var table = $('#example').DataTable({
         lengthChange: true,

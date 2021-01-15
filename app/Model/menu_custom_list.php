@@ -86,7 +86,7 @@ class menu_custom_list extends Model
         if(in_array(request()->segment(1),['Restaurent', 'admifimihub','api'])) {
             return $value;
         } else {
-            return $value +(( DB::table('service_catagories')->where('service_catagories.id', 1)->first()->tax / 100) * $value);
+            return $value +(( DB::table('service_catagories')->where('service_catagories.id', 1)->first()->commission / 100) * $value);
         }
     }
 }
