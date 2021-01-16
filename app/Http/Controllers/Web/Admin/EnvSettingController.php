@@ -6,11 +6,12 @@ use App\Http\Controllers\Controller;
 use Validator;
 use Illuminate\Http\Request;
 use App\Model\EnvSetting;
+use Illuminate\Contracts\Validation\Validator as ValidationValidator;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 use Session;
 
-class EnvSettingCtroller extends Controller
+class EnvSettingController extends Controller
 {
     public function envSettingAdd(Request $request) {
         $envSettings = EnvSetting::all();
@@ -22,10 +23,8 @@ class EnvSettingCtroller extends Controller
             return DataTables::of($envSettings)
                 ->addIndexColumn()
                 ->addColumn('action', function($row){
-                    // $btn = '<a href="editResto?resto_user_id='.base64_encode($row->resto_user_id).'" class="btn btn-outline-secondary btn-sm btn-round waves-effect waves-light m-0">Edit</a>
-                    // <a href="deleteResto?resto_user_id='.base64_encode($row->resto_user_id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light mt-1">Delete</a>
-                    // ';
-                    return 'N.A';
+                    $btn = '<a href="editEnv?config_id='.base64_encode($row->id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Edit</a>';
+                    return $btn;
                 })
                 ->addColumn('created_at', function($row){
 
@@ -62,5 +61,28 @@ class EnvSettingCtroller extends Controller
         return redirect()->back();
 
 
+    }
+    public function getEditEnvPage(Request $request){
+        $user = Auth::user();
+        $config_id =  base64_decode(request('config_id'));
+        $env_inst = new EnvSetting();
+        $env_data_by_id = $env_inst->getEnvById($config_id);
+
+        return view('admin.editEnv')->with(['data' => $user, 'env_data' =>$env_data_by_id]);
+    }
+
+    public function getEditEnvProcess(Request $request){
+        $data = $request->all();
+        $validator = Validator::make($request->all(), [
+            'value' => 'required|string|max:190',
+        ]);
+        if($validator->fails()){
+
+            return redirect()->back()->withInput()->withErrors($validator);
+        }
+        $env_inst = new EnvSetting();
+        $env_data_by_id = $env_inst->editEnv($data);
+        Session::flash('message', 'Updated Successfully !');
+        return redirect('adminfimihub/envSetting');
     }
 }

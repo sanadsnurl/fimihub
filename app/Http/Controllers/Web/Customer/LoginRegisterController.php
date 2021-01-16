@@ -56,7 +56,7 @@ class LoginRegisterController extends Controller
 
         $validator = Validator::make($request->all(), [
             'password' => 'required|string|min:6',
-            'user_id' => 'required',
+            'user_id' => 'required|numeric',
             'country_code' => 'required|string',
 
         ]);

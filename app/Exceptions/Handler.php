@@ -85,99 +85,99 @@ class Handler extends ExceptionHandler
         if ($exception instanceof AccessDeniedException) {
             if (in_array(request()->segment(1), ['Restaurent'])) {
                 Session::flash('message', 'Access Denied');
-                return redirect('Restaurent/login');
+                return redirect('Restaurent/notfound');
             } elseif (in_array(request()->segment(1), ['api'])) {
                 return response()->json([
                     'message' => 'Access Denied', 'status' => false
                 ], 401);
             } elseif (in_array(request()->segment(1), ['adminfimihub'])) {
                 Session::flash('message', 'Access Denied');
-                return redirect('adminfimihub/login');
+                return redirect('adminfimihub/notfound');
             } else {
                 Session::flash('message', 'Access Denied');
-                return redirect('login');
+                return redirect('accessDenied');
             }
 
         }
         if ($exception instanceof ModelNotFoundException) {
             if (in_array(request()->segment(1), ['Restaurent'])) {
                 Session::flash('message', 'Model Not Found');
-                return redirect('Restaurent/login');
+                return redirect('Restaurent/notfound');
             } elseif (in_array(request()->segment(1), ['api'])) {
                 return response()->json([
                     'message' => 'Model Not Found', 'status' => false
                 ], 401);
             } elseif (in_array(request()->segment(1), ['adminfimihub'])) {
                 Session::flash('message', 'Model Not Found');
-                return redirect('adminfimihub/login');
+                return redirect('adminfimihub/notfound');
             } else {
                 Session::flash('message', 'Model Not Found');
-                return redirect('login');
+                return redirect('notfound');
             }
 
         }
         if ($exception instanceof NotFoundHttpException) {
             if (in_array(request()->segment(1), ['Restaurent'])) {
                 Session::flash('message', 'Not Found');
-                return redirect('Restaurent/login');
+                return redirect('Restaurent/notfound');
             } elseif (in_array(request()->segment(1), ['api'])) {
                 return response()->json([
                     'message' => 'Not Found', 'status' => false
                 ], 401);
             } elseif (in_array(request()->segment(1), ['adminfimihub'])) {
                 Session::flash('message', 'Not Found');
-                return redirect('adminfimihub/login');
+                return redirect('adminfimihub/notfound');
             } else {
                 Session::flash('message', 'Not Found');
-                return redirect('login');
+                return redirect('notfound');
             }
         }
         if ($exception instanceof MethodNotAllowedHttpException) {
             if (in_array(request()->segment(1), ['Restaurent'])) {
                 Session::flash('message', 'Method Not Allowed');
-                return redirect('Restaurent/login');
+                return redirect('Restaurent/notfound');
             } elseif (in_array(request()->segment(1), ['api'])) {
                 return response()->json([
                     'message' => 'Method Not Allowed', 'status' => false
                 ], 401);
             } elseif (in_array(request()->segment(1), ['adminfimihub'])) {
                 Session::flash('message', 'Method Not Allowed');
-                return redirect('adminfimihub/login');
+                return redirect('adminfimihub/notfound');
             } else {
                 Session::flash('message', 'Method Not Allowed');
-                return redirect('login');
+                return redirect('accessDenied');
             }
         }
         if ($exception instanceof Illuminate\Contracts\Debug\ExceptionHandler) {
             if (in_array(request()->segment(1), ['Restaurent'])) {
                 Session::flash('message', 'Controller May Not Found');
-                return redirect('Restaurent/login');
+                return redirect('Restaurent/notfound');
             } elseif (in_array(request()->segment(1), ['api'])) {
                 return response()->json([
                     'message' => 'Controller May Not Found', 'status' => false
                 ], 401);
             } elseif (in_array(request()->segment(1), ['adminfimihub'])) {
                 Session::flash('message', 'Controller May Not Found');
-                return redirect('adminfimihub/login');
+                return redirect('adminfimihub/notfound');
             } else {
                 Session::flash('message', 'Controller May Not Found');
-                return redirect('login');
+                return redirect('notfound');
             }
         }
         if ($exception instanceof AuthenticationException) {
             if (in_array(request()->segment(1), ['Restaurent'])) {
                 Session::flash('message', 'Unauthenticated');
-                return redirect('Restaurent/login');
+                return redirect('Restaurent/notfound');
             } elseif (in_array(request()->segment(1), ['api'])) {
                 return response()->json([
                     'message' => 'Unauthenticated', 'status' => false, 'login' => false
                 ], 401);
             } elseif (in_array(request()->segment(1), ['adminfimihub'])) {
                 Session::flash('message', 'Unauthenticated');
-                return redirect('adminfimihub/login');
+                return redirect('adminfimihub/notfound');
             } else {
                 Session::flash('message', 'Unauthenticated');
-                return redirect('login');
+                return redirect('accessDenied');
             }
         }
         if ($exception instanceof TokenMismatchException) {
@@ -195,6 +195,22 @@ class Handler extends ExceptionHandler
                 // Redirect to a form. Here is an example of how I handle mine
                 Session::flash('message', "Oops! Seems you couldn't submit form for a long time. Please try again.");
                 return redirect('login')->with('csrf_error', "Oops! Seems you couldn't submit form for a long time. Please try again.");
+            }
+        }
+        else{
+            if (in_array(request()->segment(1), ['Restaurent'])) {
+                Session::flash('message', 'Method Not Allowed');
+                return redirect('Restaurent/notfound');
+            } elseif (in_array(request()->segment(1), ['api'])) {
+                return response()->json([
+                    'message' => 'Method Not Allowed', 'status' => false
+                ], 401);
+            } elseif (in_array(request()->segment(1), ['adminfimihub'])) {
+                Session::flash('message', 'Method Not Allowed');
+                return redirect('adminfimihub/notfound');
+            } else {
+                Session::flash('message', 'Method Not Allowed');
+                return redirect('accessDenied');
             }
         }
         return parent::render($request, $exception);

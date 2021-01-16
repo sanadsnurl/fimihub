@@ -24,9 +24,17 @@ Route::get('/updateorder', function() {
     return response()->json( $response);
 });
 
-Route::group(['middleware' => ['cors', 'json.response']], function () {
+Route::group(['middleware' => ['cors']], function () {
 
 //========================================== Customer Routes ===================================================
+    // Customer 404 Page
+    Route::get('/notfound', function () {
+        return view('errors.404');
+    });
+    // Customer 401 Page
+    Route::get('/accessDenied', function () {
+        return view('errors.401');
+    });
 
     // Customer index Page
     Route::get('/', 'Web\Customer\CmsController@indexHandShake');
@@ -149,6 +157,10 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
 
 //========================================== Restaurent Routes ===================================================
 
+    // Restaurent 404 Page
+    Route::get('/Restaurent/notfound', function () {
+        return view('restaurent.errors.404');
+    });
     //Restaurent Login
     Route::get('/Restaurent/login', function () {
         return view('restaurent.auth.login');
@@ -236,7 +248,10 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
     Route::post('adminfimihub/login', 'Web\Admin\LoginRegisterController@login');
     // Admin Logout
     Route::get('adminfimihub/logout', 'Web\Admin\LoginRegisterController@logout');
-
+    // Admin 404 Page
+    Route::get('/adminfimihub/notfound', function () {
+        return view('admin.errors.404');
+    });
     //========================================== Session AdminAuth Routes ===================================================
 
     Route::group(['middleware' => 'adminauth', 'prefix'=>'adminfimihub'], function () {
@@ -312,11 +327,14 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
         Route::get('pendingRider', 'Web\Admin\RiderController@pendingRider');
         // Approve Pending Restaurent Partner Requests
         Route::get('approveRider', 'Web\Admin\RiderController@approveRider');
-
-        // Approve Pending Restaurent Partner Requests
-        Route::get('envSetting', 'Web\Admin\EnvSettingCtroller@envSettingAdd');
-        Route::post('envSetting', 'Web\Admin\EnvSettingCtroller@envSettingStore');
-
+        // Env Config Get Page
+        Route::get('envSetting', 'Web\Admin\EnvSettingController@envSettingAdd');
+        // Env Config Add
+        Route::post('envSetting', 'Web\Admin\EnvSettingController@envSettingStore');
+        // Env Config Edit
+        Route::get('editEnv', 'Web\Admin\EnvSettingController@getEditEnvPage');
+        // Env Config Edit
+        Route::post('editEnvProcess', 'Web\Admin\EnvSettingController@getEditEnvProcess');
         //Delete Rider
         Route::get('deleteRider', 'Web\Admin\RiderController@deleteRider');
 

@@ -83,7 +83,7 @@
                 </li>
                 <li>
                     <a href="#" class="waves-effect">
-                        <i class="icon-magic-wand"></i> <span>Customer </span> <i
+                        <i class="icon-user"></i> <span>Customer </span> <i
                             class="fa fa-angle-right pull-right"></i>
                     </a>
                     <ul class="sidebar-submenu">
@@ -118,7 +118,12 @@
 
                     </ul>
                 </li>
+                <li>
+                    <a href="{{url('adminfimihub/envSetting')}}" class="waves-effect">
+                        <i class="icon-wrench"></i> <span>Config</span>
 
+                    </a>
+                </li>
                 <li>
                     <a href="{{url('adminfimihub/logout')}}" class="waves-effect">
                         <i class="icon-logout"></i> <span>Logout</span>
