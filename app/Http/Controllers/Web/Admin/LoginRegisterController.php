@@ -23,14 +23,14 @@ class LoginRegisterController extends Controller
         $validator = Validator::make($request->all(), [
             'password' => 'required|string|min:6',
             'user_id' => 'required',
-            
+
         ]);
         if(!$validator->fails()){
             $user_id = $request->input('user_id');
             $password = $request->input('password');
             $mobile_set = "";
             $email_set = "";
-            
+
             if(is_numeric($user_id))
             {
                 $loginData =["mobile"=>$user_id,"password"=>$password];
@@ -43,7 +43,7 @@ class LoginRegisterController extends Controller
 
             if(!auth()->attempt($loginData))
             {
-                Session::flash('message', 'Invalid Credentials !'); 
+                Session::flash('message', 'Invalid Credentials !');
                 return redirect()->back()->withInput();
             }
             else{
@@ -56,33 +56,18 @@ class LoginRegisterController extends Controller
                 $userid = $mobile_set;
                 Session::put('userid', $userid);
                 $user_data = auth()->user()->userData($userid);
-                if($user_data->mobile_verified_at == NULL)
-                {
-                    
-                    return redirect('adminfimihub/dashboard');
-                }
-                else
-                {
-                    return redirect('adminfimihub/dashboard');
-                }
+                return redirect('adminfimihub/dashboard');
             }
             else
             {
                 $userid = $email_set;
                 Session::put('userid', $userid);
                 $user_data = auth()->user()->userData($userid);
-                if($user_data->email_verified_at == NULL)
-                {
-                    return redirect('adminfimihub/dashboard');
-                }
-                else
-                {
-                    return redirect('adminfimihub/dashboard');
-                }
+                return redirect('adminfimihub/dashboard');
             }
         }
         else{
-        	return redirect()->back()->withInput()->withErrors($validator);  
+        	return redirect()->back()->withInput()->withErrors($validator);
         }
     }
 
