@@ -30,9 +30,9 @@ trait OtpGenerationTrait
 
             // Your Account SID and Auth Token from twilio.com/console
             // To set up environmental variables, see http://twil.io/secure
-            $account_sid = env('TWILIO_ACCOUNT_SID');
-            $auth_token = env('TWILIO_AUTH_TOKEN');
-            $twilio_number = env('TWILIO_SENDER_NUMBER');
+            $account_sid = Config('TWILIO_ACCOUNT_SID');
+            $auth_token = Config('TWILIO_AUTH_TOKEN');
+            $twilio_number = Config('TWILIO_SENDER_NUMBER');
 
             // In production, these should be environment variables. E.g.:
 

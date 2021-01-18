@@ -28,9 +28,9 @@ class OtpManagerController extends Controller
 
             // Your Account SID and Auth Token from twilio.com/console
             // To set up environmental variables, see http://twil.io/secure
-            $account_sid = env('TWILIO_ACCOUNT_SID');
-            $auth_token = env('TWILIO_AUTH_TOKEN');
-            $twilio_number = env('TWILIO_SENDER_NUMBER');
+            $account_sid = Config('TWILIO_ACCOUNT_SID');
+            $auth_token = Config('TWILIO_AUTH_TOKEN');
+            $twilio_number = Config('TWILIO_SENDER_NUMBER');
             // In production, these should be environment variables. E.g.:
 
             // A Twilio number you own with SMS capabilities
@@ -99,7 +99,7 @@ class OtpManagerController extends Controller
                     return response()->json(['otp'=>$user_otp, 'message' => 'OTP Sent','status'=>true], $this->successStatusCreated);
                 }
                 else{
-                    return response()->json(['message' => 'OTP not sent','status'=>true], $this->failureStatus);
+                    return response()->json(['message' => 'OTP not sent','status'=>true], $this->successStatus);
                 }
                 // return response()->json(['otp'=>(string)$user_otp, 'message' => 'OTP Sent','status'=>true], $this->successStatusCreated);
 

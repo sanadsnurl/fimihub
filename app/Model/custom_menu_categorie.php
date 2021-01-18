@@ -29,4 +29,17 @@ class custom_menu_categorie extends Model
         return $custom_menu_categories;
 
     }
+    public function getCustomCategory($id){
+        try {
+            $details=DB::table('custom_menu_categories')
+                ->where('visibility', 0)
+                ->where('id', $id)
+                ->get();
+
+            return $details;
+        }
+        catch (Exception $e) {
+            dd($e);
+        }
+    }
 }

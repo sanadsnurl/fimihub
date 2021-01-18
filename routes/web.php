@@ -224,7 +224,20 @@ Route::group(['middleware' => ['cors']], function () {
         Route::get('deleteAddOn', 'Web\Restaurent\RestaurentController@deleteCustomization');
         //Edit Add ON
         Route::get('editAddOn', 'Web\Restaurent\RestaurentController@editCustomization');
-
+        //Edit Customization
+        Route::get('editCustomMenu', 'Web\Restaurent\RestaurentController@editCustomMenu');
+        //Edit Customization Process
+        Route::post('editCustomMenuProcess', 'Web\Restaurent\RestaurentController@editCustomMenuProcess');
+        //Delete Customization Process
+        Route::get('deleteCustomMenu', 'Web\Restaurent\RestaurentController@deleteCustomMenu');
+        //Edit Customization Category
+        Route::get('editCustomCat', 'Web\Restaurent\RestaurentController@editCustomCat');
+        //Edit Customization Category Process
+        Route::post('editCustomCatProcess', 'Web\Restaurent\RestaurentController@editCustomCatProcess');
+        //Delete Customization Category Process
+        Route::get('deleteCustomCat', 'Web\Restaurent\RestaurentController@deleteCustomCat');
+        //Delete Main Cat
+        Route::get('deleteMainCat', 'Web\Restaurent\RestaurentController@deleteMainCat');
     });
 
 

@@ -85,7 +85,7 @@ class UserController extends Controller
 
                     $destinationPath = 'uploads/' . $id . '/images' . '/';
                     if ($profile_pic->move($destinationPath, $input['imagename'])) {
-                        $file_url = url($destinationPath . $input['imagename']);
+                        $file_url = asset($destinationPath . $input['imagename']);
                         $user_update_data['picture'] = $file_url;
                     } else {
                         $error_file_not_required[] = "Profile Picture Have Some Issue";

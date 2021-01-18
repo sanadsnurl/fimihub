@@ -89,7 +89,7 @@ class OrderController extends Controller
 
                     foreach ($row->ordered_menu as $ordered_menu) {
                         if ($loop_count == 1) {
-                            $order_menu .= "(" . $ordered_menu->name . " x " . $ordered_menu->quantity;
+                            $order_menu .= "<b>Dish:1 </b>(" . $ordered_menu->name . " x " . $ordered_menu->quantity;
                             if (isset($ordered_menu->cart_variant_id) && $ordered_menu->cart_variant_id != NULL) {
                                 $order_menu .= " [";
                                 $loop_count_add = 1;
@@ -126,7 +126,7 @@ class OrderController extends Controller
                             }
                             $order_menu .= ")";
                         } else {
-                            $order_menu .= "/(" . $ordered_menu->name . " x " . $ordered_menu->quantity;
+                            $order_menu .= "/<br><b>Dish:".$loop_count." </b>(" . $ordered_menu->name . " x " . $ordered_menu->quantity;
                             if (isset($ordered_menu->cart_variant_id) && $ordered_menu->cart_variant_id != NULL) {
                                 $order_menu .= " [";
                                 $loop_count_add = 1;
@@ -167,7 +167,7 @@ class OrderController extends Controller
                     }
                     return $order_menu;
                 })
-                ->rawColumns(['action'])
+                ->rawColumns(['action','ordered_menu'])
                 ->make(true);
         }
         $user['currency'] = $this->currency;
@@ -195,7 +195,7 @@ class OrderController extends Controller
 
             foreach ($order_data->ordered_menu as $ordered_menu) {
                 if ($loop_count == 1) {
-                    $order_menu .= "(" . $ordered_menu->name . " x " . $ordered_menu->quantity;
+                    $order_menu .= "<b>Dish:1 </b>(" . $ordered_menu->name . " x " . $ordered_menu->quantity;
                     if (isset($ordered_menu->cart_variant_id) && $ordered_menu->cart_variant_id != NULL) {
                         $order_menu .= " [";
                         $loop_count_add = 1;
@@ -232,7 +232,7 @@ class OrderController extends Controller
                     }
                     $order_menu .= ")";
                 } else {
-                    $order_menu .= "/(" . $ordered_menu->name . " x " . $ordered_menu->quantity;
+                    $order_menu .= "/<br><b>Dish:".$loop_count." </b>(" . $ordered_menu->name . " x " . $ordered_menu->quantity;
                     if (isset($ordered_menu->cart_variant_id) && $ordered_menu->cart_variant_id != NULL) {
                         $order_menu .= " [";
                         $loop_count_add = 1;
@@ -271,7 +271,6 @@ class OrderController extends Controller
                 }
                 $loop_count += 1;
             }
-
             $order_data->ordered_menu = $order_menu;
 
             if ($order_data->order_status == 3) {

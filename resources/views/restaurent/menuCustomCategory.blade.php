@@ -107,6 +107,7 @@
                                 <thead>
                                     <tr>
                                         <!-- <th>S.no</th> -->
+                                        <th>Action</th>
                                         <th>S.No.</th>
                                         <th>Category Name</th>
                                         <th>Customization Variant</th>
@@ -167,6 +168,12 @@ $(document).ready(function() {
         buttons: ['copy', 'excel', 'pdf', 'print'],
         ajax: "{{url('Restaurent/menuCustomCategory')}}",
         columns: [{
+                data: 'action',
+                name: 'action',
+                orderable: true,
+                searchable: false
+            },
+            {
                 data: 'DT_RowIndex',
                 name: 'id'
             },
@@ -182,12 +189,7 @@ $(document).ready(function() {
                 data: 'created_at',
                 name: 'created_at'
             },
-            // {
-            //     data: 'action',
-            //     name: 'action',
-            //     orderable: true,
-            //     searchable: false
-            // },
+
         ]
     });
     table.buttons().container()

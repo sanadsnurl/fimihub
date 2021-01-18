@@ -17,7 +17,7 @@
                                 <div class="error">{{ $errors->first('name') }}</div>
                                 @endif
                             </div>
-                            <div class="form-group">
+                            <div class="form-group signUpmain">
                                 <label for="">Phone No.</label>
                                 <input type="number" class="form-control telInput" name="mobile" value="{{ old('mobile') }}">
                                 <input type="hidden" class="country_code" name="country_code">

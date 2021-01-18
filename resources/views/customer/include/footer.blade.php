@@ -434,7 +434,7 @@
 <script type="text/javascript" src="{{asset('asset/customer/assets/scripts/searchMap.js')}}"></script>
 <script type="text/javascript" src="{{asset('asset/customer/assets/scripts/mapDistance.js')}}"></script>
 <script
-    src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}&libraries=places&callback=initialize"
+    src="https://maps.googleapis.com/maps/api/js?key={{ Config('GOOGLE_MAPS_API_KEY') }}&libraries=places&callback=initialize"
     async defer></script>
 @if(Session::has('modal_check_subscribe'))
 <script>

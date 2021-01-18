@@ -30,4 +30,44 @@ class resto_custom_menu_categorie extends Model
         return $menu_categories;
 
     }
+    public function getCustomCatByIds($id){
+        try {
+            $details=DB::table('resto_custom_menu_categories')
+                ->where('visibility', 0)
+                ->where('id', $id)
+                ->get();
+
+            return $details;
+        }
+        catch (Exception $e) {
+            dd($e);
+        }
+    }
+
+    public function editCustomCat($data)
+    {
+        $data['updated_at'] = now();
+        unset($data['_token']);
+
+        $query_data = $this
+            ->where('id', $data['id'])
+            ->update($data);
+
+        return $query_data;
+    }
+
+    public function deleteCustomCat($data)
+    {
+        $data['deleted_at'] = now();
+        unset($data['_token']);
+
+        $query_data = DB::table('resto_custom_menu_categories')
+            ->where('id', $data['id'])
+            ->update(['visibility'=> 2,'deleted_at' => $data['deleted_at']]);
+        $query_data = DB::table('menu_custom_list')
+            ->where('resto_custom_cat_id', $data['id'])
+            ->update(['visibility'=> 2,'deleted_at' => $data['deleted_at']]);
+
+        return $query_data;
+    }
 }

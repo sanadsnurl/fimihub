@@ -273,7 +273,7 @@ class OrderController extends Controller
                 // Paypal Payload
                 if (request('payment') == 2) {
                     $make_payment_array = [
-                        'business' => 'clergio-facilitator@gmail.com',
+                        'business' => Config('PAYPAL_BUSINESS_EMAIL'),
                         'item_name' => 'food',
                         'item_number' => 1,
                         '_token' => request('_token'),

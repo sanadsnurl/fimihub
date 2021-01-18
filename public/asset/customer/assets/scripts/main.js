@@ -249,9 +249,30 @@ telInput.intlTelInput({
 });
 
 $('.telInput').on('focus', function() {
-    var code = $('.selected-dial-code').text()
+    var code = $('.signUpmain .selected-dial-code').text()
     $('.country_code').val(code);
 });
 
-var jdcode = $('.selected-dial-code').text()
+var jdcode = $('.signUpmain .selected-dial-code').text()
 $('.country_code').val(jdcode);
+
+
+
+// forgote password modal
+var telInput2 = $('.telInput2');
+telInput2.intlTelInput({
+    initialCountry: 'jm',
+    preferredCountries: ['us', 'gb', 'br', 'ru', 'cn', 'es', 'jm'],
+    autoPlaceholder: '',
+    separateDialCode: true,
+    // nationalMode:false,
+    // utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/12.1.6/js/utils.js"
+});
+
+$('.telInput2').on('focus', function() {
+    var code = $('#forgot_psw .selected-dial-code').text()
+    $('.country_code2').val(code);
+});
+
+var jdcode = $('#forgot_psw .selected-dial-code').text()
+$('.country_code2').val(jdcode);
