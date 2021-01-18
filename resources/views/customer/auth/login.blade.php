@@ -19,7 +19,7 @@
                         @endif
                         <form role="form" method="POST" action="{{ url('/loginProcess') }}">
                             @csrf
-                            <div class="form-group">
+                            <div class="form-group signUpmain">
                                 <label for="">Phone No.</label>
                                 <input type="text" class="form-control telInput" name="user_id" value="{{ old('user_id') }}">
                                 <input type="hidden" class="country_code" name="country_code">
@@ -78,9 +78,9 @@
                         @csrf
                         <div class="form-group">
                             <label for="">Phone No.</label>
-                            <input type="number" class="form-control" name="phone_number"
+                            <input type="number" class="form-control telInput2" name="phone_number"
                                 value="{{ old('phone_number') }}">
-                                {{-- <input type="hidden" class="country_code" name="country_code"> --}}
+                                <input type="hidden" class="country_code2" name="country_code">
 
                             @if($errors->has('phone_number'))
                             <div class="error">{{ $errors->first('phone_number') }}</div>

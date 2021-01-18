@@ -111,7 +111,7 @@ class UserManageController extends Controller
                 $destinationPath = 'uploads/'.$id.'/images'.'/';
                 if($profile_pic->move($destinationPath, $input['imagename']))
                 {
-                    $file_url=url($destinationPath.$input['imagename']);
+                    $file_url=asset($destinationPath.$input['imagename']);
                     $profile_data['profile_picture']=$file_url;
 
                 }else{

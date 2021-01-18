@@ -261,7 +261,7 @@ class RestaurentController extends Controller
                 $destinationPath = 'uploads/'.$data['user_id'].'/images'.'/';
                 if($profile_pic->move($destinationPath, $input['imagename']))
                 {
-                    $file_url=url($destinationPath.$input['imagename']);
+                    $file_url=asset($destinationPath.$input['imagename']);
                     $data['picture']=$file_url;
 
                 }else{

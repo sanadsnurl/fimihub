@@ -6,7 +6,7 @@
     <div class="container-fluid">
 
         <div class="row">
-            <div class="col-lg-6">
+            <div class="col-lg-12">
                 <div class="card">
                     <div class="card-header text-uppercase">Order Id - {{$order_data->order_id ?? ''}}
                         <a href="{{url('Restaurent/customerOrder')}}" style="float:right;">
@@ -23,7 +23,7 @@
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 <b>Dish</b>
-                                <span>{{$order_data->ordered_menu ?? ''}}</span>
+                                <span>{!! $order_data->ordered_menu ?? '' !!}</span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 <b>Total Amount</b>

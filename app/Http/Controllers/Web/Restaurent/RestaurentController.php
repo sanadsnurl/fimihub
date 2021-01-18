@@ -89,7 +89,7 @@ class RestaurentController extends Controller
 
                 $destinationPath = 'uploads/' . $id . '/images' . '/';
                 if ($profile_pic->move($destinationPath, $input['imagename'])) {
-                    $file_url = url($destinationPath . $input['imagename']);
+                    $file_url = asset($destinationPath . $input['imagename']);
                     $data['picture'] = $file_url;
                 } else {
                     $error_file_not_required[] = "Profile Picture Have Some Issue";
@@ -102,7 +102,7 @@ class RestaurentController extends Controller
 
             if ($request->has('address_address')) {
                 $add_data = array();
-                if ($data['address_latitude'] == 0 || $data['address_longitude'] == 0 || $data['address_longitude'] == NULL|| $data['address_latitude'] == NULL) {
+                if ($data['address_latitude'] == 0 || $data['address_longitude'] == 0 || $data['address_longitude'] == NULL || $data['address_latitude'] == NULL) {
                     Session::flash('message', 'Invalid Address !');
                     return redirect()->back();
                 } else {
@@ -163,11 +163,10 @@ class RestaurentController extends Controller
         if ($request->ajax()) {
             return Datatables::of($resto_cate_data)
                 ->addIndexColumn()
-                // ->addColumn('action', function($row){
-                //     $btn = '<a href="userDetails?id='.base64_encode($row->id).'" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Details</a>
-                //         <a href="?id='.base64_encode($row->id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Block</a>';
-                //     return $btn;
-                // })
+                ->addColumn('action', function($row){
+                    $btn = '<a href="deleteMainCat?dish_cat_id='.base64_encode($row->id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Delete</a>';
+                    return $btn;
+                })
                 ->addColumn('created_at', function ($row) {
 
                     return date('d F Y', strtotime($row->created_at));
@@ -188,10 +187,10 @@ class RestaurentController extends Controller
             // 'name' => 'required|string|nullable|unique:menu_categories,name,'.auth()->user()->id.',restaurent_id',
             // 'menu_category_id' => 'required|numeric|unique:resto_menu_categories,menu_category_id,' . auth()->user()->id . ',user_id',
             'menu_category_id' => [
-                                    'required',
-                                    Rule::unique('resto_menu_categories')
-                                            ->where('user_id',auth()->user()->id)
-                                            ->where('visibility',0)
+                'required',
+                Rule::unique('resto_menu_categories')
+                    ->where('user_id', auth()->user()->id)
+                    ->where('visibility', 0)
             ],
             'cat_name' => 'unique:menu_categories,name|string|nullable',
 
@@ -268,14 +267,14 @@ class RestaurentController extends Controller
         $resto_cate_data = $resto_menu_categories->restaurentCategoryData($resto_data->id)->get();
         $resto_custom_menu_categories = new resto_custom_menu_categorie();
         $resto_cate_variant = $resto_custom_menu_categories
-                            ->restaurentCategoryCustomData($resto_data->id)
-                            ->where('customization_variant',2)
-                            ->get();
+            ->restaurentCategoryCustomData($resto_data->id)
+            ->where('customization_variant', 2)
+            ->get();
         $resto_cate_add_on = $resto_custom_menu_categories
-                            ->restaurentCategoryCustomData($resto_data->id)
-                            ->where('customization_variant',1)
-                            ->get();
-// dd($resto_cate_variant);
+            ->restaurentCategoryCustomData($resto_data->id)
+            ->where('customization_variant', 1)
+            ->get();
+        // dd($resto_cate_variant);
         $menu_list = new menu_list;
         $menu_data = $menu_list->menuPaginationData($resto_data->id);
         if ($request->ajax()) {
@@ -294,10 +293,9 @@ class RestaurentController extends Controller
                 ->addColumn('dish_type', function ($row) {
                     if ($row->dish_type == 1) {
                         return "Non-Veg";
-                    } elseif($row->dish_type == 3) {
+                    } elseif ($row->dish_type == 3) {
                         return "Beverage";
-                    }
-                    else {
+                    } else {
                         return "Veg";
                     }
                 })
@@ -307,10 +305,12 @@ class RestaurentController extends Controller
         }
         $cat_data = $cat_data->get();
         // dd($resto_cate_data);
-        return view('restaurent.menuList')->with(['data' => $user,
-                                        'resto_cate_variant'=>$resto_cate_variant,
-                                        'resto_cate_add_on'=>$resto_cate_add_on,
-                                        'cat_data' => $resto_cate_data]);
+        return view('restaurent.menuList')->with([
+            'data' => $user,
+            'resto_cate_variant' => $resto_cate_variant,
+            'resto_cate_add_on' => $resto_cate_add_on,
+            'cat_data' => $resto_cate_data
+        ]);
     }
 
     public function deleteMenuList(Request $request)
@@ -344,11 +344,11 @@ class RestaurentController extends Controller
         $resto_custom_menu_categories = new resto_custom_menu_categorie();
         $resto_cate_variant = $resto_custom_menu_categories
             ->restaurentCategoryCustomData($resto_data->id)
-            ->where('customization_variant',2)
+            ->where('customization_variant', 2)
             ->get();
         $resto_cate_add_on = $resto_custom_menu_categories
             ->restaurentCategoryCustomData($resto_data->id)
-            ->where('customization_variant',1)
+            ->where('customization_variant', 1)
             ->get();
 
         $menu_lists = new menu_list;
@@ -356,11 +356,13 @@ class RestaurentController extends Controller
 
         $menu_data->product_add_on_id = json_decode($menu_data->product_add_on_id);
         // dd($menu_data);
-        return view('restaurent.editMenu')->with(['data' => $user,
-                                            'menu_data' => $menu_data,
-                                            'resto_cate_variant'=>$resto_cate_variant,
-                                            'resto_cate_add_on'=>$resto_cate_add_on,
-                                            'cat_data' => $resto_cate_data->get()]);
+        return view('restaurent.editMenu')->with([
+            'data' => $user,
+            'menu_data' => $menu_data,
+            'resto_cate_variant' => $resto_cate_variant,
+            'resto_cate_add_on' => $resto_cate_add_on,
+            'cat_data' => $resto_cate_data->get()
+        ]);
     }
 
     public function editMenuProcess(Request $request)
@@ -382,8 +384,7 @@ class RestaurentController extends Controller
 
             if ($request->has('product_add_on_id') && !empty('product_add_on_id')) {
                 $data['product_add_on_id'] = json_encode($data['product_add_on_id']);
-
-            }else{
+            } else {
                 $data['product_add_on_id'] = json_encode([]);
             }
             if ($request->hasfile('picture')) {
@@ -395,7 +396,7 @@ class RestaurentController extends Controller
 
                 $destinationPath = 'uploads/' . $id . '/images' . '/';
                 if ($profile_pic->move($destinationPath, $input['imagename'])) {
-                    $file_url = url($destinationPath . $input['imagename']);
+                    $file_url = asset($destinationPath . $input['imagename']);
                     $data['picture'] = $file_url;
                 } else {
                     $error_file_not_required[] = "Food Picture Have Some Issue";
@@ -437,7 +438,6 @@ class RestaurentController extends Controller
             $data = $request->toarray();
             if ($request->has('product_add_on_id') && !empty('product_add_on_id')) {
                 $data['product_add_on_id'] = json_encode($data['product_add_on_id']);
-
             }
             if ($request->hasfile('picture')) {
                 $profile_pic = $request->file('picture');
@@ -448,7 +448,7 @@ class RestaurentController extends Controller
 
                 $destinationPath = 'uploads/' . $id . '/images' . '/';
                 if ($profile_pic->move($destinationPath, $input['imagename'])) {
-                    $file_url = url($destinationPath . $input['imagename']);
+                    $file_url = asset($destinationPath . $input['imagename']);
                     $data['picture'] = $file_url;
                 } else {
                     $error_file_not_required[] = "Food Picture Have Some Issue";
@@ -524,12 +524,12 @@ class RestaurentController extends Controller
                         return "Veg";
                     }
                 })
-                ->rawColumns(['action','customization_type'])
+                ->rawColumns(['action', 'customization_type'])
                 ->make(true);
         }
         $menu_customization_data = $menu_customization_data->get();
         // dd($menu_customization_data);
-        return view('restaurent.manageAddOn')->with(['data' => $user, 'menu_customization_data' => $menu_customization_data,'menu_list_id'=>$dish_id]);
+        return view('restaurent.manageAddOn')->with(['data' => $user, 'menu_customization_data' => $menu_customization_data, 'menu_list_id' => $dish_id]);
     }
 
     public function addOnProcess(Request $request)
@@ -551,10 +551,10 @@ class RestaurentController extends Controller
             $data['restaurent_id'] = $resto_data->id;
 
             $menu_customizations = new menu_customization();
-            if(isset($data['id'])){
+            if (isset($data['id'])) {
                 $add_on = $menu_customizations->editCustomization($data);
                 Session::flash('message', 'Data Updated!');
-            }else{
+            } else {
                 $add_on = $menu_customizations->makeCustomization($data);
                 Session::flash('message', 'Customization Added Successfully!');
             }
@@ -588,7 +588,6 @@ class RestaurentController extends Controller
         $menu_customizations = new menu_customization();
         $customization_data = $menu_customizations->customizationById($custom_id)->first();
         return view('restaurent.editAddOn')->with(['data' => $user, 'custom_data' => $customization_data]);
-
     }
 
     public function categoryCustomDetails(Request $request)
@@ -622,21 +621,20 @@ class RestaurentController extends Controller
             $resto_cate_data = $resto_custom_menu_categories->restaurentCategoryCustomData($resto_data->id);
             $resto_cate_datas = $resto_cate_data->get();
         }
-// dd($resto_cate_datas);
+        // dd($resto_cate_datas);
         if ($request->ajax()) {
             return Datatables::of($resto_cate_data)
                 ->addIndexColumn()
-                // ->addColumn('action', function($row){
-                //     $btn = '<a href="userDetails?id='.base64_encode($row->id).'" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Details</a>
-                //         <a href="?id='.base64_encode($row->id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Block</a>';
-                //     return $btn;
-                // })
+                ->addColumn('action', function($row){
+                    $btn = '<a href="deleteCustomCat?custom_cat_id='.base64_encode($row->id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Delete</a>';
+                    return $btn;
+                })
                 ->addColumn('customization_variant', function ($row) {
-                    if($row->customization_variant == 2){
+                    if ($row->customization_variant == 2) {
                         return 'Menu Variant';
-                        }else{
+                    } else {
                         return 'ADD-ON';
-                        }
+                    }
                 })
                 ->addColumn('created_at', function ($row) {
 
@@ -658,10 +656,10 @@ class RestaurentController extends Controller
             // 'name' => 'required|string|nullable|unique:menu_categories,name,'.auth()->user()->id.',restaurent_id',
             // 'menu_category_id' => 'required|numeric|unique:resto_menu_categories,menu_category_id,' . auth()->user()->id . ',user_id',
             'custom_cat_id' => [
-                                    'required',
-                                    Rule::unique('resto_custom_menu_categories')
-                                            ->where('user_id',auth()->user()->id)
-                                            ->where('visibility',0)
+                'required',
+                Rule::unique('resto_custom_menu_categories')
+                    ->where('user_id', auth()->user()->id)
+                    ->where('visibility', 0)
             ],
             'cat_name' => 'unique:custom_menu_categories,name|string|nullable',
             'customization_variant' => 'required|in:1,2',
@@ -743,12 +741,11 @@ class RestaurentController extends Controller
         if ($request->ajax()) {
             return Datatables::of($menu_data)
                 ->addIndexColumn()
-                // ->addColumn('action', function ($row) {
-                //     $btn = '<a href="editDish?dish_id=' . base64_encode($row->id) . '" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Edit</a>
-                //         <a href="deleteDish?dish_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Delete</a>
-                //         <a href="addOn?dish_id=' . base64_encode($row->id) . '" class="btn btn-outline-primary btn-sm btn-round waves-effect waves-light m-0">Add-on</a>';
-                //     return $btn;
-                // })
+                ->addColumn('action', function ($row) {
+                    $btn = '<a href="editCustomMenu?custom_menu_id=' . base64_encode($row->id) . '" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Edit</a>
+                    <a href="deleteCustomMenu?custom_menu_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Delete</a>';
+                    return $btn;
+                })
                 ->addColumn('created_at', function ($row) {
 
                     return date('d F Y', strtotime($row->created_at));
@@ -785,8 +782,15 @@ class RestaurentController extends Controller
             $restaurent_detail = new restaurent_detail;
             $resto_data = $restaurent_detail->getRestoData($user->id);
             $data['restaurent_id'] = $resto_data->id;
+            $resto_cus_cat_inst = new resto_custom_menu_categorie();
+            $resto_cus_cat = $resto_cus_cat_inst->getCustomCatByIds($data['resto_custom_cat_id']);
+            if(count($resto_cus_cat)){
+                if($resto_cus_cat[0]->customization_variant == 2 && $data['price']== 0){
+                    Session::flash('message', 'Variant Menu Can\'t be Free !');
+                    return redirect()->back();
+                }
+            }
             $menu_custom_lists = new menu_custom_list();
-
             $cate_id = $menu_custom_lists->makeCustomMenu($data);
             Session::flash('message', 'Add-On Added Successfully!');
 
@@ -796,4 +800,139 @@ class RestaurentController extends Controller
         }
     }
 
+    public function editCustomMenu(Request $request){
+        $user = Auth::user();
+        $menu_custom_list = new menu_custom_list();
+        $custom_menu_id = base64_decode(request('custom_menu_id'));
+        $custom_menu_data = $menu_custom_list->getCustomListPrice($custom_menu_id);
+        $resto_custom_menu_categories = new resto_custom_menu_categorie();
+        $resto_cate_data = $resto_custom_menu_categories->restaurentCategoryCustomData($custom_menu_data->restaurent_id)->get();
+        return view('restaurent.editCustomMenuList')->with(['data'=>$user ,
+        'cat_data' => $resto_cate_data,
+        'custom_menu_data'=>$custom_menu_data]);
+    }
+
+    public function editCustomMenuProcess(Request $request){
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|nullable',
+            'price' => 'numeric',
+            'resto_custom_cat_id' => 'required|exists:resto_custom_menu_categories,id|nullable',
+            'id' => 'required',
+        ]);
+        if (!$validator->fails()) {
+            $user = Auth::user();
+            $id = $user->id;
+            $data = $request->toarray();
+
+            $restaurent_detail = new restaurent_detail;
+            $resto_data = $restaurent_detail->getRestoData($user->id);
+            $data['restaurent_id'] = $resto_data->id;
+            $resto_cus_cat_inst = new resto_custom_menu_categorie();
+            $resto_cus_cat = $resto_cus_cat_inst->getCustomCatByIds($data['resto_custom_cat_id']);
+            if(count($resto_cus_cat)){
+                if($resto_cus_cat[0]->customization_variant == 2 && $data['price']== 0){
+                    Session::flash('message', 'Variant Menu Can\'t be Free !');
+                    return redirect()->back();
+                }
+            }
+            $menu_custom_lists = new menu_custom_list();
+            $cate_id = $menu_custom_lists->editCustomMenu($data);
+            Session::flash('message', 'Add-On Updated Successfully!');
+
+            return redirect()->back();
+        } else {
+            return redirect()->back()->withInput()->withErrors($validator);
+        }
+    }
+
+    public function deleteCustomMenu(Request $request)
+    {
+        $user = Auth::user();
+        $custom_menu_id = base64_decode(request('custom_menu_id'));
+
+        $menu_customizations = new menu_custom_list();
+        $delete_menu = array();
+        $delete_menu['id'] = $custom_menu_id;
+
+        $delete_menu = $menu_customizations->deleteCustomMenu($delete_menu);
+        Session::flash('message', 'Customization Deleted Successfully !');
+
+        return redirect()->back();
+    }
+
+    public function editCustomCat(Request $request){
+        $user = Auth::user();
+        $custom_cat_id = base64_decode(request('custom_cat_id'));
+        $resto_custom_menu_categories = new resto_custom_menu_categorie();
+        $rest_custom_cat_data = $resto_custom_menu_categories->getCustomCatByIds($custom_cat_id);
+        // dd($rest_custom_cat_data);
+        $custom_menu_categorie = new custom_menu_categorie();
+        $custom_cate_data = $custom_menu_categorie->restaurentCategoryCustomPaginationData()->get();
+        return view('restaurent.editCustomCategory')->with(['data'=>$user ,
+        'cat_data' => $custom_cate_data,
+        'resto_cat_data' => $rest_custom_cat_data]);
+    }
+
+    public function editCustomCatProcess(Request $request){
+        $validator = Validator::make($request->all(), [
+        'cat_name' => 'unique:custom_menu_categories,name|string|nullable',
+        'customization_variant' => 'required|in:1,2',
+        'id' => 'required',
+
+    ]);
+    if (!$validator->fails()) {
+        $user = Auth::user();
+        $data = $request->toarray();
+
+        $custom_menu_categories = new custom_menu_categorie;
+        $resto_custom_menu_categories = new resto_custom_menu_categorie;
+
+        $restaurent_detail = new restaurent_detail;
+        $resto_data = $restaurent_detail->getRestoData($user->id);
+
+
+        $resto_menu_cat = array();
+        $resto_menu_cat['id'] = $data['id'];
+        $resto_menu_cat['user_id'] = $user->id;
+        $resto_menu_cat['restaurent_id'] = $resto_data->id;
+        $resto_menu_cat['customization_variant'] = $data['customization_variant'];
+        $resto_cate_id = $resto_custom_menu_categories->editCustomCat($resto_menu_cat);
+
+        Session::flash('message', 'Custom Category Updated Successfully!');
+
+        return redirect()->back();
+        } else {
+            return redirect()->back()->withInput()->withErrors($validator);
+        }
+    }
+
+    public function deleteCustomCat(Request $request)
+    {
+        $user = Auth::user();
+        $custom_cat_id = base64_decode(request('custom_cat_id'));
+
+        $resto_custom_menu_categories = new resto_custom_menu_categorie();
+        $delete_menu = array();
+        $delete_menu['id'] = $custom_cat_id;
+
+        $delete_menu = $resto_custom_menu_categories->deleteCustomCat($delete_menu);
+        Session::flash('message', 'Category Deleted Successfully !');
+
+        return redirect()->back();
+    }
+
+    public function deleteMainCat(Request $request)
+    {
+        $user = Auth::user();
+        $dish_cat_id = base64_decode(request('dish_cat_id'));
+
+        $resto_menu_categories = new resto_menu_categorie();
+        $delete_menu = array();
+        $delete_menu['id'] = $dish_cat_id;
+
+        $delete_menu = $resto_menu_categories->deleteDishCat($delete_menu);
+        Session::flash('message', 'Category Deleted Successfully !');
+
+        return redirect()->back();
+    }
 }

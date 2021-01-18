@@ -274,7 +274,7 @@ class LoginRegisterController extends Controller
             }
             elseif($otp_verified_status==1){
                 Session::flash('forget_pwd_modal_check', 'open');
-                Session::flash('error_message', 'OTP Verified!');
+                // Session::flash('error_message', 'OTP Verified!');
                 return redirect()->back();
             }else{
                 Session::flash('message', 'Something went wrong !');
