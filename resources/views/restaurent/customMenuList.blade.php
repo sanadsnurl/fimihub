@@ -64,7 +64,7 @@
 
 
                             <div class="form-group row">
-                                <label for="input-1" class="col-sm-2 col-form-label">Price (Rs)</label>
+                                <label for="input-1" class="col-sm-2 col-form-label">Price ($)</label>
                                 <div class="col-sm-10">
                                     <input type="number" class="form-control" id="input-1" name="price" value="{{old('price')}}">
                                     @if($errors->has('price'))
@@ -159,7 +159,7 @@
 <script>
 $(document).ready(function() {
     //Default data table
-    $('#default-datatable').DataTable();
+    //$('#default-datatable').DataTable();
     var table = $('#example').DataTable({
         lengthChange: true,
         processing: true,

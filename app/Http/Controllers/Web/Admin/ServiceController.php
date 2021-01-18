@@ -65,6 +65,7 @@ class ServiceController extends Controller
             'flat_delivery_charge' => 'numeric|min:0',
             'on_km' => 'numeric|min:1',
             'after_flat_delivery_charge' => 'numeric|min:0',
+            'rider_commission' => 'numeric|min:0',
 
         ]);
         if(!$validator->fails()){

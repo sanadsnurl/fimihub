@@ -151,31 +151,36 @@ $('.payment_options label').click(function() {
     }, 100)
 })
 
- // sticky menu sidebar
- var sticky = $(".order-block .order-menu-row .sticky");
+$('.payment_options label').click(function(e) {
+    e.stopPropagation();
+    $(this).next(".content").slideToggle();
+})
 
- $(window).on("scroll", function(e){
-    sticky.each(function(e){
-         let scrolled = $(window).scrollTop();
-         let startPos = $(this).parents(".order-menu-row").offset().top - $(".header").height() - 20;
-         let endPos = $(this).parents(".order-menu-row").offset().top + $(this).parents(".order-menu-row").height() - $(this).height() - 90;
-         if(scrolled > startPos && scrolled < endPos) {
-            if(window.matchMedia("(min-width: 576px)").matches) {
+// sticky menu sidebar
+var sticky = $(".order-block .order-menu-row .sticky");
+
+$(window).on("scroll", function(e) {
+    sticky.each(function(e) {
+        let scrolled = $(window).scrollTop();
+        let startPos = $(this).parents(".order-menu-row").offset().top - $(".header").height() - 20;
+        let endPos = $(this).parents(".order-menu-row").offset().top + $(this).parents(".order-menu-row").height() - $(this).height() - 90;
+        if (scrolled > startPos && scrolled < endPos) {
+            if (window.matchMedia("(min-width: 576px)").matches) {
                 $(this).css({
                     position: "fixed",
                     top: 120,
                     bottom: "auto",
                     width: $(this).parent().width()
                 })
-            }else {
-                if($(this).hasClass("menu-block")) {
+            } else {
+                if ($(this).hasClass("menu-block")) {
                     $(this).css({
                         position: "fixed",
                         top: 0,
                         bottom: "auto",
                         width: $(this).parent().width()
                     })
-                }else {
+                } else {
                     $(this).css({
                         position: "fixed",
                         top: 55,
@@ -184,36 +189,69 @@ $('.payment_options label').click(function() {
                     })
                 }
             }
-        } 
-        else if(scrolled > endPos) {
+        } else if (scrolled > endPos) {
             $(this).css({
                 position: "absolute",
                 bottom: 0,
                 top: "auto"
             })
-        } 
-        else {
+        } else {
             $(this).css({
                 position: "relative",
                 bottom: 0,
                 top: 0
             })
         }
-     })
- });
+    })
+});
 
 // product size dropdown
-$(".order-block .order-menu-row .card-wrap .opt-dropdown .selected").click(function(){
+$(".order-block .order-menu-row .card-wrap .opt-dropdown .selected").click(function() {
     $(this).parent().toggleClass("open");
     $(this).next(".menu").slideToggle();
 })
 
-$(".order-block .order-menu-row .card-wrap .opt-dropdown .size").click(function(){
+$(".order-block .order-menu-row .card-wrap .opt-dropdown .size").click(function() {
     let sizePrice = $(this).find(".price").text();
     $(this).parents(".card-wrap").find(".text-wrap h6.price").text(sizePrice);
 })
 
 // about tab collapsible
-$(".order-block .restaurant-info .collapse-tab").click(function(){
+$(".order-block .restaurant-info .collapse-tab").click(function() {
     $(this).next().slideToggle();
 })
+
+$(function() {
+    var creditly = Creditly.initialize(
+        '.creditly-wrapper .expiration-month-and-year',
+        '.creditly-wrapper .credit-card-number',
+        '.creditly-wrapper .security-code',
+        '.creditly-wrapper .card-type');
+
+    $(".payment_options .paynow_btn").click(function(e) {
+        if ($(".payment_options #atlantic").is(":checked")) {
+            let output = creditly.validate();
+            if (!output) {
+                e.preventDefault();
+            }
+        }
+    })
+});
+
+var telInput = $('.telInput');
+telInput.intlTelInput({
+    initialCountry: 'jm',
+    preferredCountries: ['us', 'gb', 'br', 'ru', 'cn', 'es', 'jm'],
+    autoPlaceholder: '',
+    separateDialCode: true,
+    // nationalMode:false,
+    // utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/12.1.6/js/utils.js"
+});
+
+$('.telInput').on('focus', function() {
+    var code = $('.selected-dial-code').text()
+    $('.country_code').val(code);
+});
+
+var jdcode = $('.selected-dial-code').text()
+$('.country_code').val(jdcode);

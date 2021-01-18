@@ -13,7 +13,7 @@
 
         <!-- End Breadcrumb-->
         <div class="row">
-            <div class="col-lg-8">
+            <div class="col-lg-10">
                 <div class="card">
                     <div class="card-body">
                         <form role="form" method="POST" action="{{ url('Restaurent/addMenu')}}" id="personal-info"
@@ -124,15 +124,20 @@
                                         name="dish_type">
                                     <label for="user-checkbox1">Non-Veg</label>
                                 </div>
+                                <div class="demo-checkbox">
+                                    <input type="radio" id="user-checkbox2" class="filled-in chk-col-primary" value="3"
+                                        name="dish_type">
+                                    <label for="user-checkbox2">Beverage</label>
+                                </div>
                                 @if($errors->has('dish_type'))
                                 <div class="error">{{ $errors->first('dish_type') }}</div>
                                 @endif
                             </div>
 
                             <div class="form-group row">
-                                <label for="input-1" class="col-sm-2 col-form-label">Price (Rs)</label>
+                                <label for="input-1" class="col-sm-2 col-form-label">Price ($)</label>
                                 <div class="col-sm-10">
-                                    <input type="number" class="form-control" id="input-1" name="price">
+                                    <input type="text" class="form-control" name="price">
                                     @if($errors->has('price'))
                                     <div class="error">{{ $errors->first('price') }}</div>
                                     @endif
@@ -223,7 +228,7 @@
 <script>
     $(document).ready(function() {
         //Default data table
-        $('#default-datatable').DataTable();
+        //$('#default-datatable').DataTable();
         var table = $('#example').DataTable({
             lengthChange: true,
             processing: true,

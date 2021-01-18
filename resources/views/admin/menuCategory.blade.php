@@ -13,7 +13,7 @@
 
         <!-- End Breadcrumb-->
         <div class="row">
-            <div class="col-lg-8">
+            <div class="col-lg-10">
                 <div class="card">
                     <div class="card-body">
                         <form role="form" method="POST" action="{{ url('adminfimihub/addCategory')}}" id="personal-info"
@@ -101,7 +101,6 @@
                                     <tr>
                                         <th>S.No.</th>
                                         <th>Category Name</th>
-                                        <th>About</th>
                                         <th>Service</th>
                                         <!-- <th>Discount (%)</th> -->
                                         <th>Create At</th>
@@ -150,7 +149,7 @@
 <script>
 $(document).ready(function() {
     //Default data table
-    $('#default-datatable').DataTable();
+    //$('#default-datatable').DataTable();
 
     var table = $('#example').DataTable({
         lengthChange: true,
@@ -168,11 +167,7 @@ $(document).ready(function() {
                 data: 'name',
                 name: 'name'
             },
-            {
-                data: 'about',
-                name: 'about'
-            },
-            {
+           {
                 data: 'service_catagory_id',
                 name: 'service_catagory_id'
             },

@@ -239,4 +239,29 @@ return [
         'Location' => Stevebauman\Location\Facades\Location::class,
     ],
 
+    'debug_blacklist' => [
+        '_ENV' => [
+            'APP_KEY',
+            'DB_PASSWORD',
+            'REDIS_PASSWORD',
+            'MAIL_PASSWORD',
+            'PUSHER_APP_KEY',
+            'PUSHER_APP_SECRET',
+            'STRIPE_KEY',
+            'STRIPE_SECRET',
+        ],
+        '_SERVER' => [
+            'APP_KEY',
+            'DB_PASSWORD',
+            'REDIS_PASSWORD',
+            'MAIL_PASSWORD',
+            'PUSHER_APP_KEY',
+            'PUSHER_APP_SECRET',
+            'STRIPE_KEY',
+            'STRIPE_SECRET',
+        ],
+        '_POST' => [
+            'password',
+        ],
+    ],
 ];

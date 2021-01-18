@@ -58,7 +58,6 @@ class User extends Authenticatable
         try {
             $user_data=DB::table('users')
                 ->where('mobile', $userid)
-                ->orWhere('email',$userid)
                 ->first();
             unset($user_data->password);
             return $user_data;
@@ -68,7 +67,20 @@ class User extends Authenticatable
         }
     }
 
-
+    public function userDataWithCountryCode($userid,$country_code)
+    {
+        try {
+            $user_data=DB::table('users')
+                ->where('mobile', $userid)
+                ->Where('country_code',$country_code)
+                ->first();
+            unset($user_data->password);
+            return $user_data;
+        }
+        catch (Exception $e) {
+            dd($e);
+        }
+    }
 
     public function generateOTP($userid)
     {
@@ -223,7 +235,7 @@ class User extends Authenticatable
 
         $query_data = DB::table('users')
             ->where('id', $data['id'])
-            ->update(['visibility'=> 2,'deleted_at' => $data['deleted_at']]);
+            ->update(['visibility'=> 2,'deleted_at' => $data['deleted_at'],'mobile'=>$data['id'] ,'email'=>$data['id']]);
 
         $query_data = DB::table('restaurent_details')
             ->where('user_id', $data['id'])

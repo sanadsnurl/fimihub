@@ -166,7 +166,10 @@ class restaurent_detail extends Model
 
     public function getPriceAttribute($value)
     {
-        return $value +(( DB::table('service_catagories')->where('service_catagories.id', 1)->first()->tax / 100) * $value);
-
+        if(in_array(request()->segment(1),['Restaurent', 'admifimihub','api'])) {
+            return $value;
+        } else {
+            return $value +(( DB::table('service_catagories')->where('service_catagories.id', 1)->first()->commission / 100) * $value);
+        }
     }
 }

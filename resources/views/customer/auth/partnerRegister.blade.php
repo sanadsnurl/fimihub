@@ -25,7 +25,8 @@
                             </div>
                             <div class="form-group">
                                 <label for="">Phone No.</label>
-                                <input type="number" class="form-control" name="mobile" value="{{ old('mobile') }}">
+                                <input type="number" class="form-control telInput" name="mobile" value="{{ old('mobile') }}">
+                                <input type="hidden" class="country_code" name="country_code">
                                 @if($errors->has('mobile'))
                                 <div class="error">{{ $errors->first('mobile') }}</div>
                                 @endif

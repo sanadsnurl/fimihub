@@ -82,8 +82,9 @@ class OtpManagerController extends Controller
     public function OtpGeneration(Request $request)
     {
         $userid = $request->input('userid');
+        $country_code = $request->input('country_code');
         $user = new User();
-        $user_data = $user->userData($userid);
+        $user_data = $user->userDataWithCountryCode($userid,$country_code);
 
         if($user_data != NULL)
         {

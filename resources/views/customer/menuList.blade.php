@@ -144,7 +144,14 @@
                                         alt="food1">
                                 </div>
                                 <div class="text-wrap">
-                                    <h6 class="price"> {{$user_data->currency ?? ''}} {{$m_data->price ?? ''}}</h6>
+                                    <h6 class="price">
+                                        @if($m_data->price == 0 || $m_data->price == NULL)
+                                        Free
+                                        @else
+                                        {{$user_data->currency ?? ''}}
+                                        {{$m_data->price ?? '' }}
+                                        @endif
+                                    </h6>
                                     @if($m_data->dish_type == 2)
                                     <h4 class="green_dot"><i class="fa fa-stop-circle-o"
                                             style="font-size:18px;color:green"></i>
@@ -191,8 +198,12 @@
                                                 @endif
                                                 >
                                                 {{$v_data->name ?? '' }} <span class="price">
+                                                    @if($v_data->price == 0 || $v_data->price == NULL)
+                                                    Free
+                                                    @else
                                                     {{$user_data->currency ?? ''}}
                                                     {{$v_data->price ?? '' }}
+                                                    @endif
                                                 </span>
                                             </label>
                                             @endforeach
@@ -205,7 +216,7 @@
                                 @if(count($m_data->add_on) && isset($m_data->add_ons_cat[0]))
                                 <div class="opt-dropdown" style="dislay:none;">
                                     <span class="selected">
-                                        Customization
+                                        Popular Add-Ons
                                     </span>
                                     <div class="menu">
                                         <div class="accordion" id="accordionExample">
@@ -245,8 +256,12 @@
                                                             [],FALSE)) checked @endif>
                                                             {{$add_ons->name ?? '' }}
                                                             <span class="price">
+                                                                @if($add_ons->price == 0 || $add_ons->price == NULL)
+                                                                Free
+                                                                @else
                                                                 {{$user_data->currency ?? ''}}
                                                                 {{$add_ons->price ?? '' }}
+                                                                @endif
                                                             </span>
                                                         </label>
                                                         @endif
@@ -284,8 +299,7 @@
         var menu_decode_id = atob(menu_id);
         var inputQuantityElement = $("#input-quantity-" + menu_decode_id);
         var variant_menu = $(".small-" + menu_decode_id).val();
-        var menu_form_data = JSON.stringify( $('#menu_form-' + menu_decode_id).serializeArray());
-
+        var menu_form_data = JSON.stringify($('#menu_form-' + menu_decode_id).serializeArray());
         var item_count = $("#item_count");
         var total_amount = $("#total_amount");
         var cart_flex = document.getElementById('cart_flex');
@@ -309,7 +323,7 @@
                 $(inputQuantityElement).html(response.quantity);
                 $(item_count).html(response.items);
                 $(notfi_cart).html(response.items);
-                $(total_amount).html(response.total_amount  );
+                $(total_amount).html(response.total_amount);
                 $("#loading-overlay").hide();
             },
             error: function(jqXHR, textStatus, errorThrown) {
@@ -318,7 +332,6 @@
             }
         });
     }
-
     /* display rating in form of stars */
     $.fn.makeStars = function() {
         $(this).each(function() {

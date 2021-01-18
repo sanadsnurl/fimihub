@@ -8,7 +8,7 @@
 
         <!-- End Breadcrumb-->
         <div class="row">
-            <div class="col-lg-8">
+            <div class="col-lg-10">
                 <div class="card">
                     <div class="card-body">
                         <form role="form" method="POST" action="{{ url('Restaurent/editDishProcess')}}"
@@ -86,15 +86,17 @@
                             </div>
                             <div class="form-group row">
                                 <label for="input-4" class="col-sm-2 col-form-label">Add On</label>
+                                @if(count($resto_cate_add_on))
                                 @foreach($resto_cate_add_on as $css_data)
                                 <div class="demo-checkbox ml-4">
                                     <input type="checkbox" id="user-checkboxs{{$css_data->id}}"
                                         class="filled-in chk-col-primary" value="{{$css_data->id}}"
-                                        name="product_add_on_id[]" {{in_array($css_data->id,$menu_data->product_add_on_id) ? 'checked':''}}>
+                                        name="product_add_on_id[]"
+                                        {{in_array($css_data->id,($menu_data->product_add_on_id ?? [])) ? 'checked':''}}>
                                     <label for="user-checkboxs{{$css_data->id}}">{{$css_data->cat_name}}</label>
                                 </div>
                                 @endforeach
-
+                                @endif
                                 @if($errors->has('product_add_on_id'))
                                 <div class="error">{{ $errors->first('product_add_on_id') }}</div>
                                 @endif
@@ -126,14 +128,21 @@
                                     @endif>
                                     <label for="user-checkbox1">Non-Veg</label>
                                 </div>
+                                <div class="demo-checkbox">
+                                    <input type="radio" id="user-checkbox1" class="filled-in chk-col-primary" value="3"
+                                        name="dish_type" @if(isset($menu_data->dish_type))
+                                    {{$menu_data->dish_type == 3 ? 'checked' : ''}}
+                                    @endif>
+                                    <label for="user-checkbox1">Beverage</label>
+                                </div>
                                 @if($errors->has('dish_type'))
                                 <div class="error">{{ $errors->first('dish_type') }}</div>
                                 @endif
                             </div>
                             <div class="form-group row">
-                                <label for="input-1" class="col-sm-2 col-form-label">Price (Rs)</label>
+                                <label class="col-sm-2 col-form-label">Price ($)</label>
                                 <div class="col-sm-10">
-                                    <input type="number" class="form-control" id="input-1" name="price"
+                                    <input type="text" class="form-control" name="price"
                                         value="{{$menu_data->price ?? ''}}">
                                     @if($errors->has('price'))
                                     <div class="error">{{ $errors->first('price') }}</div>
@@ -141,17 +150,7 @@
                                 </div>
 
                             </div>
-                            <div class="form-group row">
-                                <label for="input-1" class="col-sm-2 col-form-label">Discount (%)</label>
-                                <div class="col-sm-10">
-                                    <input type="number" class="form-control" id="input-1" name="discount"
-                                        value="{{$menu_data->discount ?? ''}}">
-                                    @if($errors->has('discount'))
-                                    <div class="error">{{ $errors->first('discount') }}</div>
-                                    @endif
-                                </div>
 
-                            </div>
                             <div class="form-footer">
                                 <input type="submit" class="btn btn-primary" value="Save Dish"></input>
 
