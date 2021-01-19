@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Http;
 use App\User;
 use App\Model\cart;
 use App\Model\cart_submenu;
+use App\Model\Notification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -42,6 +43,17 @@ trait GetBasicPageDataTraits
                 }
             }
             $user_data->cart_item_count = $item ?? '0';
+
+        }
+        $Notifications = new Notification();
+        $notification_data = $Notifications->getAllNotifications($user->id);
+        if(!empty($notification_data)){
+            $notification_active_count = $Notifications->getActiveNotCount($user->id);
+            $user_data->notification_data = $notification_data;
+            $user_data->notification_active_count = $notification_active_count ?? 0;
+        }else{
+            $user_data->notification_data = [];
+            $user_data->notification_active_count = 0;
 
         }
         return $user_data;

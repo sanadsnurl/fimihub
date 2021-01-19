@@ -8994,3 +8994,93 @@ form .form-group label {
 .intl-tel-input.separate-dial-code .selected-flag {
     background-color: transparent;
 }
+
+
+/* notification */
+
+.notification_dropdown {
+    width: 700px;
+    left: -230px !important;
+    top: 22px !important;
+    background-color: #FFFFFF;
+    box-shadow: -28px 30px 60px #0000006B;
+    border: none;
+    border-radius: 20px;
+}
+
+.notification_head {
+    padding: 15px 30px;
+    border-bottom: 2px solid rgb(112 112 112 / 0.17);
+}
+
+.notification_body {
+    overflow-y: auto;
+}
+
+.nofication_content {
+    height: 600px;
+}
+
+.nofication_content ul li.active {
+    background-color: #e9ecef;
+}
+
+.nofication_content ul li {
+    padding: 16px 30px;
+    margin-bottom: 10px;
+    margin-left: 0!important;
+}
+
+.notification_ftr {
+    border-top: 2px solid rgb(112 112 112 / 0.17);
+    padding: 15px;
+}
+
+.notification_ftr a {
+    font-size: 24px!important;
+    font-weight: 500!important;
+}
+
+.notification_head h4 {
+    color: #7d3b8a;
+}
+
+.notification_dropdown:before {
+    top: -35px;
+    right: 37px;
+    border-bottom: 18px solid #fff;
+    z-index: 1;
+}
+
+.notification_dropdown:before,
+.notification_dropdown:after {
+    content: '';
+    position: absolute;
+    border-top: 18px solid transparent;
+    border-right: 10px solid transparent;
+    border-left: 9px solid transparent;
+}
+
+.notification_dropdown:after {
+    border-bottom: 18px solid rgba(0, 0, 0, 0.05);
+    top: -36px;
+    right: 37px;
+}
+
+.notification_dropdown {
+    left: -265px !important;
+}
+
+.notifc_btn {
+    border: none;
+    background-color: transparent;
+}
+
+.notifc_btn.dropdown-toggle::after {
+    border: none;
+}
+
+.cart_nofti span {
+    top: -11px;
+    right: -4px;
+}

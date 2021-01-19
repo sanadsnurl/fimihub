@@ -36,7 +36,7 @@ class Notification extends Model
             dd($e);
         }
     }
-    public function getAllNotifications($user_id, $type)
+    public function getAllNotifications($user_id, $type = false)
     {
         try
         {
@@ -89,6 +89,19 @@ class Notification extends Model
         catch (Exception $e) {
             dd($e);
         }
+    }
+
+    public function getActiveNotCount($user_id)
+    {
+        $notification_data=DB::table('notifications')
+        ->where('user_id', $user_id)
+        ->whereNull('deleted_at')
+        ->where(['visibility' => 0])
+        ->count();
+
+
+        return $notification_data;
+
     }
 
 }

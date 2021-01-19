@@ -441,7 +441,10 @@ class OrderController extends Controller
 
             $event_data = json_encode($event_data);
             $event_data = json_decode($event_data);
-            // dd($order_data->total_amount);
+            $order_data->delivery_time = strtotime("+40 minutes", strtotime($order_data->created_at));
+            $order_data->delivery_time = date('h:i', $order_data->delivery_time );
+            // dd($order_data->delivery_time);
+
             return view('customer.trackOrder')->with([
                 'user_data' => $user,
                 'order_data' => $order_data,

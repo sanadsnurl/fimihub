@@ -51,10 +51,11 @@
                 <span class="location">{{$resto_data->address ?? ''}}</span>
             </div>
             <div class="rating-wrap">
-                {{-- <div class="col-wrap">
-                    <h5>80 rating</h5>
+                <div class="col-wrap">
+                    @if($rating_data->rating_count >10)
+                    <h5>{{$rating_data->rating_count ?? '--'}} Rating</h5>
                     <div class="img-wrap">
-                        <span class="js-star-rating rating_star" data-rating="4.5">
+                        <span class="js-star-rating rating_star" data-rating="{{$rating_data->rating ?? '4'}}">
                             <span class="fa fa-star-o"></span>
                             <span class="fa fa-star-o"></span>
                             <span class="fa fa-star-o"></span>
@@ -62,13 +63,21 @@
                             <span class="fa fa-star-o"></span>
                         </span>
                     </div>
-                </div> --}}
+                    @else
+                    <h5>Rating</h5>
+                    <span class="btn btn-danger" style="border-radius: 60%;
+                    background-color: #7D3B8A;
+                    padding: 7px;
+                    border: 1px #7D3B8A;
+                    ">NEW</span>
+                    @endif
+                </div>
                 <div class="col-wrap">
                     <h5>Minimum Order Value</h5>
                     <h4>{{$user_data->currency ?? ''}} {{$resto_data->avg_cost ?? ''}}</h4>
                 </div>
                 <div class="col-wrap">
-                    <h5>Delivery Time</h5>
+                    <h5>Preparation Time</h5>
                     <h4 class="eta">{{$resto_data->avg_time ?? ''}} Min</h4>
                 </div>
             </div>

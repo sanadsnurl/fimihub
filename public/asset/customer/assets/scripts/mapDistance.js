@@ -14,7 +14,7 @@ function kilomiter(dakota, frick, service_data, total_amount) {
     if (isNaN(dakota.lng)) {
         return false;
     }
-    const center = { lat: 20.5937, lng: 78.9629 };
+    const center = { lat: 18.4490849, lng: -77.2419522 };
     const options = { zoom: 15, scaleControl: true, center: center };
     map = new google.maps.Map(
         document.getElementById('map'), options);
