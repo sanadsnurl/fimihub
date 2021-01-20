@@ -26,6 +26,7 @@ function initialize() {
         });
         const marker = new google.maps.Marker({
             map: map,
+            draggable: true,
             position: { lat: latitude, lng: longitude },
         });
 
@@ -34,6 +35,12 @@ function initialize() {
         const autocomplete = new google.maps.places.Autocomplete(input);
         autocomplete.key = fieldKey;
         autocompletes.push({ input: input, map: map, marker: marker, autocomplete: autocomplete });
+
+        // get lat and lng on marker drag
+        google.maps.event.addListener(marker, 'dragend', function(evt) {
+            $('#address-latitude').val(evt.latLng.lat());
+            $('#address-longitude').val(evt.latLng.lng());
+        });
     }
 
     for (let i = 0; i < autocompletes.length; i++) {
@@ -71,6 +78,7 @@ function initialize() {
 
         });
     }
+ 
 }
 
 function setLocationCoordinates(key, lat, lng) {
@@ -79,7 +87,6 @@ function setLocationCoordinates(key, lat, lng) {
     latitudeField.value = lat;
     longitudeField.value = lng;
 }
-
 
 
 
@@ -136,12 +143,12 @@ function geocodeLatLng(latitude, longitude) {
 $('.show_address').click(function() {
     let res = $('#result').attr('title');
     if (latVal && longVal && res) {
-        $('#address-input').val(res);
+        $('.sidebar_addrss_box .map-input').val(res);
         $('#address-latitude').val(latVal);
         $('#address-longitude').val(longVal);
         initialize();
     } else {
-        alert('Location not find')
+        alert('Location not find');
     }
 })
 
@@ -157,3 +164,5 @@ $(".banner .save_adrs").on("submit", function() {
         $(".banner .address_box_dyn").removeClass("invalid");
     }
 })
+
+

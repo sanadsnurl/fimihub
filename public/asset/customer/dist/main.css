@@ -9059,6 +9059,7 @@ form .form-group label {
     border-top: 18px solid transparent;
     border-right: 10px solid transparent;
     border-left: 9px solid transparent;
+    display: none;
 }
 
 .notification_dropdown:after {
@@ -9083,4 +9084,8 @@ form .form-group label {
 .cart_nofti span {
     top: -11px;
     right: -4px;
+}
+
+.banner .slider-wrap .slide-item .content-wrap .inner-wrap .search-bar .location-selector span::before {
+    top: 0;
 }

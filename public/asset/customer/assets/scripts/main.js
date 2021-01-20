@@ -53,8 +53,8 @@
         categoryTabs.removeClass("active");
         $(this).addClass("active");
         $("html, body").animate({
-            scrollTop: categoryBlock.offset().top
-        }, 1000);
+            scrollTop: categoryBlock.offset().top - 150
+        }, 800);
     })
 
     // img upload
