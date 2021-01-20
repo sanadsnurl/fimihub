@@ -94,7 +94,7 @@
                                 <div class="notification_body">
                                     <div class="nofication_content">
                                         <ul>
-                                            @if(count($user_data->notification_data))
+                                            @if(isset($user_data->notification_data) && !empty($user_data->notification_data))
                                             @foreach($user_data->notification_data as $not_data)
                                             <li class="d-flex align-items-center active">
                                                 <i class="fas fa-user-circle"></i>

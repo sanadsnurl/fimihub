@@ -65,7 +65,7 @@ class OrderController extends Controller
                 return view('customer.cart')->with([
                     'user_data' => $user,
                     'user_address' => $user_add
-                ]);;
+                ]);
             } else {
 
                 $upadte_cart = array();
@@ -175,7 +175,14 @@ class OrderController extends Controller
             $data = $request->toarray();
             $cart = new cart;
             $cart_avail = $cart->checkCartAvaibility($user->id);
-
+            $user_address = new user_address();
+            $user_default_add = $user_address->getDefaultAddress($user->id);
+            if($cart_avail == NULL){
+                return view('customer.cart')->with([
+                    'user_data' => $user,
+                    'user_address' => $user_default_add
+                ]);
+            }
             $cart_submenu = new cart_submenu;
             $quant_details = array();
             $quant_details['user_id'] = $user->id;
