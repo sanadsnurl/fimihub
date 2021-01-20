@@ -66,8 +66,8 @@
                     </div>
                 </div>
                 <div class="btn-grp">
-                    <a href="#" class="btn btn-purple">Reorder</a>
-                    <a href="#" class="btn btn-purple">Help</a>
+                    {{-- <a href="#" class="btn btn-purple">Reorder</a>
+                    <a href="#" class="btn btn-purple">Help</a> --}}
                     <a href="{{url('/trackOrder')}}{{'?odr_id='}}{{base64_encode($order->id)}}"
                         class="btn btn-purple">Details</a>
                 </div>
@@ -98,6 +98,7 @@
     <div class="tab-content" data-tab-id="ongoing">
         @if($current_order_data != NULL)
         @foreach($current_order_data as $c_order)
+
         <div class="card-wrap">
             <div class="col-left">
                 <div class="text-with-img">
@@ -151,14 +152,14 @@
                     </div>
                 </div>
                 <div class="btn-grp">
-                    <a href="#" class="btn btn-purple">Reorder</a>
-                    <a href="#" class="btn btn-purple">Help</a>
+                    {{-- <a href="#" class="btn btn-purple">Reorder</a>
+                    <a href="#" class="btn btn-purple">Help</a> --}}
                     <a href="{{url('/trackOrder')}}{{'?odr_id='}}{{base64_encode($c_order->id)}}"
                         class="btn btn-purple">Track</a>
                 </div>
             </div>
             <div class="col-right">
-                <span class="status on-way">ETA: 10 Mins <img
+                <span class="status on-way">ETA: {{$c_order->delivery_at ?? '--'}} <img
                         src="{{asset('asset/customer/assets/images/delivered.svg')}}" alt="delivered"></span>
                 <!-- <a href="#" class="show-sidepanel" id="orderPanel">View Details</a> -->
                 <span class="amt">Total Paid: {{$user_data->currency ?? '$'}} {{$c_order->total_amount ?? ''}}</span>
