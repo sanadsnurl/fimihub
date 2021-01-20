@@ -42,14 +42,14 @@
                         <div class="error">{{ $errors->first('password') }}</div>
                         @endif
                     </div>
-                    <div class="form-row mr-0 ml-0">
+                    {{-- <div class="form-row mr-0 ml-0">
                         <div class="form-group col-6">
 
                         </div>
                         <div class="form-group col-6 text-right">
                             <a href="authentication-reset-password.html">Reset Password</a>
                         </div>
-                    </div>
+                    </div> --}}
                     <input type="submit"
                         class="btn btn-primary shadow-primary btn-round btn-block waves-effect waves-light" value="Log
                         In">

@@ -82,6 +82,20 @@ class User extends Authenticatable
         }
     }
 
+    public function userDataWithMobile($userid)
+    {
+        try {
+            $user_data=DB::table('users')
+                ->where('mobile', $userid)
+                ->first();
+            unset($user_data->password);
+            return $user_data;
+        }
+        catch (Exception $e) {
+            dd($e);
+        }
+    }
+
     public function generateOTP($userid)
     {
         $otp = mt_rand(1000,9999);

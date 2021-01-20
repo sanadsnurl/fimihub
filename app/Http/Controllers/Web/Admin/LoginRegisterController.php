@@ -78,5 +78,36 @@ class LoginRegisterController extends Controller
         return redirect('/adminfimihub/login');
     }
 
+    public function resetPassword(Request $request){
+        $user = Auth::user();
+        return view('admin.resetPassword')->with(['data' => $user]);
+    }
+
+    public function resetPasswordProcess(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'password' => 'required|string|confirmed|min:6',
+            'current_password' => 'required|string|min:6',
+        ]);
+        if (!$validator->fails()) {
+            $user = Auth::user();
+            $data = $request->toarray();
+            $data['userid'] = $user->mobile;
+            if (Hash::check($data['current_password'], $user->password)) {
+                $user = new User();
+                $user->changePassword($data);
+                Session::flash('message', 'Password Changed');
+
+
+                return redirect()->back();
+            } else {
+                Session::flash('message', 'Invalid Current Password');
+                return redirect()->back();
+            }
+        } else {
+            return redirect()->back()->withInput()->withErrors($validator);
+        }
+    }
+
 
 }

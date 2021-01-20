@@ -173,7 +173,16 @@ Route::group(['middleware' => ['cors']], function () {
     Route::post('Restaurent/verifyOtp', 'Web\Restaurent\LoginRegisterController@verifyOtp');
     // Resend Otp
     Route::get('/resendOtp', 'Web\Restaurent\LoginRegisterController@resendOtp');
-
+    //Forget Password Page
+    Route::get('Restaurent/forgetPassword', 'Web\Restaurent\LoginRegisterController@forgetPassword');
+    //Forget Password Process
+    Route::post('Restaurent/forgetPasswordProcess', 'Web\Restaurent\LoginRegisterController@forgetPasswordProcess');
+    //Forget Password Page
+    Route::get('Restaurent/setNewPassword', 'Web\Restaurent\LoginRegisterController@setNewPassword');
+    //Forget Password Process
+    Route::post('Restaurent/verifyForgetPasswordOtp', 'Web\Restaurent\LoginRegisterController@verifyForgetPasswordOtp');
+     //Forget Password Resend Password
+     Route::get('Restaurent/resendNewOtp', 'Web\Restaurent\LoginRegisterController@resendNewOtp');
     //========================================== Session RestaurentAuth Routes ===================================================
 
     Route::group(['middleware' => 'restaurentauth', 'prefix'=>'Restaurent'],function () {
@@ -238,6 +247,10 @@ Route::group(['middleware' => ['cors']], function () {
         Route::get('deleteCustomCat', 'Web\Restaurent\RestaurentController@deleteCustomCat');
         //Delete Main Cat
         Route::get('deleteMainCat', 'Web\Restaurent\RestaurentController@deleteMainCat');
+        //Reset Password Page
+        Route::get('resetPassword', 'Web\Restaurent\LoginRegisterController@resetPassword');
+        //Reset Password Process
+        Route::post('resetPasswordProcess', 'Web\Restaurent\LoginRegisterController@resetPasswordProcess');
     });
 
 
@@ -350,7 +363,10 @@ Route::group(['middleware' => ['cors']], function () {
         Route::post('editEnvProcess', 'Web\Admin\EnvSettingController@getEditEnvProcess');
         //Delete Rider
         Route::get('deleteRider', 'Web\Admin\RiderController@deleteRider');
-
+        //Reset Password Page
+        Route::get('resetPassword', 'Web\Admin\LoginRegisterController@resetPassword');
+        //Reset Password Process
+        Route::post('resetPasswordProcess', 'Web\Admin\LoginRegisterController@resetPasswordProcess');
     });
 
 });
