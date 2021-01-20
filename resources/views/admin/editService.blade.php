@@ -120,11 +120,6 @@
 </div>
 
 
-
-
-<!-- End container-fluid-->
-
-
 <!--End content-wrapper-->
 @include('admin.include.footer')
 <!-- Bootstrap core JavaScript-->
