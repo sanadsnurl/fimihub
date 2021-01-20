@@ -31,6 +31,7 @@ class DashboardController extends Controller
         $user = Auth::user();
         $user_data = auth()->user()->userByIdData($user->id);
         $user_data = $this->getBasicCount($user);
+        // dd($user_data);
         if ($request->has('address_latitude')) {
             if(request('search_field') != NULL){
                 $search_field = request('search_field');
@@ -90,6 +91,7 @@ class DashboardController extends Controller
                     ->orWhere('restaurent_details.name', 'like', '%' . $search_field . '%');
             }
             $resto_data = $resto_data_query->get();
+            // dd($resto_data->toArray());
             //all nonveg restaurants
             $nonveg_resto_data_query = $this->closestRestaurant($user, $lats, $lngs, $kmRadius)->whereIn('resto_type', [1,3]);
             if ($request->has('search_field')) {

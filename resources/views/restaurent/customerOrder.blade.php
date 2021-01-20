@@ -48,11 +48,7 @@
 
 </div>
 
-
-
-
 <!-- End container-fluid-->
-
 
 <!--End content-wrapper-->
 @include('restaurent.include.footer')
@@ -73,66 +69,59 @@
 <script src="{{asset('asset/admin/assets/plugins/bootstrap-datatable/js/buttons.colVis.min.js')}}"></script>
 
 <script>
-$(document).ready(function() {
-    //Default data table
-    // //$('#default-datatable').DataTable();
-
-    var table = $('#example').DataTable({
-        lengthChange: true,
-        processing: true,
-        serverSide: true,
-        paging: true,
-        dom: 'lBfrtip',
-        buttons: ['copy', 'excel', 'pdf', 'print'],
-        ajax: "{{url('Restaurent/customerOrder')}}",
-        columns: [{
-                data: 'action',
-                name: 'action',
-                orderable: true,
-                searchable: false
-            },
-            {
-                data: 'DT_RowIndex',
-                name: 'id'
-            },
-            {
-                data: 'order_id',
-                name: 'order_id'
-            },
-            {
-                data: 'customer_name',
-                name: 'customer_name'
-            },
-            {
-                data: 'ordered_menu',
-                name: 'ordered_menu'
-            },
-            {
-                data: 'total_amount',
-                name: 'total_amount'
-            },
-            {
-                data: 'payment_type',
-                name: 'payment_type'
-            },
-            {
-                data: 'order_status',
-                name: 'order_status'
-            },
-            {
-                data: 'created_at',
-                name: 'created_at'
-            },
-
-
-
-
-        ]
+    $(document).ready(function() {
+        //Default data table
+        // //$('#default-datatable').DataTable();
+        var table = $('#example').DataTable({
+            lengthChange: true,
+            processing: true,
+            serverSide: true,
+            paging: true,
+            dom: 'lBfrtip',
+            buttons: ['copy', 'excel', 'pdf', 'print'],
+            ajax: "{{url('Restaurent/customerOrder')}}",
+            columns: [{
+                    data: 'action',
+                    name: 'action',
+                    orderable: true,
+                    searchable: false
+                },
+                {
+                    data: 'DT_RowIndex',
+                    name: 'id'
+                },
+                {
+                    data: 'order_id',
+                    name: 'order_id'
+                },
+                {
+                    data: 'customer_name',
+                    name: 'customer_name'
+                },
+                {
+                    data: 'ordered_menu',
+                    name: 'ordered_menu'
+                },
+                {
+                    data: 'total_amount',
+                    name: 'total_amount'
+                },
+                {
+                    data: 'payment_type',
+                    name: 'payment_type'
+                },
+                {
+                    data: 'order_status',
+                    name: 'order_status'
+                },
+                {
+                    data: 'created_at',
+                    name: 'created_at'
+                },
+            ]
+        });
+        table.buttons().container()
+            .appendTo('#example_wrapper .col-md-6:eq(0)');
     });
-
-    table.buttons().container()
-        .appendTo('#example_wrapper .col-md-6:eq(0)');
-
-});
 </script>
 <!--End content-wrapper-->

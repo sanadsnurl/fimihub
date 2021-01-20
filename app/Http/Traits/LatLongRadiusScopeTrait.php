@@ -169,7 +169,8 @@ trait LatLongRadiusScopeTrait
         *  Generate the select field for disctance
         */
         $disctance_select = sprintf(
-                "restaurent_details.*,ua.latitude,ua.longitude,ua.id as addres_id,COUNT(ml.restaurent_id) AS dish_count, ( %d * acos( cos( radians(%s) ) " .
+                "restaurent_details.*,ua.latitude,ua.longitude,ua.id as addres_id,COUNT(DISTINCT ml.id) AS dish_count,
+                COUNT(DISTINCT oe.id) AS rating_count,Round(AVG(oe.order_feedback),1) AS rating,( %d * acos( cos( radians(%s) ) " .
                         " * cos( radians( ua.latitude ) ) " .
                         " * cos( radians( ua.longitude ) - radians(%s) ) " .
                         " + sin( radians(%s) ) * sin( radians( ua.latitude ) ) " .
@@ -184,6 +185,12 @@ trait LatLongRadiusScopeTrait
         return restaurent_detail::leftjoin('user_address as ua', 'restaurent_details.user_id', '=', 'ua.user_id')
             ->leftJoin('menu_list as ml', function($query) {
                 return $query->on('restaurent_details.id', '=', 'ml.restaurent_id')->where('ml.visibility', 0);
+            })
+            ->leftJoin('order_events as oe', function($query) {
+                return $query->on('restaurent_details.user_id', '=', 'oe.user_id')
+                            ->where('oe.visibility', 0)
+                            ->where('oe.user_type', 2)
+                            ->whereNotNull('oe.order_feedback');
             })
             ->select(DB::raw($disctance_select) )
             // ->where('users.user_type', 2)
