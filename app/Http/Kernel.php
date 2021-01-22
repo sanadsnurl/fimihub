@@ -75,6 +75,7 @@ class Kernel extends HttpKernel
         'cors' => \App\Http\Middleware\Cors::class,
         'customerauth' => \App\Http\Middleware\CustomerAuth::class,
         'adminauth' => \App\Http\Middleware\AdminAuth::class,
-        'restaurentauth' => \App\Http\Middleware\RestaurentAuth::class
+        'restaurentauth' => \App\Http\Middleware\RestaurentAuth::class,
+        'gotoafterauth' => \App\Http\Middleware\GoTOAfterAuth::class
     ];
 }

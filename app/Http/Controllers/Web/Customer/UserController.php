@@ -19,10 +19,16 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use App\Http\Traits\OtpGenerationTrait;
 use App\Mail\ContactUs as MailContactUs;
+use App\Notifications\ContactUs as NotificationsContactUs;
 use Response;
 use Session;
 use File;
+use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Notification as FacadesNotification;
 use Mail;
+use App\Message;
+use Illuminate\Support\Facades\Route;
+use stdClass;
 
 class UserController extends Controller
 {
@@ -165,7 +171,7 @@ class UserController extends Controller
         return view('customer.pages.contactUs');
     }
 
-    public function contactUs(Request $request)
+    protected function contactUs(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
@@ -176,11 +182,25 @@ class UserController extends Controller
 
         ]);
         if (!$validator->fails()) {
-            // $user = Auth::user();
-            $email_to = 'tusharseth56@gmail.com';
+            $user = Auth::user();
+            $email_to = 'tusharseth24@gmail.com';
+            $email_tos = 'tusharseth24@gmail.com';
             $data = $request->toarray();
-            // $when = now()->addSeconds(5);
-            // Mail::to($email_to)->send(new MailContactUs($data));
+            // $toUser = User::find(1);
+
+// $emailSupport = (object) array('email' => 'tusharseth24@gmail.com');
+            // // send notification using the "user" model, when the user receives new message
+            // $toUser->notify(new NotificationsContactUs());
+            // die();
+            // $toUser->email = 'tusharseth244@gmail.com';
+            // // send notification using the "Notification" facade
+            // FacadesNotification::send($toUser, new NotificationsContactUs($data));
+
+
+    // return (new NotificationsContactUs($email_to))
+    //             ->toMail($email_to);
+// Notification::route('mail', $email_to)->notify(new NotificationsContactUs($email_to));
+// $email_to->notify((new NotificationsContactUs())->delay($when));
             $contactUs = new contactUs();
             $contactUs->makeContactUs($data);
             Session::flash('modal_message', 'Message Sent ');
