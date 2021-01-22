@@ -45,6 +45,7 @@ class CreateUsersTable extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             //rest attributes
             $table->text('address');
+            $table->string('name');
             $table->string('flat_no');
             $table->string('landmark');
             $table->string('latitude')->nullable();

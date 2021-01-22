@@ -184,7 +184,14 @@
                 <input type="text" id="address-input" name="address_address" class="form-control map-input">
 
             </div> -->
-
+            <div class="field-wrap">
+                <label>Name</label>
+                <input type="text" name="name" placeholder="Enter name" id="per_name">
+                @if($errors->has('name'))
+                <div class="error">{{ $errors->first('name') }}</div>
+                @endif
+                <span id="flaterr" class="errors"></span>
+            </div>
             <div class="field-wrap">
                 <label for="address_address">Address</label>
                 <div class="address_box_dyn sidebar_addrss_box">
@@ -476,28 +483,13 @@
         var add_details = kilomiter(user, resto,service_data,total_amountss);
         // console.log(add_details, 'resto');
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     });
     // $('.accord_btn').click(function() {
     //     $(this).next('.apply_cpn_box').slideToggle();
     //     $(this).find('span').next('img').toggleClass('rotate_icon');
     // })
     function checkform() {
+        console.log("d");
         let add = document.getElementById('address-input').value;
         let flat = document.getElementById('flat').value;
         let landmrk = document.getElementById('landmrk').value;

@@ -25,6 +25,7 @@ class AddressController extends Controller
             'address_address' => 'required|string',
             'flat_no' => 'required|string',
             'landmark' => 'required|string',
+            'name' => 'required|string',
 
 
         ]);
@@ -39,6 +40,7 @@ class AddressController extends Controller
             else{
                 $add_data['user_id']=$user->id;
                 $add_data['address']=$data['address_address'];
+                $add_data['name']=$data['name'];
                 $add_data['flat_no']=$data['flat_no'];
                 $add_data['landmark']=$data['landmark'];
                 $add_data['latitude']=$data['address_latitude'];

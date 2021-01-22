@@ -287,7 +287,7 @@ class OrderController extends Controller
                         'amount' => $billing_balance['total_amount_last']  + request('delivery_fee') ?? 0,
                         'no_shipping' => 1,
                         'currency_code' => 'USD',
-                        'notify_url' => 'http://sitename/paypal-payment-gateway-integration-in-php/notify.php',
+                        'notify_url' => '',
                         'cancel_return' => url('makePaypalOrder') . '?order_check=' . base64_encode('netset') . '&order_check_token=' . base64_encode($make_order_id),
                         'return' => url('makePaypalOrder') . '?order_check=' . base64_encode('netsetwork') . '&order_check_token=' . base64_encode($make_order_id),
                         'cmd' => '_xclick'
@@ -408,7 +408,8 @@ class OrderController extends Controller
         }
         // dd($add_on_data);
         $restaurent_detail = new restaurent_detail;
-        $resto_data = $restaurent_detail->getRestoDataOnId($order_data->restaurent_id);
+        $resto_data = $restaurent_detail->getRestoDataOnIdNotDel($order_data->restaurent_id);
+
         $resto_data->delivery_fee = $order_data->delivery_fee;
         $cart = new cart;
         $cart_data = $cart->getCartData($order_data->id);

@@ -35,7 +35,14 @@ Route::group(['middleware' => ['cors']], function () {
     Route::get('/accessDenied', function () {
         return view('errors.401');
     });
-
+    // Customer Shooping Comming Soon
+    Route::get('/shopping', function () {
+        return view('errors.shoppingCommingSoon');
+    });
+    // Customer Errands Comming Soon
+    Route::get('/errands', function () {
+        return view('errors.errandCommingSoon');
+    });
     // Customer index Page
     Route::get('/', 'Web\Customer\CmsController@indexHandShake');
 
@@ -96,6 +103,8 @@ Route::group(['middleware' => ['cors']], function () {
     //Contact Us Process
     Route::get('makePaypalOrder', 'Web\Customer\OrderController@changePaypalOrderStatus');
 
+    Route::group(['middleware' => 'gotoafterauth'], function () {
+    });
     //========================================== Session Customer Auth Routes ===================================================
 
     Route::group(['middleware' => 'customerauth'], function () {

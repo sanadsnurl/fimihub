@@ -45,7 +45,7 @@
 
                             <li
                                 class="{{ in_array($order_event_data->rider->order_status,array(1,2)) ? 'active' : ''}}">
-                                <span></span> {{$order_event_data->rider_details->name ?? '---'}} is on is way to the
+                                <span></span> {{$order_event_data->rider_details->name ?? '---'}} is on its way to the
                                 restaurant </li>
                             <li class="{{ in_array($order_event_data->rider->order_status,array(2)) ? 'active' : ''}}">
                                 <span></span> {{$order_event_data->rider_details->name ?? '---'}} has arrived at
@@ -64,7 +64,7 @@
                                 {{$order_event_data->rider_details->name ?? '---'}}</li>
                             <li
                                 class="{{ in_array($order_event_data->rider->order_status,array(1,2)) ? 'active' : ''}}">
-                                <span></span> {{$order_event_data->rider_details->name ?? '---'}} is on is way to the
+                                <span></span> {{$order_event_data->rider_details->name ?? '---'}} is on its way to the
                                 restaurant </li>
                             <li class="{{ in_array($order_event_data->rider->order_status,array(2)) ? 'active' : ''}}">
                                 <span></span> {{$order_event_data->rider_details->name ?? '---'}} has arrived at
@@ -75,7 +75,7 @@
                                 <span></span> Order packed</li>
                                 <li
                                 >
-                                <span></span> --- is on is way to the
+                                <span></span> --- is on its way to the
                                 restaurant </li>
                                 <li >
                                     <span></span> --- has arrived at
