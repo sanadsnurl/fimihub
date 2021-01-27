@@ -118,10 +118,11 @@
         seconds--
         timerEl.text(duration);
     }, 1000);
-    expirDate();
+
 })(jQuery);
 
-function expirDate() {
+
+$(function() {
     var creditly = Creditly.initialize(
         '.creditly-wrapper .expiration-month-and-year',
         '.creditly-wrapper .credit-card-number',
@@ -136,7 +137,9 @@ function expirDate() {
             }
         }
     })
-}
+});
+
+
 // jump cursor to next input
 $('.otp_verification form input').keyup(function() {
     if (this.value.length == this.maxLength) {
@@ -236,6 +239,10 @@ $(".order-block .restaurant-info .collapse-tab").click(function() {
     $(this).next().slideToggle();
 })
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 081fef4e085d67f420c184f00a8e577b1cf6fb84
 
 var telInput = $('.telInput');
 telInput.intlTelInput({
