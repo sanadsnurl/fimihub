@@ -260,6 +260,11 @@ Route::group(['middleware' => ['cors']], function () {
         Route::get('resetPassword', 'Web\Restaurent\LoginRegisterController@resetPassword');
         //Reset Password Process
         Route::post('resetPasswordProcess', 'Web\Restaurent\LoginRegisterController@resetPasswordProcess');
+        // Menu Category update Page
+        Route::get('editMainCategory', 'Web\Restaurent\RestaurentController@editMainCategory');
+        // Menu Category update Process
+        Route::post('editMainCategoryProcess', 'Web\Restaurent\RestaurentController@editMainCategoryProcess');
+
     });
 
 

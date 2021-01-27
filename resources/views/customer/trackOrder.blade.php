@@ -87,6 +87,8 @@
                             <li class="{{ in_array($order_data->order_status,array(7,8,9,10,11,12)) ? 'active' : ''}}">
                                 <span></span> Order has been picked up by
                                 {{$order_event_data->rider_details->name ?? '---'}}</li>
+                                <li class="{{ in_array($order_data->order_status,array(7,8,9,10,11,12)) ? 'active' : ''}}">
+                                    <span></span> Order On the way</li>
                             <li class="{{ in_array($order_data->order_status,array(9,10)) ? 'active' : ''}} m-0">
                                 <span></span> Order delivered</li>
                     </ul>

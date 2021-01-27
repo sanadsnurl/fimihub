@@ -459,6 +459,7 @@
 @endif
 
 <script>
+
     $(document).ready(function() {
         // $('[data-toggle="tooltip"]').tooltip();
 
@@ -477,9 +478,6 @@
         var total_amount = ($("#total_amount").text());
         var total_amounts = total_amount.replace(",", '');
         var total_amountss = parseFloat(total_amounts.replace(",", ''));
-        console.log(total_amountss, 'resto');
-
-
         var add_details = kilomiter(user, resto,service_data,total_amountss);
         // console.log(add_details, 'resto');
 
@@ -526,4 +524,5 @@
     $('.save_adrs input').on('blur', function() {
         $(this).nextAll('span').hide();
     })
+
 </script>

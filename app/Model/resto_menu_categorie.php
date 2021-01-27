@@ -53,4 +53,26 @@ class resto_menu_categorie extends Model
 
         return $query_data;
     }
+
+    public function getRestoMainCatByID($id)
+    {
+
+        $query_data = DB::table('resto_menu_categories')
+            ->where('id', $id)
+            ->first();
+
+        return $query_data;
+    }
+
+    public function editRestoMainCat($data)
+    {
+        $data['updated_at'] = now();
+        unset($data['_token']);
+
+        $query_data = DB::table('resto_menu_categories')
+            ->where('id', $data['id'])
+            ->update($data);
+
+        return $query_data;
+    }
 }

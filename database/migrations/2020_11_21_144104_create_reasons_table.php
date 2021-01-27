@@ -18,7 +18,7 @@ class CreateReasonsTable extends Migration
             $table->charset = 'utf16';
             $table->collation = 'utf16_general_ci';
             $table->increments('id');
-            $table->integer('user_id');
+            $table->integer('user_id')->nullable();
             $table->string('reason');
             $table->tinyInteger('user_type')->comment('1-Admin,2-Rider,3-User,4-Restaurent');
             $table->boolean('is_active')->default(1);
