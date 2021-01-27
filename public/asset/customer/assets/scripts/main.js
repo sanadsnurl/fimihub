@@ -119,14 +119,10 @@
         timerEl.text(duration);
     }, 1000);
 
-
-    expirDate();
-
 })(jQuery);
 
 
-
-function expirDate() {
+$(function() {
     var creditly = Creditly.initialize(
         '.creditly-wrapper .expiration-month-and-year',
         '.creditly-wrapper .credit-card-number',
@@ -141,7 +137,8 @@ function expirDate() {
             }
         }
     })
-}
+});
+
 
 // jump cursor to next input
 $('.otp_verification form input').keyup(function() {
