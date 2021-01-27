@@ -239,10 +239,6 @@ $(".order-block .restaurant-info .collapse-tab").click(function() {
     $(this).next().slideToggle();
 })
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 081fef4e085d67f420c184f00a8e577b1cf6fb84
 
 var telInput = $('.telInput');
 telInput.intlTelInput({
