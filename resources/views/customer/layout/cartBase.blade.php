@@ -285,7 +285,8 @@
                 }else{
                     total_amnt = parseFloat(total_amnt) + delivery_charge;
                 }
-                console.log(total_amnt);
+                total_amnt = total_amnt.toFixed(2);
+
                 if (response.quantity == 0) {
                     // $(remove_all_count).val(0);
                 }
