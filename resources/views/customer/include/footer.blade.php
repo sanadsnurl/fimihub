@@ -526,4 +526,22 @@
     $('.save_adrs input').on('blur', function() {
         $(this).nextAll('span').hide();
     })
+
+
+    $(function() {
+        var creditly = Creditly.initialize(
+            '.creditly-wrapper .expiration-month-and-year',
+            '.creditly-wrapper .credit-card-number',
+            '.creditly-wrapper .security-code',
+            '.creditly-wrapper .card-type');
+
+        $(".payment_options .paynow_btn").click(function(e) {
+            if ($(".payment_options #atlantic").is(":checked")) {
+                let output = creditly.validate();
+                if (!output) {
+                    e.preventDefault();
+                }
+            }
+        })
+    });
 </script>
