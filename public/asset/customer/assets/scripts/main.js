@@ -119,8 +119,29 @@
         timerEl.text(duration);
     }, 1000);
 
+
+    expirDate();
+
 })(jQuery);
 
+
+
+function expirDate() {
+    var creditly = Creditly.initialize(
+        '.creditly-wrapper .expiration-month-and-year',
+        '.creditly-wrapper .credit-card-number',
+        '.creditly-wrapper .security-code',
+        '.creditly-wrapper .card-type');
+
+    $(".payment_options .paynow_btn").click(function(e) {
+        if ($(".payment_options #atlantic").is(":checked")) {
+            let output = creditly.validate();
+            if (!output) {
+                e.preventDefault();
+            }
+        }
+    })
+}
 
 // jump cursor to next input
 $('.otp_verification form input').keyup(function() {
