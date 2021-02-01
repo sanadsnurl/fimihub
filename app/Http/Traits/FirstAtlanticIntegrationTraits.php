@@ -29,7 +29,7 @@ trait FirstAtlanticIntegrationTraits
         $card_exp_date = trim($date_process);
         $card_process = str_replace(" ", '',$payment_data['card_number']);
         $card_number_input = trim($card_process);
-
+        $base_url_api = Config('FAC_URL');
         // Payment authantication
         //phpinfo(); die;
         ini_set('display_errors', 1);
@@ -52,8 +52,7 @@ trait FirstAtlanticIntegrationTraits
         }
 
         // Ensure you append the ?wsdl query string to the url
-        $wsdlurl =
-            'https://ecm.firstatlanticcommerce.com/PGService/Services.svc?wsdl';
+        $wsdlurl = $base_url_api.'?wsdl';
         // Set up client to use SOAP 1.1 and NO CACHE for WSDL. You can choose
         //between
         // exceptions or status checking. Here we use status checking. Trace is for
@@ -61,8 +60,7 @@ trait FirstAtlanticIntegrationTraits
         // Works better with MS Web Services where
         // WSDL is split into several files. Will fetch all the WSDL up front.
         $options = array(
-            'location' =>
-            'https://ecm.firstatlanticcommerce.com/PGService/Services.svc',
+            'location' => $base_url_api,
             'soap_version' => SOAP_1_1,
             'exceptions' => 0,
             'trace' => 1,

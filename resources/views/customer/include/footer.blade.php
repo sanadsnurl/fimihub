@@ -108,6 +108,12 @@
                         <a href="{{url('privacyPolicyPage')}}">Privacy Policy </a>
                     </li>
                     <li>
+                        <a href="{{url('returnPolicyPage')}}">Return Policy </a>
+                    </li>
+                    <li>
+                        <a href="{{url('partnerAgreementPage')}}">Partner Agreement </a>
+                    </li>
+                    <li>
                         <a href="{{url('T&C')}}">Terms & Conditions </a>
                     </li>
                     <li>

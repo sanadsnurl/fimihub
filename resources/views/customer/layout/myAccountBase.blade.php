@@ -42,7 +42,7 @@
                             <a href="{{url('FAQ')}}" class="{{ request()->is('FAQ') ? 'active' : ''}}">FAQ's</a>
                         </li>
                         <li>
-                            <a href="{{url('saveaddress')}}" class="{{ request()->is('saveaddress') ? 'active' : ''}}">Manage Saved Addresses</a>
+                            <a href="{{url('saveaddress')}}" class="{{ request()->is('saveaddress') ? 'active' : ''}}">My Saved Addresses</a>
                         </li>
                         <li>
                             <a href="{{url('contactUs')}}" class="{{ request()->is('contactUs') ? 'active' : ''}}">Contact Us</a>

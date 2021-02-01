@@ -13,7 +13,7 @@
 
         <!-- End Breadcrumb-->
         <div class="row">
-            <div class="col-lg-8">
+            <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
                         <form role="form" method="POST" action="{{ url('Restaurent/addCustomCategory')}}" id="personal-info"
@@ -86,7 +86,22 @@
                                 </div>
 
                             </div>
-
+                            <div class="form-group row">
+                                <label for="input-4" class="col-sm-2 col-form-label">Is Required ?</label>
+                                <div class="demo-checkbox ml-4">
+                                    <input type="radio" id="user-checkbox" class="filled-in chk-col-primary" value="1"
+                                        name="is_required">
+                                    <label for="user-checkbox">Yes</label>
+                                </div>
+                                <div class="demo-checkbox">
+                                    <input type="radio" id="user-checkbox1" class="filled-in chk-col-primary" value="2"
+                                        name="is_required">
+                                    <label for="user-checkbox1">No</label>
+                                </div>
+                                @if($errors->has('is_required'))
+                                <div class="error">{{ $errors->first('is_required') }}</div>
+                                @endif
+                            </div>
                             <div class="form-footer">
                                 <input type="submit" class="btn btn-primary" value="Add category"></input>
 
@@ -111,6 +126,7 @@
                                         <th>S.No.</th>
                                         <th>Category Name</th>
                                         <th>Customization Variant</th>
+                                        <th>Is Required</th>
                                         <!-- <th>About</th> -->
                                         <!-- <th>Discount (%)</th> -->
                                         <th>Create At</th>
@@ -184,6 +200,10 @@ $(document).ready(function() {
             {
                 data: 'customization_variant',
                 name: 'customization_variant'
+            },
+            {
+                data: 'is_required',
+                name: 'is_required'
             },
             {
                 data: 'created_at',

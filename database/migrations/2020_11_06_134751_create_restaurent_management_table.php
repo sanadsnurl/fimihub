@@ -159,6 +159,7 @@ class CreateRestaurentManagementTable extends Migration
             $table->foreign('restaurent_id')->references('id')->on('restaurent_details')->onDelete('cascade')->onUpdate('cascade');
             //rest attributes
             $table->tinyInteger('customization_variant')->comment('1-Add-On,2-Product Variation')->nullable();
+            $table->tinyInteger('is_required')->comment('1-Yes,2-No')->nullable();
             $table->tinyInteger('visibility')->default('0');
             $table->timestamp('deleted_at', 0)->nullable();
             $table->timestamps();

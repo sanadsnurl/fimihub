@@ -100,7 +100,7 @@
                     <ul>
                         @foreach($menu_cat as $m_cat)
                         <li>
-                            <a href="#{{$m_cat->cat_name}}">{{$m_cat->cat_name}}</a>
+                            <a href="#{{$m_cat->cat_id}}">{{$m_cat->cat_name}}</a>
                         </li>
                         @endforeach
                     </ul>
@@ -141,7 +141,7 @@
                 </div>
 
                 @foreach($menu_cat as $m_cat)
-                <div class="category-block" id="{{$m_cat->cat_name}}">
+                <div class="category-block" id="{{$m_cat->cat_id}}">
                     <h5>{{$m_cat->cat_name}}</h5>
                     @foreach($menu_data as $m_data)
                     @if($m_data->cat_name == $m_cat->cat_name)
@@ -241,6 +241,9 @@
                                                             aria-expanded="true"
                                                             aria-controls="collapse-{{$m_data->id}}-{{$add_cat->id}}">
                                                             {{$add_cat->cat_name ?? ''}}
+                                                            @if($add_cat->is_required == 1)
+                                                           <span class="error">(*required)</span>
+                                                            @endif
                                                         </a>
                                                     </h2>
                                                 </div>

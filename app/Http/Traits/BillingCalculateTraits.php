@@ -73,13 +73,15 @@ trait BillingCalculateTraits
                         $m_data->price = $var_d->price;
                     }
                 }
+if($m_data->product_add_on_id){
+    foreach($m_data->product_add_on_id as $add_on){
+        $add_ons[] = $menu_custom_list->menuCustomPaginationData($m_data->restaurent_id)
+                                ->where('resto_custom_cat_id',$add_on)->get();
+        $add_ons_cat[] = $menu_custom_list->menuCustomCategoryData($m_data->restaurent_id)
+                                ->where('resto_custom_cat_id',$add_on)->first();
+    }
+}
 
-                foreach($m_data->product_add_on_id as $add_on){
-                    $add_ons[] = $menu_custom_list->menuCustomPaginationData($m_data->restaurent_id)
-                                            ->where('resto_custom_cat_id',$add_on)->get();
-                    $add_ons_cat[] = $menu_custom_list->menuCustomCategoryData($m_data->restaurent_id)
-                                            ->where('resto_custom_cat_id',$add_on)->first();
-                }
                 if($m_data->product_adds_id){
                     $m_data->product_adds_id = json_decode($m_data->product_adds_id);
 
@@ -130,7 +132,12 @@ trait BillingCalculateTraits
                                         ->where('resto_custom_cat_id',$m_data->product_variant_id)->first();
             $var_sin_data = $menu_custom_list->menuCustomPaginationData($m_data->restaurent_id)
                                     ->where('resto_custom_cat_id',$m_data->product_variant_id)->first();
-            $m_data->product_add_on_id = json_decode($m_data->product_add_on_id);
+            if($m_data->product_add_on_id){
+                $m_data->product_add_on_id = json_decode($m_data->product_add_on_id);
+
+            }else{
+                $m_data->product_add_on_id = [];
+            }
             if(count($m_data->variant_data)){
                 if(!empty($m_data->quantity) && !empty($m_data->cart_variant_id)){
                     $var_d = $menu_custom_list->getCustomListPrice($m_data->cart_variant_id);
@@ -143,21 +150,23 @@ trait BillingCalculateTraits
                     $m_data->price = $var_d->price;
                 }
             }
+if($m_data->product_add_on_id){
+    foreach($m_data->product_add_on_id as $add_on){
+        $add_ons[] = $menu_custom_list->menuCustomPaginationData($m_data->restaurent_id)
+                                ->where('resto_custom_cat_id',$add_on)->get();
+        $add_ons_cat[] = $menu_custom_list->menuCustomCategoryData($m_data->restaurent_id)
+                                ->where('resto_custom_cat_id',$add_on)->first();
+    }
 
-            foreach($m_data->product_add_on_id as $add_on){
-                $add_ons[] = $menu_custom_list->menuCustomPaginationData($m_data->restaurent_id)
-                                        ->where('resto_custom_cat_id',$add_on)->get();
-                $add_ons_cat[] = $menu_custom_list->menuCustomCategoryData($m_data->restaurent_id)
-                                        ->where('resto_custom_cat_id',$add_on)->first();
-            }
-            if($m_data->product_adds_id){
-                $m_data->product_adds_id = json_decode($m_data->product_adds_id);
-                foreach($m_data->product_adds_id as $add_on_cart){
-                    $var_ds = $menu_custom_list->getCustomListPriceWithPer($add_on_cart);
-                    // $m_data->price = $var_d->price;
-                    $total_amount = $total_amount + (1 * $var_ds->price);
-                }
-            }
+    }
+    if($m_data->product_adds_id){
+        $m_data->product_adds_id = json_decode($m_data->product_adds_id);
+        foreach($m_data->product_adds_id as $add_on_cart){
+            $var_ds = $menu_custom_list->getCustomListPriceWithPer($add_on_cart);
+            // $m_data->price = $var_d->price;
+            $total_amount = $total_amount + (1 * $var_ds->price);
+        }
+    }
 
             $m_data->add_on = ($add_ons);
             $m_data->add_ons_cat = $add_ons_cat;
