@@ -66,6 +66,10 @@ Route::group(['middleware' => ['cors']], function () {
     Route::get('/mechantQnA', 'Web\Customer\CmsController@indexMerchantQnA');
     // Privacy Policy
     Route::get('/privacyPolicyPage', 'Web\Customer\CmsController@indexPrivacyPolicy');
+    // Return Policy
+    Route::get('/returnPolicyPage', 'Web\Customer\CmsController@indexReturnPolicy');
+    // Partner Agreement
+    Route::get('/partnerAgreementPage', 'Web\Customer\CmsController@indexPartnerAgreementPolicy');
     // Partner with us page
     Route::get('/partnerWithUs', function () {
         return view('customer.auth.partnerRegister');
@@ -224,6 +228,8 @@ Route::group(['middleware' => ['cors']], function () {
         Route::get('acceptOrder', 'Web\Restaurent\OrderController@acceptOrder');
         //Reject Customer Order
         Route::get('rejectOrder', 'Web\Restaurent\OrderController@rejectOrder');
+        //Reject Customer Order
+        Route::get('rejectOrderPage', 'Web\Restaurent\OrderController@rejectOrderPage');
         //Packed Customer Order
         Route::get('packedOrder', 'Web\Restaurent\OrderController@packedOrder');
         //View Customer Order
@@ -260,6 +266,13 @@ Route::group(['middleware' => ['cors']], function () {
         Route::get('resetPassword', 'Web\Restaurent\LoginRegisterController@resetPassword');
         //Reset Password Process
         Route::post('resetPasswordProcess', 'Web\Restaurent\LoginRegisterController@resetPasswordProcess');
+        // Menu Category update Page
+        Route::get('editMainCategory', 'Web\Restaurent\RestaurentController@editMainCategory');
+        // Menu Category update Process
+        Route::post('editMainCategoryProcess', 'Web\Restaurent\RestaurentController@editMainCategoryProcess');
+        // Track Order Earnings
+        Route::get('myEarnings', 'Web\Restaurent\EarningController@earningTrack');
+
     });
 
 
@@ -376,6 +389,15 @@ Route::group(['middleware' => ['cors']], function () {
         Route::get('resetPassword', 'Web\Admin\LoginRegisterController@resetPassword');
         //Reset Password Process
         Route::post('resetPasswordProcess', 'Web\Admin\LoginRegisterController@resetPasswordProcess');
+        // Track Resto Earnings
+        Route::get('restoEarnings', 'Web\Admin\EarningController@restoEarningTrack');
+        // Track Rider Earnings
+        Route::get('riderEarnings', 'Web\Admin\EarningController@riderEarningTrack');
+        //Enable Rider
+        Route::get('enableRider', 'Web\Admin\RiderController@enableRider');
+        //Disable Rider
+        Route::get('disableRider', 'Web\Admin\RiderController@disableRider');
+
     });
 
 });

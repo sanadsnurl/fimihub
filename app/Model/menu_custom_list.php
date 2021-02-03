@@ -65,7 +65,7 @@ class menu_custom_list extends Model
         ->groupBy('mc.custom_cat_id')
         ->where('menu_custom_list.visibility', 0)
         ->where('menu_custom_list.restaurent_id', $data)
-        ->select('custom_menu_categories.name as cat_name')
+        ->select('custom_menu_categories.name as cat_name','mc.is_required as is_required')
         ->orderBy('custom_menu_categories.name');
 
         return $menu_custom_list;

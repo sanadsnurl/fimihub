@@ -16,6 +16,7 @@ use App\Model\restaurent_detail;
 use App\Model\Notification;
 use App\Model\order;
 use App\Model\OrderEvent;
+use App\Model\Reason;
 use App\Model\user_address;
 use Response;
 use Session;
@@ -51,7 +52,7 @@ class OrderController extends Controller
                         $btn .= '<a href="packedOrder?odr_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Ready For Pick-Up</a>';
                     } elseif ($row->order_status == 3) {
                         $btn .= '<a href="acceptOrder?odr_id=' . base64_encode($row->id) . '" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Accept</a>
-                        <a href="rejectOrder?odr_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Reject</a>';
+                        <a href="rejectOrderPage?odr_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Reject</a>';
                     }
                     return $btn;
                 })
@@ -269,6 +270,7 @@ class OrderController extends Controller
         $user = Auth::user();
 
         $order_id = base64_decode(request('odr_id'));
+        $reason_id = (request('reason_id'));
         $order_status = 4;
         $orders = new order;
         $order_status_update = $orders->updateOrderStatus($order_id, $order_status);
@@ -282,6 +284,7 @@ class OrderController extends Controller
         $order_event['user_id'] = $user->id;
         $order_event['order_status'] = 2;
         $order_event['user_type'] = 2;
+        $order_event['reason_id'] = $reason_id;
         $OrderEvents = new OrderEvent;
         $make_event = $OrderEvents->makeUpdateOrderEvent($order_event);
         // ============================================= PUSH NOTIFICATION=======================================
@@ -302,7 +305,7 @@ class OrderController extends Controller
 
         // ==========================================================================================================
 
-        return redirect()->back();
+        return redirect('Restaurent/customerOrder');
     }
 
     public function packedOrder(Request $request)
@@ -539,6 +542,22 @@ class OrderController extends Controller
             'order_data' => $order_data,
             'event_data' => $event_data,
             'add_datas' => $add_datas
+        ]);
+    }
+
+    public function rejectOrderPage(Request $request)
+    {
+        $user = Auth::user();
+        $order_id = base64_decode(request('odr_id'));
+        $orders = new order;
+        $order_data = $orders->getOrderData($order_id);
+        $Reasons = new Reason();
+        $order_event_data = $Reasons->getReasons(4)->get();
+// dd($order_event_data);
+        return view('restaurent.rejectReason')->with([
+            'data' => $user,
+            'order_data' => $order_data,
+            'reason_list' => $order_event_data
         ]);
     }
 }

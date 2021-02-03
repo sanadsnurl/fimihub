@@ -83,6 +83,24 @@ class CmsController extends Controller
         ]);
     }
 
+    public function indexReturnPolicy(Request $request)
+    {
+        $user = Auth::user();
+
+        return view('customer.pages.returnPolicy')->with([
+            'user_data' => $user,
+        ]);
+    }
+
+    public function indexPartnerAgreementPolicy(Request $request)
+    {
+        $user = Auth::user();
+
+        return view('customer.pages.partnerAgreement')->with([
+            'user_data' => $user,
+        ]);
+    }
+
     public function indexMerchantTandC(Request $request)
     {
         $user = Auth::user();

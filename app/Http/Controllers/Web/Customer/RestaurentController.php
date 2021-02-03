@@ -46,10 +46,11 @@ class RestaurentController extends Controller
                         'user_type'=>2
                     ];
         $rating_data = $order_events->getOrderEventRatingData($rating_array)->first();
-        // dd($rating_data);
 
         $menu_cat = $menu_list->menuCategory($resto_id);
         $user->currency=$this->currency;
+        // dd($billing_balance['menu_data']);
+
         return view('customer.menuList')->with(['user_data'=>$user,
                                                 'menu_data'=>$billing_balance['menu_data'],
                                                 'menu_cat'=>$menu_cat,

@@ -1,5 +1,5 @@
-@include('restaurent.include.sideNav')
-@include('restaurent.include.header')
+@include('admin.include.sideNav')
+@include('admin.include.header')
 <!--Data Tables -->
 <link href="{{asset('asset/admin/assets/plugins/bootstrap-datatable/css/dataTables.bootstrap4.min.css')}}"
     rel="stylesheet" type="text/css">
@@ -14,11 +14,8 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
-                    <div class="card-header"><i class="fa fa-table"></i> Order List
-                        <a href="{{url('Restaurent/customerOrder')}}" >
-                            <span class="btn btn-danger" style="float: right;">Refresh</span>
+                    <div class="card-header"><i class="fa fa-money"></i> My Earnings
 
-                        </a>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -26,16 +23,13 @@
                                 <thead>
                                     <tr>
                                         <!-- <th>S.no</th> -->
-                                        <th>Action</th>
 
                                         <th>S.No.</th>
                                         <th>Order Id</th>
-                                        <th>Customer Name</th>
-                                        <th>Dish</th>
-                                        <th>Total Amount</th>
-                                        <th>Payment Method</th>
-                                        <th>Order Status</th>
-                                        <th>Create At</th>
+                                        <th>Earning</th>
+                                        <th>Total Amount Paid</th>
+                                        <th>Delivery Fee</th>
+                                        <th>Created At</th>
 
                                     </tr>
                                 </thead>
@@ -56,7 +50,7 @@
 <!-- End container-fluid-->
 
 <!--End content-wrapper-->
-@include('restaurent.include.footer')
+@include('admin.include.footer')
 <!-- Bootstrap core JavaScript-->
 <script src="{{asset('asset/admin/assets/js/jquery.min.js')}}"></script>
 <!-- waves effect js -->
@@ -75,8 +69,6 @@
 
 <script>
     $(document).ready(function() {
-        //Default data table
-        // //$('#default-datatable').DataTable();
         var table = $('#example').DataTable({
             lengthChange: true,
             processing: true,
@@ -84,14 +76,8 @@
             paging: true,
             dom: 'lBfrtip',
             buttons: ['copy', 'excel', 'pdf', 'print'],
-            ajax: "{{url('Restaurent/customerOrder')}}",
+            ajax: "{{url('adminfimihub/riderEarnings?rider_user_id=').base64_encode($rider_user_id)}}",
             columns: [{
-                    data: 'action',
-                    name: 'action',
-                    orderable: true,
-                    searchable: false
-                },
-                {
                     data: 'DT_RowIndex',
                     name: 'id'
                 },
@@ -100,24 +86,16 @@
                     name: 'order_id'
                 },
                 {
-                    data: 'customer_name',
-                    name: 'customer_name'
-                },
-                {
-                    data: 'ordered_menu',
-                    name: 'ordered_menu'
+                    data: 'order_earning',
+                    name: 'order_earning'
                 },
                 {
                     data: 'total_amount',
                     name: 'total_amount'
                 },
                 {
-                    data: 'payment_type',
-                    name: 'payment_type'
-                },
-                {
-                    data: 'order_status',
-                    name: 'order_status'
+                    data: 'delivery_fee',
+                    name: 'delivery_fee'
                 },
                 {
                     data: 'created_at',

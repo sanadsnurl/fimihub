@@ -260,6 +260,12 @@ class LoginRegisterController extends Controller
                     $bank_data = null;
                     $vehicle_datas = null;
                     $address_data = null;
+                }elseif($user_data->visibility == 3){
+                    $status= false;
+                    $message = "Account Disabled";
+                    $bank_data = null;
+                    $vehicle_datas = null;
+                    $address_data = null;
                 }else{
                     $status= true;
                     $message = "success";

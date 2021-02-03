@@ -164,7 +164,8 @@ class RestaurentController extends Controller
             return Datatables::of($resto_cate_data)
                 ->addIndexColumn()
                 ->addColumn('action', function($row){
-                    $btn = '<a href="deleteMainCat?dish_cat_id='.base64_encode($row->id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Delete</a>';
+                    $btn = '<a href="editMainCategory?dish_main_cat_id=' . base64_encode($row->id) . '" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Edit</a>
+                    <a href="deleteMainCat?dish_cat_id='.base64_encode($row->id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Delete</a>';
                     return $btn;
                 })
                 ->addColumn('created_at', function ($row) {
@@ -636,6 +637,13 @@ class RestaurentController extends Controller
                         return 'ADD-ON';
                     }
                 })
+                ->addColumn('is_required', function ($row) {
+                    if ($row->is_required == 1) {
+                        return "Yes";
+                    } else {
+                        return "No";
+                    }
+                })
                 ->addColumn('created_at', function ($row) {
 
                     return date('d F Y', strtotime($row->created_at));
@@ -663,6 +671,7 @@ class RestaurentController extends Controller
             ],
             'cat_name' => 'unique:custom_menu_categories,name|string|nullable',
             'customization_variant' => 'required|in:1,2',
+            'is_required' => 'required|in:1,2',
 
         ]);
         if (!$validator->fails()) {
@@ -688,6 +697,7 @@ class RestaurentController extends Controller
                 $resto_menu_cat['user_id'] = $user->id;
                 $resto_menu_cat['restaurent_id'] = $resto_data->id;
                 $resto_menu_cat['customization_variant'] = $data['customization_variant'];
+                $resto_menu_cat['is_required'] = $data['is_required'];
 
                 $resto_cate_id = $resto_custom_menu_categories->makeRestoMenuCustomCategory($resto_menu_cat);
             } else {
@@ -696,6 +706,7 @@ class RestaurentController extends Controller
                 $resto_menu_cat['user_id'] = $user->id;
                 $resto_menu_cat['restaurent_id'] = $resto_data->id;
                 $resto_menu_cat['customization_variant'] = $data['customization_variant'];
+                $resto_menu_cat['is_required'] = $data['is_required'];
                 $resto_cate_id = $resto_custom_menu_categories->makeRestoMenuCustomCategory($resto_menu_cat);
             }
             Session::flash('message', 'Custom Category Added Successfully!');
@@ -757,6 +768,7 @@ class RestaurentController extends Controller
                         return "Veg";
                     }
                 })
+
                 ->rawColumns(['action'])
                 ->make(true);
             //dd($user_data);
@@ -934,5 +946,105 @@ class RestaurentController extends Controller
         Session::flash('message', 'Category Deleted Successfully !');
 
         return redirect()->back();
+    }
+
+    public function editMainCategory(Request $request)
+    {
+        $user = Auth::user();
+        $dish_main_cat_id = base64_decode(request('dish_main_cat_id'));
+        $restaurent_detail = new restaurent_detail;
+        $resto_data = $restaurent_detail->getRestoData($user->id);
+        $menu_categories = new menu_categories;
+        $cat_data = $menu_categories->restaurentCategoryPaginationData()->where('service_catagory_id', 1)->get();
+        if ($resto_data == NULL) {
+            $resto_add = NULL;
+            Session::flash('message', 'Please add Restaurant Details!');
+
+            if ($resto_add == NULL) {
+                return view('restaurent.myDetails')->with([
+                    'data' => $user,
+                    'resto_data' => $resto_data,
+                    'resto_add' => null
+                ]);
+            } else {
+                return view('restaurent.myDetails')->with([
+                    'data' => $user,
+                    'resto_data' => $resto_data,
+                    'resto_add' => $resto_add[0]
+                ]);
+            }
+        } else {
+            $resto_menu_categories = new resto_menu_categorie;
+            $resto_cate_data = $resto_menu_categories->restaurentCategoryData($resto_data->id);
+
+            $resto_cate_datas = $resto_cate_data->get();
+        }
+        $resto_menu_categories = new resto_menu_categorie;
+        $dish_cat_details = $resto_menu_categories->getRestoMainCatByID($dish_main_cat_id);
+        $user['currency'] = $this->currency;
+
+        // dd($dish_cat_details);
+        return view('restaurent.editMainCategory')->with(['data' => $user,
+                                                    'dish_cat_details' => $dish_cat_details,
+                                                    'cat_data' => $cat_data]);
+    }
+
+
+    public function editMainCategoryProcess(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            // 'name' => 'required|string|nullable|unique:menu_categories,name,'.auth()->user()->id.',restaurent_id',
+            // 'menu_category_id' => 'required|numeric|unique:resto_menu_categories,menu_category_id,' . auth()->user()->id . ',user_id',
+            'menu_category_id' => [
+                'required',
+                Rule::unique('resto_menu_categories')
+                    ->where('user_id', auth()->user()->id)
+                    ->where('visibility', 0)
+            ],
+            'cat_name' => 'unique:menu_categories,name|string|nullable',
+            'id' => 'required',
+
+        ]);
+        if (!$validator->fails()) {
+            $user = Auth::user();
+            $data = $request->toarray();
+
+            $menu_categories = new menu_categories;
+            $resto_menu_categories = new resto_menu_categorie;
+
+            $restaurent_detail = new restaurent_detail;
+            $resto_data = $restaurent_detail->getRestoData($user->id);
+
+
+            if ($data['menu_category_id'] == -1) {
+                $menu_data = array();
+                $menu_data['name'] = $data['cat_name'];
+                $menu_data['service_catagory_id'] = 1;
+
+                $cat_id = $menu_categories->makeMenuCategory($menu_data);
+
+                $resto_menu_cat = array();
+                $resto_menu_cat['menu_category_id'] = $cat_id;
+                $resto_menu_cat['user_id'] = $user->id;
+                $resto_menu_cat['id'] = $data['id'];
+                $resto_menu_cat['restaurent_id'] = $resto_data->id;
+
+                $resto_cate_id = $resto_menu_categories->editRestoMainCat($resto_menu_cat);
+            } else {
+                $resto_menu_cat = array();
+                $resto_menu_cat['menu_category_id'] = $data['menu_category_id'];
+                $resto_menu_cat['id'] = $data['id'];
+                $resto_menu_cat['user_id'] = $user->id;
+                $resto_menu_cat['restaurent_id'] = $resto_data->id;
+                $resto_cate_id = $resto_menu_categories->editRestoMainCat($resto_menu_cat);
+            }
+            Session::flash('message', 'Category Updated Successfully!');
+
+            return redirect()->back();
+        } else {
+            // dd($validator->messages());
+            return redirect()->back()->withInput()->withErrors($validator);
+        }
     }
 }

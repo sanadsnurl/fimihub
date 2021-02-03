@@ -83,10 +83,7 @@ function kilomiter(dakota, frick, service_data, total_amount) {
                         $('#add_error').html('No Nearby Restaurant Located !');
 
                     }
-                    console.log(total_amount, 'bb');
-
                     var total = deliveryCharge + total_amount;
-                    console.log(total, 'aa');
                     $('#delivery_charge').html(deliveryCharge);
                     $('#delivery_charge_input').val(deliveryCharge);
                     $("#total_amount").html(total);

@@ -95,7 +95,7 @@
                                 </div>
                                 <div class="col-12 col-sm-4 controls">
                                     <label class="control-label">CVV</label>
-                                    <input class="security-code form-control" · inputmode="numeric" type="text"
+                                    <input class="security-code form-control" · inputmode="numeric" type="Password"
                                         name="cvv" placeholder="&#149;&#149;&#149;">
                                     @if($errors->has('cvv'))
                                     <div class="error">{{ $errors->first('cvv') }}</div>

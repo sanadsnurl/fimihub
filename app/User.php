@@ -320,5 +320,18 @@ class User extends Authenticatable
         return $query_data;
     }
 
+    public function changeLoginStatus($data)
+    {
+        unset($data['_token']);
+
+        $query_data = DB::table('users')
+            ->where('id', $data['id'])
+            ->update(['visibility'=> $data['visibility'],'updated_at' => now()]);
+
+            // dd($query_data);
+
+        return $query_data;
+    }
+
 
 }

@@ -34,7 +34,7 @@ class RestaurentController extends Controller
                 ->addColumn('action', function($row){
                     $btn = '<a href="editResto?resto_user_id='.base64_encode($row->resto_user_id).'" class="btn btn-outline-secondary btn-sm btn-round waves-effect waves-light m-0">Edit</a>
                     <a href="deleteResto?resto_user_id='.base64_encode($row->resto_user_id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light mt-1">Delete</a>
-                    ';
+                    <a href="restoEarnings?resto_user_id='.base64_encode($row->resto_user_id).'" class="btn btn-outline-secondary btn-sm btn-round waves-effect waves-light m-0">Earnings</a>';
                     return $btn;
                 })
                 ->addColumn('created_at', function($row){

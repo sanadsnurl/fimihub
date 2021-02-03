@@ -44,6 +44,19 @@ class MyEarning extends Model
         return $query;
     }
 
+    public function getMyEarningOnOrder($userId) {
+        $query = $this
+                    ->leftJoin('orders', function($join)
+                        {
+                        $join->on('orders.id', '=', 'my_earnings.order_id');
+                        $join->where('orders.visibility', 0);
+
+                        })
+                    ->where('my_earnings.user_id', $userId)
+                    ->where('is_active', 1)
+                    ->select('orders.*', 'my_earnings.ride_price as order_earning');
+                    return $query;
+    }
     /**
      * 1. Week
      * 2. Month

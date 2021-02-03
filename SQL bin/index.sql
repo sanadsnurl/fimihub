@@ -188,4 +188,7 @@ INSERT INTO `cms` (`id`, `type`, `content`, `heading`, `is_active`, `deleted_at`
 
 INSERT INTO `reasons` (`id`, `reason`, `user_type`, `is_active`, `created_at`, `updated_at`) VALUES
 (1, 'Location is far away', 2, 1, NULL, NULL),
-(2, 'Unable to Reach on Time', 2, 1, NULL, NULL);
+(2, 'Unable to Reach on Time', 2, 1, NULL, NULL),
+(3,  'Location is far away', '4', '1', NULL, NULL),
+(4,  'Item Unavailable', '4', '1', NULL, NULL),
+(5, 'Unable to Reach on Time', '4', '1', NULL, NULL);

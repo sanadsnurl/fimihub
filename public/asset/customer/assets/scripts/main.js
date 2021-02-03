@@ -240,7 +240,6 @@ $(".order-block .restaurant-info .collapse-tab").click(function() {
 })
 
 
-
 var telInput = $('.telInput');
 telInput.intlTelInput({
     initialCountry: 'jm',

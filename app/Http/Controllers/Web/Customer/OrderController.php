@@ -97,19 +97,22 @@ class OrderController extends Controller
                             ->where('resto_custom_cat_id', $m_data->product_variant_id)->first();
                         $var_sin_data = $menu_custom_list->menuCustomPaginationData($m_data->restaurent_id)
                             ->where('resto_custom_cat_id', $m_data->product_variant_id)->first();
-                        $m_data->product_add_on_id = json_decode($m_data->product_add_on_id);
-
+                        if($m_data->product_add_on_id){
+                            $m_data->product_add_on_id = json_decode($m_data->product_add_on_id)?? 0;
+                        }
                         if (!empty($m_data->variant_data)  && !empty($m_data->cart_variant_id)) {
                             $var_d = $menu_custom_list->getCustomListPrice($m_data->cart_variant_id);
                             $m_data->price = $var_d->price;
                         }
-
-                        foreach ($m_data->product_add_on_id as $add_on) {
-                            $add_ons[] = $menu_custom_list->menuCustomPaginationData($m_data->restaurent_id)
-                                ->where('resto_custom_cat_id', $add_on)->get();
-                            $add_ons_cat[] = $menu_custom_list->menuCustomCategoryData($m_data->restaurent_id)
-                                ->where('resto_custom_cat_id', $add_on)->first();
+                        if($m_data->product_add_on_id){
+                            foreach ($m_data->product_add_on_id as $add_on) {
+                                $add_ons[] = $menu_custom_list->menuCustomPaginationData($m_data->restaurent_id)
+                                    ->where('resto_custom_cat_id', $add_on)->get();
+                                $add_ons_cat[] = $menu_custom_list->menuCustomCategoryData($m_data->restaurent_id)
+                                    ->where('resto_custom_cat_id', $add_on)->first();
+                            }
                         }
+
                         if ($m_data->product_adds_id) {
                             $m_data->product_adds_id = json_decode($m_data->product_adds_id);
                             foreach ($m_data->product_adds_id as $add_on_cart) {
@@ -204,19 +207,24 @@ class OrderController extends Controller
                         ->where('resto_custom_cat_id', $m_data->product_variant_id)->first();
                     $var_sin_data = $menu_custom_list->menuCustomPaginationData($m_data->restaurent_id)
                         ->where('resto_custom_cat_id', $m_data->product_variant_id)->first();
-                    $m_data->product_add_on_id = json_decode($m_data->product_add_on_id);
+                        if($m_data->product_add_on_id){
+                            $m_data->product_add_on_id = json_decode($m_data->product_add_on_id) ?? 0;
+
+                        }
 
                     if (!empty($m_data->variant_data)  && !empty($m_data->cart_variant_id)) {
                         $var_d = $menu_custom_list->getCustomListPrice($m_data->cart_variant_id);
                         $m_data->price = $var_d->price;
                     }
+if($m_data->product_add_on_id){
+    foreach ($m_data->product_add_on_id as $add_on) {
+        $add_ons[] = $menu_custom_list->menuCustomPaginationData($m_data->restaurent_id)
+            ->where('resto_custom_cat_id', $add_on)->get();
+        $add_ons_cat[] = $menu_custom_list->menuCustomCategoryData($m_data->restaurent_id)
+            ->where('resto_custom_cat_id', $add_on)->first();
+    }
+}
 
-                    foreach ($m_data->product_add_on_id as $add_on) {
-                        $add_ons[] = $menu_custom_list->menuCustomPaginationData($m_data->restaurent_id)
-                            ->where('resto_custom_cat_id', $add_on)->get();
-                        $add_ons_cat[] = $menu_custom_list->menuCustomCategoryData($m_data->restaurent_id)
-                            ->where('resto_custom_cat_id', $add_on)->first();
-                    }
                     if ($m_data->product_adds_id) {
                         $m_data->product_adds_id = json_decode($m_data->product_adds_id);
                         foreach ($m_data->product_adds_id as $add_on_cart) {
@@ -397,11 +405,14 @@ class OrderController extends Controller
                 $total_cart_value = $total_cart_value + $m_data->price * $m_data->quantity;
                 // dd($m_data->add_on);
                 $add_on_data = array();
-                foreach ($m_data->add_on as $add_data) {
+                if($m_data->add_on){
+                    foreach ($m_data->add_on as $add_data) {
 
-                    // $total_cart_value = $total_cart_value + $add_data->price * $add_data->quantity;
-                    $add_on_data[] = $add_data;
+                        // $total_cart_value = $total_cart_value + $add_data->price * $add_data->quantity;
+                        $add_on_data[] = $add_data;
+                    }
                 }
+
                 $menu_data_list->add_on_data = $add_on_data;
                 $menu_data[] = $menu_data_list;
             }
