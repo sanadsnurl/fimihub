@@ -485,6 +485,8 @@
         var total_amounts = total_amount.replace(",", '');
         var total_amountss = parseFloat(total_amounts.replace(",", ''));
         var add_details = kilomiter(user, resto,service_data,total_amountss);
+        // console.log(total_amount);
+
         // console.log(add_details, 'resto');
 
     });

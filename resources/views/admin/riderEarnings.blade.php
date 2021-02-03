@@ -15,6 +15,9 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-header"><i class="fa fa-money"></i> My Earnings
+                        <span class="btn btn-success mr-5"
+                            style="float: right;font-weight: bold;font-size: medium;">Total Earning :
+                            {{$total_earning->order_earning ?? 0}}</span>
 
                     </div>
                     <div class="card-body">

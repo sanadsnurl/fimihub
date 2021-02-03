@@ -103,12 +103,12 @@ trait FirstAtlanticIntegrationTraits
             'Amount' => $amount,
             'Currency' => $currency,
             'CurrencyExponent' => 2,
-            'IPAddress' => 'fimihub.com',
+            'IPAddress' => 'https://fimihub.com',
             'MerchantId' => $facId,
             'OrderNumber' => $orderNumber,
             'Signature' => $signature,
             'SignatureMethod' => 'SHA1',
-            'TransactionCode' => '0'
+            'TransactionCode' => '64'
         );
         // The request data is named 'Request' for reasons that are not clear!
         $AuthorizeRequest = array('Request' => array(

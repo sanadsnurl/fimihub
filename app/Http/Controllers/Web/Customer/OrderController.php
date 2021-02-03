@@ -348,6 +348,7 @@ if($m_data->product_add_on_id){
                         $orders = new order();
                         $payment_status = 3;
                         $order_status_update = $orders->updatePaymentStatus($make_order_id, $payment_status);
+                        $txn_array['status'] = 2;
                         $payment_gateway_txns = new payment_gateway_txn();
                         $txn_done = $payment_gateway_txns->insertUpdateTxn($txn_array);
                     }

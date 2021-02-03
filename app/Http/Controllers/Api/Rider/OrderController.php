@@ -136,13 +136,24 @@ class OrderController extends Controller
                 $collectedPrice = $request->input('price');
                 $ServiceCategories = new ServiceCategory();
                 $service_data = $ServiceCategories->getServiceById(1);
-              $rider_earning = (($service_data->rider_commission / 100) * $orderDetails->delivery_fee);
+                $rider_earning = (($service_data->rider_commission / 100) * $orderDetails->delivery_fee);
+
+                $delivery_fee = $orderDetails->delivery_fee;
+                $total_amount_c = round(abs($orderDetails->total_amount - $delivery_fee),2);
+                $tax = $service_data->service_tax;
+                $sub_total = $total_amount_c / (1 + ($tax / 100));
+                $commission = $service_data->service_commission;
+                $total_earning_resto = $sub_total / (1 + ($commission / 100));
+                $total_earning_resto = round($total_earning_resto,2);
+
+
             if($request->input('payment_type') == 3) {
                     $earning = array(
                         'user_id' => $id,
                         'order_id' => $orderId,
                         'ride_price' => $rider_earning,
                         'cash_price' => $price,
+                        'resto_commission' => $total_earning_resto,
                     );
                     $this->myEarning->updateEarning($earning, $orderId);
 
@@ -152,6 +163,7 @@ class OrderController extends Controller
                     'order_id' => $orderId,
                     'ride_price' => $rider_earning,
                     'cash_price' => null,
+                    'resto_commission' => $total_earning_resto,
                 );
                 $this->myEarning->updateEarning($earning, $orderId);
             }

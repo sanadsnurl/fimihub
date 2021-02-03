@@ -440,6 +440,9 @@ class RestaurentController extends Controller
             if ($request->has('product_add_on_id') && !empty('product_add_on_id')) {
                 $data['product_add_on_id'] = json_encode($data['product_add_on_id']);
             }
+            if ($request->has('product_variant_id') && !empty('product_variant_id')&& request('product_variant_id')!=NULL) {
+                $data['price'] = 0;
+            }
             if ($request->hasfile('picture')) {
                 $profile_pic = $request->file('picture');
                 $input['imagename'] = $data['name'] . time() . '.' . $profile_pic->getClientOriginalExtension();
@@ -622,7 +625,6 @@ class RestaurentController extends Controller
             $resto_cate_data = $resto_custom_menu_categories->restaurentCategoryCustomData($resto_data->id);
             $resto_cate_datas = $resto_cate_data->get();
         }
-        // dd($resto_cate_datas);
         if ($request->ajax()) {
             return Datatables::of($resto_cate_data)
                 ->addIndexColumn()
@@ -643,6 +645,15 @@ class RestaurentController extends Controller
                     } else {
                         return "No";
                     }
+
+                })
+                ->addColumn('multiple_select', function ($row) {
+                    if ($row->multiple_select == 1) {
+                        return "Yes";
+                    } else {
+                        return "No";
+                    }
+
                 })
                 ->addColumn('created_at', function ($row) {
 
@@ -672,6 +683,7 @@ class RestaurentController extends Controller
             'cat_name' => 'unique:custom_menu_categories,name|string|nullable',
             'customization_variant' => 'required|in:1,2',
             'is_required' => 'required|in:1,2',
+            'multiple_select' => 'required|in:1,2',
 
         ]);
         if (!$validator->fails()) {
@@ -698,6 +710,7 @@ class RestaurentController extends Controller
                 $resto_menu_cat['restaurent_id'] = $resto_data->id;
                 $resto_menu_cat['customization_variant'] = $data['customization_variant'];
                 $resto_menu_cat['is_required'] = $data['is_required'];
+                $resto_menu_cat['multiple_select'] = $data['multiple_select'];
 
                 $resto_cate_id = $resto_custom_menu_categories->makeRestoMenuCustomCategory($resto_menu_cat);
             } else {
@@ -707,6 +720,7 @@ class RestaurentController extends Controller
                 $resto_menu_cat['restaurent_id'] = $resto_data->id;
                 $resto_menu_cat['customization_variant'] = $data['customization_variant'];
                 $resto_menu_cat['is_required'] = $data['is_required'];
+                $resto_menu_cat['multiple_select'] = $data['multiple_select'];
                 $resto_cate_id = $resto_custom_menu_categories->makeRestoMenuCustomCategory($resto_menu_cat);
             }
             Session::flash('message', 'Custom Category Added Successfully!');

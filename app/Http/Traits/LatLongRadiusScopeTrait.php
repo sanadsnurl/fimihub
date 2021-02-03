@@ -8,10 +8,14 @@ use App\User;
 
 trait LatLongRadiusScopeTrait
 {
+    public function __construct()
+    {
+        $this->max_distance_km_rider = Config('RIDER_NEAR_ORDER');
+        $this->max_distance_km_order = Config('RIDER_NEAR_ORDER');
+        $this->max_distance_km_resto = Config('RESTAURANT_NEAR_USER');
+        # code...
+    }
 
-    public $max_distance_km_rider = 100;
-    public $max_distance_km_order = 100;
-    public $max_distance_km_resto = 1000;
     /*
     *  find the n closest locations
     *  @param float $lat latitude of the po+int of interest
@@ -68,7 +72,7 @@ trait LatLongRadiusScopeTrait
                 ->where('oe.user_type', 1);
                 // ->where('oe.user_id', Auth::id());
             })
-            ->having('distance', '<=', $max_distance_km_order)
+            ->having('distance', '<=', $this->max_distance_km_order)
             ->orderBy('distance', 'ASC' )
             ->whereNull('oe.order_id')
             ->orderBy('orders.id', 'DESC')
@@ -132,7 +136,7 @@ trait LatLongRadiusScopeTrait
             // })
             ->where('users.user_type', 2)
             ->where('users.status', 1)
-            ->having('distance', '<=', $max_distance_km_rider )
+            ->having('distance', '<=', $this->max_distance_km_rider )
             ->whereNotNull('ua.user_id')
             ->orderBy('distance', 'ASC' )
             ->groupBy('users.id');
@@ -194,7 +198,7 @@ trait LatLongRadiusScopeTrait
             })
             ->select(DB::raw($disctance_select) )
             // ->where('users.user_type', 2)
-            ->having('distance', '<=', $max_distance_km_resto)
+            ->having('distance', '<=', $this->max_distance_km_resto)
             ->whereNotNull('ua.user_id')
             ->where('restaurent_details.visibility', 0)
             ->having('dish_count', '>', 0)

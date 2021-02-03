@@ -22,6 +22,7 @@ class CreateMyEarningsTable extends Migration
             $table->integer('user_id');
             $table->float('ride_price', 8,2)->nullable();
             $table->float('cash_price', 8,2)->nullable();
+            $table->float('resto_commission', 8,2)->nullable();
             $table->boolean('is_active')->default(1);
             $table->timestamps();
         });

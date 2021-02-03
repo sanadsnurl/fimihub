@@ -260,6 +260,7 @@
                                                         @foreach($add_onss as $add_ons)
                                                         @if($add_cat->cat_name == $add_ons->cat_name)
                                                         <label for="cheese-{{$m_data->id}}-{{$add_ons->id ?? ''}}">
+                                                            @if($add_cat->multiple_select == 1)
                                                             <input type="checkbox"
                                                                 onClick="increment_quantity('{{base64_encode($m_data->id)}}')"
                                                                 id="cheese-{{$m_data->id}}-{{$add_ons->id ?? ''}}"
@@ -267,6 +268,16 @@
                                                                 class="extras"
                                                                 @if(in_array($add_ons->id,($m_data->product_adds_id) ??
                                                             [],FALSE)) checked @endif>
+                                                            @else
+                                                            <input type="radio"
+                                                                onClick="increment_quantity('{{base64_encode($m_data->id)}}')"
+                                                                id="cheese-{{$m_data->id}}-{{$add_ons->id ?? ''}}"
+                                                                name="custom_data[]" value="{{$add_ons->id ?? ''}}"
+                                                                class="extras"
+                                                                @if(in_array($add_ons->id,($m_data->product_adds_id) ??
+                                                            [],FALSE)) checked @endif>
+                                                            @endif
+
                                                             {{$add_ons->name ?? '' }}
                                                             <span class="price">
                                                                 @if($add_ons->price == 0 || $add_ons->price == NULL)
