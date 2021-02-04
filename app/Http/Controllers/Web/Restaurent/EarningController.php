@@ -97,6 +97,24 @@ class EarningController extends Controller
 
                     return round($total_earning,2);
                 })
+                ->addColumn('total_tax', function ($row) {
+                    $delivery_fee = $row->delivery_fee;
+                    $total_amount = round(abs($row->total_amount - $delivery_fee),2);
+                    $tax = $row->service_tax;
+                    $sub_total = $total_amount / (1 + ($tax / 100));
+                    $total_tax = round(abs($total_amount - $sub_total),2);
+
+                    return $total_tax;
+                })
+                ->addColumn('total_commission', function ($row) {
+                    $delivery_fee = $row->delivery_fee;
+                    $total_amount = round(abs($row->total_amount - $delivery_fee),2);
+                    $tax = $row->service_tax;
+                    $sub_total = $total_amount / (1 + ($tax / 100));
+                    $commission = $row->service_commission;
+                    $total_commission = $sub_total - $sub_total / (1 + ($commission / 100));
+                    return round($total_commission,2);
+                })
                 ->rawColumns(['action', 'ordered_menu'])
                 ->make(true);
         }

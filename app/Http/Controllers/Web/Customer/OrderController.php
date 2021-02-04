@@ -536,4 +536,73 @@ if($m_data->product_add_on_id){
 
         return redirect('/myOrder');
     }
+
+    public function firstAtlanticSaveResult(Request $request){
+        $data = $request->toArray();
+        // First Atlantic Payload
+        if (isset($data['ReasonCode'])) {
+            $payment_reponse = json_encode($data);
+            $order_number = $data['OrderID'];
+            $customer_order = explode('-',$order_number);
+            $make_order_id = $customer_order[0];
+            $orders = new order();
+            $order_data = $orders->getOrderData($make_order_id);
+            $order_number_bank = $data['ReferenceNo'] ?? '';
+            $response_code = $data['ReasonCode'] ?? '';
+
+            $user = new User();
+            $user_data = $user->userData($order_data->user_id);
+            $user = Auth::loginUsingId($order_data->user_id);
+            // auth()->attempt(['mobile'=>$user_data->mobile]);
+            Session::put('user', $user);
+            $txn_array = [
+                'txn_id' => $order_number,
+                'user_id' => $order_data->user_id,
+                'order_id' => $make_order_id,
+                'txn_type' => 1,
+                'amount' => $order_data->total_amount ?? 0,
+                'status' => 1,
+                'payment_type' => 4,
+                'bank_response'=> $payment_reponse
+            ];
+            // Start transaction
+            DB::beginTransaction();
+            if ($response_code == 1) {
+                // Success
+                $orders = new order();
+                $payment_status = 2;
+                $order_status_update = $orders->updatePaymentStatus($make_order_id, $payment_status);
+                $payment_gateway_txns = new payment_gateway_txn();
+                $txn_done = $payment_gateway_txns->insertUpdateTxn($txn_array);
+
+            } else {
+                // Failed
+                $orders = new order();
+                $payment_status = 3;
+                $order_status_update = $orders->updatePaymentStatus($make_order_id, $payment_status);
+                $txn_array['status'] = 2;
+                $payment_gateway_txns = new payment_gateway_txn();
+                $txn_done = $payment_gateway_txns->insertUpdateTxn($txn_array);
+            }
+            if ($order_status_update && $txn_done) {
+                //Commit
+                DB::commit();
+            } else {
+                //rollback
+                DB::rollBack();
+                Session::flash('modal_message', 'Payment failed !');
+
+                Session::flash('modal_check_subscribe', 'open');
+                return redirect()->back();
+
+            }
+            Session::flash('modal_check_order', 'open');
+            Session::flash('order_id', base64_encode($make_order_id));
+            return redirect('/myOrder');
+
+        }else{
+            return redirect('accessDenied');
+        }
+
+    }
 }

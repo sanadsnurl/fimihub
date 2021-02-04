@@ -94,7 +94,7 @@
                                     @endif
                                 </div>
                                 <div class="col-12 col-sm-4 controls">
-                                    <label class="control-label">CVV</label>
+                                    <label class="control-label" style="width: fit-content;">CVV</label>
                                     <input class="security-code form-control" · inputmode="numeric" type="Password"
                                         name="cvv" placeholder="&#149;&#149;&#149;">
                                     @if($errors->has('cvv'))
@@ -112,7 +112,7 @@
                                     @endif
                                 </div>
                                 <div class="col-12 col-sm-4 controls">
-                                    <label class="control-label">Expiration</label>
+                                    <label class="control-label" style="width: fit-content;">Expiration</label>
                                     <input class="expiration-month-and-year form-control" type="text"
                                         name="card_expiry_date" placeholder="MM / YY">
                                     @if($errors->has('card_expiry_date'))

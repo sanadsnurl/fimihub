@@ -143,7 +143,11 @@ class order extends Model
     }
 
     public function updatePaymentStatus($orderId, $payment_status){
-        return $this->where('id', $orderId)->update(['payment_status'=> $payment_status]);
+        if($payment_status == 3){
+            return $this->where('id', $orderId)->update(['payment_status'=> $payment_status,'order_status'=> 1]);
+        }else{
+            return $this->where('id', $orderId)->update(['payment_status'=> $payment_status]);
+        }
     }
 
     public function getOrderData($order_id)
@@ -236,11 +240,7 @@ class order extends Model
     {
         $delivery_time = strtotime("+40 minutes", strtotime($this->created_at));
         return date('h:i', $delivery_time);
-        // dd("dd");
-        // $created_at = DB::table('orders')->select('created_at');
-        // dd($created_at);
-        // $delivery_time = strtotime("+40 minutes", strtotime($created_at));
-        // return date('h:i', $delivery_time);
+
 
     }
 

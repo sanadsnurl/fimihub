@@ -30,7 +30,7 @@
                                         <th>S.No.</th>
                                         <th>Order Id</th>
                                         <th>Earning</th>
-                                        <th>Total Amount Paid</th>
+                                        <th>Total Order Amount</th>
                                         <th>Delivery Fee</th>
                                         <th>Created At</th>
 

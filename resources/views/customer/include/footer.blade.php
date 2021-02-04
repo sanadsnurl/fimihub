@@ -171,8 +171,8 @@
         </div>
     </div>
 </footer>
-<div class="side-panel left" data-panel-id="addressPanel">
-    <div class="inner-sidebar">
+<div class="side-panel left" data-panel-id="addressPanel" >
+    <div class="inner-sidebar" style="overflow: auto;">
         <div class="title">
             <div class="icon close-sidepanel">
                 <img src="{{asset('asset/customer/assets/images/cross.svg')}}" alt="cross">

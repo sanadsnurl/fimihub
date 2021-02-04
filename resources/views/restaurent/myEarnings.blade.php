@@ -32,7 +32,10 @@
                                         <th>Total Amount Paid</th>
                                         <th>Delivery Fee</th>
                                         <th>Tax (in %)</th>
+                                        <th>Total Tax (in $)</th>
                                         <th>Commission (in %)</th>
+                                        <th>Total Commission (in $)</th>
+
                                         <th>Created At</th>
 
                                     </tr>
@@ -108,8 +111,16 @@
                     name: 'service_tax'
                 },
                 {
+                    data: 'total_tax',
+                    name: 'total_tax'
+                },
+                {
                     data: 'service_commission',
                     name: 'service_commission'
+                },
+                {
+                    data: 'total_commission',
+                    name: 'total_commission'
                 },
                 {
                     data: 'created_at',
