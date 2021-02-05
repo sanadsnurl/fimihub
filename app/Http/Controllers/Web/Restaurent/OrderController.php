@@ -240,8 +240,8 @@ class OrderController extends Controller
         // ================================== get rider by restaurant location ====================
         $lat = $resto_add[0]->latitude;
         $lng = $resto_add[0]->longitude;
-        $kmRadius = $this->max_distance_km_rider;
-        $rider = $this->closestRiders($user, $lat, $lng, $kmRadius)->get();
+        // $kmRadius = $this->max_distance_km_rider;
+        $rider = $this->closestRiders($user, $lat, $lng)->get();
 
         foreach ($rider as $rid) {
             if (isset($rid->device_token)) {

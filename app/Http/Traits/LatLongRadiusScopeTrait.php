@@ -8,6 +8,10 @@ use App\User;
 
 trait LatLongRadiusScopeTrait
 {
+    public $max_distance_km_rider;
+    public $max_distance_km_order;
+    public $max_distance_km_resto;
+
     public function __construct()
     {
         $this->max_distance_km_rider = Config('RIDER_NEAR_ORDER');
@@ -25,7 +29,7 @@ trait LatLongRadiusScopeTrait
     *  @param string $units miles|kilometers
     *  @return array
     */
-    public function riderClosestOrders($order, $lat, $lng, $max_distance_km_order= 25, $units = 'kilometers')
+    public function riderClosestOrders($order, $lat, $lng, $max_distance_km_order1 = 25, $units = 'kilometers')
     {
 
         // $numberOfVehicle = $myRequestDetails->number_of_vehicle ? $myRequestDetails->number_of_vehicle : 1;
@@ -72,7 +76,7 @@ trait LatLongRadiusScopeTrait
                 ->where('oe.user_type', 1);
                 // ->where('oe.user_id', Auth::id());
             })
-            ->having('distance', '<=', $this->max_distance_km_order)
+            ->having('distance', '<=', Config('RIDER_NEAR_ORDER'))
             ->orderBy('distance', 'ASC' )
             ->whereNull('oe.order_id')
             ->orderBy('orders.id', 'DESC')
@@ -88,7 +92,7 @@ trait LatLongRadiusScopeTrait
     *  @param string $units miles|kilometers
     *  @return array
     */
-    public function closestRiders($order, $lat, $lng, $max_distance_km_rider = 25, $units = 'kilometers')
+    public function closestRiders($order, $lat, $lng, $max_distance_km_rider1 = 25, $units = 'kilometers')
     {
          // $numberOfVehicle = $myRequestDetails->number_of_vehicle ? $myRequestDetails->number_of_vehicle : 1;
         /*
@@ -136,7 +140,7 @@ trait LatLongRadiusScopeTrait
             // })
             ->where('users.user_type', 2)
             ->where('users.status', 1)
-            ->having('distance', '<=', $this->max_distance_km_rider )
+            ->having('distance', '<=', Config('RIDER_NEAR_ORDER') )
             ->whereNotNull('ua.user_id')
             ->orderBy('distance', 'ASC' )
             ->groupBy('users.id');
@@ -151,7 +155,7 @@ trait LatLongRadiusScopeTrait
     *  @param string $units miles|kilometers
     *  @return array
     */
-    public function closestRestaurant($order, $lat, $lng, $max_distance_km_resto = 25, $units = 'kilometers')
+    public function closestRestaurant($order, $lat, $lng, $max_distance_km_resto1 = 25, $units = 'kilometers')
     {
          // $numberOfVehicle = $myRequestDetails->number_of_vehicle ? $myRequestDetails->number_of_vehicle : 1;
         /*
@@ -198,7 +202,7 @@ trait LatLongRadiusScopeTrait
             })
             ->select(DB::raw($disctance_select) )
             // ->where('users.user_type', 2)
-            ->having('distance', '<=', $this->max_distance_km_resto)
+            ->having('distance', '<=', Config('RESTAURANT_NEAR_USER'))
             ->whereNotNull('ua.user_id')
             ->where('restaurent_details.visibility', 0)
             ->having('dish_count', '>', 0)

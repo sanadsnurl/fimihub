@@ -166,6 +166,8 @@ Route::group(['middleware' => ['cors']], function () {
         Route::get('trackOrder', 'Web\Customer\OrderController@trackOrder');
         //feedback
         Route::post('feedback', 'Web\Customer\OrderController@postFeedback');
+        //Set Card details
+        Route::get('setCard', 'Web\Customer\UserController@setCard');
 
     });
 

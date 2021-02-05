@@ -80,12 +80,12 @@ class DashboardController extends Controller
             $lats = $lat_lng_array['address_latitude'] ??  $lat;
             $lngs = $lat_lng_array['address_longitude'] ?? $lng;
             // print($lats);
-            $kmRadius = $this->max_distance_km_resto;
-            $resto = $this->closestRestaurant($user, $lats, $lngs, $kmRadius);
+            // $kmRadius = $this->max_distance_km_resto;
+            $resto = $this->closestRestaurant($user, $lats, $lngs);
 
             $restaurent_detail = new restaurent_detail;
             //all restaurants
-            $resto_data_query = $this->closestRestaurant($user, $lats, $lngs, $kmRadius);
+            $resto_data_query = $this->closestRestaurant($user, $lats, $lngs);
             if ($request->has('search_field')) {
                 $resto_data_query = $resto_data_query->where('ml.name', 'like', '%' . $search_field . '%')
                     ->orWhere('restaurent_details.name', 'like', '%' . $search_field . '%');
@@ -93,7 +93,7 @@ class DashboardController extends Controller
             $resto_data = $resto_data_query->get();
             // dd($resto_data->toArray());
             //all nonveg restaurants
-            $nonveg_resto_data_query = $this->closestRestaurant($user, $lats, $lngs, $kmRadius)->whereIn('resto_type', [1,3]);
+            $nonveg_resto_data_query = $this->closestRestaurant($user, $lats, $lngs)->whereIn('resto_type', [1,3]);
             if ($request->has('search_field')) {
                 $nonveg_resto_data_query = $nonveg_resto_data_query->where('ml.name', 'like', '%' . $search_field . '%')
                     ->orWhere('restaurent_details.name', 'like', '%' . $search_field . '%');
@@ -101,7 +101,7 @@ class DashboardController extends Controller
             $nonveg_resto_data = $nonveg_resto_data_query->get();
 
             //all veg restaurants
-            $veg_resto_data_query = $this->closestRestaurant($user, $lats, $lngs, $kmRadius)->whereIn('resto_type', [2,3]);
+            $veg_resto_data_query = $this->closestRestaurant($user, $lats, $lngs)->whereIn('resto_type', [2,3]);
             if ($request->has('search_field')) {
                 $veg_resto_data_query = $veg_resto_data_query->where('ml.name', 'like', '%' . $search_field . '%')
                     ->orWhere('restaurent_details.name', 'like', '%' . $search_field . '%');

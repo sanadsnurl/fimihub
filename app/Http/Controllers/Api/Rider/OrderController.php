@@ -67,8 +67,8 @@ class OrderController extends Controller
             } else {
                 return response()->json(['message' =>'Unable to detect location', 'status' => false], $this->successStatus);
             }
-            $kmRadius = $this->max_distance_km_order;
-            $order = $this->riderClosestOrders($user, $lat, $lng, $kmRadius)
+            // $kmRadius = $this->max_distance_km_order ?? '100';
+            $order = $this->riderClosestOrders($user, $lat, $lng)
             ->with('restaurentDetails.restroAddress','userAddress.userDetails')
             ->paginate(10);
             foreach($order as $value) {
@@ -140,12 +140,12 @@ class OrderController extends Controller
 
                 $delivery_fee = $orderDetails->delivery_fee;
                 $total_amount_c = round(abs($orderDetails->total_amount - $delivery_fee),2);
-                $tax = $service_data->service_tax;
+                $tax = $orderDetails->service_tax;
                 $sub_total = $total_amount_c / (1 + ($tax / 100));
-                $commission = $service_data->service_commission;
+                $commission = $orderDetails->service_commission;
                 $total_earning_resto = $sub_total / (1 + ($commission / 100));
                 $total_earning_resto = round($total_earning_resto,2);
-
+// return ($total_earning_resto);
 
             if($request->input('payment_type') == 3) {
                     $earning = array(

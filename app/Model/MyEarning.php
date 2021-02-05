@@ -20,6 +20,7 @@ class MyEarning extends Model
         'user_id',
         'order_id',
         'ride_price',
+        'resto_commission',
         'cash_price',
         'is_active',
     ];

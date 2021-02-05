@@ -27,6 +27,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Notification as FacadesNotification;
 use Mail;
 use App\Message;
+use App\Model\saved_card;
 use Illuminate\Support\Facades\Route;
 use stdClass;
 
@@ -294,5 +295,19 @@ class UserController extends Controller
         $about_data = $cmsObj->getCms(1)->get();
 
         return view('customer.aboutUs')->with(['user_data' => $user_data, 'about_data' => $about_data]);
+    }
+    public function setCard(Request $request){
+        $user = Auth::user();
+        $card_id = request('card_id');
+        $card_array = ['id'=> $card_id, 'user_id' => $user->id];
+        $saved_cards =  new saved_card();
+        $card_data = $saved_cards->getCardById($card_array);
+        // dd($card_array);
+        $card_data->card_number = base64_decode($card_data->card_number);
+        $response = [
+            'card_data' => $card_data,
+        ];
+
+        return $response;
     }
 }
