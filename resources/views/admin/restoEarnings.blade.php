@@ -15,7 +15,9 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-header"><i class="fa fa-money"></i> My Earnings
-
+                        <span class="btn btn-success mr-5"
+                        style="float: right;font-weight: bold;font-size: medium;">Total Earning :
+                        {{$total_earning->resto_earning ?? 0}}</span>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -30,7 +32,9 @@
                                         <th>Total Amount Paid</th>
                                         <th>Delivery Fee</th>
                                         <th>Tax (in %)</th>
+                                        <th>Total Tax (in $)</th>
                                         <th>Commission (in %)</th>
+                                        <th>Total Commission (in $)</th>
                                         <th>Created At</th>
 
                                     </tr>
@@ -88,8 +92,8 @@
                     name: 'order_id'
                 },
                 {
-                    data: 'order_earning',
-                    name: 'order_earning'
+                    data: 'resto_earning',
+                    name: 'resto_earning'
                 },
                 {
                     data: 'total_amount',
@@ -104,8 +108,16 @@
                     name: 'service_tax'
                 },
                 {
+                    data: 'total_tax',
+                    name: 'total_tax'
+                },
+                {
                     data: 'service_commission',
                     name: 'service_commission'
+                },
+                {
+                    data: 'total_commission',
+                    name: 'total_commission'
                 },
                 {
                     data: 'created_at',

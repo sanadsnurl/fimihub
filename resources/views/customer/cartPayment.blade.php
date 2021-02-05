@@ -61,16 +61,16 @@
                     </ul>
                 </div>
 
-                <input type="radio" name="payment" id="paypal" value="2">
+                {{-- <input type="radio" name="payment" id="paypal" value="2">
                 <label for="paypal">
                     <img src="{{asset('asset/customer/assets/images/paypal.svg')}}" alt="paypal">
-                </label>
+                </label> --}}
 
                 {{-- <input type="radio" name="payment" id="cash" value="3">
                 <label for="cash" id="cashondelivery">
                     <img src="{{asset('asset/customer/assets/images/cash-delivery.svg')}}" class="mr-2"
-                        alt="cash on delivery">
-                    CASH ON DELIVERY
+                alt="cash on delivery">
+                CASH ON DELIVERY
                 </label> --}}
 
                 <input type="radio" name="payment" id="atlantic" value="4">
@@ -79,22 +79,46 @@
                         alt="cash on delivery">
                     Pay with Credit/Debit Card
                 </label>
+
                 <div class="content">
+                    <div class="col-md-12">
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width: -webkit-fill-available;
+                                padding: 8px;
+                                background-color: #7D3B8A;
+                                margin-bottom: 10px;">
+                                Select From Saved Cards
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton"
+                                style="width: -webkit-fill-available">
+                                @if(count($card_data))
+                                @foreach($card_data as $user_card)
+                                <a class="dropdown-item" href="#" onclick="return setCardDetails({{$user_card->id ?? ''}})">
+                                    <span class="name"> {{$user_card->person_name ?? ''}} </span> &nbsp; <b>|</b> &nbsp;
+                                    <span class="address">{{$user_card->card_number ?? ''}}
+                                    </span>
+                                </a>
+                                @endforeach
+                                @endif
+                            </div>
+                        </div>
+                    </div>
                     <div class="creditly-wrapper">
                         <div class="credit-card-wrapper">
                             <div class="first-row form-group">
                                 <div class="col-12 col-sm-8 controls">
                                     <label class="control-label">Card Number</label>
-                                    <input class="number credit-card-number form-control" type="text" name="card_number"
+                                    <input class="number credit-card-number form-control card_number" type="text" name="card_number"
                                         inputmode="numeric" autocomplete="cc-number" autocompletetype="cc-number"
-                                        id="da" x-autocompletetype="cc-number"
+                                        id="da " x-autocompletetype="cc-number"
                                         placeholder="&#149;&#149;&#149;&#149; &#149;&#149;&#149;&#149; &#149;&#149;&#149;&#149; &#149;&#149;&#149;&#149;">
                                     @if($errors->has('card_number'))
                                     <div class="error">{{ $errors->first('card_number') }}</div>
                                     @endif
                                 </div>
                                 <div class="col-12 col-sm-4 controls">
-                                    <label class="control-label">CVV</label>
+                                    <label class="control-label" style="width: fit-content;">CVV</label>
                                     <input class="security-code form-control" · inputmode="numeric" type="Password"
                                         name="cvv" placeholder="&#149;&#149;&#149;">
                                     @if($errors->has('cvv'))
@@ -105,18 +129,27 @@
                             <div class="second-row form-group">
                                 <div class="col-12 col-sm-8 controls">
                                     <label class="control-label">Name on Card</label>
-                                    <input class="billing-address-name form-control" type="text" name="person_name"
+                                    <input class="billing-address-name form-control" type="text" name="person_name" id="person_name"
                                         placeholder="Enter Name on Card">
                                     @if($errors->has('person_name'))
                                     <div class="error">{{ $errors->first('person_name') }}</div>
                                     @endif
                                 </div>
                                 <div class="col-12 col-sm-4 controls">
-                                    <label class="control-label">Expiration</label>
+                                    <label class="control-label" style="width: fit-content;">Expiration</label>
                                     <input class="expiration-month-and-year form-control" type="text"
-                                        name="card_expiry_date" placeholder="MM / YY">
+                                        name="card_expiry_date" placeholder="MM / YY" id="card_expiry_date">
                                     @if($errors->has('card_expiry_date'))
                                     <div class="error">{{ $errors->first('card_expiry_date') }}</div>
+                                    @endif
+                                </div>
+                                <div class="col-12 col-sm-4 controls mt-3 ml-2">
+                                    <input type="checkbox" id="remember_card" name="remember_card" value="1">
+                                    <label for="remember_card" class="control-label"
+                                        style="width: fit-content;">Remember this card?</label>
+
+                                    @if($errors->has('remember_card'))
+                                    <div class="error">{{ $errors->first('remember_card') }}</div>
                                     @endif
                                 </div>
                             </div>
@@ -145,4 +178,27 @@
         </div>
     </div>
 </div>
+<script>
+    function setCardDetails(card_id) {
+        $.ajax({
+            url:"setCard",
+            data:"card_id=" + card_id,
+            type:"get",
+            beforeSend: function(){
+                $("#loading-overlay").show();
+            },
+            success: function(response) {
+                $('#person_name').val(response.card_data.person_name);
+                $('.card_number').val(response.card_data.card_number);
+                $('#card_expiry_date').val(response.card_data.card_expiry_date);
+                $("#loading-overlay").hide();
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                $("#loading-overlay").hide();
+                alert("something went wrong");
+            }
+        });
+    }
+</script>
+
 @endsection

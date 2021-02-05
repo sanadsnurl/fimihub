@@ -3,6 +3,8 @@
 namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
+//custom import
+use Illuminate\Support\Facades\DB;
 use Auth;
 use Carbon\Carbon;
 
@@ -18,6 +20,7 @@ class MyEarning extends Model
         'user_id',
         'order_id',
         'ride_price',
+        'resto_commission',
         'cash_price',
         'is_active',
     ];
@@ -87,5 +90,48 @@ class MyEarning extends Model
         } else {
             return $query;
         }
+    }
+
+    public function getMyTotalEarning($userId) {
+        $query = $this
+                    ->leftJoin('orders', function($join)
+                        {
+                        $join->on('orders.id', '=', 'my_earnings.order_id');
+                        $join->where('orders.visibility', 0);
+
+                        })
+                    ->where('my_earnings.user_id', $userId)
+                    ->where('is_active', 1)
+                    ->select(DB::raw('SUM(my_earnings.ride_price) as order_earning'))
+                    ->first();
+                    return $query;
+    }
+
+    public function getMyEarningOnOrderResto($userId) {
+        $query = $this
+                    ->Join('orders', function($join) use($userId)
+                        {
+                        $join->on('orders.id', '=', 'my_earnings.order_id');
+                        $join->where('orders.visibility', 0);
+                        $join->where('orders.restaurent_id', $userId);
+
+                        })
+                    ->where('is_active', 1)
+                    ->select('orders.*', 'my_earnings.ride_price as order_earning', 'my_earnings.resto_commission as resto_earning');
+                    return $query;
+    }
+
+    public function getMyTotalEarningResto($userId) {
+        $query = $this
+                    ->Join('orders', function($join) use($userId)
+                        {
+                        $join->on('orders.id', '=', 'my_earnings.order_id');
+                        $join->where('orders.visibility', 0);
+                        $join->where('orders.restaurent_id', $userId);
+                        })
+                    ->where('is_active', 1)
+                    ->select(DB::raw('SUM(my_earnings.resto_commission) as resto_earning'))
+                    ->first();
+                    return $query;
     }
 }

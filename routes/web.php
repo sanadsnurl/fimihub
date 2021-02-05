@@ -78,6 +78,8 @@ Route::group(['middleware' => ['cors']], function () {
     Route::get('/testPayment', function () {
         return view('customer.testPaymentPage');
     });
+    // first atlantic Process
+    Route::post('/firstAtlanticResult', 'Web\Customer\OrderController@firstAtlanticSaveResult');
     // Partner with us Process
     Route::post('/partnerRegisterProcess', 'Web\Customer\DashboardController@partnerRegister');
     // Customer Login Process
@@ -164,6 +166,8 @@ Route::group(['middleware' => ['cors']], function () {
         Route::get('trackOrder', 'Web\Customer\OrderController@trackOrder');
         //feedback
         Route::post('feedback', 'Web\Customer\OrderController@postFeedback');
+        //Set Card details
+        Route::get('setCard', 'Web\Customer\UserController@setCard');
 
     });
 

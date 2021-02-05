@@ -67,8 +67,8 @@ class OrderController extends Controller
             } else {
                 return response()->json(['message' =>'Unable to detect location', 'status' => false], $this->successStatus);
             }
-            $kmRadius = $this->max_distance_km_order;
-            $order = $this->riderClosestOrders($user, $lat, $lng, $kmRadius)
+            // $kmRadius = $this->max_distance_km_order ?? '100';
+            $order = $this->riderClosestOrders($user, $lat, $lng)
             ->with('restaurentDetails.restroAddress','userAddress.userDetails')
             ->paginate(10);
             foreach($order as $value) {
@@ -136,13 +136,24 @@ class OrderController extends Controller
                 $collectedPrice = $request->input('price');
                 $ServiceCategories = new ServiceCategory();
                 $service_data = $ServiceCategories->getServiceById(1);
-              $rider_earning = (($service_data->rider_commission / 100) * $orderDetails->delivery_fee);
+                $rider_earning = (($service_data->rider_commission / 100) * $orderDetails->delivery_fee);
+
+                $delivery_fee = $orderDetails->delivery_fee;
+                $total_amount_c = round(abs($orderDetails->total_amount - $delivery_fee),2);
+                $tax = $orderDetails->service_tax;
+                $sub_total = $total_amount_c / (1 + ($tax / 100));
+                $commission = $orderDetails->service_commission;
+                $total_earning_resto = $sub_total / (1 + ($commission / 100));
+                $total_earning_resto = round($total_earning_resto,2);
+// return ($total_earning_resto);
+
             if($request->input('payment_type') == 3) {
                     $earning = array(
                         'user_id' => $id,
                         'order_id' => $orderId,
                         'ride_price' => $rider_earning,
                         'cash_price' => $price,
+                        'resto_commission' => $total_earning_resto,
                     );
                     $this->myEarning->updateEarning($earning, $orderId);
 
@@ -152,6 +163,7 @@ class OrderController extends Controller
                     'order_id' => $orderId,
                     'ride_price' => $rider_earning,
                     'cash_price' => null,
+                    'resto_commission' => $total_earning_resto,
                 );
                 $this->myEarning->updateEarning($earning, $orderId);
             }

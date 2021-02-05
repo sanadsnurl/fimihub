@@ -6,8 +6,8 @@
 <div class="content-col">
     <h5>My Orders</h5>
     <ul class="tabs">
-        <li class="active" id="past-order">Past Order</li>
-        <li id="ongoing">On Going</li>
+        <li class="active" id="ongoing">On Going</li>
+        <li  id="past-order">Past Order</li>
     </ul>
     <div class="tab-content" data-tab-id="past-order">
         @if($order_data != NULL)

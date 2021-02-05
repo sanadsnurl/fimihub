@@ -21,7 +21,11 @@ class EarningController extends Controller
     {
         $user = Auth::user();
         $restaurent_detail = new restaurent_detail();
+        $MyEarnings = new MyEarning();
         $resto_user_id = base64_decode(request('resto_user_id'));
+
+
+
         $resto_data = $restaurent_detail->getRestoData($resto_user_id);
         if ($resto_data == NULL) {
             $orders = new order;
@@ -31,10 +35,13 @@ class EarningController extends Controller
             $order_data = $orders->customerOrderPaginationData($resto_data->id)
                             ->whereIn('orders.order_status',[9,10]);
         }
-
+        $resto_id = $resto_data->id ?? 0;
+        $resto_order_data = $MyEarnings->getMyEarningOnOrderResto($resto_id);
+        $resto_order_data_sum = $MyEarnings->getMyTotalEarningResto($resto_id);
+        // dd($resto_order_data);
 
         if ($request->ajax()) {
-            return DataTables::of($order_data)
+            return DataTables::of($resto_order_data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
                     $btn = '';
@@ -91,15 +98,33 @@ class EarningController extends Controller
                     $commission = $row->service_commission;
                     $total_earning = $sub_total / (1 + ($commission / 100));
 
-                    return $total_earning;
+                    return round($total_earning,2);
+                })
+                ->addColumn('total_tax', function ($row) {
+                    $delivery_fee = $row->delivery_fee;
+                    $total_amount = round(abs($row->total_amount - $delivery_fee),2);
+                    $tax = $row->service_tax;
+                    $sub_total = $total_amount / (1 + ($tax / 100));
+                    $total_tax = round(abs($total_amount - $sub_total),2);
+
+                    return $total_tax;
+                })
+                ->addColumn('total_commission', function ($row) {
+                    $delivery_fee = $row->delivery_fee;
+                    $total_amount = round(abs($row->total_amount - $delivery_fee),2);
+                    $tax = $row->service_tax;
+                    $sub_total = $total_amount / (1 + ($tax / 100));
+                    $commission = $row->service_commission;
+                    $total_commission = $sub_total - $sub_total / (1 + ($commission / 100));
+                    return round($total_commission,2);
                 })
                 ->rawColumns(['action', 'ordered_menu'])
                 ->make(true);
         }
         $user['currency'] = $this->currency;
-        // dd($order_data->get());
+        // dd($resto_order_data->get());
 
-        return view('admin.restoEarnings')->with(['data' => $user,'resto_user_id'=>$resto_user_id]);
+        return view('admin.restoEarnings')->with(['data' => $user,'resto_user_id'=>$resto_user_id,'total_earning'=>$resto_order_data_sum]);
     }
 
     public function riderEarningTrack(Request $request)
@@ -108,8 +133,9 @@ class EarningController extends Controller
         $MyEarnings = new MyEarning();
         $rider_user_id = base64_decode(request('rider_user_id'));
         $rider_order_data = $MyEarnings->getMyEarningOnOrder($rider_user_id);
+        $rider_order_data_sum = $MyEarnings->getMyTotalEarning($rider_user_id);
 
-// dd($rider_order_data);
+// dd($rider_order_data_sum);
         if ($request->ajax()) {
             return DataTables::of($rider_order_data)
                 ->addIndexColumn()
@@ -166,6 +192,6 @@ class EarningController extends Controller
         $user['currency'] = $this->currency;
         // dd($order_data->get());
 
-        return view('admin.riderEarnings')->with(['data' => $user,'rider_user_id'=>$rider_user_id]);
+        return view('admin.riderEarnings')->with(['data' => $user,'rider_user_id'=>$rider_user_id,'total_earning'=>$rider_order_data_sum]);
     }
 }

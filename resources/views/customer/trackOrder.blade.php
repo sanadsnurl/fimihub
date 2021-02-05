@@ -64,7 +64,7 @@
                                 <span></span> Order has been picked up by
                                 {{$order_event_data->rider_details->name ?? '---'}}</li>
                                 <li class="{{ in_array($order_data->order_status,array(7,8,9,10,11,12)) ? 'active' : ''}}">
-                                    <span></span> Order On the way</li>
+                                    <span></span> Order Has Arrived</li>
                             @elseif(isset($order_event_data->rider->order_status) &&
                             $order_event_data->rider->order_status >= 1 && $order_data->order_status >= 6)
                             <li
@@ -88,7 +88,7 @@
                                 <span></span> Order has been picked up by
                                 {{$order_event_data->rider_details->name ?? '---'}}</li>
                                 <li class="{{ in_array($order_data->order_status,array(7,8,9,10,11,12)) ? 'active' : ''}}">
-                                    <span></span> Order On the way</li>
+                                    <span></span> Order Has Arrived</li>
                             @else
                             <li
                                 class="{{ in_array($order_data->order_status,array(6,7,8,9,10,11,12)) ? 'active' : ''}}">
@@ -107,7 +107,7 @@
                                 <span></span> Order has been picked up by
                                 {{$order_event_data->rider_details->name ?? '---'}}</li>
                                 <li class="{{ in_array($order_data->order_status,array(7,8,9,10,11,12)) ? 'active' : ''}}">
-                                    <span></span> Order On the way</li>
+                                    <span></span> Order Has Arrived</li>
                             @endif
 
                             <li class="{{ in_array($order_data->order_status,array(9,10)) ? 'active' : ''}} m-0">

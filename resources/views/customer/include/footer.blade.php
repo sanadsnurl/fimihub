@@ -171,8 +171,8 @@
         </div>
     </div>
 </footer>
-<div class="side-panel left" data-panel-id="addressPanel">
-    <div class="inner-sidebar">
+<div class="side-panel left" data-panel-id="addressPanel" >
+    <div class="inner-sidebar" style="overflow: auto;">
         <div class="title">
             <div class="icon close-sidepanel">
                 <img src="{{asset('asset/customer/assets/images/cross.svg')}}" alt="cross">
@@ -485,6 +485,8 @@
         var total_amounts = total_amount.replace(",", '');
         var total_amountss = parseFloat(total_amounts.replace(",", ''));
         var add_details = kilomiter(user, resto,service_data,total_amountss);
+        // console.log(total_amount);
+
         // console.log(add_details, 'resto');
 
     });

@@ -102,6 +102,22 @@
                                 <div class="error">{{ $errors->first('is_required') }}</div>
                                 @endif
                             </div>
+                            <div class="form-group row">
+                                <label for="input-4" class="col-sm-2 col-form-label">Multiple Select</label>
+                                <div class="demo-checkbox ml-4">
+                                    <input type="radio" id="user-checkboxxx" class="filled-in chk-col-primary" value="1"
+                                        name="multiple_select">
+                                    <label for="user-checkboxxx">Yes</label>
+                                </div>
+                                <div class="demo-checkbox">
+                                    <input type="radio" id="user-checkbox1x" class="filled-in chk-col-primary" value="2"
+                                        name="multiple_select">
+                                    <label for="user-checkbox1x">No</label>
+                                </div>
+                                @if($errors->has('multiple_select'))
+                                <div class="error">{{ $errors->first('multiple_select') }}</div>
+                                @endif
+                            </div>
                             <div class="form-footer">
                                 <input type="submit" class="btn btn-primary" value="Add category"></input>
 
@@ -127,6 +143,7 @@
                                         <th>Category Name</th>
                                         <th>Customization Variant</th>
                                         <th>Is Required</th>
+                                        <th>Multiple Select</th>
                                         <!-- <th>About</th> -->
                                         <!-- <th>Discount (%)</th> -->
                                         <th>Create At</th>
@@ -204,6 +221,10 @@ $(document).ready(function() {
             {
                 data: 'is_required',
                 name: 'is_required'
+            },
+            {
+                data: 'multiple_select',
+                name: 'multiple_select'
             },
             {
                 data: 'created_at',

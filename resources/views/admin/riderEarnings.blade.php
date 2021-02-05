@@ -15,6 +15,9 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-header"><i class="fa fa-money"></i> My Earnings
+                        <span class="btn btn-success mr-5"
+                            style="float: right;font-weight: bold;font-size: medium;">Total Earning :
+                            {{$total_earning->order_earning ?? 0}}</span>
 
                     </div>
                     <div class="card-body">
@@ -27,7 +30,7 @@
                                         <th>S.No.</th>
                                         <th>Order Id</th>
                                         <th>Earning</th>
-                                        <th>Total Amount Paid</th>
+                                        <th>Total Order Amount</th>
                                         <th>Delivery Fee</th>
                                         <th>Created At</th>
 
