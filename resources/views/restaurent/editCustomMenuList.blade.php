@@ -5,6 +5,7 @@
     rel="stylesheet" type="text/css">
 <link href="{{asset('asset/admin/assets/plugins/bootstrap-datatable/css/buttons.bootstrap4.min.css')}}" rel="stylesheet"
     type="text/css">
+    <link href="{{asset('asset/admin/assets/plugins/select2/css/select2.min.css')}}" rel="stylesheet" />
 
 <div class="clearfix"></div>
 
@@ -52,7 +53,7 @@
                             <div class="form-group row">
                                 <label for="input-1" class="col-sm-2 col-form-label">Customization Category</label>
                                 <div class="col-sm-10">
-                                    <select name="resto_custom_cat_id" id="" class="form-control">
+                                    <select name="resto_custom_cat_id" id="" class="form-control single-select">
                                         <option value="">-- Select Food Category --</option>
                                         @foreach($cat_data as $c_data)
                                         <option value="{{$c_data->id}}" {{$custom_menu_data->resto_custom_cat_id == $c_data->id ? 'selected':''}}>{{$c_data->cat_name}}</option>
@@ -98,3 +99,17 @@
 
 <!--End content-wrapper-->
 @include('restaurent.include.footer')
+<!-- Bootstrap core JavaScript-->
+<script src="{{asset('asset/admin/assets/js/jquery.min.js')}}"></script>
+<!-- waves effect js -->
+<script src="{{asset('asset/admin/assets/js/waves.js')}}"></script>
+
+<script src="{{asset('asset/admin/assets/plugins/select2/js/select2.min.js')}}"></script>
+<script src="{{asset('asset/admin/assets/plugins/jquery-multi-select/jquery.multi-select.js')}}"></script>
+<script src="{{asset('asset/admin/assets/plugins/jquery-multi-select/jquery.quicksearch.js')}}"></script>
+
+<script>
+    $(document).ready(function() {
+        $('.single-select').select2();
+    });
+</script>

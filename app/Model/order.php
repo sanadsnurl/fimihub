@@ -244,5 +244,21 @@ class order extends Model
 
     }
 
+    public function deleteCustomerOrder($data)
+    {
+        $data['deleted_at'] = now();
+        unset($data['_token']);
 
+        $query_data = DB::table('orders')
+            ->where('id', $data['id'])
+            ->update(['visibility'=> 2,'deleted_at' => $data['deleted_at']]);
+        $query_data = DB::table('order_events')
+            ->where('order_id', $data['id'])
+            ->update(['visibility'=> 2,'deleted_at' => $data['deleted_at']]);
+        $query_data = DB::table('my_earnings')
+            ->where('order_id', $data['id'])
+            ->update(['is_active'=> 2,'updated_at' => $data['deleted_at']]);
+
+        return $query_data;
+    }
 }

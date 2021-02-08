@@ -102,6 +102,7 @@
                             <div class="text-wrap">
                                 <h6>{{$r_data->name ?? ''}}</h6>
                                 <span class="eta">{{$r_data->avg_time ?? '--'}} Min</span>
+                                <span class="distance">{{round($r_data->distance,2) ?? '--'}} KM</span>
                                 <p>{{$r_data->about ?? ''}}</p>
                             </div>
                         </a>
@@ -135,6 +136,8 @@
                                 <div class="text-wrap">
                                     <h6>{{$r_data->name ?? ''}}</h6>
                                     <span class="eta">{{$r_data->avg_time ?? '--'}} Min</span>
+                                    <span class="distance">{{round($r_data->distance,2) ?? '--'}} KM</span>
+
                                     <p>{{$r_data->about ?? ''}}</p>
                                 </div>
                             </a>
@@ -169,6 +172,7 @@
                                 <div class="text-wrap">
                                     <h6>{{$r_data->name ?? ''}}</h6>
                                     <span class="eta">{{$r_data->avg_time ?? '--'}} Min</span>
+                                    <span class="distance">{{round($r_data->distance,2) ?? '--'}} KM</span>
                                     <p>{{$r_data->about ?? ''}}</p>
                                 </div>
                             </a>

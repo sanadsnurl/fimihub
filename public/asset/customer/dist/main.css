@@ -5495,6 +5495,27 @@ header:after,
     background-size: cover;
 }
 
+.card-grid .grid-container .row-wrap .col-wrap .card-wrap .text-wrap .distance {
+    font-size: 14px;
+    font-weight: 600;
+    color: #7D3B8A;
+    background: #E6E6E6;
+    padding: 5px 7px 5px 35px;
+    position: relative;
+    border-radius: 5px;
+}
+
+.card-grid .grid-container .row-wrap .col-wrap .card-wrap .text-wrap .distance::before {
+    position: absolute;
+    content: "";
+    top: 3px;
+    left: 8px;
+    width: 20px;
+    height: 20px;
+    background: url("../assets/images/distance.svg") no-repeat;
+    background-size: cover;
+}
+
 .card-grid .grid-container .btn-wrap {
     text-align: center;
 }
@@ -5657,18 +5678,18 @@ header:after,
     position: relative;
 }
 
-.order-block .restaurant-info .rating-wrap .col-wrap h4.eta {
+.order-block .restaurant-info .rating-wrap .col-wrap h4.distance {
     padding-left: 26px;
 }
 
-.order-block .restaurant-info .rating-wrap .col-wrap h4.eta::before {
+.order-block .restaurant-info .rating-wrap .col-wrap h4.distance::before {
     position: absolute;
     content: "";
     top: 3px;
     left: 0;
     width: 20px;
     height: 20px;
-    background: url(../assets/images/free-time.svg) no-repeat;
+    background: url(../assets/images/distance.svg) no-repeat;
     background-size: cover;
 }
 

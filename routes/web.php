@@ -276,6 +276,8 @@ Route::group(['middleware' => ['cors']], function () {
         Route::post('editMainCategoryProcess', 'Web\Restaurent\RestaurentController@editMainCategoryProcess');
         // Track Order Earnings
         Route::get('myEarnings', 'Web\Restaurent\EarningController@earningTrack');
+        //Delete Order
+        Route::get('deleteOrder', 'Web\Restaurent\OrderController@deleteCustomOrder');
 
     });
 
