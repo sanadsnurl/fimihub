@@ -44,7 +44,11 @@ class MyEarningController extends Controller
         $type = $request->input('type');
         $startDate = date('Y-m-d', strtotime($request->input('start_date')));
         $endDate = date('Y-m-d', strtotime($request->input('end_date')));
-        $response = $this->myEarning->getMyEarningByWeekMonthYear($userId, $type, $startDate, $endDate)->get();
+        $response = $this->myEarning->getMyEarningByWeekMonthYear($userId, $type, $startDate, $endDate)->with('orders')->get();
+        foreach($response as $r){
+            $r->orders->ordered_menu = json_decode($r->orders->ordered_menu);
+            $r->order_id = ($r->orders->order_id);
+        }
         if(count($response)) {
             return response()->json(['data' => $response, 'message' => 'success', 'status' => true], $this->successStatus);
         }

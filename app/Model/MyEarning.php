@@ -25,6 +25,10 @@ class MyEarning extends Model
         'is_active',
     ];
 
+    public function orders() {
+        return $this->belongsTo(order::class, 'order_id');
+    }
+
     public function updateEarning($data, $orderId = false) {
         $id = Auth::id();
         $earning = $this->where('order_id', $orderId)->where('user_id', $id)->first();
@@ -134,4 +138,6 @@ class MyEarning extends Model
                     ->first();
                     return $query;
     }
+
+
 }
