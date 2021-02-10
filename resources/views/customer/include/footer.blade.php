@@ -278,10 +278,12 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body text-center">
-                <h3>Order Confirmed!</h3>
+                <h3>@if(Session::has('order_statuss')){{Session::get('order_statuss')}}
+                    @endif</h3>
                 <img src="{{asset('asset/customer/assets/images/cup_icon.svg')}}" alt="cup">
-                <h3 class="mt-3 mb-3">THANK YOU!</h3>
-                <p>Your order was successfully placed <br>and being prepared for delivery.</p>
+                {{-- <h3 class="mt-3 mb-3">THANK YOU!</h3> --}}
+                <p>@if(Session::has('order_message')){!! Session::get('order_message') !!}
+                    @endif</p>
                 <div class="d-flex align-items-center justify-content-center">
                     <a href="{{url('/trackOrder')}}@if(Session::has('order_id')){{'?odr_id='}}{{Session::get('order_id')}}
                     @endif

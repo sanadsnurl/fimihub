@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Rider;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\GetOrderedMenuRequest;
 use Illuminate\Http\Request;
 use App\Http\Traits\NotificationTrait;
 use App\Http\Traits\LatLongRadiusScopeTrait;
@@ -221,5 +222,37 @@ class OrderController extends Controller
             'payment_type' => 'nullable|required_if:order_status,5|numeric',
             'price' => 'nullable|required_if:payment_type,3|numeric',
         ));
+    }
+
+    public function getOrderedData(GetOrderedMenuRequest $request){
+        $order_id = request('order_id');
+        $orders = new order();
+        $order_data = $orders->getOrderData($order_id);
+        if(isset($order_data->ordered_menu)){
+
+            $order_data->ordered_menu = json_decode($order_data->ordered_menu);
+            $ordered_menu = $order_data->ordered_menu;
+
+
+        }
+        // dd($ordered_menu);
+
+        foreach ($order_data->ordered_menu as $ordered_menu) {
+            $ordered_menu->ordered_add_on = array();
+            $ordered_menu->ordered_variant = array();
+            foreach ($ordered_menu->add_on as $add_datas) {
+                foreach ($add_datas as $add_data) {
+                    if (in_array($add_data->id, ($ordered_menu->product_adds_id) ?? [], FALSE)) {
+                        $ordered_menu->ordered_add_on[] = $add_data;
+                    }
+                }
+            }
+            foreach ($ordered_menu->variant_data as $v_data) {
+                if ($ordered_menu->cart_variant_id == $v_data->id) {
+                    $ordered_menu->ordered_variant[] = $v_data;
+                }
+            }
+        }
+        return response()->json(['data'=>$order_data->ordered_menu,'message' => 'Success ', 'status' => true], $this->successStatus);
     }
 }

@@ -6,7 +6,7 @@
 <footer class="footer">
     <div class="container">
         <div class="text-center">
-            Copyright 2020 by <a href="#" class="link">Ads N Url</a>
+            Copyright 2020 by  <a href="{{url('/')}}" class="link">FiMi Hub</a>
         </div>
     </div>
 </footer>

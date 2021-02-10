@@ -31,10 +31,8 @@
                                         <th>My Earning</th>
                                         <th>Total Amount Paid</th>
                                         <th>Delivery Fee</th>
-                                        <th>Tax (in %)</th>
-                                        <th>Total Tax (in $)</th>
-                                        <th>Commission (in %)</th>
-                                        <th>Total Commission (in $)</th>
+                                        <th>GCT (in %)</th>
+                                        <th>Total GCT (in $)</th>
 
                                         <th>Created At</th>
 
@@ -114,14 +112,7 @@
                     data: 'total_tax',
                     name: 'total_tax'
                 },
-                {
-                    data: 'service_commission',
-                    name: 'service_commission'
-                },
-                {
-                    data: 'total_commission',
-                    name: 'total_commission'
-                },
+
                 {
                     data: 'created_at',
                     name: 'created_at'

@@ -54,6 +54,7 @@ class OrderController extends Controller
                         $btn .= '<a href="acceptOrder?odr_id=' . base64_encode($row->id) . '" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Accept</a>
                         <a href="rejectOrderPage?odr_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Reject</a>';
                     }
+                    $btn .= '<a href="deleteOrder?odr_id=' . base64_encode($row->id) . '" class="btn btn-outline-warning btn-sm btn-round waves-effect waves-light ">Delete</a>';
                     return $btn;
                 })
                 ->addColumn('created_at', function ($row) {
@@ -559,5 +560,20 @@ class OrderController extends Controller
             'order_data' => $order_data,
             'reason_list' => $order_event_data
         ]);
+    }
+
+    public function deleteCustomOrder(Request $request)
+    {
+        $user = Auth::user();
+        $odr_id = base64_decode(request('odr_id'));
+
+        $orders = new order();
+        $delete_menu = array();
+        $delete_menu['id'] = $odr_id;
+
+        $delete_menu = $orders->deleteCustomerOrder($delete_menu);
+        Session::flash('message', 'Order Deleted Successfully !');
+
+        return redirect()->back();
     }
 }

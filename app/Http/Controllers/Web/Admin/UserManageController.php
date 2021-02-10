@@ -16,6 +16,26 @@ use DataTables;
 
 class UserManageController extends Controller
 {
+    public function restoLookup(Request $request){
+        $user = Auth::user();
+        $resto_user_id = base64_decode(request('resto_user_id'));
+        $users = new User;
+        $resto_data = $users->userByIdData($resto_user_id);
+        if(isset($resto_data)){
+            if($resto_data->visibility == 0){
+                Auth::logout();
+                Session::flush(['admin_data','userid']);
+                $user = Auth::loginUsingId($resto_user_id);
+                Session::put('restaurent', $user);
+                Session::flash('message', 'Previous session has been destroyed!');
+                return redirect('Restaurent/customerOrder');
+            }else{
+                Session::flash('message', 'Account Removed Or Not Valid!');
+                return redirect()->back();
+            }
+        }
+    }
+
     public function UserListDetails(Request $request)
     {
         $user = Auth::user();

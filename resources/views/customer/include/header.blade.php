@@ -94,12 +94,14 @@
                                 <div class="notification_body">
                                     <div class="nofication_content">
                                         <ul>
-                                            @if(isset($user_data->notification_data) && !empty($user_data->notification_data))
+                                            @if(isset($user_data->notification_data) &&
+                                            !empty($user_data->notification_data))
                                             @foreach($user_data->notification_data as $not_data)
                                             <li class="d-flex align-items-center active">
                                                 <i class="fas fa-user-circle"></i>
                                                 <div>
-                                                    <p>{{$not_data->title ?? ''}} | Order-Id {{$not_data->txn_id ?? ''}}</p>
+                                                    <p>{{$not_data->title ?? ''}} | Order-Id {{$not_data->txn_id ?? ''}}
+                                                    </p>
                                                     <span
                                                         class="time">{{date('d F Y',strtotime($not_data->created_at))}}</span>
                                                 </div>

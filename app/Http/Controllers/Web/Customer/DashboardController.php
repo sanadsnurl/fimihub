@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use App\Http\Traits\OtpGenerationTrait;
+use Illuminate\Support\Facades\Cookie;
 use Response;
 use Session;
 use Location;
@@ -28,9 +29,13 @@ class DashboardController extends Controller
     use LatLongRadiusScopeTrait, GetBasicPageDataTraits;
     public function index(Request $request)
     {
+
+// dd($_COOKIE["lat"]."--".$_COOKIE["long"]);
         $user = Auth::user();
         $user_data = auth()->user()->userByIdData($user->id);
         $user_data = $this->getBasicCount($user);
+
+
         // dd($user_data);
         if ($request->has('address_latitude')) {
             if(request('search_field') != NULL){
@@ -60,15 +65,16 @@ class DashboardController extends Controller
 
         if ($ip == '127.0.0.1') {
 
-            $lat = '18.4490849';
-            $lng = '-77.2419522';
+            $lat = $_COOKIE["lat"] ?? '18.4490849';
+            $lng = $_COOKIE["long"] ?? '-77.2419522';
         } else {
             $loc_data = Location::get($ip);
 
             $lat = $loc_data->latitude ??  '18.4490849';
             $lng = $loc_data->longitude ?? '-77.2419522';
         }
-
+        $lat = $_COOKIE["lat"] ?? '18.4490849';
+        $lng = $_COOKIE["long"] ?? '-77.2419522';
         if ($lat == 0 || $lng == 0) {
             $resto = [];
 

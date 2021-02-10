@@ -54,8 +54,8 @@ class saved_card extends Model
     }
     public function getCardNumberAttribute($value)
     {
-        $card_explode =  explode(" ",base64_decode($value));
+        $card_explode =  substr(base64_decode($value),0,4);
 
-        return $card_explode[0]." XXXX XXXX XXXX";
+        return $card_explode." XXXX XXXX XXXX";
     }
 }

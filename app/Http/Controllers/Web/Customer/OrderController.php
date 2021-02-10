@@ -367,20 +367,33 @@ class OrderController extends Controller
                     if ($order_status_update && $txn_done) {
                         //Commit
                         DB::commit();
+                        $order_statuss = "Order Confirmed";
+                        $order_message = "Your order was successfully placed <br> and being prepared for delivery.";
                     } else {
                         //rollback
                         DB::rollBack();
+                        $order_statuss = "Order Failed";
+                        $order_message = "Your order was Failed ,<br> tansaction declined.";
                         Session::flash('modal_message', 'Payment failed !');
 
                         Session::flash('modal_check_subscribe', 'open');
                         return redirect()->back();
                     }
                 }
-                if(in_array(request('payment') ,[1,3])){
+                if(in_array(request('payment') ,[3])){
                     $cart = new cart;
+                    $order_statuss = "Order Confirmed";
+                    $order_message = "Your order was successfully placed <br> and being prepared for delivery.";
+                    $cart_delete = $cart->deleteCart($user->id);
+                }elseif(in_array(request('payment') ,[1])){
+                    $cart = new cart;
+                    $order_statuss = "Order Pending";
+                    $order_message = "Your order was pending <br> admin approval needed.";
                     $cart_delete = $cart->deleteCart($user->id);
                 }
                 Session::flash('modal_check_order', 'open');
+                Session::flash('order_statuss', $order_statuss ?? '');
+                Session::flash('order_message', $order_message ?? '');
                 Session::flash('order_id', $order_id);
                 return redirect('/myOrder');
             } else {
@@ -537,17 +550,25 @@ class OrderController extends Controller
         if ($order_check == 'netsetwork') {
             $payment_status = 2;
             // dd($order_check);
+            $order_statuss = "Order Confirmed";
+            $order_message = "Your order was successfully placed <br> and being prepared for delivery.";
             $cart = new cart;
             $cart_delete = $cart->deleteCart($order_data->user_id);
 
             $order_status_update = $orders->updatePaymentStatus($order_check_token, $payment_status);
+            Session::flash('order_statuss', $order_statuss ?? '');
+            Session::flash('order_message', $order_message ?? '');
             Session::flash('modal_check_order', 'open');
             Session::flash('order_id', request('order_check_token'));
         } else {
             $payment_status = 3;
             $order_status = 1;
+            $order_statuss = "Order Failed";
+            $order_message = "Your order was Failed ,<br> tansaction declined.";
             $order_status_update = $orders->updatePaymentStatus($order_check_token, $payment_status);
             $order_status_updates = $orders->updateOrderStatus($order_check_token, $order_status);
+            Session::flash('order_statuss', $order_statuss ?? '');
+            Session::flash('order_message', $order_message ?? '');
             Session::flash('modal_check_order', 'open');
             Session::flash('order_id', request('order_check_token'));
         }
@@ -588,6 +609,8 @@ class OrderController extends Controller
             DB::beginTransaction();
             if ($response_code == 1) {
                 // Success
+                $order_statuss = "Order Confirmed";
+                $order_message = "Your order was successfully placed <br> and being prepared for delivery.";
                 $cart = new cart;
                 $cart_delete = $cart->deleteCart($user->id);
                 $orders = new order();
@@ -597,6 +620,8 @@ class OrderController extends Controller
                 $txn_done = $payment_gateway_txns->insertUpdateTxn($txn_array);
             } else {
                 // Failed
+                $order_statuss = "Order Failed";
+                $order_message = "Your order was Failed ,<br> tansaction declined.";
                 $orders = new order();
                 $payment_status = 3;
                 $order_status_update = $orders->updatePaymentStatus($make_order_id, $payment_status);
@@ -609,6 +634,7 @@ class OrderController extends Controller
                 DB::commit();
             } else {
                 //rollback
+
                 DB::rollBack();
                 Session::flash('modal_message', 'Payment failed !');
 
@@ -616,6 +642,8 @@ class OrderController extends Controller
                 return redirect()->back();
             }
             Session::flash('modal_check_order', 'open');
+            Session::flash('order_statuss', $order_statuss ?? '');
+            Session::flash('order_message', $order_message ?? '');
             Session::flash('order_id', base64_encode($make_order_id));
             return redirect('/myOrder');
         } else {

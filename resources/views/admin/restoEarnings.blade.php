@@ -31,8 +31,8 @@
                                         <th>Earning</th>
                                         <th>Total Amount Paid</th>
                                         <th>Delivery Fee</th>
-                                        <th>Tax (in %)</th>
-                                        <th>Total Tax (in $)</th>
+                                        <th>GCT (in %)</th>
+                                        <th>Total GCT (in $)</th>
                                         <th>Commission (in %)</th>
                                         <th>Total Commission (in $)</th>
                                         <th>Created At</th>

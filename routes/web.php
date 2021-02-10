@@ -276,6 +276,8 @@ Route::group(['middleware' => ['cors']], function () {
         Route::post('editMainCategoryProcess', 'Web\Restaurent\RestaurentController@editMainCategoryProcess');
         // Track Order Earnings
         Route::get('myEarnings', 'Web\Restaurent\EarningController@earningTrack');
+        //Delete Order
+        Route::get('deleteOrder', 'Web\Restaurent\OrderController@deleteCustomOrder');
 
     });
 
@@ -401,6 +403,8 @@ Route::group(['middleware' => ['cors']], function () {
         Route::get('enableRider', 'Web\Admin\RiderController@enableRider');
         //Disable Rider
         Route::get('disableRider', 'Web\Admin\RiderController@disableRider');
+        //Lookup Restaurent
+        Route::get('lookupResto', 'Web\Admin\UserManageController@restoLookup');
 
     });
 

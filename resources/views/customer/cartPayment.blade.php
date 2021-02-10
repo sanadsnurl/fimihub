@@ -66,12 +66,12 @@
                     <img src="{{asset('asset/customer/assets/images/paypal.svg')}}" alt="paypal">
                 </label> --}}
 
-                {{-- <input type="radio" name="payment" id="cash" value="3">
+                <input type="radio" name="payment" id="cash" value="3">
                 <label for="cash" id="cashondelivery">
                     <img src="{{asset('asset/customer/assets/images/cash-delivery.svg')}}" class="mr-2"
                 alt="cash on delivery">
                 CASH ON DELIVERY
-                </label> --}}
+                </label>
 
                 <input type="radio" name="payment" id="atlantic" value="4">
                 <label for="atlantic" id="atlantic">

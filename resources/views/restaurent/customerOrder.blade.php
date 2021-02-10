@@ -15,6 +15,12 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-header"><i class="fa fa-table"></i> Order List
+                        @if(Session::has('message'))
+                            <div class="error" style="text-align:center;">
+                                <h4 class="error">{{ Session::get('message') }}</h4>
+                            </div>
+
+                            @endif
                         <a href="{{url('Restaurent/customerOrder')}}" >
                             <span class="btn btn-danger" style="float: right;">Refresh</span>
 
