@@ -78,7 +78,7 @@ function initialize() {
 
         });
     }
- 
+
 }
 
 function setLocationCoordinates(key, lat, lng) {
@@ -127,6 +127,8 @@ function geocodeLatLng(latitude, longitude) {
                 infowindow.setContent(results[0].formatted_address);
                 let str = results[0].formatted_address;
                 let strRes = str.slice(0, 22) + '...';
+                document.cookie = "lat =" + latitude;
+                document.cookie = "long =" + longitude;
                 document.getElementById('result').innerHTML = strRes;
                 document.getElementById('result').setAttribute('title', str);
             } else {
@@ -164,5 +166,3 @@ $(".banner .save_adrs").on("submit", function() {
         $(".banner .address_box_dyn").removeClass("invalid");
     }
 })
-
-

@@ -403,6 +403,8 @@ Route::group(['middleware' => ['cors']], function () {
         Route::get('enableRider', 'Web\Admin\RiderController@enableRider');
         //Disable Rider
         Route::get('disableRider', 'Web\Admin\RiderController@disableRider');
+        //Lookup Restaurent
+        Route::get('lookupResto', 'Web\Admin\UserManageController@restoLookup');
 
     });
 
