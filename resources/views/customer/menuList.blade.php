@@ -235,12 +235,12 @@
                                     // var_dump($m_data->add_ons_cat);
                                 @endphp
                                 @if(isset($m_data->add_ons_cat) && $flag ==1)
-                                <div class="opt-dropdown" style="dislay:none;">
-                                    <span class="selected">
+                                <div class="opt-dropdown " style="dislay:none;">
+                                    <span class="selected djsonu2">
                                         Popular Add-Ons
                                     </span>
                                     <div class="menu">
-                                        <div class="accordion" id="accordionExample">
+                                        <div class="accordion djsonu" id="accordionExample">
                                             {{-- @if(count($m_data->add_ons_cat)) --}}
                                             @foreach($m_data->add_ons_cat as $add_cat)
                                             @if(!empty($add_cat))
@@ -249,6 +249,8 @@
                                                     <h2 class="mb-0">
                                                         <a class="btn btn-link  @if($add_cat->is_required == 1)
                                                             active_required
+                                                            @else
+                                                        not_active_required
                                                              @endif" data-toggle="collapse"
                                                             data-target="#collapse-{{$m_data->id}}-{{$add_cat->cats_id}}"
                                                             aria-expanded="true"
@@ -263,12 +265,18 @@
 
                                                 <div id="collapse-{{$m_data->id}}-{{$add_cat->cats_id}}" class="collapse
                                                 @if($loop->index == 0)
-                                                show
+                                                shows
                                                 @endif
+
+                                                @if($add_cat->is_required == 1)
+                                                        show
+
+                                                         @endif
                                                 " aria-labelledby="heading-{{$m_data->id}}-{{$add_cat->cats_id}}"
                                                     data-parent="#accordionExample">
                                                     <div class="card-body @if($add_cat->is_required == 1)
                                                         active_required_vij
+
                                                          @endif">
                                                         @foreach($m_data->add_on as $add_onss)
                                                         @if(count($add_onss))
@@ -340,12 +348,40 @@
         var menu_decode_id = atob(menu_id);
         var inputQuantityElement = $("#input-quantity-" + menu_decode_id);
         var isSendRequest = 0;
-        inputQuantityElement.parents(".card-wrap").find(".active_required_vij input[type=checkbox]").each(function( index, value) {
+        inputQuantityElement.parents(".card-wrap").find(".active_required_vij input").each(function( index, value) {
+           console.log("dszx");
             if($(this).prop('checked') == true) {
                 isSendRequest = 1;
             }
             if(isSendRequest == 0) {
-            alert("Please select atleast one required Addon")
+                // $("#accordionExample").style.display = 'block';
+            // $(this).parents('.card-wrap').find('.djsonu').style.display = 'block';
+
+            // $(".order-block .order-menu-row .card-wrap .opt-dropdown .selected").click(function() {
+            //     $(this).parent().toggleClass("open");
+            //     $(this).next(".menu").slideToggle();
+            // })
+            $(this).parents('.card-wrap').find('.opt-dropdown .djsonu2').each(function( index, value) {
+                    // $(this).trigger( "click" );
+                    $(this).parent().addClass("open");
+                    $(this).next(".menu").slideDown();
+                    // console.log($(this).find(".active_required"));
+                    // $(this).parents('.card-wrap').find(".active_required").each(function() {
+                    //     // $(this).slideDown();
+                    //     // collapse
+                    //     // console.log($(this).parents('.accordion').find('.collapse'), "$(this).parents('.accordion').find('.collapse')")
+                    //     $(this).parents('.accordion').find('.collapse').addClass("show");
+                    // });
+                    // $(this).parents('.card-wrap').find(".not_active_required").each(function() {
+                    //     // $(this).slideDown();
+                    //     // collapse
+                    //     // console.log($(this).parents('.accordion').find('.collapse'), "$(this).parents('.accordion').find('.collapse')")
+                    //     $(this).parents('.accordion').find('.ninja').removeClass("show");
+                    // });
+                    // console.log('checking')
+             });
+            alert("Please select atleast one required Addon");
+
             // console.log('request not sended');
             return false;
         }
@@ -429,29 +465,29 @@
 
     $(document).ready(function() {
         $('.js-star-rating').makeStars();
-        setTimeout(()=> {
-        $('.col-order .category-block .active_required_vij').each(function( index, value) {
+    //     setTimeout(()=> {
+    //     $('.col-order .category-block .active_required_vij').each(function( index, value) {
 
-            $(this).find("input").each(function(newIndex,NewValue) {
-                if(newIndex == 0) {
-                    $(this).prop('checked',true)
-                }
+    //         $(this).find("input").each(function(newIndex,NewValue) {
+    //             if(newIndex == 0) {
+    //                 $(this).prop('checked',true)
+    //             }
 
-                });
-            });
+    //             });
+    //         });
 
-     },100)
+    //  },100)
 
-            $('.col-order .category-block .active_required_vij input').click(function() {
-        let elm = $(this).prev('input')
-        setTimeout(()=> {
-            if(elm.is(':checked')) {
-                $('.custom_card_bdy .demo_checkbox input').prop('checked',true);
-            }else {
-                $('.custom_card_bdy .demo_checkbox input').prop('checked',false);
-            }
-        },100)
-    });
+    //         $('.col-order .category-block .active_required_vij input').click(function() {
+    //     let elm = $(this).prev('input')
+    //     setTimeout(()=> {
+    //         if(elm.is(':checked')) {
+    //             $('.custom_card_bdy .demo_checkbox input').prop('checked',true);
+    //         }else {
+    //             $('.custom_card_bdy .demo_checkbox input').prop('checked',false);
+    //         }
+    //     },100)
+    // });
 
         // $(".active_required").each(function(){
         //     if($(this).parents(".card-wrap").find(".product_qty").text() == 0) {
