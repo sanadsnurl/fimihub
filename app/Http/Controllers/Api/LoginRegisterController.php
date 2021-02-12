@@ -26,6 +26,7 @@ use App\Model\user_address;
 
 class LoginRegisterController extends Controller
 {
+    // ROLE = 1-> driver , 2-> runner
     public $byPassOtp = 5555;
     use OtpGenerationTrait;
     public function register(UserStoreRequest $request)
@@ -41,6 +42,7 @@ class LoginRegisterController extends Controller
             $user_insert_data['country_code'] = $data['country_code'];
             $user_insert_data['email'] = $data['email'];
             $user_insert_data['user_type'] = 2;
+            $user_insert_data['role'] = $data['role'];
             $user_insert_data['visibility'] = 1;
 
             $user = User::create($user_insert_data);
@@ -52,8 +54,14 @@ class LoginRegisterController extends Controller
 
             $vehicle_data = array();
             $vehicle_data['user_id'] = $user_data->id;
-            $vehicle_data['vehicle_number'] = $data['vehicle_number'];
-            $vehicle_data['model_name'] = $data['model_name'];
+            if(request()->has('vehicle_number')){
+                $vehicle_data['vehicle_number'] = $data['vehicle_number'];
+
+            }
+            if(request()->has('model_name')){
+                $vehicle_data['model_name'] = $data['model_name'];
+
+            }
 
             if ($request->hasfile('vehicle_image')) {
                 $profile_pic = $request->file('vehicle_image');
@@ -71,8 +79,10 @@ class LoginRegisterController extends Controller
                     $vehicle_data['vehicle_image'] = "";
                 }
             }
-            $vehicle_data['color'] = $data['color'];
+            if(request()->has('color')){
+                $vehicle_data['color'] = $data['color'];
 
+            }
             if ($request->hasfile('background_check')) {
                 $profile_pic = $request->file('background_check');
                 $input['imagename'] = 'PoliceBackgroundCheck' . time() . '.' . $profile_pic->getClientOriginalExtension();
@@ -140,6 +150,7 @@ class LoginRegisterController extends Controller
                     $vehicle_data['driving_license'] = "";
                 }
             }
+            if($data['role'] == 1){
             $vehicle_data['registration_number'] = $data['registration_number'];
             $vehicle_data['policy_company'] = $data['policy_company'];
             $vehicle_data['insurance_company'] = $data['insurance_company'];
@@ -149,6 +160,7 @@ class LoginRegisterController extends Controller
             $vehicle_data['dl_end_date'] = $data['dl_end_date'];
             $vehicle_data['registraion_start_date'] = $data['registraion_start_date'];
             $vehicle_data['registraion_end_date'] = $data['registraion_end_date'];
+            }
             $vehicle_detail = new vehicle_detail;
             $vehicle_datas = $vehicle_detail->insertUpdateVehicleData($vehicle_data);
             $vehicle_datas = $vehicle_detail->getVehicleData($user->id);

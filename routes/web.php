@@ -405,6 +405,14 @@ Route::group(['middleware' => ['cors']], function () {
         Route::get('disableRider', 'Web\Admin\RiderController@disableRider');
         //Lookup Restaurent
         Route::get('lookupResto', 'Web\Admin\UserManageController@restoLookup');
+        // Manage Sub-Admin page
+        Route::get('getSubAdmin', 'Web\Admin\UserManageController@manageSubAdmin');
+        // Add Sub-Admin
+        Route::post('addSubAdmin', 'Web\Admin\UserManageController@addSubAdmin');
+        // Edit Sub-Admin page
+        Route::get('editSubAdmin', 'Web\Admin\UserManageController@editSubAdmin');
+        // Edit Sub-Admin
+        Route::post('editSubAdminProcess', 'Web\Admin\UserManageController@editSubAdminProcess');
 
     });
 

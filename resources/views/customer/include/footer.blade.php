@@ -535,4 +535,14 @@
         $(this).nextAll('span').hide();
     })
 
+    $(document).on("keydown", "#card_expiry_date", function(e) {
+       let input = $(this).val();
+       if(e.keyCode !== 8) {
+        if (input.length >= 2 && input.length <= 5) {
+            var newInput = input.slice(0, 2) + " / " + input.slice(2);
+            $(this).val(newInput);
+        }
+       }
+    })
+
 </script>

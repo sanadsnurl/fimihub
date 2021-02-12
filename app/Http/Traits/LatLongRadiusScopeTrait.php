@@ -16,6 +16,7 @@ trait LatLongRadiusScopeTrait
     {
         $this->max_distance_km_rider = Config('RIDER_NEAR_ORDER');
         $this->max_distance_km_order = Config('RIDER_NEAR_ORDER');
+        $this->max_distance_km_runner = Config('RUNNER_NEAR_ORDER');
         $this->max_distance_km_resto = Config('RESTAURANT_NEAR_USER');
         # code...
     }
@@ -139,6 +140,7 @@ trait LatLongRadiusScopeTrait
             //     // ->where('oe.user_id', Auth::id());
             // })
             ->where('users.user_type', 2)
+            ->where('users.role', 1)
             ->where('users.status', 1)
             ->having('distance', '<=', Config('RIDER_NEAR_ORDER') )
             ->whereNotNull('ua.user_id')
@@ -146,6 +148,60 @@ trait LatLongRadiusScopeTrait
             ->groupBy('users.id');
     }
 
+    public function closestRunner($order, $lat, $lng, $max_distance_km_rider1 = 25, $units = 'kilometers')
+    {
+         // $numberOfVehicle = $myRequestDetails->number_of_vehicle ? $myRequestDetails->number_of_vehicle : 1;
+        /*
+        *  Allow for changing of units of measurement
+        */
+        switch ( $units ) {
+            default:
+            case 'miles':
+                //radius of the great circle in miles
+                $gr_circle_radius = 3959;
+            break;
+            case 'kilometers':
+                //radius of the great circle in kilometers
+                $gr_circle_radius = 6371;
+            break;
+        }
+
+        /*
+        *  Generate the select field for disctance
+        */
+        $disctance_select = sprintf(
+                "users.*,ua.latitude,ua.longitude,ua.id as addres_id, ( %d * acos( cos( radians(%s) ) " .
+                        " * cos( radians( ua.latitude ) ) " .
+                        " * cos( radians( ua.longitude ) - radians(%s) ) " .
+                        " + sin( radians(%s) ) * sin( radians( ua.latitude ) ) " .
+                    ") " .
+                ") " .
+                "AS distance",
+                $gr_circle_radius,
+                $lat,
+                $lng,
+                $lat
+            );
+        return User::leftjoin('user_address as ua', 'users.id', '=', 'ua.user_id')
+            // ->rightJoin('orders as o', 'user_address.id', '=', 'o.address_id')
+            ->select(DB::raw($disctance_select) )
+            // ->whereNotNull('o.address_id')
+            // ->where(function($query) {
+            //     $query->orWhere('orders.order_status', 6)->orWhere('orders.order_status', 5);
+            // })
+            // ->leftjoin('order_events as oe',function($query){
+            //     $query->on('orders.id', '=', 'oe.order_id')
+            //     ->where('oe.user_type', 1);
+            //     // ->where('oe.user_id', Auth::id());
+            // })
+            ->where('users.user_type', 2)
+            ->where('users.role', 2)
+            ->where('users.status', 1)
+            ->having('distance', '<=', Config('RUNNER_NEAR_ORDER') )
+            ->whereNotNull('ua.user_id')
+            ->orderBy('distance', 'ASC' )
+            ->groupBy('users.id');
+    }
     /*
     *  find the n closest locations
     *  @param float $lat latitude of the po+int of interest

@@ -145,16 +145,7 @@
                                 </div>
 
                             </div>
-                            <!-- <div class="form-group row">
-                                <label for="input-1" class="col-sm-2 col-form-label">Discount (%)</label>
-                                <div class="col-sm-10">
-                                    <input type="number" class="form-control" id="input-1" name="discount">
-                                    @if($errors->has('discount'))
-                                    <div class="error">{{ $errors->first('discount') }}</div>
-                                    @endif
-                                </div>
 
-                            </div> -->
                             <div class="form-footer">
                                 <input type="submit" class="btn btn-primary" value="Save Dish"></input>
 
