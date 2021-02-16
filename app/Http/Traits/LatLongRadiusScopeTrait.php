@@ -235,6 +235,7 @@ trait LatLongRadiusScopeTrait
         /*
         *  Generate the select field for disctance
         */
+        // dd($lng);
         $disctance_select = sprintf(
                 "restaurent_details.*,ua.latitude,ua.longitude,ua.id as addres_id,COUNT(DISTINCT ml.id) AS dish_count,
                 COUNT(DISTINCT oe.id) AS rating_count,Round(AVG(oe.order_feedback),1) AS rating,(( %d * acos( cos( radians(%s) ) " .
@@ -269,133 +270,33 @@ trait LatLongRadiusScopeTrait
             ->groupBy('ml.restaurent_id')
             ->groupBy('restaurent_details.id');
 
-            // foreach ($data as $value) {
-            //     $value->frick= new stdClass ;
-            //     $value->dakota = new stdClass ;
-            //     $value->dakota->lat =  $lat;
-            //     $value->dakota->lng =  $lng;
-            //     $value->frick->lat =  $value->latitude;
-            //     $value->frick->lng =  $value->longitude;
-            //     $value->dis = $this->getDistanceScript((int)$lat,$lng, $value->latitude,$value->longitude);
-            // }
 
 
-
+            // return $data;
 
             // dd($data->toArray());
     }
 
-    // public function getDistanceBetweenPointsNew($latitude1, $longitude1, $latitude2, $longitude2, $unit = 'Km') {
-    //     $theta = $longitude1 - $longitude2;
-    //     $distance = (sin(deg2rad($latitude1)) * sin(deg2rad($latitude2))) + (cos(deg2rad($latitude1)) * cos(deg2rad($latitude2)) * cos(deg2rad($theta)));
-    //     $distance = acos($distance);
-    //     $distance = rad2deg($distance);
-    //     $distance = $distance * 60 * 1.1515; switch($unit) {
-    //          case 'Mi': break; case 'Km' : $distance = $distance * 1.609344;
-    //     }
-    //     return (round($distance,2));
-//    }
+    public function getDistanceBetweenPointsNew($latitude1, $longitude1, $latitude2, $longitude2) {
+        // dd($longitude1);
+        $source_address = $latitude1.",".$longitude1;
+        $destination_address = $latitude2.",".$longitude2;
+                $url = "https://maps.googleapis.com/maps/api/directions/json?origin=".$source_address."&destination=".$destination_address."&sensor=false&key=".Config('GOOGLE_MAPS_API_KEY');
+                    // dd($url);
+                $ch = curl_init();
+                    curl_setopt($ch, CURLOPT_URL, $url);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                    curl_setopt($ch, CURLOPT_PROXYPORT, 3128);
+                    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+                    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+                    $response = curl_exec($ch);
+                    curl_close($ch);
+                    $response_all = json_decode($response);
+                    $distance = $response_all->routes[0]->legs[0]->distance->text;
+                    $distance =explode(' km',$distance);
+                    return ($distance[0]);
 
-
-
-
-
-
-
-
-   public function getDistanceScript($lat,$lng, $latitude,$longitude) {
-
-    // echo "<script>";
-    // echo "alert('hello');";
-    // echo "</script>";
-
-    $value = 'asdfsdf';
-    echo "<script>";
-
-        // console.log(dakota, 'dakota');
-        // console.log(frick, 'frick');
-     echo   "
-        var frick = {};
-        var dakota = {};
-        frick.lat = (int)$lat;
-        frick.lng = (int)$lng;
-        dakota.lat = (int)$latitude;
-        dakota.lng = (int)$longitude;
-        var directionsData = {};
-        if (isNaN(frick.lat)) {
-            return false;
-        }
-        if (isNaN(frick.lng)) {
-            return false;
-        }
-        if (isNaN(dakota.lat)) {
-            return false;
-        }
-        if (isNaN(dakota.lng)) {
-            return false;
-        }
-        const center = { lat: 18.4490849, lng: -77.2419522 };
-        const options = { zoom: 15, scaleControl: true, center: center };
-        map = new google.maps.Map(
-            document.getElementById('map'), options);
-        // get distance accouring to address
-        // const dakota = {lat: 28.6623, lng: 77.1411};
-        // const frick = {lat: 28.6280, lng: 77.3649};
-        // The markers for The Dakota and The Frick Collection
-        var mk1 = new google.maps.Marker({ position: dakota, map: map });
-        var mk2 = new google.maps.Marker({ position: frick, map: map });
-        // Draw a line showing the straight distance between the markers
-        function haversine_distance(mk1, mk2) {
-            var R = 3958.8; // Radius of the Earth in miles
-            var rlat1 = mk1.position.lat() * (Math.PI / 180); // Convert degrees to radians
-            var rlat2 = mk2.position.lat() * (Math.PI / 180); // Convert degrees to radians
-            var difflat = rlat2 - rlat1; // Radian difference (latitudes)
-            var difflon = (mk2.position.lng() - mk1.position.lng()) * (Math.PI / 180); // Radian difference (longitudes)
-            var d = 2 * R * Math.asin(Math.sqrt(Math.sin(difflat / 2) * Math.sin(difflat / 2) + Math.cos(rlat1) * Math.cos(rlat2) * Math.sin(difflon / 2) * Math.sin(difflon / 2)));
-            return d;
-        }
-        // Calculate and display the distance between markers
-        var distance = haversine_distance(mk1, mk2);
-        // console.log(distance, 'distance');
-        let directionsService = new google.maps.DirectionsService();
-        let directionsRenderer = new google.maps.DirectionsRenderer();
-        const route = {
-            origin: dakota,
-            destination: frick,
-            travelMode: 'DRIVING'
-        }
-        directionsData = directionsService.route(route,
-            function(response, status) { // anonymous function to capture directions
-                if (status !== 'OK') {
-                    // window.alert('Directions request failed due to ' + status);
-                    // console.log('Directions request failed due to ' + status);
-                    $('#add_error').html('Address Is Not Valid !');
-
-                    return;
-                } else {
-                    directionsRenderer.setDirections(response); // Add route to the map
-                    var directionsData = response.routes[0].legs[0]; // Get data about the mapped route
-                    if (!directionsData) {
-                        $('#add_error').html('Address Is Not Valid !');
-
-                        //   console.log('Directions request failed');
-                        return;
-                    } else {
-                        var delivery_crg = 0;
-                        var str = directionsData.distance.text;
-                        var diskm = str.replace('km', '');
-                        var dis = parseFloat(diskm.replace(',', ''));
-
-                        console.log(dis);
-
-                    }
-                }
-            });";
-
-        echo "</script>";
-return true;
-
-    // return  $value;
    }
+
 
 }

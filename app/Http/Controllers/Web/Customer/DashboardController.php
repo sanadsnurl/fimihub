@@ -23,6 +23,7 @@ use Response;
 use Session;
 use Location;
 use phpDocumentor\Reflection\Types\Null_;
+use stdClass;
 
 class DashboardController extends Controller
 {
@@ -97,6 +98,15 @@ class DashboardController extends Controller
                     ->orWhere('restaurent_details.name', 'like', '%' . $search_field . '%');
             }
             $resto_data = $resto_data_query->get();
+            foreach ($resto_data as $value) {
+                $value->frick= new stdClass ;
+                $value->dakota = new stdClass ;
+                $value->dakota->lat =  $lat;
+                $value->dakota->lng =  $lng;
+                $value->frick->lat =  $value->latitude;
+                $value->frick->lng =  $value->longitude;
+                $value->dis = $this->getDistanceBetweenPointsNew($lat,$lng, $value->latitude,$value->longitude);
+            }
             // dd($resto_data->toArray());
             //all nonveg restaurants
             $nonveg_resto_data_query = $this->closestRestaurant($user, $lats, $lngs)->whereIn('resto_type', [1,3]);
@@ -105,7 +115,15 @@ class DashboardController extends Controller
                     ->orWhere('restaurent_details.name', 'like', '%' . $search_field . '%');
             }
             $nonveg_resto_data = $nonveg_resto_data_query->get();
-
+            foreach ($nonveg_resto_data as $value) {
+                $value->frick= new stdClass ;
+                $value->dakota = new stdClass ;
+                $value->dakota->lat =  $lat;
+                $value->dakota->lng =  $lng;
+                $value->frick->lat =  $value->latitude;
+                $value->frick->lng =  $value->longitude;
+                $value->dis = $this->getDistanceBetweenPointsNew($lat,$lng, $value->latitude,$value->longitude);
+            }
             //all veg restaurants
             $veg_resto_data_query = $this->closestRestaurant($user, $lats, $lngs)->whereIn('resto_type', [2,3]);
             if ($request->has('search_field')) {
@@ -113,6 +131,15 @@ class DashboardController extends Controller
                     ->orWhere('restaurent_details.name', 'like', '%' . $search_field . '%');
             }
             $veg_resto_data = $veg_resto_data_query->get();
+            foreach ($veg_resto_data as $value) {
+                $value->frick= new stdClass ;
+                $value->dakota = new stdClass ;
+                $value->dakota->lat =  $lat;
+                $value->dakota->lng =  $lng;
+                $value->frick->lat =  $value->latitude;
+                $value->frick->lng =  $value->longitude;
+                $value->dis = $this->getDistanceBetweenPointsNew($lat,$lng, $value->latitude,$value->longitude);
+            }
         }
 
         $slider_cms = new slider_cms;
@@ -125,7 +152,7 @@ class DashboardController extends Controller
                 $sl_data[] =  $s_data;
             // }
         }
-
+        // dd($resto_data);
         return view('customer.home')->with([
             'user_data' => $user_data,
             'resto_data' => $resto_data,

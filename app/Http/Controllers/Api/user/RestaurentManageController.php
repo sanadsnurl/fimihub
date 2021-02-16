@@ -59,7 +59,7 @@ class RestaurentManageController extends Controller
                 $resto_data_query = $resto_data_query->where('ml.name', 'like', '%' . $search_field . '%')
                     ->orWhere('restaurent_details.name', 'like', '%' . $search_field . '%');
             }
-            $resto_data = $resto_data_query->get();
+            $resto_data = $resto_data_query->paginate(6);
             // dd($resto_data->toArray());
             //all nonveg restaurants
             $nonveg_resto_data_query = $this->closestRestaurant($user, $lats, $lngs)->whereIn('resto_type', [1,3]);
@@ -67,7 +67,7 @@ class RestaurentManageController extends Controller
                 $nonveg_resto_data_query = $nonveg_resto_data_query->where('ml.name', 'like', '%' . $search_field . '%')
                     ->orWhere('restaurent_details.name', 'like', '%' . $search_field . '%');
             }
-            $nonveg_resto_data = $nonveg_resto_data_query->get();
+            $nonveg_resto_data = $nonveg_resto_data_query->paginate(6);
 
             //all veg restaurants
             $veg_resto_data_query = $this->closestRestaurant($user, $lats, $lngs)->whereIn('resto_type', [2,3]);
@@ -75,12 +75,12 @@ class RestaurentManageController extends Controller
                 $veg_resto_data_query = $veg_resto_data_query->where('ml.name', 'like', '%' . $search_field . '%')
                     ->orWhere('restaurent_details.name', 'like', '%' . $search_field . '%');
             }
-            $veg_resto_data = $veg_resto_data_query->get();
+            $veg_resto_data = $veg_resto_data_query->paginate(6);
         }
 
         return response()->json([
             'user_data' => $user_data,
-            'resto_data' => $resto_data,
+            'near_by_restaurant' => $resto_data,
             'nonveg' => $nonveg_resto_data,
             'veg' => $veg_resto_data
         ], $this->successStatus);

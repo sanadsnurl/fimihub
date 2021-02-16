@@ -91,13 +91,14 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
     Route::post('user/login', 'Api\user\AuthController@login');
     //Forget password
     Route::post('user/forgetPassword', 'Api\user\AuthController@forgetPassword');
-    //Customer dashboard
-    Route::get('/home', 'Web\Customer\DashboardController@index');
+
     //========================================== User Bearer Api's===================================================
 
     Route::group(['middleware' => 'auth:api', 'prefix' => 'user'], function () {
         //User Details
         Route::get('details', 'Api\user\UserAuthController@userDetails');
+        //Customer dashboard
+        Route::get('getRestaurantByCat', 'Api\user\RestaurentManageController@getRestaurentList');
 
     });
 });
