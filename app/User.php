@@ -9,6 +9,8 @@ use Laravel\Passport\HasApiTokens;
 use Illuminate\Support\Facades\DB;
 use App\Model\rider_bank_detail;
 use App\Model\vehicle_detail;
+use App\Model\user_address;
+
 
 use Exception;
 
@@ -86,7 +88,18 @@ class User extends Authenticatable
             dd($e);
         }
     }
+    public function userIdData($id)
+    {
+        try {
+            $user_data=$this
+                ->where('id', $id);
 
+            return $user_data;
+        }
+        catch (Exception $e) {
+            dd($e);
+        }
+    }
     public function userDataWithMobile($userid)
     {
         try {
@@ -355,5 +368,9 @@ class User extends Authenticatable
         return $query_data;
     }
 
+    public function userAddress()
+    {
+        return $this->hasMany(user_address::class, 'user_id')->where('visibility',0);
+    }
 
 }
