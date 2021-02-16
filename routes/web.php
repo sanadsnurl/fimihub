@@ -35,7 +35,14 @@ Route::group(['middleware' => ['cors']], function () {
     Route::get('/accessDenied', function () {
         return view('errors.401');
     });
-
+    // Customer Shooping Comming Soon
+    Route::get('/shopping', function () {
+        return view('errors.shoppingCommingSoon');
+    });
+    // Customer Errands Comming Soon
+    Route::get('/errands', function () {
+        return view('errors.errandCommingSoon');
+    });
     // Customer index Page
     Route::get('/', 'Web\Customer\CmsController@indexHandShake');
 
@@ -59,6 +66,10 @@ Route::group(['middleware' => ['cors']], function () {
     Route::get('/mechantQnA', 'Web\Customer\CmsController@indexMerchantQnA');
     // Privacy Policy
     Route::get('/privacyPolicyPage', 'Web\Customer\CmsController@indexPrivacyPolicy');
+    // Return Policy
+    Route::get('/returnPolicyPage', 'Web\Customer\CmsController@indexReturnPolicy');
+    // Partner Agreement
+    Route::get('/partnerAgreementPage', 'Web\Customer\CmsController@indexPartnerAgreementPolicy');
     // Partner with us page
     Route::get('/partnerWithUs', function () {
         return view('customer.auth.partnerRegister');
@@ -67,6 +78,8 @@ Route::group(['middleware' => ['cors']], function () {
     Route::get('/testPayment', function () {
         return view('customer.testPaymentPage');
     });
+    // first atlantic Process
+    Route::post('/firstAtlanticResult', 'Web\Customer\OrderController@firstAtlanticSaveResult');
     // Partner with us Process
     Route::post('/partnerRegisterProcess', 'Web\Customer\DashboardController@partnerRegister');
     // Customer Login Process
@@ -96,6 +109,8 @@ Route::group(['middleware' => ['cors']], function () {
     //Contact Us Process
     Route::get('makePaypalOrder', 'Web\Customer\OrderController@changePaypalOrderStatus');
 
+    Route::group(['middleware' => 'gotoafterauth'], function () {
+    });
     //========================================== Session Customer Auth Routes ===================================================
 
     Route::group(['middleware' => 'customerauth'], function () {
@@ -151,6 +166,8 @@ Route::group(['middleware' => ['cors']], function () {
         Route::get('trackOrder', 'Web\Customer\OrderController@trackOrder');
         //feedback
         Route::post('feedback', 'Web\Customer\OrderController@postFeedback');
+        //Set Card details
+        Route::get('setCard', 'Web\Customer\UserController@setCard');
 
     });
 
@@ -173,7 +190,16 @@ Route::group(['middleware' => ['cors']], function () {
     Route::post('Restaurent/verifyOtp', 'Web\Restaurent\LoginRegisterController@verifyOtp');
     // Resend Otp
     Route::get('/resendOtp', 'Web\Restaurent\LoginRegisterController@resendOtp');
-
+    //Forget Password Page
+    Route::get('Restaurent/forgetPassword', 'Web\Restaurent\LoginRegisterController@forgetPassword');
+    //Forget Password Process
+    Route::post('Restaurent/forgetPasswordProcess', 'Web\Restaurent\LoginRegisterController@forgetPasswordProcess');
+    //Forget Password Page
+    Route::get('Restaurent/setNewPassword', 'Web\Restaurent\LoginRegisterController@setNewPassword');
+    //Forget Password Process
+    Route::post('Restaurent/verifyForgetPasswordOtp', 'Web\Restaurent\LoginRegisterController@verifyForgetPasswordOtp');
+     //Forget Password Resend Password
+     Route::get('Restaurent/resendNewOtp', 'Web\Restaurent\LoginRegisterController@resendNewOtp');
     //========================================== Session RestaurentAuth Routes ===================================================
 
     Route::group(['middleware' => 'restaurentauth', 'prefix'=>'Restaurent'],function () {
@@ -206,6 +232,8 @@ Route::group(['middleware' => ['cors']], function () {
         Route::get('acceptOrder', 'Web\Restaurent\OrderController@acceptOrder');
         //Reject Customer Order
         Route::get('rejectOrder', 'Web\Restaurent\OrderController@rejectOrder');
+        //Reject Customer Order
+        Route::get('rejectOrderPage', 'Web\Restaurent\OrderController@rejectOrderPage');
         //Packed Customer Order
         Route::get('packedOrder', 'Web\Restaurent\OrderController@packedOrder');
         //View Customer Order
@@ -224,6 +252,32 @@ Route::group(['middleware' => ['cors']], function () {
         Route::get('deleteAddOn', 'Web\Restaurent\RestaurentController@deleteCustomization');
         //Edit Add ON
         Route::get('editAddOn', 'Web\Restaurent\RestaurentController@editCustomization');
+        //Edit Customization
+        Route::get('editCustomMenu', 'Web\Restaurent\RestaurentController@editCustomMenu');
+        //Edit Customization Process
+        Route::post('editCustomMenuProcess', 'Web\Restaurent\RestaurentController@editCustomMenuProcess');
+        //Delete Customization Process
+        Route::get('deleteCustomMenu', 'Web\Restaurent\RestaurentController@deleteCustomMenu');
+        //Edit Customization Category
+        Route::get('editCustomCat', 'Web\Restaurent\RestaurentController@editCustomCat');
+        //Edit Customization Category Process
+        Route::post('editCustomCatProcess', 'Web\Restaurent\RestaurentController@editCustomCatProcess');
+        //Delete Customization Category Process
+        Route::get('deleteCustomCat', 'Web\Restaurent\RestaurentController@deleteCustomCat');
+        //Delete Main Cat
+        Route::get('deleteMainCat', 'Web\Restaurent\RestaurentController@deleteMainCat');
+        //Reset Password Page
+        Route::get('resetPassword', 'Web\Restaurent\LoginRegisterController@resetPassword');
+        //Reset Password Process
+        Route::post('resetPasswordProcess', 'Web\Restaurent\LoginRegisterController@resetPasswordProcess');
+        // Menu Category update Page
+        Route::get('editMainCategory', 'Web\Restaurent\RestaurentController@editMainCategory');
+        // Menu Category update Process
+        Route::post('editMainCategoryProcess', 'Web\Restaurent\RestaurentController@editMainCategoryProcess');
+        // Track Order Earnings
+        Route::get('myEarnings', 'Web\Restaurent\EarningController@earningTrack');
+        //Delete Order
+        Route::get('deleteOrder', 'Web\Restaurent\OrderController@deleteCustomOrder');
 
     });
 
@@ -337,6 +391,28 @@ Route::group(['middleware' => ['cors']], function () {
         Route::post('editEnvProcess', 'Web\Admin\EnvSettingController@getEditEnvProcess');
         //Delete Rider
         Route::get('deleteRider', 'Web\Admin\RiderController@deleteRider');
+        //Reset Password Page
+        Route::get('resetPassword', 'Web\Admin\LoginRegisterController@resetPassword');
+        //Reset Password Process
+        Route::post('resetPasswordProcess', 'Web\Admin\LoginRegisterController@resetPasswordProcess');
+        // Track Resto Earnings
+        Route::get('restoEarnings', 'Web\Admin\EarningController@restoEarningTrack');
+        // Track Rider Earnings
+        Route::get('riderEarnings', 'Web\Admin\EarningController@riderEarningTrack');
+        //Enable Rider
+        Route::get('enableRider', 'Web\Admin\RiderController@enableRider');
+        //Disable Rider
+        Route::get('disableRider', 'Web\Admin\RiderController@disableRider');
+        //Lookup Restaurent
+        Route::get('lookupResto', 'Web\Admin\UserManageController@restoLookup');
+        // Manage Sub-Admin page
+        Route::get('getSubAdmin', 'Web\Admin\UserManageController@manageSubAdmin');
+        // Add Sub-Admin
+        Route::post('addSubAdmin', 'Web\Admin\UserManageController@addSubAdmin');
+        // Edit Sub-Admin page
+        Route::get('editSubAdmin', 'Web\Admin\UserManageController@editSubAdmin');
+        // Edit Sub-Admin
+        Route::post('editSubAdminProcess', 'Web\Admin\UserManageController@editSubAdminProcess');
 
     });
 

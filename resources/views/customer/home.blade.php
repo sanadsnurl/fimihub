@@ -54,7 +54,8 @@
                                 </div>
 
                                 <div class="search-input">
-                                    <input type="text" id="filter_name" name="search_field" placeholder="Search for restaurant, food">
+                                    <input type="text" id="filter_name" name="search_field"
+                                        placeholder="Search for restaurant, food">
 
                                     <div class="search-btn">
                                         <input type="submit" value=" ">
@@ -90,11 +91,18 @@
                                 <img src="{{$r_data->picture ?? asset('asset/customer/assets/images/resto_thumbnail.png')}}"
                                     alt="restaurant">
                                 <div class="img-cutout"></div>
-                                <span class="rating">4.1 (60+)</span>
+                                <span class="rating">
+                                    @if($r_data->rating_count <10)
+                                    NEW
+                                    @else
+                                    {{$r_data->rating ?? 'NEW'}} ({{$r_data->rating_count ?? ''}})
+                                    @endif
+                                </span>
                             </div>
                             <div class="text-wrap">
                                 <h6>{{$r_data->name ?? ''}}</h6>
                                 <span class="eta">{{$r_data->avg_time ?? '--'}} Min</span>
+                                <span class="distance">{{round($r_data->distance,2) ?? '--'}} KM</span>
                                 <p>{{$r_data->about ?? ''}}</p>
                             </div>
                         </a>
@@ -128,6 +136,8 @@
                                 <div class="text-wrap">
                                     <h6>{{$r_data->name ?? ''}}</h6>
                                     <span class="eta">{{$r_data->avg_time ?? '--'}} Min</span>
+                                    <span class="distance">{{round($r_data->distance,2) ?? '--'}} KM</span>
+
                                     <p>{{$r_data->about ?? ''}}</p>
                                 </div>
                             </a>
@@ -162,6 +172,7 @@
                                 <div class="text-wrap">
                                     <h6>{{$r_data->name ?? ''}}</h6>
                                     <span class="eta">{{$r_data->avg_time ?? '--'}} Min</span>
+                                    <span class="distance">{{round($r_data->distance,2) ?? '--'}} KM</span>
                                     <p>{{$r_data->about ?? ''}}</p>
                                 </div>
                             </a>

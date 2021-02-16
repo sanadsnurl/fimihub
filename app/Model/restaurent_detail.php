@@ -64,6 +64,20 @@ class restaurent_detail extends Model
             dd($e);
         }
     }
+
+    public function getRestoDataOnIdNotDel($userid)
+    {
+        try {
+            $restaurent_details=DB::table('restaurent_details')
+                ->where('id', $userid)
+                ->first();
+
+            return $restaurent_details;
+        }
+        catch (Exception $e) {
+            dd($e);
+        }
+    }
     public function getallRestoData()
     {
         try {

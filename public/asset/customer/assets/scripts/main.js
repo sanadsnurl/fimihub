@@ -53,8 +53,8 @@
         categoryTabs.removeClass("active");
         $(this).addClass("active");
         $("html, body").animate({
-            scrollTop: categoryBlock.offset().top
-        }, 1000);
+            scrollTop: categoryBlock.offset().top - 150
+        }, 800);
     })
 
     // img upload
@@ -120,6 +120,24 @@
     }, 1000);
 
 })(jQuery);
+
+
+$(function() {
+    var creditly = Creditly.initialize(
+        '.creditly-wrapper .expiration-month-and-year',
+        '.creditly-wrapper .credit-card-number',
+        '.creditly-wrapper .security-code',
+        '.creditly-wrapper .card-type');
+
+    $(".payment_options .paynow_btn").click(function(e) {
+        if ($(".payment_options #atlantic").is(":checked")) {
+            let output = creditly.validate();
+            if (!output) {
+                e.preventDefault();
+            }
+        }
+    })
+});
 
 
 // jump cursor to next input
@@ -221,22 +239,6 @@ $(".order-block .restaurant-info .collapse-tab").click(function() {
     $(this).next().slideToggle();
 })
 
-$(function() {
-    var creditly = Creditly.initialize(
-        '.creditly-wrapper .expiration-month-and-year',
-        '.creditly-wrapper .credit-card-number',
-        '.creditly-wrapper .security-code',
-        '.creditly-wrapper .card-type');
-
-    $(".payment_options .paynow_btn").click(function(e) {
-        if ($(".payment_options #atlantic").is(":checked")) {
-            let output = creditly.validate();
-            if (!output) {
-                e.preventDefault();
-            }
-        }
-    })
-});
 
 var telInput = $('.telInput');
 telInput.intlTelInput({
@@ -249,9 +251,30 @@ telInput.intlTelInput({
 });
 
 $('.telInput').on('focus', function() {
-    var code = $('.selected-dial-code').text()
+    var code = $('.signUpmain .selected-dial-code').text()
     $('.country_code').val(code);
 });
 
-var jdcode = $('.selected-dial-code').text()
+var jdcode = $('.signUpmain .selected-dial-code').text()
 $('.country_code').val(jdcode);
+
+
+
+// forgote password modal
+var telInput2 = $('.telInput2');
+telInput2.intlTelInput({
+    initialCountry: 'jm',
+    preferredCountries: ['us', 'gb', 'br', 'ru', 'cn', 'es', 'jm'],
+    autoPlaceholder: '',
+    separateDialCode: true,
+    // nationalMode:false,
+    // utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/12.1.6/js/utils.js"
+});
+
+$('.telInput2').on('focus', function() {
+    var code = $('#forgot_psw .selected-dial-code').text()
+    $('.country_code2').val(code);
+});
+
+var jdcode = $('#forgot_psw .selected-dial-code').text()
+$('.country_code2').val(jdcode);

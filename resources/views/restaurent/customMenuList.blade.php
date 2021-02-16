@@ -5,6 +5,7 @@
     rel="stylesheet" type="text/css">
 <link href="{{asset('asset/admin/assets/plugins/bootstrap-datatable/css/buttons.bootstrap4.min.css')}}" rel="stylesheet"
     type="text/css">
+    <link href="{{asset('asset/admin/assets/plugins/select2/css/select2.min.css')}}" rel="stylesheet" />
 
 <div class="clearfix"></div>
 
@@ -23,7 +24,8 @@
                                 <i class="fa fa-cutlery"></i>
                                 Add Customization
                                 <a href="{{url('Restaurent/menuCustomCategory')}}" class="" target="_blank">
-                                    <span class="btn btn-danger" style="float: right;">+ Add Customization Category</span>
+                                    <span class="btn btn-danger" style="float: right;">+ Add Customization
+                                        Category</span>
 
                                 </a>
 
@@ -38,7 +40,8 @@
                             <div class="form-group row">
                                 <label for="input-1" class="col-sm-2 col-form-label">Customization Name</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="input-1" name="name" value="{{old('name')}}">
+                                    <input type="text" class="form-control" id="input-1" name="name"
+                                        value="{{old('name')}}">
                                     @if($errors->has('name'))
                                     <div class="error">{{ $errors->first('name') }}</div>
                                     @endif
@@ -48,7 +51,7 @@
                             <div class="form-group row">
                                 <label for="input-1" class="col-sm-2 col-form-label">Customization Category</label>
                                 <div class="col-sm-10">
-                                    <select name="resto_custom_cat_id" id="" class="form-control">
+                                    <select name="resto_custom_cat_id" id="" class="form-control single-select">
                                         <option value="">-- Select Food Category --</option>
                                         @foreach($cat_data as $c_data)
                                         <option value="{{$c_data->id}}">{{$c_data->cat_name}}</option>
@@ -62,11 +65,11 @@
 
                             </div>
 
-
                             <div class="form-group row">
                                 <label for="input-1" class="col-sm-2 col-form-label">Price ($)</label>
                                 <div class="col-sm-10">
-                                    <input type="number" class="form-control" id="input-1" name="price" value="{{old('price')}}">
+                                    <input type="number" class="form-control" id="input-1" name="price"
+                                        value="{{old('price')}}">
                                     @if($errors->has('price'))
                                     <div class="error">{{ $errors->first('price') }}</div>
                                     @endif
@@ -108,13 +111,12 @@
                             <table id="example" class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <!-- <th>S.no</th> -->
+                                        <th>Action</th>
                                         <th>S.No.</th>
                                         <th>Customization Name</th>
                                         <th>Category</th>
                                         <th>Price</th>
                                         <th>Create At</th>
-                                        {{-- <th>Action</th> --}}
 
                                     </tr>
                                 </thead>
@@ -132,11 +134,7 @@
 
 </div>
 
-
-
-
 <!-- End container-fluid-->
-
 
 <!--End content-wrapper-->
 @include('restaurent.include.footer')
@@ -144,6 +142,11 @@
 <script src="{{asset('asset/admin/assets/js/jquery.min.js')}}"></script>
 <!-- waves effect js -->
 <script src="{{asset('asset/admin/assets/js/waves.js')}}"></script>
+
+<script src="{{asset('asset/admin/assets/plugins/select2/js/select2.min.js')}}"></script>
+<script src="{{asset('asset/admin/assets/plugins/jquery-multi-select/jquery.multi-select.js')}}"></script>
+<script src="{{asset('asset/admin/assets/plugins/jquery-multi-select/jquery.quicksearch.js')}}"></script>
+
 <!--Data Tables js-->
 <script src="{{asset('asset/admin/assets/plugins/bootstrap-datatable/js/jquery.dataTables.min.js')}}"></script>
 <script src="{{asset('asset/admin/assets/plugins/bootstrap-datatable/js/dataTables.bootstrap4.min.js')}}"></script>
@@ -157,47 +160,49 @@
 <script src="{{asset('asset/admin/assets/plugins/bootstrap-datatable/js/buttons.colVis.min.js')}}"></script>
 
 <script>
-$(document).ready(function() {
-    //Default data table
-    //$('#default-datatable').DataTable();
-    var table = $('#example').DataTable({
-        lengthChange: true,
-        processing: true,
-        serverSide: true,
-        paging: true,
-        dom: 'lBfrtip',
-        buttons: ['copy', 'excel', 'pdf', 'print'],
-        ajax: "{{url('Restaurent/menuCustomList')}}",
-        columns: [{
-                data: 'DT_RowIndex',
-                name: 'id'
-            },
-            {
-                data: 'name',
-                name: 'name'
-            },
-            {
-                data: 'cat_name',
-                name: 'cat_name'
-            },
-            {
-                data: 'price',
-                name: 'price'
-            },
-            {
-                data: 'created_at',
-                name: 'created_at'
-            },
-            // {
-            //     data: 'action',
-            //     name: 'action',
-            //     orderable: true,
-            //     searchable: false
-            // },
-        ]
+    $(document).ready(function() {
+        //Default data table
+        //$('#default-datatable').DataTable();
+        var table = $('#example').DataTable({
+            lengthChange: true,
+            processing: true,
+            serverSide: true,
+            paging: true,
+            dom: 'lBfrtip',
+            buttons: ['copy', 'excel', 'pdf', 'print'],
+            ajax: "{{url('Restaurent/menuCustomList')}}",
+            columns: [{
+                    data: 'action',
+                    name: 'action',
+                    orderable: true,
+                    searchable: false
+                },
+                {
+                    data: 'DT_RowIndex',
+                    name: 'id'
+                },
+                {
+                    data: 'name',
+                    name: 'name'
+                },
+                {
+                    data: 'cat_name',
+                    name: 'cat_name'
+                },
+                {
+                    data: 'price',
+                    name: 'price'
+                },
+                {
+                    data: 'created_at',
+                    name: 'created_at'
+                },
+            ]
+        });
+        table.buttons().container()
+            .appendTo('#example_wrapper .col-md-6:eq(0)');
+        $('.single-select').select2();
+
     });
-    table.buttons().container()
-        .appendTo('#example_wrapper .col-md-6:eq(0)');
-});
 </script>
 <!--End content-wrapper-->

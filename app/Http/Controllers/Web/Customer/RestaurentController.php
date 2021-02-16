@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use App\Http\Traits\OtpGenerationTrait;
 use App\Model\menu_custom_list;
+use App\Model\OrderEvent;
 use Response;
 use Session;
 
@@ -40,13 +41,21 @@ class RestaurentController extends Controller
         'resto_id' =>$resto_id
         ];
         $billing_balance = $this->getBilling($billing_data_arary);
-        // dd($billing_balance['menu_data']->toArray());
+        $order_events = new OrderEvent();
+        $rating_array = ['user_id'=> $resto_data->user_id,
+                        'user_type'=>2
+                    ];
+        $rating_data = $order_events->getOrderEventRatingData($rating_array)->first();
 
         $menu_cat = $menu_list->menuCategory($resto_id);
         $user->currency=$this->currency;
+        // dd($billing_balance['menu_data']);
+        // dd($billing_balance['menu_data'][0]->add_ons_cat);
+
         return view('customer.menuList')->with(['user_data'=>$user,
                                                 'menu_data'=>$billing_balance['menu_data'],
                                                 'menu_cat'=>$menu_cat,
+                                                'rating_data'=>$rating_data,
                                                 'total_amount'=>$billing_balance['total_amount'],
                                                 'sub_total'=>$billing_balance['sub_total'],
                                                 'item'=>$billing_balance['item'],

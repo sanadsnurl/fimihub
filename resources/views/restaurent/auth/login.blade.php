@@ -47,7 +47,7 @@
 
                         </div>
                         <div class="form-group col-6 text-right">
-                            <a href="authentication-reset-password.html">Reset Password</a>
+                            <a href="{{url('Restaurent/forgetPassword')}}">Forget Password</a>
                         </div>
                     </div>
                     <input type="submit"

@@ -136,4 +136,21 @@ class OrderEvent extends Model
         }
     }
 
+    public function getOrderEventRatingData($data)
+    {
+        try {
+            $query_data = DB::table('order_events')
+                        ->where('user_id', $data['user_id'])
+                        ->where('user_type', $data['user_type'])
+                        ->where('visibility', 0)
+                        ->whereNotNull('order_feedback')
+                        ->select(DB::raw('Count(order_feedback) AS rating_count , Round(AVG(order_feedback),1) AS rating'));
+
+            return $query_data;
+        }
+        catch (Exception $e) {
+            dd($e);
+        }
+    }
+
 }

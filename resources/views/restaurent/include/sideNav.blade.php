@@ -73,7 +73,7 @@
                 </li>
                 <li>
                     <a href="#" class="waves-effect">
-                        <i class="fa fa-cutlery"></i> <span>Add-On </span> <i
+                        <i class="fa fa-glass"></i> <span>Add-On </span> <i
                             class="fa fa-angle-right pull-right"></i>
                     </a>
                     <ul class="sidebar-submenu">
@@ -83,7 +83,12 @@
 
                     </ul>
                 </li>
+                <li>
+                    <a href="{{url('Restaurent/myEarnings')}}" class="waves-effect">
+                        <i class="fa fa-money"></i> <span>My Earnings</span>
 
+                    </a>
+                </li>
 
                 <li>
                     <a href="{{url('Restaurent/logout')}}" class="waves-effect">

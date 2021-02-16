@@ -237,10 +237,6 @@ class menu_list extends Model
         $data['deleted_at'] = now();
         unset($data['_token']);
 
-        $query_data = DB::table('menu_customizations')
-            ->where('menu_list_id', $data['id'])
-            ->update(['visibility'=> 2,'deleted_at' => $data['deleted_at']]);
-
         $query_data = $this
             ->where('id', $data['id'])
             ->update(['visibility'=> 2,'deleted_at' => $data['deleted_at']]);

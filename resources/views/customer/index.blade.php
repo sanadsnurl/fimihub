@@ -78,32 +78,33 @@
         </div>
         <div class="row-wrap">
             <div class="col-wrap">
-                <a href="#">
-                    <div class="inner-wrap">
-                        <div class="icon">
-                            <img src="{{asset('asset/customer/assets/images/groceries.svg')}}" alt="groceries">
-                        </div>
-                        <h5>Groceries, Essentials</h5>
-                    </div>
-                </a>
-            </div>
-            <div class="col-wrap">
                 <a href="{{url('/home')}}">
                     <div class="inner-wrap">
                         <div class="icon">
                             <img src="{{asset('asset/customer/assets/images/food.svg')}}" alt="food">
                         </div>
-                        <h5>Food Delivery</h5>
+                        <h5>FiMi Food</h5>
                     </div>
                 </a>
             </div>
             <div class="col-wrap">
-                <a href="#">
+                <a href="{{url('shopping')}}">
+                    <div class="inner-wrap">
+                        <div class="icon">
+                            <img src="{{asset('asset/customer/assets/images/groceries.svg')}}" alt="groceries">
+                        </div>
+                        <h5>FiMi Shopping (Coming Soon)</h5>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-wrap">
+                <a href="{{url('errands')}}">
                     <div class="inner-wrap">
                         <div class="icon">
                             <img src="{{asset('asset/customer/assets/images/delivery.svg')}}" alt="delivery">
                         </div>
-                        <h5>Errand</h5>
+                        <h5>FiMi Errands (Coming Soon)</h5>
                     </div>
                 </a>
             </div>

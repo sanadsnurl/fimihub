@@ -25,7 +25,9 @@ trait PaypalIntegrationTraits
         // dd($payment_data);
 
 		//payment url
-        $url = "https://www.sandbox.paypal.com/cgi-bin/webscr";
+        $url = Config('PAYPAL_URL');
+        $paypal_username = Config('PAYPAL_USERNAME');
+        $paypal_password = Config('PAYPAL_PASSWORD');
         $header = [
             'X-CSRF-TOKEN' => csrf_token()
         ];

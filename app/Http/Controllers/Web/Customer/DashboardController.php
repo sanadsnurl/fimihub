@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use App\Http\Traits\OtpGenerationTrait;
+use Illuminate\Support\Facades\Cookie;
 use Response;
 use Session;
 use Location;
@@ -28,9 +29,14 @@ class DashboardController extends Controller
     use LatLongRadiusScopeTrait, GetBasicPageDataTraits;
     public function index(Request $request)
     {
+
+// dd($_COOKIE["lat"]."--".$_COOKIE["long"]);
         $user = Auth::user();
         $user_data = auth()->user()->userByIdData($user->id);
         $user_data = $this->getBasicCount($user);
+
+
+        // dd($user_data);
         if ($request->has('address_latitude')) {
             if(request('search_field') != NULL){
                 $search_field = request('search_field');
@@ -59,15 +65,16 @@ class DashboardController extends Controller
 
         if ($ip == '127.0.0.1') {
 
-            $lat = '18.4490849';
-            $lng = '-77.2419522';
+            $lat = $_COOKIE["lat"] ?? '18.4490849';
+            $lng = $_COOKIE["long"] ?? '-77.2419522';
         } else {
             $loc_data = Location::get($ip);
 
             $lat = $loc_data->latitude ??  '18.4490849';
             $lng = $loc_data->longitude ?? '-77.2419522';
         }
-
+        $lat = $_COOKIE["lat"] ?? '18.4490849';
+        $lng = $_COOKIE["long"] ?? '-77.2419522';
         if ($lat == 0 || $lng == 0) {
             $resto = [];
 
@@ -79,19 +86,20 @@ class DashboardController extends Controller
             $lats = $lat_lng_array['address_latitude'] ??  $lat;
             $lngs = $lat_lng_array['address_longitude'] ?? $lng;
             // print($lats);
-            $kmRadius = $this->max_distance_km_resto;
-            $resto = $this->closestRestaurant($user, $lats, $lngs, $kmRadius);
+            // $kmRadius = $this->max_distance_km_resto;
+            $resto = $this->closestRestaurant($user, $lats, $lngs);
 
             $restaurent_detail = new restaurent_detail;
             //all restaurants
-            $resto_data_query = $this->closestRestaurant($user, $lats, $lngs, $kmRadius);
+            $resto_data_query = $this->closestRestaurant($user, $lats, $lngs);
             if ($request->has('search_field')) {
                 $resto_data_query = $resto_data_query->where('ml.name', 'like', '%' . $search_field . '%')
                     ->orWhere('restaurent_details.name', 'like', '%' . $search_field . '%');
             }
             $resto_data = $resto_data_query->get();
+            // dd($resto_data->toArray());
             //all nonveg restaurants
-            $nonveg_resto_data_query = $this->closestRestaurant($user, $lats, $lngs, $kmRadius)->whereIn('resto_type', [1,3]);
+            $nonveg_resto_data_query = $this->closestRestaurant($user, $lats, $lngs)->whereIn('resto_type', [1,3]);
             if ($request->has('search_field')) {
                 $nonveg_resto_data_query = $nonveg_resto_data_query->where('ml.name', 'like', '%' . $search_field . '%')
                     ->orWhere('restaurent_details.name', 'like', '%' . $search_field . '%');
@@ -99,7 +107,7 @@ class DashboardController extends Controller
             $nonveg_resto_data = $nonveg_resto_data_query->get();
 
             //all veg restaurants
-            $veg_resto_data_query = $this->closestRestaurant($user, $lats, $lngs, $kmRadius)->whereIn('resto_type', [2,3]);
+            $veg_resto_data_query = $this->closestRestaurant($user, $lats, $lngs)->whereIn('resto_type', [2,3]);
             if ($request->has('search_field')) {
                 $veg_resto_data_query = $veg_resto_data_query->where('ml.name', 'like', '%' . $search_field . '%')
                     ->orWhere('restaurent_details.name', 'like', '%' . $search_field . '%');

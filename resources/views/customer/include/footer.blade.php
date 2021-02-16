@@ -108,6 +108,12 @@
                         <a href="{{url('privacyPolicyPage')}}">Privacy Policy </a>
                     </li>
                     <li>
+                        <a href="{{url('returnPolicyPage')}}">Return Policy </a>
+                    </li>
+                    <li>
+                        <a href="{{url('partnerAgreementPage')}}">Partner Agreement </a>
+                    </li>
+                    <li>
                         <a href="{{url('T&C')}}">Terms & Conditions </a>
                     </li>
                     <li>
@@ -165,8 +171,8 @@
         </div>
     </div>
 </footer>
-<div class="side-panel left" data-panel-id="addressPanel">
-    <div class="inner-sidebar">
+<div class="side-panel left" data-panel-id="addressPanel" >
+    <div class="inner-sidebar" style="overflow: auto;">
         <div class="title">
             <div class="icon close-sidepanel">
                 <img src="{{asset('asset/customer/assets/images/cross.svg')}}" alt="cross">
@@ -184,10 +190,17 @@
                 <input type="text" id="address-input" name="address_address" class="form-control map-input">
 
             </div> -->
-
+            <div class="field-wrap">
+                <label>Name</label>
+                <input type="text" name="name" placeholder="Enter name" id="per_name">
+                @if($errors->has('name'))
+                <div class="error">{{ $errors->first('name') }}</div>
+                @endif
+                <span id="flaterr" class="errors"></span>
+            </div>
             <div class="field-wrap">
                 <label for="address_address">Address</label>
-                <div class="address_box_dyn">
+                <div class="address_box_dyn sidebar_addrss_box">
                     <input type="text" data-id="address-input" name="address_address" placeholder="Address"
                         class="map-input">
                     <button type="button" class="show_address"><i class="fa fa-crosshairs"></i></button>
@@ -265,10 +278,12 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body text-center">
-                <h3>Order Confirmed!</h3>
+                <h3>@if(Session::has('order_statuss')){{Session::get('order_statuss')}}
+                    @endif</h3>
                 <img src="{{asset('asset/customer/assets/images/cup_icon.svg')}}" alt="cup">
-                <h3 class="mt-3 mb-3">THANK YOU!</h3>
-                <p>Your order was successfully placed <br>and being prepared for delivery.</p>
+                {{-- <h3 class="mt-3 mb-3">THANK YOU!</h3> --}}
+                <p>@if(Session::has('order_message')){!! Session::get('order_message') !!}
+                    @endif</p>
                 <div class="d-flex align-items-center justify-content-center">
                     <a href="{{url('/trackOrder')}}@if(Session::has('order_id')){{'?odr_id='}}{{Session::get('order_id')}}
                     @endif
@@ -434,7 +449,7 @@
 <script type="text/javascript" src="{{asset('asset/customer/assets/scripts/searchMap.js')}}"></script>
 <script type="text/javascript" src="{{asset('asset/customer/assets/scripts/mapDistance.js')}}"></script>
 <script
-    src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}&libraries=places&callback=initialize"
+    src="https://maps.googleapis.com/maps/api/js?key={{ Config('GOOGLE_MAPS_API_KEY') }}&libraries=places&callback=initialize"
     async defer></script>
 @if(Session::has('modal_check_subscribe'))
 <script>
@@ -452,6 +467,7 @@
 @endif
 
 <script>
+
     $(document).ready(function() {
         // $('[data-toggle="tooltip"]').tooltip();
 
@@ -470,27 +486,10 @@
         var total_amount = ($("#total_amount").text());
         var total_amounts = total_amount.replace(",", '');
         var total_amountss = parseFloat(total_amounts.replace(",", ''));
-        console.log(total_amountss, 'resto');
-
-
         var add_details = kilomiter(user, resto,service_data,total_amountss);
+        // console.log(total_amount);
+
         // console.log(add_details, 'resto');
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     });
     // $('.accord_btn').click(function() {
@@ -498,6 +497,7 @@
     //     $(this).find('span').next('img').toggleClass('rotate_icon');
     // })
     function checkform() {
+        console.log("d");
         let add = document.getElementById('address-input').value;
         let flat = document.getElementById('flat').value;
         let landmrk = document.getElementById('landmrk').value;
@@ -534,4 +534,15 @@
     $('.save_adrs input').on('blur', function() {
         $(this).nextAll('span').hide();
     })
+
+    $(document).on("keydown", "#card_expiry_date", function(e) {
+       let input = $(this).val();
+       if(e.keyCode !== 8) {
+        if (input.length >= 2 && input.length <= 5) {
+            var newInput = input.slice(0, 2) + " / " + input.slice(2);
+            $(this).val(newInput);
+        }
+       }
+    })
+
 </script>

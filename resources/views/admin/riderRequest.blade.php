@@ -4,7 +4,6 @@
 <link href="{{asset('asset/admin/assets/plugins/bootstrap-datatable/css/buttons.bootstrap4.min.css')}}" rel="stylesheet"
     type="text/css">
 
-
 @include('admin.include.sideNav')
 @include('admin.include.header')
 <div class="clearfix"></div>
@@ -30,6 +29,7 @@
                                     <tr>
                                         <th>Action</th>
                                         <th>S.No.</th>
+                                        <th>Type</th>
                                         <th>Name</th>
                                         <th>Mobile</th>
                                         <th>Email</th>
@@ -73,7 +73,6 @@
     </div>
     <!-- End container-fluid-->
 
-
     <!--End content-wrapper-->
     @include('admin.include.footer')
     <!-- Bootstrap core JavaScript-->
@@ -93,29 +92,32 @@
     <script src="{{asset('asset/admin/assets/plugins/bootstrap-datatable/js/buttons.colVis.min.js')}}"></script>
 
     <script>
-    $(document).ready(function() {
-        //Default data table
-        //$('#default-datatable').DataTable();
-
-        var table = $('#example').DataTable({
-            lengthChange: true,
-            processing:true,
-            serverSide:true,
-            paging: true,
-            dom: 'lBfrtip',
-            buttons: ['copy', 'excel', 'pdf', 'print'],
-            ajax: "{{url('adminfimihub/pendingRider')}}",
-            columns: [ {
-                    data: 'action',
-                    name: 'action',
-                    orderable: true,
-                    searchable: false
-                },
-                {
-                    data: 'DT_RowIndex',
-                    name: 'id'
-                },
-                {
+        $(document).ready(function() {
+            //Default data table
+            //$('#default-datatable').DataTable();
+            var table = $('#example').DataTable({
+                lengthChange: true,
+                processing: true,
+                serverSide: true,
+                paging: true,
+                dom: 'lBfrtip',
+                buttons: ['copy', 'excel', 'pdf', 'print'],
+                ajax: "{{url('adminfimihub/pendingRider')}}",
+                columns: [{
+                        data: 'action',
+                        name: 'action',
+                        orderable: true,
+                        searchable: false
+                    },
+                    {
+                        data: 'DT_RowIndex',
+                        name: 'id'
+                    },
+                    {
+                        data: 'role',
+                        name: 'role'
+                    },
+                    {
                         data: 'name',
                         name: 'name'
                     },
@@ -324,15 +326,10 @@
                         data: 'created_at',
                         name: 'created_at'
                     },
-
-
-
-            ]
+                ]
+            });
+            table.buttons().container()
+                .appendTo('#example_wrapper .col-md-6:eq(0)');
         });
-
-        table.buttons().container()
-            .appendTo('#example_wrapper .col-md-6:eq(0)');
-
-    });
     </script>
     <!--End content-wrapper-->

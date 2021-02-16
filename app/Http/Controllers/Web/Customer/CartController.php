@@ -90,12 +90,13 @@ class CartController extends Controller
                         $var_d = $menu_custom_list->getCustomListPrice($m_data->cart_variant_id);
                         $m_data->price = $var_d->price;
                     }
-
-                    foreach($m_data->product_add_on_id as $add_on){
-                        $add_ons[] = $menu_custom_list->menuCustomPaginationData($m_data->restaurent_id)
-                                                ->where('resto_custom_cat_id',$add_on)->get();
-                        $add_ons_cat[] = $menu_custom_list->menuCustomCategoryData($m_data->restaurent_id)
-                                                ->where('resto_custom_cat_id',$add_on)->first();
+                    if($m_data->product_add_on_id){
+                        foreach($m_data->product_add_on_id as $add_on){
+                            $add_ons[] = $menu_custom_list->menuCustomPaginationData($m_data->restaurent_id)
+                                                    ->where('resto_custom_cat_id',$add_on)->get();
+                            $add_ons_cat[] = $menu_custom_list->menuCustomCategoryData($m_data->restaurent_id)
+                                                    ->where('resto_custom_cat_id',$add_on)->first();
+                        }
                     }
                     if($m_data->product_adds_id){
                         $m_data->product_adds_id = json_decode($m_data->product_adds_id);
@@ -119,7 +120,6 @@ class CartController extends Controller
                 'resto_id' =>$quant_details['restaurent_id']
                 ];
                 $billing_balance = ($this->getBilling($billing_data_arary));
-                // dd($billing_balance['service_data']);
                 $user->currency = $this->currency;
                 return view('customer.cartAddress')->with([
                     'user_data' => $user,
@@ -155,14 +155,19 @@ class CartController extends Controller
 
     // dd(json_encode($menu_all_data->custom_data));
         $custom_data = array();
-        foreach ($menu_all_data as $value) {
-            if($value->name == $menu_id.'-variant'){
-                $variant_id = $value->value;
-            }
-            if($value->name == 'custom_data[]'){
-                $custom_data[] = $value->value;
+        // dd($menu_all_data);
+        if(count($menu_all_data)){
+            foreach ($menu_all_data as $value) {
+                if($value->name == $menu_id.'-variant'){
+                    $variant_id = $value->value;
+                }else{
+                    $custom_data[] = $value->value;
+
+                }
+
             }
         }
+
         $custom_data = json_encode($custom_data);
 
         // dd($variant_id);

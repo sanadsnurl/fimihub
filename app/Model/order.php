@@ -29,13 +29,13 @@ class order extends Model
      */
     public function makeOrder($data)
     {
-        $count=DB::table('orders')->max('id');
+        $count=$this->max('id');
         $unique_id=10000000001+$count;
         $data['order_id']='FF'.$unique_id;
         $data['updated_at'] = now();
         $data['created_at'] = now();
         unset($data['_token']);
-        $query_data = DB::table('orders')->insertGetId($data);
+        $query_data = $this->insertGetId($data);
         return $query_data;
     }
 
@@ -143,13 +143,17 @@ class order extends Model
     }
 
     public function updatePaymentStatus($orderId, $payment_status){
-        return $this->where('id', $orderId)->update(['payment_status'=> $payment_status]);
+        if($payment_status == 3){
+            return $this->where('id', $orderId)->update(['payment_status'=> $payment_status,'order_status'=> 1]);
+        }else{
+            return $this->where('id', $orderId)->update(['payment_status'=> $payment_status]);
+        }
     }
 
     public function getOrderData($order_id)
     {
         try {
-            $order_data=DB::table('orders')
+            $order_data=$this
                 ->where('visibility', 0)
                 ->where('id', $order_id)
                 ->first();
@@ -164,7 +168,7 @@ class order extends Model
     public function allUserOrderPastData($user_id)
     {
         try {
-            $order_data=DB::table('orders')
+            $order_data=$this
                 ->join('restaurent_details as rd', 'rd.id', '=', 'orders.restaurent_id')
                 ->where('orders.visibility', 0)
                 ->whereIn('orders.order_status', [1,2,4,8,9,10])
@@ -183,7 +187,7 @@ class order extends Model
     public function allUserCurrentPastData($user_id)
     {
         try {
-            $order_data=DB::table('orders')
+            $order_data=$this
                 ->join('restaurent_details as rd', 'rd.id', '=', 'orders.restaurent_id')
                 ->where('orders.visibility', 0)
                 ->whereIn('orders.order_status', [3,5,6,7])
@@ -202,7 +206,7 @@ class order extends Model
 
     public function customerOrderPaginationData($data)
     {
-        $menu_list=DB::table('orders')
+        $menu_list=$this
                 ->where('orders.visibility', 0)
                 ->where('orders.payment_status',2)
                 ->where('orders.restaurent_id', $data)
@@ -222,6 +226,7 @@ class order extends Model
 
     }
 
+
     public function allOrderPaginationDataByID($order_id)
     {
         $menu_list=$this->select('orders.*')
@@ -231,5 +236,29 @@ class order extends Model
         return $menu_list;
 
     }
+    public function getDeliveryAtAttribute($value)
+    {
+        $delivery_time = strtotime("+40 minutes", strtotime($this->created_at));
+        return date('h:i', $delivery_time);
 
+
+    }
+
+    public function deleteCustomerOrder($data)
+    {
+        $data['deleted_at'] = now();
+        unset($data['_token']);
+
+        $query_data = DB::table('orders')
+            ->where('id', $data['id'])
+            ->update(['visibility'=> 2,'deleted_at' => $data['deleted_at']]);
+        $query_data = DB::table('order_events')
+            ->where('order_id', $data['id'])
+            ->update(['visibility'=> 2,'deleted_at' => $data['deleted_at']]);
+        $query_data = DB::table('my_earnings')
+            ->where('order_id', $data['id'])
+            ->update(['is_active'=> 2,'updated_at' => $data['deleted_at']]);
+
+        return $query_data;
+    }
 }

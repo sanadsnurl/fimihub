@@ -53,10 +53,15 @@ class User extends Authenticatable
     $this->attributes['password'] = $value;
     }
 
+    public function getRoleAttribute($value)
+    {
+        return json_decode($value);
+    }
+
     public function userData($userid)
     {
         try {
-            $user_data=DB::table('users')
+            $user_data=$this
                 ->where('mobile', $userid)
                 ->first();
             unset($user_data->password);
@@ -70,9 +75,23 @@ class User extends Authenticatable
     public function userDataWithCountryCode($userid,$country_code)
     {
         try {
-            $user_data=DB::table('users')
+            $user_data=$this
                 ->where('mobile', $userid)
                 ->Where('country_code',$country_code)
+                ->first();
+            unset($user_data->password);
+            return $user_data;
+        }
+        catch (Exception $e) {
+            dd($e);
+        }
+    }
+
+    public function userDataWithMobile($userid)
+    {
+        try {
+            $user_data=$this
+                ->where('mobile', $userid)
                 ->first();
             unset($user_data->password);
             return $user_data;
@@ -86,7 +105,7 @@ class User extends Authenticatable
     {
         $otp = mt_rand(1000,9999);
         $data=array('verification_code'=>$otp);
-        DB::table('users')
+        $this
             ->where('mobile', $userid)
             ->orWhere('email',$userid)
             ->update($data);
@@ -98,7 +117,7 @@ class User extends Authenticatable
         $value = \Hash::make($data['password']);
         $pass=array('password'=> $value);
         $pass['updated_at'] = now();
-        $result = DB::table('users')
+        $result = $this
             ->where('mobile', $data['userid'])
             ->orWhere('email',$data['userid'])
             ->update($pass);
@@ -109,7 +128,7 @@ class User extends Authenticatable
     public function UpdateLogin($data)
     {
 
-        $value=DB::table('users')->where('id', $data['id'])->get();
+        $value=$this->where('id', $data['id'])->get();
 
         if($value->count() == 0)
         {
@@ -121,7 +140,7 @@ class User extends Authenticatable
 
             $data['updated_at'] = now();
 
-            $query_data = DB::table('users')
+            $query_data = $this
                         ->where('id', $data['id'])
                         ->update($data);
             $query_type="update";
@@ -134,7 +153,7 @@ class User extends Authenticatable
     public function userByIdData($id)
     {
         try {
-            $user_data=DB::table('users')
+            $user_data=$this
                 ->where('id', $id)
                 ->first();
             unset($user_data->password);
@@ -148,7 +167,7 @@ class User extends Authenticatable
     public function allUserList($user_type)
     {
         try {
-            $user_data=DB::table('users')
+            $user_data=$this
                 ->where('visibility', 0)
                 ->where('user_type', $user_type)
                 ->get();
@@ -163,7 +182,7 @@ class User extends Authenticatable
     public function allUserPaginateList($user_type)
     {
         try {
-            $user_data=DB::table('users')
+            $user_data=$this
                 ->where('visibility', 0)
                 ->where('user_type', $user_type)
                 ->orderBy('created_at','DESC');
@@ -180,7 +199,7 @@ class User extends Authenticatable
     public function allUserPaginateListRestoData($user_type)
     {
         try {
-            $user_data=DB::table('users')
+            $user_data=$this
                 ->leftJoin('restaurent_details', function($join) use ($user_type)
                         {
                         $join->on('restaurent_details.user_id', '=', 'users.id');
@@ -203,7 +222,7 @@ class User extends Authenticatable
     public function pendingUserPaginateList($user_type)
     {
         try {
-            $user_data=DB::table('users')
+            $user_data=$this
                 ->where('visibility', 1)
                 ->where('user_type', $user_type)
                 ->orderBy('created_at','DESC');
@@ -221,7 +240,7 @@ class User extends Authenticatable
         $data['updated_at'] = now();
         unset($data['_token']);
 
-        $query_data = DB::table('users')
+        $query_data = $this
             ->where('id', $id)
             ->update(['visibility'=>0]);
 
@@ -233,7 +252,7 @@ class User extends Authenticatable
         $data['deleted_at'] = now();
         unset($data['_token']);
 
-        $query_data = DB::table('users')
+        $query_data = $this
             ->where('id', $data['id'])
             ->update(['visibility'=> 2,'deleted_at' => $data['deleted_at'],'mobile'=>$data['id'] ,'email'=>$data['id']]);
 
@@ -258,6 +277,22 @@ class User extends Authenticatable
             $user_data=$this
                 ->where('users.visibility', 0)
                 ->where('users.user_type', $user_type)
+                ->orderBy('users.created_at','DESC');
+
+
+            return $user_data;
+        }
+        catch (Exception $e) {
+            dd($e);
+        }
+    }
+    public function allUserSubAdminData()
+    {
+        try {
+            $user_data=$this
+                ->whereIn('users.visibility', [0])
+                ->where('users.user_type',1)
+                ->whereNotNull('users.role')
                 ->orderBy('users.created_at','DESC');
 
 
@@ -299,9 +334,23 @@ class User extends Authenticatable
         $data['updated_at'] = now();
         unset($data['_token']);
 
-        $query_data = DB::table('users')
+        $query_data = $this
             ->where('id', $data['id'])
             ->update(['status'=>$data['status']]);
+
+        return $query_data;
+    }
+
+
+    public function changeLoginStatus($data)
+    {
+        unset($data['_token']);
+
+        $query_data = $this
+            ->where('id', $data['id'])
+            ->update(['visibility'=> $data['visibility'],'updated_at' => now()]);
+
+            // dd($query_data);
 
         return $query_data;
     }

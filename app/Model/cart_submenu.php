@@ -130,11 +130,10 @@ class cart_submenu extends Model
                     ->update($data);
 
                 $value_part = $this
-                    ->where('menu_id', $data['menu_id'])
                     ->where('user_id', $data['user_id'])
                     ->where('cart_id', $data['cart_id'])
                     ->where('visibility', 0);
-                if ($value_part->count() != 0) {
+                if ($value_part->count() == 0) {
                     $query_data = DB::table('carts')
                         ->where('user_id', $data['user_id'])
                         ->where('id', $data['cart_id'])

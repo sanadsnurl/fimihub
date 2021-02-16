@@ -66,7 +66,7 @@
                         {{-- <li>
                             <a href="#" class="icon-link">
                                 <img src="{{asset('asset/customer/assets/images/search_purple.svg')}}" alt="search">
-                            </a>
+                        </a>
                         </li> --}}
                         <li>
                             <a href="{{url('/cart')}}" class="icon-link cart_nofti">
@@ -76,11 +76,52 @@
                                 </span>
                             </a>
                         </li>
-                        <li>
-                            <a href="#" class="icon-link cart_nofti">
-                                <img src="{{asset('asset/customer/assets/images/notification.svg')}}" alt="notification">
-                                <span>0</span>
-                            </a>
+
+                        <li class="dropdown">
+                            <!-- <a href="javascript:void(0)"><img src="./assets/images/user.svg" alt="user"> SIGN IN</a> -->
+                            <button type="button" class="dropdown-toggle notifc_btn" data-toggle="dropdown">
+                                <a href="#" class="icon-link cart_nofti">
+                                    <img src="{{asset('asset/customer/assets/images/notification.svg')}}"
+                                        alt="notification">
+                                    <span>{{$user_data->notification_active_count ?? '!'}} </span>
+                                </a>
+                            </button>
+                            <div class="dropdown-menu notification_dropdown">
+                                <div class="notification_head d-flex align-items-center justify-content-between">
+                                    <h4>NOTIFICATION</h4>
+
+                                </div>
+                                <div class="notification_body">
+                                    <div class="nofication_content">
+                                        <ul>
+                                            @if(isset($user_data->notification_data) &&
+                                            !empty($user_data->notification_data))
+                                            @foreach($user_data->notification_data as $not_data)
+                                            <li class="d-flex align-items-center active">
+                                                <i class="fas fa-user-circle"></i>
+                                                <div>
+                                                    <p>{{$not_data->title ?? ''}} | Order-Id {{$not_data->txn_id ?? ''}}
+                                                    </p>
+                                                    <span
+                                                        class="time">{{date('d F Y',strtotime($not_data->created_at))}}</span>
+                                                </div>
+                                            </li>
+                                            @endforeach
+                                            @else
+                                            <li class="d-flex align-items-center active">
+                                                <i class="fas fa-user-circle"></i>
+                                                <div>
+                                                    <p>No New Notification</p>
+                                                </div>
+                                            </li>
+                                            @endif
+                                        </ul>
+                                    </div>
+                                </div>
+                                {{-- <div class="notification_ftr text-center">
+                                    <a href="#">View all notification</a>
+                                </div> --}}
+                            </div>
                         </li>
                         <li>
                             <a href="#" class="icon-link user">
@@ -120,8 +161,9 @@
                                     alt="user"> SIGN IN</a>
                         </li>
                         <li>
-                            <a href="{{url('register')}}"> <img src="{{asset('asset/customer/assets/images/logout.svg')}}"
-                                    alt="sign up"> SIGN UP</a>
+                            <a href="{{url('register')}}"> <img
+                                    src="{{asset('asset/customer/assets/images/logout.svg')}}" alt="sign up"> SIGN
+                                UP</a>
                         </li>
                         @endif
 

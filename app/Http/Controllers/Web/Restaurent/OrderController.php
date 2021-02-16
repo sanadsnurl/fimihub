@@ -16,6 +16,7 @@ use App\Model\restaurent_detail;
 use App\Model\Notification;
 use App\Model\order;
 use App\Model\OrderEvent;
+use App\Model\Reason;
 use App\Model\user_address;
 use Response;
 use Session;
@@ -51,8 +52,9 @@ class OrderController extends Controller
                         $btn .= '<a href="packedOrder?odr_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Ready For Pick-Up</a>';
                     } elseif ($row->order_status == 3) {
                         $btn .= '<a href="acceptOrder?odr_id=' . base64_encode($row->id) . '" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Accept</a>
-                        <a href="rejectOrder?odr_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Reject</a>';
+                        <a href="rejectOrderPage?odr_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Reject</a>';
                     }
+                    $btn .= '<a href="deleteOrder?odr_id=' . base64_encode($row->id) . '" class="btn btn-outline-warning btn-sm btn-round waves-effect waves-light ">Delete</a>';
                     return $btn;
                 })
                 ->addColumn('created_at', function ($row) {
@@ -98,7 +100,7 @@ class OrderController extends Controller
 
                     foreach ($row->ordered_menu as $ordered_menu) {
                         if ($loop_count == 1) {
-                            $order_menu .= "(" . $ordered_menu->name . " x " . $ordered_menu->quantity;
+                            $order_menu .= "<b>Dish:1 </b>(" . $ordered_menu->name . " x " . $ordered_menu->quantity;
                             if (isset($ordered_menu->cart_variant_id) && $ordered_menu->cart_variant_id != NULL) {
                                 $order_menu .= " [";
                                 $loop_count_add = 1;
@@ -121,21 +123,24 @@ class OrderController extends Controller
                                 $loop_count_add = 1;
 
 
-                                foreach ($ordered_menu->add_on[0] as $add_data) {
-                                    if (in_array($add_data->id, ($ordered_menu->product_adds_id) ?? [], FALSE)) {
-                                        if ($loop_count == 1) {
-                                            $order_menu .= "(" . $add_data->cat_name . ' : ' . $add_data->name . ")";
-                                        } else {
-                                            $order_menu .= "/(" . $add_data->cat_name . ' : ' . $add_data->name . ")";
+                                foreach ($ordered_menu->add_on as $add_datas) {
+                                    foreach ($add_datas as $add_data) {
+
+                                        if (in_array($add_data->id, ($ordered_menu->product_adds_id) ?? [], FALSE)) {
+                                            if ($loop_count == 1) {
+                                                $order_menu .= "(" . $add_data->cat_name . ' : ' . $add_data->name . ")";
+                                            } else {
+                                                $order_menu .= "/(" . $add_data->cat_name . ' : ' . $add_data->name . ")";
+                                            }
+                                            $loop_count_add += 1;
                                         }
-                                        $loop_count_add += 1;
                                     }
                                 }
                                 $order_menu .= "] ";
                             }
                             $order_menu .= ")";
                         } else {
-                            $order_menu .= "/(" . $ordered_menu->name . " x " . $ordered_menu->quantity;
+                            $order_menu .= "/<br><b>Dish:" . $loop_count . " </b>(" . $ordered_menu->name . " x " . $ordered_menu->quantity;
                             if (isset($ordered_menu->cart_variant_id) && $ordered_menu->cart_variant_id != NULL) {
                                 $order_menu .= " [";
                                 $loop_count_add = 1;
@@ -158,14 +163,16 @@ class OrderController extends Controller
                                 $loop_count_add = 1;
 
 
-                                foreach ($ordered_menu->add_on[0] as $add_data) {
-                                    if (in_array($add_data->id, ($ordered_menu->product_adds_id) ?? [], FALSE)) {
-                                        if ($loop_count == 1) {
-                                            $order_menu .= "(" . $add_data->cat_name . ' : ' . $add_data->name . ")";
-                                        } else {
-                                            $order_menu .= "/(" . $add_data->cat_name . ' : ' . $add_data->name . ")";
+                                foreach ($ordered_menu->add_on as $add_datas) {
+                                    foreach ($add_datas as $add_data) {
+                                        if (in_array($add_data->id, ($ordered_menu->product_adds_id) ?? [], FALSE)) {
+                                            if ($loop_count == 1) {
+                                                $order_menu .= "(" . $add_data->cat_name . ' : ' . $add_data->name . ")";
+                                            } else {
+                                                $order_menu .= "/(" . $add_data->cat_name . ' : ' . $add_data->name . ")";
+                                            }
+                                            $loop_count_add += 1;
                                         }
-                                        $loop_count_add += 1;
                                     }
                                 }
                                 $order_menu .= "] ";
@@ -176,7 +183,7 @@ class OrderController extends Controller
                     }
                     return $order_menu;
                 })
-                ->rawColumns(['action'])
+                ->rawColumns(['action', 'ordered_menu'])
                 ->make(true);
         }
         $user['currency'] = $this->currency;
@@ -234,10 +241,28 @@ class OrderController extends Controller
         // ================================== get rider by restaurant location ====================
         $lat = $resto_add[0]->latitude;
         $lng = $resto_add[0]->longitude;
-        $kmRadius = $this->max_distance_km_rider;
-        $rider = $this->closestRiders($user, $lat, $lng, $kmRadius)->get();
+        // $kmRadius = $this->max_distance_km_rider;
+        $rider = $this->closestRiders($user, $lat, $lng)->get();
+        $runner = $this->closestRunner($user, $lat, $lng)->get();
 
         foreach ($rider as $rid) {
+            if (isset($rid->device_token)) {
+                $push_notification_rider = array();
+                $push_notification_rider['device_token'] = $rid->device_token;
+                $push_notification_rider['title'] = 'New Order Request';
+                $push_notification_rider['page_token'] = 1;
+                $push_notification_rider['notification'] = 'New Order By ' . $customer_data->name;
+                $push_notification_rider_result = $this->pushNotification($push_notification_rider);
+            }
+            $notification_rider = array();
+            $notification_rider['user_id'] = $rid->id;
+            $notification_rider['txn_id'] = $order_data->order_id;
+            $notification_rider['title'] = 'New Order Request';
+            $notification_rider['notification'] = 'New Order By ' . $customer_data->name;
+            $notification = new Notification();
+            $notification_id = $notification->makeNotifiaction($notification_rider);
+        }
+        foreach ($runner as $rid) {
             if (isset($rid->device_token)) {
                 $push_notification_rider = array();
                 $push_notification_rider['device_token'] = $rid->device_token;
@@ -264,6 +289,7 @@ class OrderController extends Controller
         $user = Auth::user();
 
         $order_id = base64_decode(request('odr_id'));
+        $reason_id = (request('reason_id'));
         $order_status = 4;
         $orders = new order;
         $order_status_update = $orders->updateOrderStatus($order_id, $order_status);
@@ -277,6 +303,7 @@ class OrderController extends Controller
         $order_event['user_id'] = $user->id;
         $order_event['order_status'] = 2;
         $order_event['user_type'] = 2;
+        $order_event['reason_id'] = $reason_id;
         $OrderEvents = new OrderEvent;
         $make_event = $OrderEvents->makeUpdateOrderEvent($order_event);
         // ============================================= PUSH NOTIFICATION=======================================
@@ -297,7 +324,7 @@ class OrderController extends Controller
 
         // ==========================================================================================================
 
-        return redirect()->back();
+        return redirect('Restaurent/customerOrder');
     }
 
     public function packedOrder(Request $request)
@@ -396,7 +423,7 @@ class OrderController extends Controller
 
             foreach ($order_data->ordered_menu as $ordered_menu) {
                 if ($loop_count == 1) {
-                    $order_menu .= "(" . $ordered_menu->name . " x " . $ordered_menu->quantity;
+                    $order_menu .= "<b>Dish:1 </b>(" . $ordered_menu->name . " x " . $ordered_menu->quantity;
                     if (isset($ordered_menu->cart_variant_id) && $ordered_menu->cart_variant_id != NULL) {
                         $order_menu .= " [";
                         $loop_count_add = 1;
@@ -419,21 +446,24 @@ class OrderController extends Controller
                         $loop_count_add = 1;
 
 
-                        foreach ($ordered_menu->add_on[0] as $add_data) {
-                            if (in_array($add_data->id, ($ordered_menu->product_adds_id) ?? [], FALSE)) {
-                                if ($loop_count == 1) {
-                                    $order_menu .= "(" . $add_data->cat_name . ' : ' . $add_data->name . ")";
-                                } else {
-                                    $order_menu .= "/(" . $add_data->cat_name . ' : ' . $add_data->name . ")";
+                        foreach ($ordered_menu->add_on as $add_datas) {
+                            foreach ($add_datas as $add_data) {
+
+                                if (in_array($add_data->id, ($ordered_menu->product_adds_id) ?? [], FALSE)) {
+                                    if ($loop_count == 1) {
+                                        $order_menu .= "(" . $add_data->cat_name . ' : ' . $add_data->name . ")";
+                                    } else {
+                                        $order_menu .= "/(" . $add_data->cat_name . ' : ' . $add_data->name . ")";
+                                    }
+                                    $loop_count_add += 1;
                                 }
-                                $loop_count_add += 1;
                             }
                         }
                         $order_menu .= "] ";
                     }
                     $order_menu .= ")";
                 } else {
-                    $order_menu .= "/(" . $ordered_menu->name . " x " . $ordered_menu->quantity;
+                    $order_menu .= "/<br><b>Dish:" . $loop_count . " </b>(" . $ordered_menu->name . " x " . $ordered_menu->quantity;
                     if (isset($ordered_menu->cart_variant_id) && $ordered_menu->cart_variant_id != NULL) {
                         $order_menu .= " [";
                         $loop_count_add = 1;
@@ -456,14 +486,16 @@ class OrderController extends Controller
                         $loop_count_add = 1;
 
 
-                        foreach ($ordered_menu->add_on[0] as $add_data) {
-                            if (in_array($add_data->id, ($ordered_menu->product_adds_id) ?? [], FALSE)) {
-                                if ($loop_count == 1) {
-                                    $order_menu .= "(" . $add_data->cat_name . ' : ' . $add_data->name . ")";
-                                } else {
-                                    $order_menu .= "/(" . $add_data->cat_name . ' : ' . $add_data->name . ")";
+                        foreach ($ordered_menu->add_on as $add_datas) {
+                            foreach ($add_datas as $add_data) {
+                                if (in_array($add_data->id, ($ordered_menu->product_adds_id) ?? [], FALSE)) {
+                                    if ($loop_count == 1) {
+                                        $order_menu .= "(" . $add_data->cat_name . ' : ' . $add_data->name . ")";
+                                    } else {
+                                        $order_menu .= "/(" . $add_data->cat_name . ' : ' . $add_data->name . ")";
+                                    }
+                                    $loop_count_add += 1;
                                 }
-                                $loop_count_add += 1;
                             }
                         }
                         $order_menu .= "] ";
@@ -472,7 +504,6 @@ class OrderController extends Controller
                 }
                 $loop_count += 1;
             }
-
             $order_data->ordered_menu = $order_menu;
 
             if ($order_data->order_status == 3) {
@@ -531,5 +562,36 @@ class OrderController extends Controller
             'event_data' => $event_data,
             'add_datas' => $add_datas
         ]);
+    }
+
+    public function rejectOrderPage(Request $request)
+    {
+        $user = Auth::user();
+        $order_id = base64_decode(request('odr_id'));
+        $orders = new order;
+        $order_data = $orders->getOrderData($order_id);
+        $Reasons = new Reason();
+        $order_event_data = $Reasons->getReasons(4)->get();
+// dd($order_event_data);
+        return view('restaurent.rejectReason')->with([
+            'data' => $user,
+            'order_data' => $order_data,
+            'reason_list' => $order_event_data
+        ]);
+    }
+
+    public function deleteCustomOrder(Request $request)
+    {
+        $user = Auth::user();
+        $odr_id = base64_decode(request('odr_id'));
+
+        $orders = new order();
+        $delete_menu = array();
+        $delete_menu['id'] = $odr_id;
+
+        $delete_menu = $orders->deleteCustomerOrder($delete_menu);
+        Session::flash('message', 'Order Deleted Successfully !');
+
+        return redirect()->back();
     }
 }

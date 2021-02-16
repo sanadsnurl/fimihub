@@ -24,6 +24,18 @@ class menu_custom_list extends Model
         return $query_data;
     }
 
+    public function editCustomMenu($data)
+    {
+        $data['updated_at'] = now();
+        unset($data['_token']);
+
+        $query_data = $this
+            ->where('id', $data['id'])
+            ->update($data);
+
+        return $query_data;
+    }
+
     public function menuCustomPaginationData($data)
     {
         $menu_custom_list=$this
@@ -53,7 +65,8 @@ class menu_custom_list extends Model
         ->groupBy('mc.custom_cat_id')
         ->where('menu_custom_list.visibility', 0)
         ->where('menu_custom_list.restaurent_id', $data)
-        ->select('custom_menu_categories.name as cat_name')
+        ->select('custom_menu_categories.name as cat_name','mc.is_required as is_required','mc.id as cats_id'
+        ,'mc.multiple_select as multiple_select')
         ->orderBy('custom_menu_categories.name');
 
         return $menu_custom_list;
@@ -88,5 +101,17 @@ class menu_custom_list extends Model
         } else {
             return $value +(( DB::table('service_catagories')->where('service_catagories.id', 1)->first()->commission / 100) * $value);
         }
+    }
+
+    public function deleteCustomMenu($data)
+    {
+        $data['deleted_at'] = now();
+        unset($data['_token']);
+
+        $query_data = DB::table('menu_custom_list')
+            ->where('id', $data['id'])
+            ->update(['visibility'=> 2,'deleted_at' => $data['deleted_at']]);
+
+        return $query_data;
     }
 }

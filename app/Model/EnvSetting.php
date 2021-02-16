@@ -19,10 +19,10 @@ class EnvSetting extends Model
         'value',
     ];
 
-    static public function getEnvVar()
+    public function getEnvVar()
     {
         try {
-            $env_data = self::all();
+            $env_data = $this::all();
 
             return $env_data;
         } catch (\Exception $e) {

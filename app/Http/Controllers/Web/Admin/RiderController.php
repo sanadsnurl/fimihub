@@ -26,14 +26,22 @@ class RiderController extends Controller
         $user = Auth::user();
 
         $users = new user;
-        $user_list = $users->allUserPaginateListRiderData(2)
+        $user_list = $users->allUserPaginateListRiderData(2)->orWhere('users.visibility', 3)
             ->with('riderBankDetails', 'vehicleDetails');
         if ($request->ajax()) {
             return Datatables::of($user_list)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $btn = '<a href="deleteRider?rider_user_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light mt-1">Delete</a>
-                    ';
+                    if($row->visibility == 3){
+                        $btn = '<a href="deleteRider?rider_user_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light mt-1">Delete</a>
+                        <a href="riderEarnings?rider_user_id='.base64_encode($row->id).'" class="btn btn-outline-secondary btn-sm btn-round waves-effect waves-light m-0">Earnings</a>
+                        <a href="enableRider?rider_user_id=' . base64_encode($row->id) . '" class="btn btn-outline-success btn-sm btn-round waves-effect waves-light mt-1">Enable</a>';
+                    }else{
+                        $btn = '<a href="deleteRider?rider_user_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light mt-1">Delete</a>
+                        <a href="riderEarnings?rider_user_id='.base64_encode($row->id).'" class="btn btn-outline-secondary btn-sm btn-round waves-effect waves-light m-0">Earnings</a>
+                        <a href="disableRider?rider_user_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light mt-1">Disable</a>';
+                    }
+
                     return $btn;
                 })
                 ->addColumn('vehicle_image', function ($row) {
@@ -89,6 +97,16 @@ class RiderController extends Controller
                     }
                     return $btns;
 
+                })
+                ->addColumn('role', function ($row) {
+                    $type = "";
+                    if($row->role == 1){
+                        $type = "Driver";
+                    }
+                    if($row->role == 2){
+                        $type = "Runner";
+                    }
+                    return $type;
                 })
                 ->addColumn('created_at', function ($row) {
 
@@ -181,6 +199,16 @@ class RiderController extends Controller
                     return $btns;
 
                 })
+                ->addColumn('role', function ($row) {
+                    $type = "";
+                    if($row->role == 1){
+                        $type = "Driver";
+                    }
+                    if($row->role == 2){
+                        $type = "Runner";
+                    }
+                    return $type;
+                })
                 ->addColumn('created_at', function ($row) {
 
                     return date('d F Y', strtotime($row->created_at));
@@ -227,6 +255,35 @@ class RiderController extends Controller
 
         $delete_rider = $users->deleteUser($delete_rider);
         Session::flash('message', 'Rider Deleted Successfully !');
+
+        return redirect()->back();
+    }
+
+    public function enableRider(Request $request){
+        $user = Auth::user();
+        $rider_user_id = base64_decode(request('rider_user_id'));
+
+        $users = new User;
+        $delete_rider = array();
+        $delete_rider['id'] = $rider_user_id;
+        $delete_rider['visibility'] = 0;
+
+        $delete_rider = $users->changeLoginStatus($delete_rider);
+        Session::flash('message', 'Rider Enabled  !');
+
+        return redirect()->back();
+    }
+
+    public function disableRider(Request $request){
+        $user = Auth::user();
+        $rider_user_id = base64_decode(request('rider_user_id'));
+        $users = new User;
+        $delete_rider = array();
+        $delete_rider['id'] = $rider_user_id;
+        $delete_rider['visibility'] = 3;
+
+        $delete_rider = $users->changeLoginStatus($delete_rider);
+        Session::flash('message', 'Rider Disabled !');
 
         return redirect()->back();
     }

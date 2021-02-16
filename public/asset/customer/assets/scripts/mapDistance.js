@@ -14,7 +14,7 @@ function kilomiter(dakota, frick, service_data, total_amount) {
     if (isNaN(dakota.lng)) {
         return false;
     }
-    const center = { lat: 20.5937, lng: 78.9629 };
+    const center = { lat: 18.4490849, lng: -77.2419522 };
     const options = { zoom: 15, scaleControl: true, center: center };
     map = new google.maps.Map(
         document.getElementById('map'), options);
@@ -83,10 +83,12 @@ function kilomiter(dakota, frick, service_data, total_amount) {
                         $('#add_error').html('No Nearby Restaurant Located !');
 
                     }
-                    console.log(total_amount, 'bb');
+                    // var total_amount = total_amount.toFixed(2);
 
                     var total = deliveryCharge + total_amount;
-                    console.log(total, 'aa');
+                    var total = total.toFixed(2);
+                    var deliveryCharge = deliveryCharge.toFixed(2);
+                    // console.log(total_amount);
                     $('#delivery_charge').html(deliveryCharge);
                     $('#delivery_charge_input').val(deliveryCharge);
                     $("#total_amount").html(total);

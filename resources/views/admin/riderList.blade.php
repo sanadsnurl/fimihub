@@ -30,6 +30,7 @@
                                     <tr>
                                         <th>Action</th>
                                         <th>S.No.</th>
+                                        <th>Type</th>
                                         <th>Name</th>
                                         <th>Mobile</th>
                                         <th>Email</th>
@@ -93,8 +94,7 @@
 
     <script>
         $(document).ready(function() {
-            //Default data table
-            // $('#defaultdatatable').DataTable();
+
             var table = $('#example1').DataTable({
                 lengthChange: true,
                 processing: true,
@@ -112,6 +112,10 @@
                     {
                         data: 'DT_RowIndex',
                         name: 'id'
+                    },
+                    {
+                        data: 'role',
+                        name: 'role'
                     },
                     {
                         data: 'name',

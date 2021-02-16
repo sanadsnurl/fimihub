@@ -17,8 +17,8 @@ function initialize() {
         const fieldKey = input.getAttribute("data-id").replace("-input", "");
         const isEdit = document.getElementById(fieldKey + "-latitude").value != '' && document.getElementById(fieldKey + "-longitude").value != '';
 
-        const latitude = parseFloat(document.getElementById(fieldKey + "-latitude").value) || -33.8688;
-        const longitude = parseFloat(document.getElementById(fieldKey + "-longitude").value) || 151.2195;
+        const latitude = parseFloat(document.getElementById(fieldKey + "-latitude").value) || 18.4490849;
+        const longitude = parseFloat(document.getElementById(fieldKey + "-longitude").value) || -77.2419522;
 
         const map = new google.maps.Map(document.getElementById(fieldKey + '-map'), {
             center: { lat: latitude, lng: longitude },
@@ -26,6 +26,7 @@ function initialize() {
         });
         const marker = new google.maps.Marker({
             map: map,
+            draggable: true,
             position: { lat: latitude, lng: longitude },
         });
 
@@ -34,6 +35,12 @@ function initialize() {
         const autocomplete = new google.maps.places.Autocomplete(input);
         autocomplete.key = fieldKey;
         autocompletes.push({ input: input, map: map, marker: marker, autocomplete: autocomplete });
+
+        // get lat and lng on marker drag
+        google.maps.event.addListener(marker, 'dragend', function(evt) {
+            $('#address-latitude').val(evt.latLng.lat());
+            $('#address-longitude').val(evt.latLng.lng());
+        });
     }
 
     for (let i = 0; i < autocompletes.length; i++) {
@@ -71,6 +78,7 @@ function initialize() {
 
         });
     }
+
 }
 
 function setLocationCoordinates(key, lat, lng) {
@@ -79,7 +87,6 @@ function setLocationCoordinates(key, lat, lng) {
     latitudeField.value = lat;
     longitudeField.value = lng;
 }
-
 
 
 
@@ -120,6 +127,8 @@ function geocodeLatLng(latitude, longitude) {
                 infowindow.setContent(results[0].formatted_address);
                 let str = results[0].formatted_address;
                 let strRes = str.slice(0, 22) + '...';
+                document.cookie = "lat =" + latitude;
+                document.cookie = "long =" + longitude;
                 document.getElementById('result').innerHTML = strRes;
                 document.getElementById('result').setAttribute('title', str);
             } else {
@@ -136,25 +145,24 @@ function geocodeLatLng(latitude, longitude) {
 $('.show_address').click(function() {
     let res = $('#result').attr('title');
     if (latVal && longVal && res) {
-        $('#address-input').val(res);
+        $('.sidebar_addrss_box .map-input').val(res);
         $('#address-latitude').val(latVal);
         $('#address-longitude').val(longVal);
         initialize();
     } else {
-        alert('Location not find')
+        alert('Location not find');
     }
 })
 
 var searchInput = $(".banner .search-bar .location-selector input#location-input");
 
-$(".banner .save_adrs").on("submit", function(){
+$(".banner .save_adrs").on("submit", function() {
     let langInput = $(".banner .search-bar  #location-longitude");
     let latInput = $(".banner .search-bar #location-latitude");
-    if((langInput.val() == 0 && latInput.val() == 0) && (searchInput.val().length !== 0) ) {
+    if ((langInput.val() == 0 && latInput.val() == 0) && (searchInput.val().length !== 0)) {
         $(".banner .address_box_dyn").addClass("invalid");
         return false
-    }else {
+    } else {
         $(".banner .address_box_dyn").removeClass("invalid");
     }
 })
-
