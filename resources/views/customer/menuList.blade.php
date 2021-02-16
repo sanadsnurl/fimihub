@@ -176,7 +176,7 @@
                                     <div onClick="increment_quantity('{{base64_encode($m_data->id)}}',1)">
                                         <li>-</li>
                                     </div>
-                                    <li id="input-quantity-{{$m_data->id}}">{{$m_data->quantity ?? '0'}}</li>
+                                    <li class="product_qty" id="input-quantity-{{$m_data->id}}">{{$m_data->quantity ?? '0'}}</li>
                                     <div onClick="increment_quantity('{{base64_encode($m_data->id)}}',2)">
                                         <li>+</li>
                                     </div>
@@ -223,40 +223,63 @@
                                 </div>
                                 @endif
                                 {{-- Customization --}}
-                                @if(count($m_data->add_on) && isset($m_data->add_ons_cat[0]))
-                                <div class="opt-dropdown" style="dislay:none;">
-                                    <span class="selected">
+                                @php
+                                $flag = 0;
+                                foreach($m_data->add_ons_cat as $add_cat){
+                                    if(!empty($add_cat)){
+                                        $flag = 1;
+
+                                    }
+                                }
+
+                                    // var_dump($m_data->add_ons_cat);
+                                @endphp
+                                @if(isset($m_data->add_ons_cat) && $flag ==1)
+                                <div class="opt-dropdown " style="dislay:none;">
+                                    <span class="selected djsonu2">
                                         Popular Add-Ons
                                     </span>
                                     <div class="menu">
-                                        <div class="accordion" id="accordionExample">
+                                        <div class="accordion djsonu" id="accordionExample">
                                             {{-- @if(count($m_data->add_ons_cat)) --}}
                                             @foreach($m_data->add_ons_cat as $add_cat)
                                             @if(!empty($add_cat))
                                             <div class="card">
-                                                <div class="card-header" id="heading-{{$m_data->id}}-{{$add_cat->id}}">
+                                                <div class="card-header" id="heading-{{$m_data->id}}-{{$add_cat->cats_id}}">
                                                     <h2 class="mb-0">
-                                                        <a class="btn btn-link" data-toggle="collapse"
-                                                            data-target="#collapse-{{$m_data->id}}-{{$add_cat->id}}"
+                                                        <a class="btn btn-link  @if($add_cat->is_required == 1)
+                                                            active_required
+                                                            @else
+                                                        not_active_required
+                                                             @endif" data-toggle="collapse"
+                                                            data-target="#collapse-{{$m_data->id}}-{{$add_cat->cats_id}}"
                                                             aria-expanded="true"
-                                                            aria-controls="collapse-{{$m_data->id}}-{{$add_cat->id}}">
+                                                            aria-controls="collapse-{{$m_data->id}}-{{$add_cat->cats_id}}">
                                                             {{$add_cat->cat_name ?? ''}}
                                                             @if($add_cat->is_required == 1)
-                                                           <span class="error">(*required)</span>
+                                                            <span class="error">(*required)</span>
                                                             @endif
                                                         </a>
                                                     </h2>
                                                 </div>
 
-                                                <div id="collapse-{{$m_data->id}}-{{$add_cat->id}}" class="collapse
+                                                <div id="collapse-{{$m_data->id}}-{{$add_cat->cats_id}}" class="collapse
                                                 @if($loop->index == 0)
-                                                show
+                                                shows
                                                 @endif
-                                                " aria-labelledby="heading-{{$m_data->id}}-{{$add_cat->id}}"
+
+                                                @if($add_cat->is_required == 1)
+                                                        show
+
+                                                         @endif
+                                                " aria-labelledby="heading-{{$m_data->id}}-{{$add_cat->cats_id}}"
                                                     data-parent="#accordionExample">
-                                                    <div class="card-body">
-                                                        @if(count($m_data->add_on))
+                                                    <div class="card-body @if($add_cat->is_required == 1)
+                                                        active_required_vij
+
+                                                         @endif">
                                                         @foreach($m_data->add_on as $add_onss)
+                                                        @if(count($add_onss))
                                                         @foreach($add_onss as $add_ons)
                                                         @if($add_cat->cat_name == $add_ons->cat_name)
                                                         <label for="cheese-{{$m_data->id}}-{{$add_ons->id ?? ''}}">
@@ -266,13 +289,14 @@
                                                                 id="cheese-{{$m_data->id}}-{{$add_ons->id ?? ''}}"
                                                                 name="custom_data[]" value="{{$add_ons->id ?? ''}}"
                                                                 class="extras"
+
                                                                 @if(in_array($add_ons->id,($m_data->product_adds_id) ??
                                                             [],FALSE)) checked @endif>
                                                             @else
                                                             <input type="radio"
                                                                 onClick="increment_quantity('{{base64_encode($m_data->id)}}')"
                                                                 id="cheese-{{$m_data->id}}-{{$add_ons->id ?? ''}}"
-                                                                name="custom_data[]" value="{{$add_ons->id ?? ''}}"
+                                                                name="custom_data[{{$add_cat->cats_id ?? '1'}}]" value="{{$add_ons->id ?? ''}}"
                                                                 class="extras"
                                                                 @if(in_array($add_ons->id,($m_data->product_adds_id) ??
                                                             [],FALSE)) checked @endif>
@@ -290,8 +314,8 @@
                                                         </label>
                                                         @endif
                                                         @endforeach
-                                                        @endforeach
                                                         @endif
+                                                        @endforeach
                                                     </div>
                                                 </div>
                                             </div>
@@ -319,9 +343,54 @@
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script>
     function increment_quantity(menu_id, click_type = false) {
+
         var resto_id = $("#input-quantity").val();
         var menu_decode_id = atob(menu_id);
         var inputQuantityElement = $("#input-quantity-" + menu_decode_id);
+        var isSendRequest = 0;
+        inputQuantityElement.parents(".card-wrap").find(".active_required_vij input").each(function( index, value) {
+           console.log("dszx");
+            if($(this).prop('checked') == true) {
+                isSendRequest = 1;
+            }
+            if(isSendRequest == 0) {
+                // $("#accordionExample").style.display = 'block';
+            // $(this).parents('.card-wrap').find('.djsonu').style.display = 'block';
+
+            // $(".order-block .order-menu-row .card-wrap .opt-dropdown .selected").click(function() {
+            //     $(this).parent().toggleClass("open");
+            //     $(this).next(".menu").slideToggle();
+            // })
+            $(this).parents('.card-wrap').find('.opt-dropdown .djsonu2').each(function( index, value) {
+                    // $(this).trigger( "click" );
+                    $(this).parent().addClass("open");
+                    $(this).next(".menu").slideDown();
+                    // console.log($(this).find(".active_required"));
+                    // $(this).parents('.card-wrap').find(".active_required").each(function() {
+                    //     // $(this).slideDown();
+                    //     // collapse
+                    //     // console.log($(this).parents('.accordion').find('.collapse'), "$(this).parents('.accordion').find('.collapse')")
+                    //     $(this).parents('.accordion').find('.collapse').addClass("show");
+                    // });
+                    // $(this).parents('.card-wrap').find(".not_active_required").each(function() {
+                    //     // $(this).slideDown();
+                    //     // collapse
+                    //     // console.log($(this).parents('.accordion').find('.collapse'), "$(this).parents('.accordion').find('.collapse')")
+                    //     $(this).parents('.accordion').find('.ninja').removeClass("show");
+                    // });
+                    // console.log('checking')
+             });
+            alert("Please select atleast one required Addon");
+
+            // console.log('request not sended');
+            return false;
+        }
+        });
+
+
+        // console.log('request sended');
+
+
         var variant_menu = $(".small-" + menu_decode_id).val();
         var menu_form_data = JSON.stringify($('#menu_form-' + menu_decode_id).serializeArray());
         var item_count = $("#item_count");
@@ -343,6 +412,21 @@
                     cart_flex.style.display = 'flex';
                 } else {
                     cart_flex.style.display = 'none';
+                }
+                if (response.quantity > 0) {
+                    // inputQuantityElement.parents(".card-wrap").find(".active_required").each(function(item, index){
+                    //     let required_option = $(item).parents(".card").find("label .extras:checked").length
+                    //     console.log(required_option);
+                    //     if(required_option < 1) {
+                    //         $(item).parents(".card").find("label .extras").each(function(subItem, index){
+                    //             $(subItem).change(function(){
+                    //                 if($(this).is(":checked")) {
+                    //                     console.log('test');
+                    //                 }
+                    //             })
+                    //         })
+                    //     }
+                    // })
                 }
                 $(inputQuantityElement).html(response.quantity);
                 $(item_count).html(response.items);
@@ -377,7 +461,49 @@
             }
         });
     };
+
+
     $(document).ready(function() {
         $('.js-star-rating').makeStars();
+    //     setTimeout(()=> {
+    //     $('.col-order .category-block .active_required_vij').each(function( index, value) {
+
+    //         $(this).find("input").each(function(newIndex,NewValue) {
+    //             if(newIndex == 0) {
+    //                 $(this).prop('checked',true)
+    //             }
+
+    //             });
+    //         });
+
+    //  },100)
+
+    //         $('.col-order .category-block .active_required_vij input').click(function() {
+    //     let elm = $(this).prev('input')
+    //     setTimeout(()=> {
+    //         if(elm.is(':checked')) {
+    //             $('.custom_card_bdy .demo_checkbox input').prop('checked',true);
+    //         }else {
+    //             $('.custom_card_bdy .demo_checkbox input').prop('checked',false);
+    //         }
+    //     },100)
+    // });
+
+        // $(".active_required").each(function(){
+        //     if($(this).parents(".card-wrap").find(".product_qty").text() == 0) {
+        //         $(this).parents(".card").find(".extras").first().prop("checked", true);
+        //     }
+        // })
+
+        // $(".active_required").parents(".card").find(".card-body").each(function(){
+        //     let checkbox = $(this).find(".extras");
+        //     let checkboxLength = checkbox.length;
+        //     $(checkbox).change(function(){
+        //         if(checkboxLength < 1) {
+        //             $(this).prop("checked", true);
+        //             alert("Please select at least one option!");
+        //         }
+        //     })
+        // })
     });
 </script>

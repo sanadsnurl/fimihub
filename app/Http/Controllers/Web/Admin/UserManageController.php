@@ -14,6 +14,8 @@ use Response;
 use Session;
 use DataTables;
 
+use function GuzzleHttp\json_decode;
+
 class UserManageController extends Controller
 {
     public function restoLookup(Request $request){
@@ -34,6 +36,132 @@ class UserManageController extends Controller
                 return redirect()->back();
             }
         }
+    }
+    public function manageSubAdmin(Request $request)
+    {
+        $user = Auth::user();
+
+        $users = new user;
+        $user_list = $users->allUserSubAdminData();
+        if ($request->ajax()) {
+            return Datatables::of($user_list)
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+                    $btn = '<a href="editSubAdmin?sub_admin_user_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light mt-1">Edit</a>';
+                    return $btn;
+                })
+                ->addColumn('role', function ($row) {
+                    $role = ($row->role);
+                    $role_per = "";
+                    if(in_array(1,$role)){
+                        $role_per .= "=> Rider Management<br>";
+                    }
+                    if(in_array(2,$role)){
+                        $role_per .= "=> Restaurant Management<br>";
+                    }
+                    if(in_array(3,$role)){
+                        $role_per .= "=> Order Management<br>";
+                    }
+                    return $role_per;
+                })
+                ->addColumn('created_at', function ($row) {
+
+                    return date('d F Y', strtotime($row->created_at));
+                })
+                ->addColumn('mobile', function ($row) {
+                    if($row->country_code != NULL){
+                        return '('.$row->country_code.')'.$row->mobile;
+                    }else{
+                        return $row->mobile;
+
+                    }
+                })
+                ->rawColumns(['action', 'role'])
+                ->make(true);
+        }
+        $user['currency'] = $this->currency;
+        $user_list = $user_list->get();
+
+        // dd($user_list);
+        return view('admin.manageSubAdmin')->with(['data' => $user]);
+    }
+
+    public function editSubAdmin(Request $request)
+    {
+        $user = Auth::user();
+        $sub_admin_user_id = base64_decode(request('sub_admin_user_id'));
+        $users = new User;
+        $sub_admin_data = $users->userByIdData($sub_admin_user_id);
+        $user['currency'] = $this->currency;
+
+        // dd($dish_cat_details);
+        return view('admin.editSubAdmin')->with(['data' => $user,
+                                                    'sub_admin' => $sub_admin_data
+                                                    ]);
+    }
+
+    public function addSubAdmin(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:150',
+            'password' => 'required|string|min:6',
+            'email' => 'required|email|unique:users',
+            'role' => 'required'
+        ]);
+        if(!$validator->fails()){
+            $data=$request->toArray();
+            // dd($data);
+            $data['user_type']=1;
+            $data['role']=json_encode($data['role']);
+            $data['email_verified_at']=now();
+            $user = User::create($data);
+                if($user != NULL){
+
+                    Session::flash('message', 'Register Succesfully !');
+                    return redirect()->back();
+
+                }else{
+                    Session::flash('message', 'Registration Failed , Please try again!');
+                    return redirect()->back();
+                }
+
+        }
+        else{
+        	return redirect()->back()->withInput()->withErrors($validator);
+        }
+
+    }
+
+    public function editSubAdminProcess(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:150',
+            'password' => 'string|min:6|nullable',
+            'role' => 'required',
+            'id' => 'required'
+        ]);
+        if(!$validator->fails()){
+            $data=$request->toArray();
+            // dd($data);
+            $data['role']=json_encode($data['role']);
+            if($data['password']==NULL){
+            unset($data['password']);
+
+            }else{
+                $data['password'] = \Hash::make($data['password']);
+            }
+            $data['email_verified_at']=now();
+            $users = new  User;
+            unset($data['_token']);
+            $users->UpdateLogin($data);
+            Session::flash('message', 'Updated Succesfully !');
+            return redirect()->back();
+
+        }
+        else{
+        	return redirect()->back()->withInput()->withErrors($validator);
+        }
+
     }
 
     public function UserListDetails(Request $request)

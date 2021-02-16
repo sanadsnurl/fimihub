@@ -66,12 +66,12 @@
                     <img src="{{asset('asset/customer/assets/images/paypal.svg')}}" alt="paypal">
                 </label> --}}
 
-                <input type="radio" name="payment" id="cash" value="3">
+                {{-- <input type="radio" name="payment" id="cash" value="3">
                 <label for="cash" id="cashondelivery">
                     <img src="{{asset('asset/customer/assets/images/cash-delivery.svg')}}" class="mr-2"
                 alt="cash on delivery">
                 CASH ON DELIVERY
-                </label>
+                </label> --}}
 
                 <input type="radio" name="payment" id="atlantic" value="4">
                 <label for="atlantic" id="atlantic">
@@ -137,7 +137,7 @@
                                 </div>
                                 <div class="col-12 col-sm-4 controls">
                                     <label class="control-label" style="width: fit-content;">Expiration</label>
-                                    <input class="expiration-month-and-year form-control" type="text"
+                                    <input class="expiration-month-and-year form-control" maxlength="7" type="text"
                                         name="card_expiry_date" placeholder="MM / YY" id="card_expiry_date">
                                     @if($errors->has('card_expiry_date'))
                                     <div class="error">{{ $errors->first('card_expiry_date') }}</div>

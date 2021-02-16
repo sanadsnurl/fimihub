@@ -50,6 +50,7 @@ class RestaurentController extends Controller
         $menu_cat = $menu_list->menuCategory($resto_id);
         $user->currency=$this->currency;
         // dd($billing_balance['menu_data']);
+        // dd($billing_balance['menu_data'][0]->add_ons_cat);
 
         return view('customer.menuList')->with(['user_data'=>$user,
                                                 'menu_data'=>$billing_balance['menu_data'],

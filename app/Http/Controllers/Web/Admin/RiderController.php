@@ -98,6 +98,16 @@ class RiderController extends Controller
                     return $btns;
 
                 })
+                ->addColumn('role', function ($row) {
+                    $type = "";
+                    if($row->role == 1){
+                        $type = "Driver";
+                    }
+                    if($row->role == 2){
+                        $type = "Runner";
+                    }
+                    return $type;
+                })
                 ->addColumn('created_at', function ($row) {
 
                     return date('d F Y', strtotime($row->created_at));
@@ -188,6 +198,16 @@ class RiderController extends Controller
                     }
                     return $btns;
 
+                })
+                ->addColumn('role', function ($row) {
+                    $type = "";
+                    if($row->role == 1){
+                        $type = "Driver";
+                    }
+                    if($row->role == 2){
+                        $type = "Runner";
+                    }
+                    return $type;
                 })
                 ->addColumn('created_at', function ($row) {
 

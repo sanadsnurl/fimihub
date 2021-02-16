@@ -243,8 +243,26 @@ class OrderController extends Controller
         $lng = $resto_add[0]->longitude;
         // $kmRadius = $this->max_distance_km_rider;
         $rider = $this->closestRiders($user, $lat, $lng)->get();
+        $runner = $this->closestRunner($user, $lat, $lng)->get();
 
         foreach ($rider as $rid) {
+            if (isset($rid->device_token)) {
+                $push_notification_rider = array();
+                $push_notification_rider['device_token'] = $rid->device_token;
+                $push_notification_rider['title'] = 'New Order Request';
+                $push_notification_rider['page_token'] = 1;
+                $push_notification_rider['notification'] = 'New Order By ' . $customer_data->name;
+                $push_notification_rider_result = $this->pushNotification($push_notification_rider);
+            }
+            $notification_rider = array();
+            $notification_rider['user_id'] = $rid->id;
+            $notification_rider['txn_id'] = $order_data->order_id;
+            $notification_rider['title'] = 'New Order Request';
+            $notification_rider['notification'] = 'New Order By ' . $customer_data->name;
+            $notification = new Notification();
+            $notification_id = $notification->makeNotifiaction($notification_rider);
+        }
+        foreach ($runner as $rid) {
             if (isset($rid->device_token)) {
                 $push_notification_rider = array();
                 $push_notification_rider['device_token'] = $rid->device_token;

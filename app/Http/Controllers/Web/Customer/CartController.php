@@ -120,7 +120,6 @@ class CartController extends Controller
                 'resto_id' =>$quant_details['restaurent_id']
                 ];
                 $billing_balance = ($this->getBilling($billing_data_arary));
-                // dd($billing_balance['service_data']);
                 $user->currency = $this->currency;
                 return view('customer.cartAddress')->with([
                     'user_data' => $user,
@@ -156,14 +155,16 @@ class CartController extends Controller
 
     // dd(json_encode($menu_all_data->custom_data));
         $custom_data = array();
+        // dd($menu_all_data);
         if(count($menu_all_data)){
             foreach ($menu_all_data as $value) {
                 if($value->name == $menu_id.'-variant'){
                     $variant_id = $value->value;
-                }
-                if($value->name == 'custom_data[]'){
+                }else{
                     $custom_data[] = $value->value;
+
                 }
+
             }
         }
 

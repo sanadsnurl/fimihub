@@ -52,7 +52,7 @@
 
                     </a>
                 </li>
-
+                @if($data->role == NULL || in_array(2,$data->role))
                 <li>
                     <a href="#" class="waves-effect">
                         <i class="icon-user-following"></i> <span>Restaurant </span> <i
@@ -70,6 +70,8 @@
 
                     </ul>
                 </li>
+                @endif
+                @if($data->role == NULL || in_array(1,$data->role))
                 <li>
                     <a href="#" class="waves-effect">
                         <i class="icon-disc"></i> <span>Rider </span> <i class="fa fa-angle-right pull-right"></i>
@@ -81,6 +83,8 @@
                                 Request</a></li>
                     </ul>
                 </li>
+                @endif
+                @if($data->role == NULL)
                 <li>
                     <a href="#" class="waves-effect">
                         <i class="icon-user"></i> <span>Customer </span> <i
@@ -92,18 +96,24 @@
 
                     </ul>
                 </li>
+                @endif
+                @if($data->role == NULL || in_array(3,$data->role))
                 <li>
                     <a href="{{url('adminfimihub/customerOrder')}}" class="waves-effect">
                         <i class="icon-list"></i> <span>Order's</span>
 
                     </a>
                 </li>
+                @endif
+                @if($data->role == NULL)
                 <li>
                     <a href="{{url('adminfimihub/serviceList')}}" class="waves-effect">
                         <i class="icon-home"></i> <span>Services</span>
 
                     </a>
                 </li>
+                @endif
+                @if($data->role == NULL)
                 <li>
                     <a href="#" class="waves-effect">
                         <i class="icon-magic-wand"></i> <span>CMS </span> <i class="fa fa-angle-right pull-right"></i>
@@ -118,12 +128,23 @@
 
                     </ul>
                 </li>
+                @endif
+                @if($data->role == NULL)
                 <li>
                     <a href="{{url('adminfimihub/envSetting')}}" class="waves-effect">
                         <i class="icon-wrench"></i> <span>Config</span>
 
                     </a>
                 </li>
+                @endif
+                @if($data->role == NULL)
+                <li>
+                    <a href="{{url('adminfimihub/getSubAdmin')}}" class="waves-effect">
+                        <i class="icon-wrench"></i> <span>Sub-Admin</span>
+
+                    </a>
+                </li>
+                @endif
                 <li>
                     <a href="{{url('adminfimihub/logout')}}" class="waves-effect">
                         <i class="icon-logout"></i> <span>Logout</span>
