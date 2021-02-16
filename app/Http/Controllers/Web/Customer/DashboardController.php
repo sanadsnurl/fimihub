@@ -85,7 +85,7 @@ class DashboardController extends Controller
         } else {
             $lats = $lat_lng_array['address_latitude'] ??  $lat;
             $lngs = $lat_lng_array['address_longitude'] ?? $lng;
-            // print($lats);
+            // dd($lats."--".$lngs);
             // $kmRadius = $this->max_distance_km_resto;
             $resto = $this->closestRestaurant($user, $lats, $lngs);
 

@@ -17,7 +17,7 @@ use Imagick;
 trait MediaUploadTrait
 {
     // Staged File Domain
-    public $domain = 'https://filebooks.herokuapp.com/';
+    public $domain = 'https://fimihub.com/';
 
     function mediaUpload($media)
     {

@@ -28,11 +28,14 @@ function initialize() {
             map: map,
             draggable: true,
             position: { lat: latitude, lng: longitude },
+            travelMode: 'DRIVING'
+
         });
 
         marker.setVisible(isEdit);
 
         const autocomplete = new google.maps.places.Autocomplete(input);
+
         autocomplete.key = fieldKey;
         autocompletes.push({ input: input, map: map, marker: marker, autocomplete: autocomplete });
 
