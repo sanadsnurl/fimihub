@@ -13,8 +13,8 @@
 //         curl_close($ch);
 $source_address = '18.4512188,-77.2441534';
 $destination_address = '18.0210953,-76.7936676';
-        $url = "https://maps.googleapis.com/maps/api/directions/json?origin=".str_replace(' ', '+', $source_address)."&destination=".str_replace(' ', '+', $destination_address)."&sensor=false&key=".Config('GOOGLE_MAPS_API_KEY');
-           dd($url);
+        $url = "https://maps.googleapis.com/maps/api/directions/json?origin=28.652267999999996,77.1600089&destination=18.4525947,-77.2369962&sensor=false&key=".Config('GOOGLE_MAPS_API_KEY');
+        //    dd($url);
         $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -24,8 +24,9 @@ $destination_address = '18.0210953,-76.7936676';
             $response = curl_exec($ch);
             curl_close($ch);
             $response_all = json_decode($response);
+            dd($response_all);
+
             $distance = $response_all->routes[0]->legs[0]->distance->text;
-            dd($distance);
 
 
 @endphp

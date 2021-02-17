@@ -5,6 +5,11 @@ use Illuminate\Support\Facades\DB;
 use App\Model\order;
 use App\Model\restaurent_detail;
 use App\User;
+use Illuminate\Pagination\Paginator;
+
+use Illuminate\Support\Collection;
+
+use Illuminate\Pagination\LengthAwarePaginator;
 use stdClass;
 
 trait LatLongRadiusScopeTrait
@@ -237,7 +242,7 @@ trait LatLongRadiusScopeTrait
         */
         // dd($lng);
         $disctance_select = sprintf(
-                "restaurent_details.*,ua.latitude,ua.longitude,ua.id as addres_id,COUNT(DISTINCT ml.id) AS dish_count,
+                "null as dis,null as dis_new,restaurent_details.*,ua.latitude,ua.longitude,ua.id as addres_id,COUNT(DISTINCT ml.id) AS dish_count,
                 COUNT(DISTINCT oe.id) AS rating_count,Round(AVG(oe.order_feedback),1) AS rating,(( %d * acos( cos( radians(%s) ) " .
                         " * cos( radians( ua.latitude ) ) " .
                         " * cos( radians( ua.longitude ) - radians(%s) ) " .
@@ -276,7 +281,16 @@ trait LatLongRadiusScopeTrait
 
             // dd($data->toArray());
     }
+    public function paginate($items, $perPage = 5, $page = null, $options = [])
+    {
 
+        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+
+        $items = $items instanceof Collection ? $items : Collection::make($items);
+
+        return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
+
+    }
     public function getDistanceBetweenPointsNew($latitude1, $longitude1, $latitude2, $longitude2) {
         // dd($longitude1);
         $source_address = $latitude1.",".$longitude1;
@@ -292,9 +306,10 @@ trait LatLongRadiusScopeTrait
                     $response = curl_exec($ch);
                     curl_close($ch);
                     $response_all = json_decode($response);
-                    $distance = $response_all->routes[0]->legs[0]->distance->text;
-                    $distance =explode(' km',$distance);
-                    return ($distance[0]);
+                    // dd($response_all);
+                    $distance = $response_all->routes[0]->legs[0]->distance->text ?? null;
+                    $distance = str_replace('', ',',str_replace('', ' km',$distance));
+                    return ($distance ?? null);
 
    }
 

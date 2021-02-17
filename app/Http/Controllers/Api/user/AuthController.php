@@ -61,7 +61,7 @@ class AuthController extends Controller
                     $response = [
                         'data' => $user_data,
                         'status' => true,
-                        'message' => 'Not Verified', 'verified' => false
+                        'message' => 'Please Verify Your Mobile Number', 'verified' => false
                     ];
                     return response()->json($response, $this->successStatus);
                 }

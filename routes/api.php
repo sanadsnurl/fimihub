@@ -99,6 +99,8 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
         Route::get('details', 'Api\user\UserAuthController@userDetails');
         //Customer dashboard
         Route::get('getRestaurantByCat', 'Api\user\RestaurentManageController@getRestaurentList');
+        //Customer Menu List
+        Route::get('getMenuByRestaurant', 'Api\user\RestaurentManageController@getRestaurentMenuDetails');
 
     });
 });
