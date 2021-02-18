@@ -101,7 +101,9 @@ class RestaurentManageController extends Controller
             'user_data' => $user_data,
             'near_by_restaurant' => $resto_data,
             'nonveg' => $nonveg_resto_data,
-            'veg' => $veg_resto_data
+            'veg' => $veg_resto_data,
+            'message' => 'success',
+            'status' => true
         ], $this->successStatus);
     }
 
@@ -147,7 +149,9 @@ class RestaurentManageController extends Controller
             'total_amount' => $billing_balance['total_amount'],
             'sub_total' => $billing_balance['sub_total'],
             'item' => $billing_balance['item'],
-            'resto_data' => $resto_data
+            'resto_data' => $resto_data,
+            'message' => 'success',
+            'status' => true
         ], $this->successStatus);
     }
 }

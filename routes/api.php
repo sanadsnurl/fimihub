@@ -101,6 +101,10 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
         Route::get('getRestaurantByCat', 'Api\user\RestaurentManageController@getRestaurentList');
         //Customer Menu List
         Route::get('getMenuByRestaurant', 'Api\user\RestaurentManageController@getRestaurentMenuDetails');
+        //Get cart details
+        Route::get('getCartDetails', 'Api\user\CartController@getCartDetails');
+        //Get cart details
+        Route::post('addToCart', 'Api\user\CartController@addToCart');
 
     });
 });
