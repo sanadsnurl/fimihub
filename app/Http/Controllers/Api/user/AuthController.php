@@ -267,4 +267,5 @@ class AuthController extends Controller
             return response()->json(['message' => $th->getMessage(), 'status' => false], $this->invalidStatus);
         }
     }
+
 }

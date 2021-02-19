@@ -98,7 +98,6 @@ class RestaurentManageController extends Controller
         }
 
         return response()->json([
-            'user_data' => $user_data,
             'near_by_restaurant' => $resto_data,
             'nonveg' => $nonveg_resto_data,
             'veg' => $veg_resto_data,
@@ -142,7 +141,6 @@ class RestaurentManageController extends Controller
         // dd($billing_balance['menu_data']);
         // dd($billing_balance['menu_data'][0]->add_ons_cat);
         return response()->json([
-            'user_data' => $user,
             'menu_data' => $billing_balance['menu_data'],
             'menu_cat' => $menu_cat,
             'rating_data' => $rating_data,

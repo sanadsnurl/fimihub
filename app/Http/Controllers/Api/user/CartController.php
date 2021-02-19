@@ -44,7 +44,6 @@ class CartController extends Controller
 
         if ($cart_avail == NULL) {
             return response()->json([
-                'user_data' => $user,
                 'user_address' => $user_add,
                 'cart_menu_data' => NULL,
                 'message' => 'success',
@@ -119,7 +118,6 @@ class CartController extends Controller
                 $billing_balance = ($this->getBilling($billing_data_arary));
                 $user->currency = $this->currency;
                 return response()->json([
-                    'user_data' => $user,
                     'cart_menu_data' => $cart_menu_data,
                     'user_default_address' => $user_add_def,
                     'resto_default_address' => $resto_add_def,
@@ -136,7 +134,6 @@ class CartController extends Controller
 
             } else {
                 return response()->json([
-                    'user_data' => $user,
                     'user_address' => $user_add,
                     'cart_menu_data' => NULL,
                     'message' => 'success',
@@ -240,21 +237,18 @@ class CartController extends Controller
                     'status' => true
                 ];
                 return response()->json([
-                    'user_data' => $user,
                     'data' => $response,
                     'message' => 'success',
                     'status' => true
                 ], $this->successStatus);
             } else {
                 return response()->json([
-                    'user_data' => $user,
                     'message' => 'Invalid Menu Item !',
                     'status' => false
                 ], $this->invalidStatus);
             }
         } else {
             return response()->json([
-                'user_data' => $user,
                 'message' => 'Invalid Restaurant Details !',
                 'status' => false
             ], $this->invalidStatus);
