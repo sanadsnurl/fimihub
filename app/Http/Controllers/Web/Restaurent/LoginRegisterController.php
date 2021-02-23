@@ -63,7 +63,11 @@ class LoginRegisterController extends Controller
                     $this->OtpGeneration($userid);
                     return redirect('/resendOtp');
 
-                }elseif($user_data->visibility != 0){
+                }elseif($user_data->visibility == 3){
+                    Session::flash('message', 'Account Disabled !');
+                    return redirect()->back();
+                }
+                elseif($user_data->visibility != 0){
                     Session::flash('message', 'Account Deleted !');
                     return redirect()->back();
                 }

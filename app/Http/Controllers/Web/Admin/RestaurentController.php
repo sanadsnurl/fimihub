@@ -32,10 +32,20 @@ class RestaurentController extends Controller
             return Datatables::of($user_list)
                 ->addIndexColumn()
                 ->addColumn('action', function($row){
-                    $btn = '<a href="editResto?resto_user_id='.base64_encode($row->resto_user_id).'" class="btn btn-outline-secondary btn-sm btn-round waves-effect waves-light m-0">Edit</a>
+                    if($row->resto_visibility == 3){
+                        $btn = '<a href="editResto?resto_user_id='.base64_encode($row->resto_user_id).'" class="btn btn-outline-secondary btn-sm btn-round waves-effect waves-light m-0">Edit</a>
+                        <a href="deleteResto?resto_user_id='.base64_encode($row->resto_user_id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light mt-1">Delete</a>
+                        <a href="restoEarnings?resto_user_id='.base64_encode($row->resto_user_id).'" class="btn btn-outline-secondary btn-sm btn-round waves-effect waves-light m-0">Earnings</a>
+                        <a href="lookupResto?resto_user_id='.base64_encode($row->resto_user_id).'" class="btn btn-outline-secondary btn-sm btn-round waves-effect waves-light m-0">Look-Up</a>
+                        <a href="enableResto?resto_user_id='.base64_encode($row->resto_user_id).'" class="btn btn-outline-secondary btn-sm btn-round waves-effect waves-light m-0">Enable</a>';
+                    }else{
+                        $btn = '<a href="editResto?resto_user_id='.base64_encode($row->resto_user_id).'" class="btn btn-outline-secondary btn-sm btn-round waves-effect waves-light m-0">Edit</a>
                     <a href="deleteResto?resto_user_id='.base64_encode($row->resto_user_id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light mt-1">Delete</a>
                     <a href="restoEarnings?resto_user_id='.base64_encode($row->resto_user_id).'" class="btn btn-outline-secondary btn-sm btn-round waves-effect waves-light m-0">Earnings</a>
-                    <a href="lookupResto?resto_user_id='.base64_encode($row->resto_user_id).'" class="btn btn-outline-secondary btn-sm btn-round waves-effect waves-light m-0">Look-Up</a>';
+                    <a href="lookupResto?resto_user_id='.base64_encode($row->resto_user_id).'" class="btn btn-outline-secondary btn-sm btn-round waves-effect waves-light m-0">Look-Up</a>
+                    <a href="disableResto?resto_user_id='.base64_encode($row->resto_user_id).'" class="btn btn-outline-secondary btn-sm btn-round waves-effect waves-light m-0">Disable</a>';
+
+                    }
                     return $btn;
                 })
                 ->addColumn('created_at', function($row){
@@ -48,6 +58,7 @@ class RestaurentController extends Controller
         }
         $user['currency']=$this->currency;
         $user_list = $user_list->get();
+        // dd($user_list);
         return view('admin.restaurentList')->with(['data'=>$user]);
 
     }
@@ -321,6 +332,35 @@ class RestaurentController extends Controller
 
         $delete_resto = $users->deleteUser($delete_resto);
         Session::flash('message', 'Restaurant Deleted Successfully !');
+
+        return redirect()->back();
+    }
+
+    public function enableResto(Request $request){
+        $user = Auth::user();
+        $resto_user_id = base64_decode(request('resto_user_id'));
+
+        $users = new User;
+        $delete_rider = array();
+        $delete_rider['id'] = $resto_user_id;
+        $delete_rider['visibility'] = 0;
+
+        $delete_rider = $users->changeLoginStatus($delete_rider);
+        Session::flash('message', 'Restaurent  Enabled  !');
+
+        return redirect()->back();
+    }
+
+    public function disableResto(Request $request){
+        $user = Auth::user();
+        $resto_user_id = base64_decode(request('resto_user_id'));
+        $users = new User;
+        $delete_rider = array();
+        $delete_rider['id'] = $resto_user_id;
+        $delete_rider['visibility'] = 3;
+
+        $delete_rider = $users->changeLoginStatus($delete_rider);
+        Session::flash('message', 'Restaurent Disabled !');
 
         return redirect()->back();
     }

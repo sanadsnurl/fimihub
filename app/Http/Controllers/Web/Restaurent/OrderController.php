@@ -194,6 +194,7 @@ class OrderController extends Controller
 
     public function acceptOrder(Request $request)
     {
+
         $user = Auth::user();
 
         $order_id = base64_decode(request('odr_id'));
@@ -286,10 +287,24 @@ class OrderController extends Controller
 
     public function rejectOrder(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'odr_id' => 'required|string',
+            'reason_id' => 'required|string',
+            'reason_string' => 'string|max:150|nullable',
+
+        ]);
+        if($validator->fails()){
+        	return redirect()->back()->withErrors($validator);
+
+        }
+
         $user = Auth::user();
 
         $order_id = base64_decode(request('odr_id'));
         $reason_id = (request('reason_id'));
+        if($reason_id == -1){
+            $reason_id = (request('reason_string'));
+        }
         $order_status = 4;
         $orders = new order;
         $order_status_update = $orders->updateOrderStatus($order_id, $order_status);
@@ -303,7 +318,7 @@ class OrderController extends Controller
         $order_event['user_id'] = $user->id;
         $order_event['order_status'] = 2;
         $order_event['user_type'] = 2;
-        $order_event['reason_id'] = $reason_id;
+        $order_event['reason_string'] = $reason_id;
         $OrderEvents = new OrderEvent;
         $make_event = $OrderEvents->makeUpdateOrderEvent($order_event);
         // ============================================= PUSH NOTIFICATION=======================================

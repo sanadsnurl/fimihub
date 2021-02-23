@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Model\restaurent_detail;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -216,12 +217,12 @@ class User extends Authenticatable
                 ->leftJoin('restaurent_details', function($join) use ($user_type)
                         {
                         $join->on('restaurent_details.user_id', '=', 'users.id');
-                        $join->where('restaurent_details.visibility', 0);
+                        $join->whereIn('restaurent_details.visibility', [0,3]);
 
                         })
-                ->where('users.visibility', 0)
+                ->whereIn('users.visibility', [0,3])
                 ->where('users.user_type', $user_type)
-                ->select('restaurent_details.*','users.name as prop_name','users.email as user_email','users.mobile as user_mobile','users.created_at as user_created_at','users.id as resto_user_id')
+                ->select('restaurent_details.*','users.name as prop_name','users.email as user_email','users.mobile as user_mobile','users.created_at as user_created_at','users.id as resto_user_id','users.visibility as resto_visibility')
                 ->orderBy('users.created_at','DESC');
 
 
@@ -362,11 +363,16 @@ class User extends Authenticatable
         $query_data = $this
             ->where('id', $data['id'])
             ->update(['visibility'=> $data['visibility'],'updated_at' => now()]);
+        $query_data = DB::table('restaurent_details')
+            ->where('user_id', $data['id'])
+            ->update(['visibility'=> $data['visibility'],'updated_at' => now()]);
 
             // dd($query_data);
 
         return $query_data;
     }
+
+
 
     public function userAddress()
     {

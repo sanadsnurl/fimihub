@@ -20,6 +20,7 @@
             <p>Arriving Today at {{$order_data->delivery_time ?? '--'}}</p>
             @endif
         </div>
+
         <div class="order_progress">
             <div class="row">
                 <div class="col-md-9">
@@ -36,7 +37,7 @@
                             <span></span> Pending</li>
                         <li
                             class="{{ in_array($order_data->order_status,array(4)) ? 'order_cancel' : 'order_status_hide rest_den'}} ">
-                            <span></span> Restaurant Denied</li>
+                            <span></span> Restaurant Denied ({{$order_event_data->restaurant->reason_string ?? 'Cancelled'}})</li>
 
                         <li class="{{ in_array($order_data->order_status,array(5,6,7,8,9,10,11,12)) ? 'active' : ''}}">
                             <span></span> Order placed</li>

@@ -28,6 +28,6 @@ class Controller extends BaseController
     public $currency = "$";
     //Wallet Key
     public $key = "MERCHANT";
-    
-    
+
+
 }

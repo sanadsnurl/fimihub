@@ -1,4 +1,5 @@
 @include('customer.include.header')
+
 <section class="banner no-padding">
     <div class="slider-wrap">
         @foreach($slider_data as $s_data)

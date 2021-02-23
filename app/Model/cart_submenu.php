@@ -179,7 +179,7 @@ class cart_submenu extends Model
     }
     public function getPriceAttribute($value)
     {
-        if (in_array(request()->segment(1), ['Restaurent', 'admifimihub', 'api'])) {
+        if (in_array(request()->segment(1), ['Restaurent', 'admifimihub'])) {
             return $value;
         } else {
             return $value + ((DB::table('service_catagories')->where('service_catagories.id', 1)->first()->commission / 100) * $value);

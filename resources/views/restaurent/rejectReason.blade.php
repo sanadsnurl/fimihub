@@ -58,15 +58,25 @@
                                         <option value="">-- Select Reason --</option>
                                         @if(!empty($reason_list))
                                         @foreach($reason_list as $r_data)
-                                        <option value="{{$r_data->id}}"
+                                        <option value="{{$r_data->reason}}"
                                         >{{$r_data->reason}}</option>
                                         @endforeach
                                         @endif
-                                        {{-- <option value="-1">Other</option> --}}
+                                        <option value="-1">Other</option>
                                     </select>
 
                                     @if($errors->has('reason_id'))
                                     <div class="error">{{ $errors->first('reason_id') }}</div>
+                                    @endif
+                                </div>
+
+                            </div>
+                            <div class="form-group row" style="display:none" id="option_other">
+                                <label for="input-1" class="col-sm-2 col-form-label">Give Reason</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="input-1" name="reason_string">
+                                    @if($errors->has('reason_string'))
+                                    <div class="error">{{ $errors->first('reason_string') }}</div>
                                     @endif
                                 </div>
 

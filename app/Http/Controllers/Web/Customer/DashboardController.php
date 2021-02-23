@@ -23,13 +23,15 @@ use Response;
 use Session;
 use Location;
 use phpDocumentor\Reflection\Types\Null_;
+use stdClass;
 
 class DashboardController extends Controller
 {
     use LatLongRadiusScopeTrait, GetBasicPageDataTraits;
     public function index(Request $request)
     {
-
+        $near_by_radius = config('RESTAURANT_NEAR_USER');
+        $near_by_radius = (int)$near_by_radius;
 // dd($_COOKIE["lat"]."--".$_COOKIE["long"]);
         $user = Auth::user();
         $user_data = auth()->user()->userByIdData($user->id);
@@ -85,11 +87,16 @@ class DashboardController extends Controller
         } else {
             $lats = $lat_lng_array['address_latitude'] ??  $lat;
             $lngs = $lat_lng_array['address_longitude'] ?? $lng;
+            $_COOKIE['lat'] = $lats;
+            $_COOKIE['long'] = $lngs;
             // dd($lats."--".$lngs);
             // $kmRadius = $this->max_distance_km_resto;
             $resto = $this->closestRestaurant($user, $lats, $lngs);
 
             $restaurent_detail = new restaurent_detail;
+
+            // $restaurent_detail->get();
+            // dd($restaurent_detail->get()->toArray());
             //all restaurants
             $resto_data_query = $this->closestRestaurant($user, $lats, $lngs);
             if ($request->has('search_field')) {
@@ -97,14 +104,23 @@ class DashboardController extends Controller
                     ->orWhere('restaurent_details.name', 'like', '%' . $search_field . '%');
             }
             $resto_data = $resto_data_query->get();
-            // dd($resto_data->toArray());
+            foreach ($resto_data as $value) {
+                $value->dis = $this->getDistanceBetweenPointsNew($lats,$lngs, $value->latitude,$value->longitude);
+            }
+            $resto_data = $resto_data->sortBY('dis', SORT_NATURAL)->where('dis', '<=', $near_by_radius)->values()->all();
+
             //all nonveg restaurants
+            // dd($resto_data->toArray());
             $nonveg_resto_data_query = $this->closestRestaurant($user, $lats, $lngs)->whereIn('resto_type', [1,3]);
             if ($request->has('search_field')) {
                 $nonveg_resto_data_query = $nonveg_resto_data_query->where('ml.name', 'like', '%' . $search_field . '%')
                     ->orWhere('restaurent_details.name', 'like', '%' . $search_field . '%');
             }
             $nonveg_resto_data = $nonveg_resto_data_query->get();
+            foreach ($nonveg_resto_data as $value) {
+                $value->dis = $this->getDistanceBetweenPointsNew($lats,$lngs, $value->latitude,$value->longitude);
+            }
+            $nonveg_resto_data = $nonveg_resto_data->sortBY('dis', SORT_NATURAL)->where('dis', '<=', $near_by_radius)->values()->all();
 
             //all veg restaurants
             $veg_resto_data_query = $this->closestRestaurant($user, $lats, $lngs)->whereIn('resto_type', [2,3]);
@@ -113,6 +129,11 @@ class DashboardController extends Controller
                     ->orWhere('restaurent_details.name', 'like', '%' . $search_field . '%');
             }
             $veg_resto_data = $veg_resto_data_query->get();
+            foreach ($veg_resto_data as $value) {
+                $value->dis = $this->getDistanceBetweenPointsNew($lats,$lngs, $value->latitude,$value->longitude);
+            }
+            $veg_resto_data = $veg_resto_data->sortBY('dis', SORT_NATURAL)->where('dis', '<=', $near_by_radius)->values()->all();
+
         }
 
         $slider_cms = new slider_cms;
@@ -125,7 +146,7 @@ class DashboardController extends Controller
                 $sl_data[] =  $s_data;
             // }
         }
-
+        // dd($resto_data);
         return view('customer.home')->with([
             'user_data' => $user_data,
             'resto_data' => $resto_data,

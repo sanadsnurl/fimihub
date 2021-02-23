@@ -65,7 +65,14 @@
                 <label for="paypal">
                     <img src="{{asset('asset/customer/assets/images/paypal.svg')}}" alt="paypal">
                 </label> --}}
-
+                <input type="radio" name="payment" id="paypal" value="2" disabled>
+                <label for="paypal">
+                    <img src="{{asset('asset/customer/assets/images/paypal.svg')}}" alt="paypal"> (Currency Conversion -> comming soon)
+                </label>
+                <input type="radio" name="payment" id="paypal" value="2" disabled>
+                <label for="paypal">
+                    <img src="https://media.glassdoor.com/sqll/903157/quisk-squarelogo-1476479951808.png" alt="paypal" height="30px" width="30px"> Quisk (comming soon)
+                </label>
                 {{-- <input type="radio" name="payment" id="cash" value="3">
                 <label for="cash" id="cashondelivery">
                     <img src="{{asset('asset/customer/assets/images/cash-delivery.svg')}}" class="mr-2"
