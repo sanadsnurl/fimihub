@@ -128,7 +128,7 @@ class OrderController extends Controller
             $data['reason_id'] = $request->input('reason_id');
             $data['order_comment'] = $request->input('order_comment');
             $this->orderEvent->updateStatus($orderId, $data);
-            $this->order->updateStatus($orderId, 8); // 8-rider_cancel
+            // $this->order->updateStatus($orderId, 8); // 8-rider_cancel
         } else if($orderStatus == 5) { // Order delivered
             $this->order->updateStatus($orderId, 9); // 9-received
             $orderDetails = $this->order->getOrder($orderId)->first();
