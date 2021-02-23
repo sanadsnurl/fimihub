@@ -34,14 +34,16 @@
                                         <!-- <th>S.no</th> -->
                                         <th>Action</th>
 
+
                                         <th>S.No.</th>
+                                        <th>Create At</th>
+                                        <th>Order Time</th>
                                         <th>Order Id</th>
                                         <th>Customer Name</th>
                                         <th>Dish</th>
                                         <th>Total Amount</th>
                                         <th>Payment Method</th>
                                         <th>Order Status</th>
-                                        <th>Create At</th>
 
                                     </tr>
                                 </thead>
@@ -102,6 +104,14 @@
                     name: 'id'
                 },
                 {
+                    data: 'created_at',
+                    name: 'created_at'
+                },
+                {
+                    data: 'order_time',
+                    name: 'order_time'
+                },
+                {
                     data: 'order_id',
                     name: 'order_id'
                 },
@@ -125,10 +135,7 @@
                     data: 'order_status',
                     name: 'order_status'
                 },
-                {
-                    data: 'created_at',
-                    name: 'created_at'
-                },
+
             ]
         });
         table.buttons().container()
