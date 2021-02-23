@@ -126,6 +126,7 @@ class CreateOrdersTable extends Migration
             $table->tinyInteger('order_feedback')->nullable();
             $table->string('feedback_comment')->nullable();
             $table->integer('reason_id')->nullable();
+            $table->text('reason_string')->nullable();
             $table->tinyInteger('user_type')->comment('1-Rider,2-Restaurent')->nullable();
             $table->tinyInteger('visibility')->default('0');
             $table->timestamp('deleted_at', 0)->nullable();

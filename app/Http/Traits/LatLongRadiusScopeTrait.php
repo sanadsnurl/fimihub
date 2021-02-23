@@ -5,6 +5,12 @@ use Illuminate\Support\Facades\DB;
 use App\Model\order;
 use App\Model\restaurent_detail;
 use App\User;
+use Illuminate\Pagination\Paginator;
+
+use Illuminate\Support\Collection;
+
+use Illuminate\Pagination\LengthAwarePaginator;
+use stdClass;
 
 trait LatLongRadiusScopeTrait
 {
@@ -221,25 +227,28 @@ trait LatLongRadiusScopeTrait
             default:
             case 'miles':
                 //radius of the great circle in miles
-                $gr_circle_radius = 3959;
+                $gr_circle_radius = 3958.8;
             break;
             case 'kilometers':
                 //radius of the great circle in kilometers
-                $gr_circle_radius = 6371;
+                // $gr_circle_radius = 6371.07103;
+                $gr_circle_radius = 8471;
+
             break;
         }
 
         /*
         *  Generate the select field for disctance
         */
+        // dd($lng);
         $disctance_select = sprintf(
-                "restaurent_details.*,ua.latitude,ua.longitude,ua.id as addres_id,COUNT(DISTINCT ml.id) AS dish_count,
-                COUNT(DISTINCT oe.id) AS rating_count,Round(AVG(oe.order_feedback),1) AS rating,( %d * acos( cos( radians(%s) ) " .
+                "null as dis,null as dis_new,restaurent_details.*,ua.latitude,ua.longitude,ua.id as addres_id,COUNT(DISTINCT ml.id) AS dish_count,
+                COUNT(DISTINCT oe.id) AS rating_count,Round(AVG(oe.order_feedback),1) AS rating,(( %d * acos( cos( radians(%s) ) " .
                         " * cos( radians( ua.latitude ) ) " .
                         " * cos( radians( ua.longitude ) - radians(%s) ) " .
                         " + sin( radians(%s) ) * sin( radians( ua.latitude ) ) " .
                     ") " .
-                ") " .
+                ") )  " .
                 "AS distance",
                 $gr_circle_radius,
                 $lat,
@@ -265,5 +274,44 @@ trait LatLongRadiusScopeTrait
             ->orderBy('distance', 'ASC' )
             ->groupBy('ml.restaurent_id')
             ->groupBy('restaurent_details.id');
+
+
+
+            // return $data;
+
+            // dd($data->toArray());
     }
+    public function paginate($items, $perPage = 5, $page = null, $options = [])
+    {
+
+        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+
+        $items = $items instanceof Collection ? $items : Collection::make($items);
+
+        return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
+
+    }
+    public function getDistanceBetweenPointsNew($latitude1, $longitude1, $latitude2, $longitude2) {
+        // dd($longitude1);
+        $source_address = $latitude1.",".$longitude1;
+        $destination_address = $latitude2.",".$longitude2;
+                $url = "https://maps.googleapis.com/maps/api/directions/json?origin=".$source_address."&destination=".$destination_address."&sensor=false&key=".Config('GOOGLE_MAPS_API_KEY');
+                    // dd($url);
+                $ch = curl_init();
+                    curl_setopt($ch, CURLOPT_URL, $url);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                    curl_setopt($ch, CURLOPT_PROXYPORT, 3128);
+                    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+                    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+                    $response = curl_exec($ch);
+                    curl_close($ch);
+                    $response_all = json_decode($response);
+                    // dd($response_all);
+                    $distance = $response_all->routes[0]->legs[0]->distance->text ?? null;
+                    $distance = str_replace('', ',',str_replace('', ' km',$distance));
+                    return ($distance ?? null);
+
+   }
+
+
 }

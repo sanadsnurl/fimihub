@@ -166,8 +166,9 @@ class OtpManagerController extends Controller
                         $user_data->verification_code = NULL;
                         $user_data->save();
 
-
-                        return response()->json(['status' => true,'message'=>'OTP Verified Successfully'], $this->successStatus);
+                        $rememberPasswordToken = $user_data->createToken('teckzy')->token;
+                        $remember_password_token = $rememberPasswordToken->id;
+                        return response()->json(['remember_password_token'=>$remember_password_token,'status' => true,'message'=>'OTP Verified Successfully'], $this->successStatus);
                     }
                 }
                 elseif (filter_var($userid, FILTER_VALIDATE_EMAIL))

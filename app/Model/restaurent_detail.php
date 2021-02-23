@@ -5,9 +5,12 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Model;
 //custom import
 use Illuminate\Support\Facades\DB;
+use App\Http\Traits\LatLongRadiusScopeTrait;
 
 class restaurent_detail extends Model
 {
+
+    use LatLongRadiusScopeTrait;
     public function insertUpdateRestoData($data)
     {
         $value=DB::table('restaurent_details')->where('user_id', $data['user_id'])->get();
@@ -186,4 +189,32 @@ class restaurent_detail extends Model
             return $value +(( DB::table('service_catagories')->where('service_catagories.id', 1)->first()->commission / 100) * $value);
         }
     }
+
+    // public function userDistance()
+    // {
+    //     return $this->belongsTo(user_address::class, 'user_id', 'user_id')->having('restaurent_details.dis','<',10);
+    // }
+
+    // public function setDisAttribute($value) {
+    //     $lat = $_COOKIE["lat"] ?? '18.4490849';
+    //     $lng = $_COOKIE["long"] ?? '-77.2419522';
+    //     $value = $this->getDistanceBetweenPointsNew($lat, $lng, $this->latitude, $this->longitude);
+    //     return $value ?? null;
+    // }
+    // public function getDisAttribute($value) {
+    //     $lat = $_COOKIE["lat"] ?? '18.4490849';
+    //     $lng = $_COOKIE["long"] ?? '-77.2419522';
+    //     $value = $this->getDistanceBetweenPointsNew($lat, $lng, $this->latitude, $this->longitude)?? NULL;
+    //     if($value == ""){
+    //         $value = NULL;
+    //     }
+    //     return $value ?? null;
+    // }
+    // public function getDisNewAttribute($value) {
+    //     $lat = $_COOKIE["lat"] ?? '18.4490849';
+    //     $lng = $_COOKIE["long"] ?? '-77.2419522';
+    //     // dd($value);
+    //     $value = $this->getDistanceBetweenPointsNew($lat, $lng, $this->latitude, $this->longitude) ?? NULL;
+    //     return $value ?? 'abab';
+    // }
 }

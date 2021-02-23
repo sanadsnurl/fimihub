@@ -81,4 +81,30 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
 
     });
     // ...
+
+
+    //========================================== User Api's===================================================
+
+    //User Registration
+    Route::post('user/register', 'Api\user\AuthController@userRegister');
+    //User Login
+    Route::post('user/login', 'Api\user\AuthController@login');
+    //Forget password
+    Route::post('user/forgetPassword', 'Api\user\AuthController@forgetPassword');
+
+    //========================================== User Bearer Api's===================================================
+
+    Route::group(['middleware' => 'auth:api', 'prefix' => 'user'], function () {
+        //User Details
+        Route::get('details', 'Api\user\UserAuthController@userDetails');
+        //Customer dashboard
+        Route::get('getRestaurantByCat', 'Api\user\RestaurentManageController@getRestaurentList');
+        //Customer Menu List
+        Route::get('getMenuByRestaurant', 'Api\user\RestaurentManageController@getRestaurentMenuDetails');
+        //Get cart details
+        Route::get('getCartDetails', 'Api\user\CartController@getCartDetails');
+        //Get cart details
+        Route::post('addToCart', 'Api\user\CartController@addToCart');
+
+    });
 });

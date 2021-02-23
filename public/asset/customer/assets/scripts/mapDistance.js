@@ -65,7 +65,7 @@ function kilomiter(dakota, frick, service_data, total_amount) {
                     var str = directionsData.distance.text;
                     var diskm = str.replace("km", '');
                     var dis = parseFloat(diskm.replace(",", ''));
-                    // console.log(dis, 'dis');
+                    console.log(directionsData, 'dis');
                     // console.log(directionsData.distance.text, 'directionsData.distance.text');
                     if (dis <= 10000) {
                         if (dis <= service_data.flat_km) {
