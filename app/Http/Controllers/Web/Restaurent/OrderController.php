@@ -60,6 +60,9 @@ class OrderController extends Controller
                 ->addColumn('created_at', function ($row) {
                     return date('d F Y', strtotime($row->created_at));
                 })
+                ->addColumn('order_time', function ($row) {
+                    return date('h:i A', strtotime($row->created_at));
+                })
                 ->addColumn('payment_type', function ($row) {
                     if ($row->payment_type == 1) {
                         return "Bank Transfer";
