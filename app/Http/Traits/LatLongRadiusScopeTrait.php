@@ -59,7 +59,7 @@ trait LatLongRadiusScopeTrait
         *  Generate the select field for disctance
         */
         $disctance_select = sprintf(
-                "orders.*,ua.latitude,ua.longitude,ua.id as addres_id, ( %d * acos( cos( radians(%s) ) " .
+                "orders.*,oe.order_status as order_event_status, ua.latitude,ua.longitude,ua.id as addres_id, ( %d * acos( cos( radians(%s) ) " .
                         " * cos( radians( ua.latitude ) ) " .
                         " * cos( radians( ua.longitude ) - radians(%s) ) " .
                         " + sin( radians(%s) ) * sin( radians( ua.latitude ) ) " .
@@ -93,9 +93,9 @@ trait LatLongRadiusScopeTrait
             ->orderBy('distance', 'ASC' )
 
             // ->whereNull('oe.order_id')
-            ->whereNull('oe.order_status')
-            ->orWhere(function($query){
-                return $query->where('oe.order_status', 6)->where('oe.user_id', '!=', auth()->id());
+            // ->whereNull('oe.order_status')
+            ->where(function($query){
+                return $query->where('oe.order_status', 6)->where('oe.user_id', '!=', auth()->id())->orWhereNull('oe.order_status');
             })
 
             ->orderBy('orders.id', 'DESC')
