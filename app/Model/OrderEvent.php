@@ -60,7 +60,7 @@ class OrderEvent extends Model
 
     public function orderAlreadyAssigned($orderId) {
         $userId = Auth::id();
-        return $this->where('order_id', $orderId)->where('user_type', 1)->where('user_id', '!=', $userId);
+        return $this->where('order_id', $orderId)->where('order_status', '!=', 6)->where('user_type', 1)->where('user_id', '!=', $userId);
     }
 
     public function makeOrderEvent($data)
