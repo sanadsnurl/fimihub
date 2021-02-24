@@ -80,7 +80,7 @@ trait LatLongRadiusScopeTrait
             })
             ->leftjoin('order_events as oe',function($query){
                 $query->on('orders.id', '=', 'oe.order_id')
-                ->where('oe.user_id', '!=', auth()->id())
+                ->where('oe.user_id', auth()->id())
                 ->where('oe.order_status', 6)
                 ->where('oe.user_type', 1);
                 // ->where('oe.user_id', Auth::id());
