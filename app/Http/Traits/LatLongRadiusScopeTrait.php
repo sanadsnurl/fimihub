@@ -85,7 +85,10 @@ trait LatLongRadiusScopeTrait
             })
             ->having('distance', '<=', Config('RIDER_NEAR_ORDER'))
             ->orderBy('distance', 'ASC' )
-            ->whereNull('oe.order_id')
+            // ->whereNull('oe.order_id')
+            ->where('oe.user_id', '!=', auth()->id())
+            ->where('oe.order_status', 6)
+
             ->orderBy('orders.id', 'DESC')
             ->groupBy('orders.id');
     }
