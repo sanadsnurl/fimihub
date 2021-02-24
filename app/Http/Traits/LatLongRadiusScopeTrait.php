@@ -80,16 +80,22 @@ trait LatLongRadiusScopeTrait
             })
             ->leftjoin('order_events as oe',function($query){
                 $query->on('orders.id', '=', 'oe.order_id')
-                ->where('oe.user_id', auth()->id())
-                ->where('oe.order_status', 6)
+                // ->where('oe.user_id', '!=', auth()->id())
+                // ->where('oe.order_status', 6)
+                // ->where(function($query){
+                //     $query->where('oe.user_id', auth()->id())->where('oe.order_status', 6);
+                // })
+
                 ->where('oe.user_type', 1);
                 // ->where('oe.user_id', Auth::id());
             })
             ->having('distance', '<=', Config('RIDER_NEAR_ORDER'))
             ->orderBy('distance', 'ASC' )
-            ->whereNull('oe.order_id')
-            ->where(function($query){
-                return $query->where('oe.order_status', 6)->orWhereNull('oe.order_id');
+
+            // ->whereNull('oe.order_id')
+            ->whereNull('oe.order_status')
+            ->orWhere(function($query){
+                return $query->where('oe.order_status', 6)->where('oe.user_id', '!=', auth()->id());
             })
 
             ->orderBy('orders.id', 'DESC')
