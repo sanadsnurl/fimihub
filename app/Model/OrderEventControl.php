@@ -17,6 +17,8 @@ class OrderEventControl extends Model
         'user_id',
         'order_id',
         'status',
+        'order_comment',
+        'reason_id'
     ];
     public function orderAlreadyAssigned($orderId) {
         return $this->where('order_id', $orderId)->where('status', 1);

@@ -153,4 +153,13 @@ class OrderEvent extends Model
         }
     }
 
+    public function orderEventControlDelete($orderId) {
+        $userId = Auth::id();
+        $orderDetails = $this->where('order_id', $orderId)->where('user_id', $userId)->where('user_type', 1)->where('order_status', 1)->first();
+        if($orderDetails) {
+            return $this->where('order_id', $orderId)->where('user_id', $userId)->where('user_type', 1)->where('order_status', 1)->delete();
+        }
+        return false;
+    }
+
 }
