@@ -145,6 +145,19 @@
                                 </div>
 
                             </div>
+                            <div class="form-group row">
+                                <label for="input-1" class="col-sm-2 col-form-label">Active/InActive</label>
+                                <div class="col-sm-10">
+                                    <select name="visibility" id="visibility" class="form-control single-select">
+                                        <option value="0">Active</option>
+                                        <option value="1">InActive</option>
+                                    </select>
+                                    @if($errors->has('visibility'))
+                                    <div class="error">{{ $errors->first('visibility') }}</div>
+                                    @endif
+                                </div>
+
+                            </div>
 
                             <div class="form-footer">
                                 <input type="submit" class="btn btn-primary" value="Save Dish"></input>
@@ -173,6 +186,7 @@
                                         <!-- <th>S.no</th> -->
                                         <th>Action</th>
                                         <th>S.No.</th>
+                                        <th>Dish Status</th>
                                         <th>Dish Name</th>
                                         <th>Category</th>
                                         <th>Price</th>
@@ -243,6 +257,10 @@
                 {
                     data: 'DT_RowIndex',
                     name: 'id'
+                },
+                {
+                    data: 'visibility',
+                    name: 'visibility'
                 },
                 {
                     data: 'name',

@@ -220,6 +220,7 @@ Route::group(['middleware' => ['cors']], function () {
         Route::post('addCustomCategory', 'Web\Restaurent\RestaurentController@addCustomCategoryProcess');
         // Menu List
         Route::get('menuList', 'Web\Restaurent\RestaurentController@getMenuList');
+        Route::get('dishVisibility', 'Web\Restaurent\RestaurentController@dishVisibility');
         // Menu Custom List
         Route::get('menuCustomList', 'Web\Restaurent\RestaurentController@getMenuCustomList');
         // Menu Category update or insert
