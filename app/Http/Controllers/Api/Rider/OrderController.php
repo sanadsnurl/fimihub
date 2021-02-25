@@ -76,15 +76,15 @@ class OrderController extends Controller
             ->paginate(10);
             // ->toSql();
             // dd($order);
-            // $ids = array();
+            $ids = array();
 
             foreach($order as $value) {
                 $value->ordered_menu = json_decode($value->ordered_menu);
-                // $ids[]=$value->order_event_status. '-'.$value->id.'--'.$value->oeuser_id.'-'.$value->oeuser_type;
+                $ids[]=$value->order_event_status. '-'.$value->id.'--'.$value->oeuser_id.'-'.$value->oeuser_type;
             }
 
         }
-        return response()->json(['data' => $order, 'message' => 'Success', 'status' => true], $this->successStatus);
+        return response()->json(['data' => $ids, 'message' => 'Success', 'status' => true], $this->successStatus);
     }
 
     public function getActiveOrder(Request $request, int $orderId = 0) {
@@ -133,19 +133,19 @@ class OrderController extends Controller
             'order_id' => $orderId
         );
 
-        $alreadyAssigned = $this->orderEventControl->orderAlreadyAssigned($orderId)->first();
+        $alreadyAssigned = $this->orderEvent->orderAlreadyAssigned($orderId)->first();
         if(!empty($alreadyAssigned)) {
             return response()->json(['message' => 'Already assigned. Please refresh', 'status' => false], $this->successStatus);
         }
 
         if($orderStatus == 6) { // // Order rejected by rider
-            $data['reason_id'] = $request->input('reason_id');
-            $data['order_comment'] = $request->input('order_comment');
+            $dataAccepted['reason_id'] = $request->input('reason_id');
+            $dataAccepted['order_comment'] = $request->input('order_comment');
 
-            if($this->orderEventControl->orderEventControlDelete($orderId)) {
-                $this->orderEvent->updateStatus($orderId, $data);
+            if($this->orderEventControl->updateStatus($orderId, $dataAccepted)) {
+                $this->orderEvent->orderEventControlDelete($orderId, $data);
             } else {
-                $this->orderEvent->updateStatus($orderId, $data);
+                $this->orderEvent->orderEventControlDelete($orderId, $data);
                 // return response()->json(['message' => 'You can not reject.', 'status' => false], $this->successStatus);
             }
 
@@ -191,20 +191,20 @@ class OrderController extends Controller
             }
 
             // $this->orderEvent->updateStatus($orderId, $data);
-            $this->orderEventControl->updateStatus($orderId, $dataAccepted);
+            $this->orderEvent->updateStatus($orderId, $data);
         } else if($orderStatus == 4) { //  On the way
             // $this->orderEvent->updateStatus($orderId, $data);
-            $this->orderEventControl->updateStatus($orderId, $dataAccepted);
+            $this->orderEvent->updateStatus($orderId, $data);
             //$this->order->updateStatus($orderId, 12); // 12-rider on the way
 
         } else if($orderStatus == 3) { // Order Picked Up
             // $this->orderEvent->updateStatus($orderId, $data);
-            $this->orderEventControl->updateStatus($orderId, $dataAccepted);
+            $this->orderEvent->updateStatus($orderId, $data);
             $this->order->updateStatus($orderId, 7); // 7-rider picked product
 
         } else if($orderStatus == 1) { // Arriving to store
             // $this->orderEvent->updateStatus($orderId, $data);
-            $this->orderEventControl->updateStatus($orderId, $dataAccepted); // 11-assigned to rider
+            $this->orderEvent->updateStatus($orderId, $data); // 11-assigned to rider
 
         } else {
             $this->orderEvent->updateStatus($orderId, $data);

@@ -20,6 +20,8 @@ class CreateOrderEventControlsTable extends Migration
             $table->increments('id');
             $table->ingeret('order_id');
             $table->ingeret('user_id');
+            $table->string('order_comment')->nullable();
+            $table->ingeret('user_id');
             $table->ingeret('status')->comment('1.accepted');
             $table->timestamps();
         });
