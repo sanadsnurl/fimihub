@@ -27,7 +27,7 @@ class UpdateLoginRequest extends FormRequest
     {
         $validator = [
             'name' => 'string|max:150',
-            'mobile' => 'numeric|digits:4|unique:users,mobile,'. Auth::id(),
+            'mobile' => 'numeric|min:4|unique:users,mobile,'. Auth::id(),
             'country_code' => 'string|nullable',
             'email' => 'nullable|email|unique:users,email,'. Auth::id(),
             'vehicle_number' => 'string',

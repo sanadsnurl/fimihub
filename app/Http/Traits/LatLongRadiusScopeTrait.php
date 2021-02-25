@@ -59,7 +59,7 @@ trait LatLongRadiusScopeTrait
         *  Generate the select field for disctance
         */
         $disctance_select = sprintf(
-                "orders.*,oe.order_status as order_event_status, ua.latitude,ua.longitude,ua.id as addres_id, ( %d * acos( cos( radians(%s) ) " .
+                "orders.*,oec.order_id as oecorder_id, oe.order_status as order_event_status,oe.user_id as oeuser_id, oe.user_type as oeuser_type, ua.latitude,ua.longitude,ua.id as addres_id, ( %d * acos( cos( radians(%s) ) " .
                         " * cos( radians( ua.latitude ) ) " .
                         " * cos( radians( ua.longitude ) - radians(%s) ) " .
                         " + sin( radians(%s) ) * sin( radians( ua.latitude ) ) " .
@@ -76,27 +76,22 @@ trait LatLongRadiusScopeTrait
             ->select(DB::raw($disctance_select) )
             // ->whereNotNull('o.address_id')
             ->where(function($query) {
-                $query->orWhere('orders.order_status', 6)->orWhere('orders.order_status', 5);
+                $query->where('orders.order_status', 6)->orWhere('orders.order_status', 5);
             })
+            ->leftjoin('order_event_controls as oec', 'orders.id', '=', 'oec.order_id')
             ->leftjoin('order_events as oe',function($query){
                 $query->on('orders.id', '=', 'oe.order_id')
-                // ->where('oe.user_id', '!=', auth()->id())
-                // ->where('oe.order_status', 6)
-                // ->where(function($query){
-                //     $query->where('oe.user_id', auth()->id())->where('oe.order_status', 6);
-                // })
+                ->where(function($query) {
+                    return $query->where('oe.order_status', 6)->where('oe.user_id', '=', auth()->id());
+                })
 
                 ->where('oe.user_type', 1);
-                // ->where('oe.user_id', Auth::id());
             })
             ->having('distance', '<=', Config('RIDER_NEAR_ORDER'))
             ->orderBy('distance', 'ASC' )
 
-            // ->whereNull('oe.order_id')
-            // ->whereNull('oe.order_status')
-            ->where(function($query){
-                return $query->where('oe.order_status', 6)->where('oe.user_id', '!=', auth()->id())->orWhereNull('oe.order_status');
-            })
+            ->whereNull('oec.order_id')
+            ->whereNull('oe.order_status')
 
             ->orderBy('orders.id', 'DESC')
             ->groupBy('orders.id');
