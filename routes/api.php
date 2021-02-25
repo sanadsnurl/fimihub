@@ -36,6 +36,7 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
     //CMS About us, Term And Condition, FAQ
     Route::get('/getcms/{type?}', 'Api\CmsController@getCms');
 
+
     //========================================== Bearer Api's===================================================
 
     Route::group(['middleware' => 'auth:api'], function(){
@@ -65,6 +66,16 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
         Route::get('/getreasons/{id}', 'Api\CmsController@getReasons');
         // get Service Category
         Route::get('/getservicecategory/{id?}', 'Api\ServiceCategoryController@getServiceCategory');
+        //Insert User Address
+        Route::post('/insertAddress', 'Api\user\AddressController@insertAddress');
+        //Get User Address
+        Route::get('/userAddressById', 'Api\user\AddressController@getUserAddress');
+        //Make Delivery Address
+        Route::get('/makeDeliveryAddress', 'Api\user\AddressController@makeDeliveryAddress');
+        //Delete Address
+        Route::get('/deleteAddress', 'Api\user\AddressController@deleteAddress');
+        //Edit User Address
+        Route::post('/editAddress', 'Api\user\AddressController@editAddress');
 
     });
 
