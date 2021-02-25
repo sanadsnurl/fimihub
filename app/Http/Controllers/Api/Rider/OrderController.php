@@ -76,15 +76,15 @@ class OrderController extends Controller
             ->paginate(10);
             // ->toSql();
             // dd($order);
-            $ids = array();
+            // $ids = array();
 
             foreach($order as $value) {
                 $value->ordered_menu = json_decode($value->ordered_menu);
-                $ids[]=$value->order_event_status. '-'.$value->id.'--'.$value->oeuser_id.'-'.$value->oeuser_type;
+                // $ids[]=$value->order_event_status. '-'.$value->id.'--'.$value->oeuser_id.'-'.$value->oeuser_type;
             }
 
         }
-        return response()->json(['data' => $ids, 'message' => 'Success', 'status' => true], $this->successStatus);
+        return response()->json(['data' => $order, 'message' => 'Success', 'status' => true], $this->successStatus);
     }
 
     public function getActiveOrder(Request $request, int $orderId = 0) {

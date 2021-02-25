@@ -41,9 +41,9 @@ class OrderEventControl extends Model
 
     public function orderEventControlDelete($orderId) {
         $userId = Auth::id();
-        $orderDetails = $this->where('order_id', $orderId)->where('user_id', $userId)->where('status', 1)->first();
+        $orderDetails = $this->where('order_id', $orderId)->where('user_id', $userId)->where('status', 6)->first();
         if($orderDetails) {
-            return $this->where('order_id', $orderId)->where('user_id', $userId)->where('status', 1)->delete();
+            return $this->where('order_id', $orderId)->where('user_id', $userId)->where('status', 6)->delete();
         }
         return false;
     }
