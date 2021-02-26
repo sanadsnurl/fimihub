@@ -286,10 +286,10 @@ class RestaurentController extends Controller
                             <a href="deleteDish?dish_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Delete</a>
                         ';
                         if($row->visibility == 1) {
-                            $btn .= '<a href="dishVisibility?dish_id=' . base64_encode($row->id) . '&visi='.base64_encode($row->visibility).'" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Active</a>
+                            $btn .= '<a href="dishVisibility?dish_id=' . base64_encode($row->id) . '&visi='.base64_encode($row->visibility).'" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Enable</a>
                         ';
                         } else {
-                            $btn .= '<a href="dishVisibility?dish_id=' . base64_encode($row->id) . '&visi='.base64_encode($row->visibility).'" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">InActive</a>
+                            $btn .= '<a href="dishVisibility?dish_id=' . base64_encode($row->id) . '&visi='.base64_encode($row->visibility).'" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Disable</a>
                             ';
                         }
                     return $btn;
@@ -300,9 +300,9 @@ class RestaurentController extends Controller
                 })
                 ->addColumn('visibility', function ($row) {
                     if ($row->visibility == 1) {
-                        return 'InActive';
+                        return 'Disable';
                     } else {
-                        return 'Active';
+                        return 'Enable';
                     }
                 })
                 ->addColumn('dish_type', function ($row) {
@@ -338,9 +338,9 @@ class RestaurentController extends Controller
 
         $delete_menu = $menu_lists->visibilityOffOnOfDish($delete_menu, $visibility);
         if ($visibility) {
-            $message = 'Dish InActive !';
+            $message = 'Dish Disable !';
         } else {
-            $message = 'Dish Active !';
+            $message = 'Dish Enable !';
         }
 
         Session::flash('menu_message', $message);

@@ -28,10 +28,10 @@
                                         <th>Order Id</th>
                                         <th>Restaurant Name</th>
                                         <th>Customer Name</th>
+                                        <th>Order Status</th>
                                         <th>Dish</th>
                                         <th>Total Amount</th>
                                         <th>Payment Method</th>
-                                        <th>Order Status</th>
                                         <th>Create At</th>
 
                                     </tr>
@@ -111,6 +111,10 @@
                     name: 'customer_name'
                 },
                 {
+                    data: 'order_status',
+                    name: 'order_status'
+                },
+                {
                     data: 'ordered_menu',
                     name: 'ordered_menu'
                 },
@@ -121,10 +125,6 @@
                 {
                     data: 'payment_type',
                     name: 'payment_type'
-                },
-                {
-                    data: 'order_status',
-                    name: 'order_status'
                 },
                 {
                     data: 'created_at',
