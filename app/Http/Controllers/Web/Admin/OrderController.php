@@ -193,6 +193,7 @@ class OrderController extends Controller
         $user['currency'] = $this->currency;
 
         $order_data = $order_data->first();
+        // dd($order_id);
         if ($order_data != NUll) {
             $order_menu = "";
             $loop_count = 1;
