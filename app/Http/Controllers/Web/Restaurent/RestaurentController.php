@@ -301,9 +301,9 @@ class RestaurentController extends Controller
                 })
                 ->addColumn('visibility', function ($row) {
                     if ($row->visibility == 1) {
-                        return 'Enable';
-                    } else {
                         return 'Disable';
+                    } else {
+                        return 'Enable';
                     }
                 })
                 ->addColumn('dish_type', function ($row) {
@@ -339,9 +339,9 @@ class RestaurentController extends Controller
 
         $delete_menu = $menu_lists->visibilityOffOnOfDish($delete_menu, $visibility);
         if ($visibility) {
-            $message = 'Dish InActive !';
+            $message = 'Dish Disable !';
         } else {
-            $message = 'Dish Active !';
+            $message = 'Dish Enable !';
         }
 
         Session::flash('menu_message', $message);

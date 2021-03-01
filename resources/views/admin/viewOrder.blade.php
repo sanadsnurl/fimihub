@@ -58,6 +58,12 @@
                                 <span >{{$event_data->rider_details->mobile ?? '--'}} </span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <b>Rider order status</b>
+                                @if (!empty($order_data->orderEvent))
+                                <span >{{$order_data->orderEvent->reason->reason ?? '--'}} </span>
+                                @endif
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
                                 <b>Food Commission</b>
                                 <span > {{$order_data->service_commission ?? ''}}%</span>
                             </li>

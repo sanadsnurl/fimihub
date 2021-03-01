@@ -1,5 +1,12 @@
 @include('restaurent.include.sideNav')
 @include('restaurent.include.header')
+<style>
+    .dish_details_box{
+        box-shadow: 0 2px 5px rgb(0 0 0 / 20%);
+        padding: 13px 17px;
+        border-radius: 4px;
+    }
+</style>
 <div class="clearfix"></div>
 
 <div class="content-wrapper">
@@ -22,44 +29,144 @@
                                 <span>{{$order_data->customer_name ?? ''}}</span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <b>Dish</b>
-                                <span>{!! $order_data->ordered_menu ?? '' !!}</span>
+                                    <div class="row w-100">
+                                        <div class="col-md-3">
+                                            <b>Dish</b>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <div class="row">
+                                                @foreach ($order_data->ordered_menu_added as $ordered_menu)
+                                                <div class="col-md-3">
+                                                    <div class="dish_details_box h-100">
+
+                                                        <p><strong>{{ucFirst($ordered_menu->name) . " x " . $ordered_menu->quantity}}</strong></p>
+                                                        @foreach ($ordered_menu->variant_data as $v_data)
+                                                            @if ($ordered_menu->cart_variant_id == $v_data->id)
+                                                            <p><strong>{{ucFirst($v_data->cat_name)}}</strong>: {{$v_data->name}}</p>
+                                                            @endif
+                                                        @endforeach
+
+                                                        @foreach ($ordered_menu->add_on as $add_datas)
+                                                            @foreach ($add_datas as $add_data)
+                                                            @if (in_array($add_data->id, ($ordered_menu->product_adds_id) ?? [], FALSE))
+                                                                <p><strong>{{ucFirst($add_data->cat_name)}}</strong>: {{$add_data->name}}</p>
+                                                            @endif
+                                                            @endforeach
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                                @endforeach
+
+                                                {{-- <div class="col-md-3">
+                                                    <div class="dish_details_box h-100">
+                                                        <span>{!! $order_data->ordered_menu ?? '' !!}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="dish_details_box h-100">
+                                                        <span>{!! $order_data->ordered_menu ?? '' !!}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="dish_details_box h-100">
+                                                        <span>{!! $order_data->ordered_menu ?? '' !!}</span>
+                                                    </div>
+                                                </div> --}}
+
+                                            </div>
+                                        </div>
+                                    </div>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <b>Total Amount</b>
-                                <span>{{$data->currency ?? ''}} {{$order_data->total_amount ?? ''}}</span>
+                                {{-- <b>Total Amount</b>
+                                <span>{{$data->currency ?? ''}} {{$order_data->total_amount ?? ''}}</span> --}}
+                                <div class="col-md-3">
+                                    <b>Total Amount</b>
+                                </div>
+                                <div class="col-md-9">
+                                    <span>{{$data->currency ?? ''}} {{$order_data->total_amount ?? ''}}</span>
+                                </div>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <b>Payment Method</b>
-                                <span>{{$order_data->payment_type ?? ''}}</span>
+                                {{-- <b>Payment Method</b>
+                                <span>{{$order_data->payment_type ?? ''}}</span> --}}
+                                <div class="col-md-3">
+                                    <b>Payment Method</b>
+                                </div>
+                                <div class="col-md-9">
+                                    <span>{{$order_data->payment_type ?? ''}}</span>
+                                </div>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <b>Order Status</b>
-                                <span>{{$order_data->order_status ?? ''}}</span>
+                                {{-- <b>Order Status</b>
+                                <span>{{$order_data->order_status ?? ''}}</span> --}}
+                                <div class="col-md-3">
+                                    <b>Order Status</b>
+                                </div>
+                                <div class="col-md-9">
+                                    <span>{{$order_data->order_status ?? ''}}</span>
+                                </div>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <b>Flat No.</b>
-                                <span>{{$add_datas->flat_no ?? '--'}} </span>
+                                {{-- <b>Flat No.</b>
+                                <span>{{$add_datas->flat_no ?? '--'}} </span> --}}
+                                <div class="col-md-3">
+                                    <b>Flat No.</b>
+                                </div>
+                                <div class="col-md-9">
+                                    <span>{{$order_data->flat_no ?? ''}}</span>
+                                </div>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <b>Landmark</b>
-                                <span>{{$add_datas->landmark ?? '--'}} </span>
+                                {{-- <b>Landmark</b>
+                                <span>{{$add_datas->landmark ?? '--'}} </span> --}}
+                                <div class="col-md-3">
+                                    <b>Landmark.</b>
+                                </div>
+                                <div class="col-md-9">
+                                    <span>{{$order_data->landmark ?? ''}}</span>
+                                </div>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <b>Delivery Address</b>
-                                <span>{{$add_datas->address ?? '--'}} </span>
+                                {{-- <b>Delivery Address</b>
+                                <span>{{$add_datas->address ?? '--'}} </span> --}}
+
+                                <div class="col-md-3">
+                                    <b>Delivery Address</b>
+                                </div>
+                                <div class="col-md-9">
+                                    <span>{{$order_data->address ?? ''}}</span>
+                                </div>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <b>Rider Name</b>
-                                <span>{{$event_data->rider_details->name ?? 'Not Alloted Yet'}} </span>
+                                {{-- <b>Rider Name</b>
+                                <span>{{$event_data->rider_details->name ?? 'Not Alloted Yet'}} </span> --}}
+                                <div class="col-md-3">
+                                    <b>Rider Name</b>
+                                </div>
+                                <div class="col-md-9">
+                                    <span>{{$event_data->rider_details->name ?? 'Not Alloted Yet'}}</span>
+                                </div>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <b>Rider Mobile</b>
-                                <span>{{$event_data->rider_details->mobile ?? '--'}} </span>
+                                {{-- <b>Rider Mobile</b>
+                                <span>{{$event_data->rider_details->mobile ?? '--'}} </span> --}}
+                                <div class="col-md-3">
+                                    <b>Rider Mobile</b>
+                                </div>
+                                <div class="col-md-9">
+                                    <span>{{$event_data->rider_details->mobile ?? '--'}}</span>
+                                </div>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <b>Created At</b>
-                                <span>{{$order_data->created_at ?? ''}}</span>
+                                {{-- <b>Created At</b>
+                                <span>{{$order_data->created_at ?? ''}}</span> --}}
+                                <div class="col-md-3">
+                                    <b>Created At</b>
+                                </div>
+                                <div class="col-md-9">
+                                    <span>{{$event_data->created_at ?? '--'}}</span>
+                                </div>
                             </li>
 
                         </ul>
