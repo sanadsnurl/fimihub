@@ -169,12 +169,12 @@ $(document).ready(function() {
             },
             {
                 data: 'cat_name',
-                name: 'cat_name'
+                name: 'mc.name'
             },
 
             {
                 data: 'created_at',
-                name: 'created_at'
+                name: 'created_at',
             },
 
         ]

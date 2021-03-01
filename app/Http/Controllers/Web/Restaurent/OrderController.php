@@ -41,6 +41,13 @@ class OrderController extends Controller
             $order_data = $orders->customerOrderPaginationData($resto_data->id);
         }
 
+        // $arrayKeys = collect(array([1 => 'vijay'], [2 => 'Ankur']));
+
+        // $arrayKeys->map(function($value) {
+        //     dd($value);
+        // });
+
+
 
         if ($request->ajax()) {
             return Datatables::of($order_data)
@@ -59,6 +66,12 @@ class OrderController extends Controller
                 })
                 ->addColumn('created_at', function ($row) {
                     return date('d F Y', strtotime($row->created_at));
+                })
+                ->filterColumn('created_at', function ($query, $keyword){
+                    $query->whereRaw("DATE_FORMAT(orders.created_at,'%d %M %Y') like ?", ["%$keyword%"]);
+                })
+                ->filterColumn('order_time', function ($query, $keyword){
+                    $query->whereRaw("TIME_FORMAT(orders.created_at,'%h:%i %p') like ?", ["%$keyword%"]);
                 })
                 ->addColumn('order_time', function ($row) {
                     return date('h:i A', strtotime($row->created_at));
@@ -96,6 +109,7 @@ class OrderController extends Controller
                         return "N.A";
                     }
                 })
+
                 ->addColumn('ordered_menu', function ($row) {
                     $order_menu = "";
                     $loop_count = 1;
@@ -186,6 +200,13 @@ class OrderController extends Controller
                     }
                     return $order_menu;
                 })
+
+                // ->editColumn('ordered_menu', function ($row) {
+                //     // return var_dump($row->ordered_menu);
+                //     // return 'Hi ' . $row->name . '!';
+                // })
+
+
                 ->rawColumns(['action', 'ordered_menu'])
                 ->make(true);
         }
@@ -342,6 +363,7 @@ class OrderController extends Controller
 
         // ==========================================================================================================
 
+        Session::flash('message', 'Order Rejected successfully.');
         return redirect('Restaurent/customerOrder');
     }
 

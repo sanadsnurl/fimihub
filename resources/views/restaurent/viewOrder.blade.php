@@ -35,6 +35,7 @@
                                         </div>
                                         <div class="col-md-9">
                                             <div class="row">
+
                                                 @foreach ($order_data->ordered_menu_added as $ordered_menu)
                                                 <div class="col-md-3">
                                                     <div class="dish_details_box h-100">
