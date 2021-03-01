@@ -83,6 +83,7 @@
                             </div>
                             <div class="form-footer">
                                 <input type="submit" class="btn btn-primary" value="Reject"></input>
+                                <a href="{{url('Restaurent/customerOrder')}}"  ><span class="btn btn-danger">Back</span></a>
 
                             </div>
                         </form>

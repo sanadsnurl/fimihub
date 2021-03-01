@@ -15,6 +15,9 @@ class Cors
      */
     public function handle($request, Closure $next)
     {
+        // dd($request->input('mc.created_at'));
+
+
         $response = $next($request);
 
         $response->headers->set('Access-Control-Allow-Origin' , '*');
