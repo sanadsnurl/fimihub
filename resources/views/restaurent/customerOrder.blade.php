@@ -39,6 +39,7 @@
                                         <th>Create At</th>
                                         <th>Order Time</th>
                                         <th>Order Id</th>
+                                        <th>Customer Mobile</th>
                                         <th>Customer Name</th>
                                         <th>Dish</th>
                                         <th>Total Amount</th>
@@ -114,6 +115,10 @@
                 {
                     data: 'order_id',
                     name: 'order_id'
+                },
+                {
+                    data: 'mobile',
+                    name: 'mobile'
                 },
                 {
                     data: 'customer_name',

@@ -97,15 +97,23 @@
                                             @if(isset($user_data->notification_data) &&
                                             !empty($user_data->notification_data))
                                             @foreach($user_data->notification_data as $not_data)
-                                            <li class="d-flex align-items-center active">
-                                                <i class="fas fa-user-circle"></i>
-                                                <div>
-                                                    <p>{{$not_data->title ?? ''}} | Order-Id {{$not_data->txn_id ?? ''}}
-                                                    </p>
-                                                    <span
-                                                        class="time">{{date('d F Y',strtotime($not_data->created_at))}}</span>
-                                                </div>
-                                            </li>
+                                            @php
+                                                $str2 = substr($not_data->txn_id, 3);
+                                                $order_id = ($str2 + 1)-1;
+                                            @endphp
+                                            <a href="{{url('/trackOrder')}}{{'?odr_id='}}{{base64_encode($order_id) ?? ''}}" class="g">
+
+                                                <li class="d-flex align-items-center active">
+                                                    <i class="fas fa-user-circle"></i>
+                                                    <div>
+                                                        <p>{{$not_data->title ?? ''}} | Order-Id {{$not_data->txn_id ?? ''}}
+                                                        </p>
+                                                        <span
+                                                            class="time">{{date('d F Y',strtotime($not_data->created_at))}}</span>
+                                                    </div>
+                                                </li>
+
+                                            </a>
                                             @endforeach
                                             @else
                                             <li class="d-flex align-items-center active">

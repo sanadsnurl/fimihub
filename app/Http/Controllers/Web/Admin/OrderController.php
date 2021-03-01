@@ -34,7 +34,7 @@ class OrderController extends Controller
         $orders = new order;
         $order_data = $orders->allOrderPaginationData()
             ->with('userAddress.userDetails', 'restaurentDetails.restroAddress', 'cart.cartItems.menuItems', 'orderEvent.reason');
-
+// dd($order_data->get());
         if ($request->ajax()) {
             return Datatables::of($order_data)
                 ->addIndexColumn()
@@ -44,6 +44,7 @@ class OrderController extends Controller
                     if ($row->payment_type == 1 && $row->payment_status == 1) {
                         $btn .= '<a href="orderPaid?odr_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Make Order Paid</a>';
                     }
+                    $btn .= '<a href="deleteOrder?odr_id=' . base64_encode($row->id) . '" class="btn btn-outline-primary btn-sm btn-round waves-effect waves-light ">Delete</a>';
                     return $btn;
                 })
                 ->addColumn('created_at', function ($row) {
@@ -398,5 +399,20 @@ class OrderController extends Controller
         } else {
             return redirect()->back()->withInput()->withErrors($validator);
         }
+    }
+
+    public function deleteCustomOrder(Request $request)
+    {
+        $user = Auth::user();
+        $odr_id = base64_decode(request('odr_id'));
+// dd($odr_id);
+        $orders = new order();
+        $delete_menu = array();
+        $delete_menu['id'] = $odr_id;
+
+        $delete_menu = $orders->deleteCustomerOrder($delete_menu);
+        Session::flash('message', 'Order Deleted Successfully !');
+
+        return redirect()->back();
     }
 }
