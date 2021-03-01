@@ -276,7 +276,8 @@ trait LatLongRadiusScopeTrait
         /*
         *  Generate the select field for disctance
         */
-        // dd($lng);
+        // dd();
+        $current_time = date('h:i');
         $disctance_select = sprintf(
                 "null as dis,null as dis_new,restaurent_details.*,ua.latitude,ua.longitude,ua.id as addres_id,COUNT(DISTINCT ml.id) AS dish_count,
                 COUNT(DISTINCT oe.id) AS rating_count,Round(AVG(oe.order_feedback),1) AS rating,(( %d * acos( cos( radians(%s) ) " .
@@ -305,6 +306,8 @@ trait LatLongRadiusScopeTrait
             // ->where('users.user_type', 2)
             ->having('distance', '<=', Config('RESTAURANT_NEAR_USER'))
             ->whereNotNull('ua.user_id')
+            ->whereTime('restaurent_details.open_time','<=', $current_time)
+            ->whereTime('restaurent_details.close_time','>=', $current_time)
             ->where('restaurent_details.visibility', 0)
             ->having('dish_count', '>', 0)
             ->orderBy('distance', 'ASC' )

@@ -199,6 +199,12 @@ class OrderController extends Controller
             $cart_menu_data = $cart_submenu->getCartMenuList($quant_details);
 
             if ($cart_menu_data != NULL) {
+                $restaurent_detail = new restaurent_detail;
+                $resto_data_with_time = $restaurent_detail->checkRestoTimeAvailiability($cart_avail->restaurent_id);
+                if ($resto_data_with_time == NULL) {
+                    Session::flash('message', 'Restaurant Currently Closed !');
+                    return redirect()->back();
+                }
                 foreach ($cart_menu_data as $m_data) {
 
                     $add_ons = array();
