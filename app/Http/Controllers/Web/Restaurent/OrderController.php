@@ -342,6 +342,7 @@ class OrderController extends Controller
 
         // ==========================================================================================================
 
+        Session::flash('message', 'Order Rejected successfully.');
         return redirect('Restaurent/customerOrder');
     }
 
