@@ -35,17 +35,21 @@
                                         </div>
                                         <div class="col-md-9">
                                             <div class="row">
+                                                @if(!empty($order_data->ordered_menu_added))
                                                 @foreach ($order_data->ordered_menu_added as $ordered_menu)
                                                 <div class="col-md-3">
                                                     <div class="dish_details_box h-100">
 
                                                         <p><strong>{{ucFirst($ordered_menu->name) . " x " . $ordered_menu->quantity}}</strong></p>
-                                                        @foreach ($ordered_menu->variant_data as $v_data)
-                                                            @if ($ordered_menu->cart_variant_id == $v_data->id)
-                                                            <p><strong>{{ucFirst($v_data->cat_name)}}</strong>: {{$v_data->name}}</p>
-                                                            @endif
-                                                        @endforeach
+                                                        @if(!empty($ordered_menu->variant_data))
 
+                                                            @foreach ($ordered_menu->variant_data as $v_data)
+                                                                @if ($ordered_menu->cart_variant_id == $v_data->id)
+                                                                <p><strong>{{ucFirst($v_data->cat_name)}}</strong>: {{$v_data->name}}</p>
+                                                                @endif
+                                                            @endforeach
+                                                        @endif
+                                                    @if(!empty($ordered_menu->add_on))
                                                         @foreach ($ordered_menu->add_on as $add_datas)
                                                             @foreach ($add_datas as $add_data)
                                                             @if (in_array($add_data->id, ($ordered_menu->product_adds_id) ?? [], FALSE))
@@ -53,10 +57,11 @@
                                                             @endif
                                                             @endforeach
                                                         @endforeach
+                                                        @endif
                                                     </div>
                                                 </div>
                                                 @endforeach
-
+                                                @endif
                                                 {{-- <div class="col-md-3">
                                                     <div class="dish_details_box h-100">
                                                         <span>{!! $order_data->ordered_menu ?? '' !!}</span>

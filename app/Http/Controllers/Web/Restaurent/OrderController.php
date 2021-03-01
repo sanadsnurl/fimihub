@@ -439,6 +439,8 @@ class OrderController extends Controller
             $loop_count = 1;
             $order_data->ordered_menu = json_decode($order_data->ordered_menu);
 
+            $order_data->ordered_menu_added = $order_data->ordered_menu;
+
             foreach ($order_data->ordered_menu as $ordered_menu) {
                 if ($loop_count == 1) {
                     $order_menu .= "<b>Dish:1 </b>(" . $ordered_menu->name . " x " . $ordered_menu->quantity;
