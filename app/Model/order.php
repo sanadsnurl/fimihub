@@ -225,6 +225,7 @@ class order extends Model
     public function allOrderPaginationData()
     {
         $menu_list=$this->select('orders.*')
+                ->where('orders.visibility', 0)
                 ->orderBy('orders.created_at','DESC');
 
         return $menu_list;

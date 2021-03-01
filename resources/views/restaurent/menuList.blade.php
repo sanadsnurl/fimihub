@@ -146,11 +146,11 @@
 
                             </div>
                             <div class="form-group row">
-                                <label for="input-1" class="col-sm-2 col-form-label">Active/InActive</label>
+                                <label for="input-1" class="col-sm-2 col-form-label">Enable/Disable</label>
                                 <div class="col-sm-10">
                                     <select name="visibility" id="visibility" class="form-control single-select">
-                                        <option value="0">Active</option>
-                                        <option value="1">InActive</option>
+                                        <option value="0">Enable</option>
+                                        <option value="1">Disable</option>
                                     </select>
                                     @if($errors->has('visibility'))
                                     <div class="error">{{ $errors->first('visibility') }}</div>

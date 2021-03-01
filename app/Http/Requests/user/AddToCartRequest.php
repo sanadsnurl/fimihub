@@ -30,7 +30,7 @@ class AddToCartRequest extends FormRequest
             'restaurant_id' => 'required|numeric|exists:restaurent_details,id',
             'menu_id' => 'required|numeric|exists:menu_list,id',
             'variant_id' => 'numeric|nullable',
-            'add_on_id' => 'numeric|nullable',
+            'add_on_id' => 'nullable',
             'action_type' => 'required|numeric|in:1,2,3',
         ];
         return $validator;
