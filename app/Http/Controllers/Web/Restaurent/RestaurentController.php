@@ -277,19 +277,33 @@ class RestaurentController extends Controller
             ->get();
         // dd($resto_cate_variant);
         $menu_list = new menu_list;
-        $menu_data = $menu_list->menuPaginationData($resto_data->id);
+        $menu_data = $menu_list->getMenuPaginationData($resto_data->id);
         if ($request->ajax()) {
             return Datatables::of($menu_data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
                     $btn = '<a href="editDish?dish_id=' . base64_encode($row->id) . '" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Edit</a>
-                        <a href="deleteDish?dish_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Delete</a>
+                            <a href="deleteDish?dish_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Delete</a>
                         ';
+                        if($row->visibility == 1) {
+                            $btn .= '<a href="dishVisibility?dish_id=' . base64_encode($row->id) . '&visi='.base64_encode($row->visibility).'" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Active</a>
+                        ';
+                        } else {
+                            $btn .= '<a href="dishVisibility?dish_id=' . base64_encode($row->id) . '&visi='.base64_encode($row->visibility).'" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">InActive</a>
+                            ';
+                        }
                     return $btn;
                 })
                 ->addColumn('created_at', function ($row) {
 
                     return date('d F Y', strtotime($row->created_at));
+                })
+                ->addColumn('visibility', function ($row) {
+                    if ($row->visibility == 1) {
+                        return 'InActive';
+                    } else {
+                        return 'Active';
+                    }
                 })
                 ->addColumn('dish_type', function ($row) {
                     if ($row->dish_type == 1) {
@@ -312,6 +326,26 @@ class RestaurentController extends Controller
             'resto_cate_add_on' => $resto_cate_add_on,
             'cat_data' => $resto_cate_data
         ]);
+    }
+
+    public function dishVisibility(Request $request) {
+        $dish_id = base64_decode(request('dish_id'));
+        $visibility = base64_decode(request('visi'));
+        $visibility = $visibility ? 0 : 1;
+        $menu_lists = new menu_list;
+        $delete_menu = array();
+        $delete_menu['id'] = $dish_id;
+
+        $delete_menu = $menu_lists->visibilityOffOnOfDish($delete_menu, $visibility);
+        if ($visibility) {
+            $message = 'Dish InActive !';
+        } else {
+            $message = 'Dish Active !';
+        }
+
+        Session::flash('menu_message', $message);
+
+        return redirect()->back();
     }
 
     public function deleteMenuList(Request $request)
@@ -376,6 +410,7 @@ class RestaurentController extends Controller
             'price' => 'required|numeric|not_in:0',
             'dish_type' => 'required|in:1,2,3|nullable',
             'menu_category_id' => 'required|exists:resto_menu_categories,id|nullable',
+            'visibility' => 'required|in:1,0',
 
         ]);
         if (!$validator->fails()) {
@@ -431,6 +466,7 @@ class RestaurentController extends Controller
             'dish_type' => 'required|in:1,2,3|nullable',
             'menu_category_id' => 'required|exists:resto_menu_categories,id|nullable',
             'product_variant_id' => 'integer|nullable',
+            'visibility' => 'required|in:1,0',
 
         ]);
         if (!$validator->fails()) {

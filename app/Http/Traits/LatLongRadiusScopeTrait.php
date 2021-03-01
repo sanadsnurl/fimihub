@@ -59,7 +59,7 @@ trait LatLongRadiusScopeTrait
         *  Generate the select field for disctance
         */
         $disctance_select = sprintf(
-                "orders.*,ua.latitude,ua.longitude,ua.id as addres_id, ( %d * acos( cos( radians(%s) ) " .
+                "orders.*,oe.order_id as oecorder_id, oec.status as order_event_status,oec.user_id as oeuser_id, oe.user_type as oeuser_type, ua.latitude,ua.longitude,ua.id as addres_id, ( %d * acos( cos( radians(%s) ) " .
                         " * cos( radians( ua.latitude ) ) " .
                         " * cos( radians( ua.longitude ) - radians(%s) ) " .
                         " + sin( radians(%s) ) * sin( radians( ua.latitude ) ) " .
@@ -71,21 +71,57 @@ trait LatLongRadiusScopeTrait
                 $lng,
                 $lat
             );
+        // return order::leftjoin('user_address as ua', 'orders.address_id', '=', 'ua.id')
+        //     // ->rightJoin('orders as o', 'user_address.id', '=', 'o.address_id')
+        //     ->select(DB::raw($disctance_select) )
+        //     // ->whereNotNull('o.address_id')
+        //     ->where(function($query) {
+        //         $query->where('orders.order_status', 6)->orWhere('orders.order_status', 5);
+        //     })
+        //     ->leftjoin('order_event_controls as oec', 'orders.id', '=', 'oec.order_id')
+        //     ->leftjoin('order_events as oe',function($query){
+        //         $query->on('orders.id', '=', 'oe.order_id')
+        //         ->where(function($query) {
+        //             return $query->where('oe.order_status', 6)->where('oe.user_id', '=', auth()->id());
+        //         })
+
+        //         ->where('oe.user_type', 1);
+        //     })
+        //     ->having('distance', '<=', Config('RIDER_NEAR_ORDER'))
+        //     ->orderBy('distance', 'ASC' )
+
+        //     ->whereNull('oec.order_id')
+        //     ->whereNull('oe.order_status')
+
+        //     ->orderBy('orders.id', 'DESC')
+        //     ->groupBy('orders.id');
+
+
         return order::leftjoin('user_address as ua', 'orders.address_id', '=', 'ua.id')
             // ->rightJoin('orders as o', 'user_address.id', '=', 'o.address_id')
             ->select(DB::raw($disctance_select) )
             // ->whereNotNull('o.address_id')
             ->where(function($query) {
-                $query->orWhere('orders.order_status', 6)->orWhere('orders.order_status', 5);
+                $query->where('orders.order_status', 6)->orWhere('orders.order_status', 5);
             })
             ->leftjoin('order_events as oe',function($query){
-                $query->on('orders.id', '=', 'oe.order_id')
-                ->where('oe.user_type', 1);
-                // ->where('oe.user_id', Auth::id());
+                $query->on('orders.id', '=', 'oe.order_id')->where('oe.user_type', 1);
             })
+            ->leftjoin('order_event_controls as oec', function($query) {
+                $query->on('orders.id', '=', 'oec.order_id') ->where(function($query) {
+                    return $query->where('oec.status', 6)->where('oec.user_id', '=', auth()->id());
+                });
+            })
+
             ->having('distance', '<=', Config('RIDER_NEAR_ORDER'))
             ->orderBy('distance', 'ASC' )
+
+            ->whereNull('oec.status')
             ->whereNull('oe.order_id')
+
+            // ->whereNull('oec.order_id')
+            // ->whereNull('oe.order_status')
+
             ->orderBy('orders.id', 'DESC')
             ->groupBy('orders.id');
     }

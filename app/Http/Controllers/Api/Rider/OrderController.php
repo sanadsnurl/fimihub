@@ -11,6 +11,7 @@ use App\Model\MyEarning;
 use App\Model\Notification;
 use App\Model\order;
 use App\Model\OrderEvent;
+use App\Model\OrderEventControl;
 use App\Model\ServiceCategory;
 use App\User;
 use Auth, Validator;
@@ -19,10 +20,11 @@ class OrderController extends Controller
 {
     use NotificationTrait, LatLongRadiusScopeTrait;
 
-    public function __construct(order $order, OrderEvent $orderEvent, MyEarning $myEarning) {
+    public function __construct(OrderEventControl $orderEventControl, order $order, OrderEvent $orderEvent, MyEarning $myEarning) {
         $this->order = $order;
         $this->orderEvent = $orderEvent;
         $this->myEarning = $myEarning;
+        $this->orderEventControl = $orderEventControl;
     }
 
     public function testingNotification()
@@ -72,9 +74,15 @@ class OrderController extends Controller
             $order = $this->riderClosestOrders($user, $lat, $lng)
             ->with('restaurentDetails.restroAddress','userAddress.userDetails')
             ->paginate(10);
+            // ->toSql();
+            // dd($order);
+            // $ids = array();
+
             foreach($order as $value) {
                 $value->ordered_menu = json_decode($value->ordered_menu);
+                // $ids[]=$value->order_event_status. '-'.$value->id.'--'.$value->oeuser_id.'-'.$value->oeuser_type;
             }
+
         }
         return response()->json(['data' => $order, 'message' => 'Success', 'status' => true], $this->successStatus);
     }
@@ -119,15 +127,28 @@ class OrderController extends Controller
             'order_id' => $orderId
         );
 
+        $dataAccepted = array(
+            'user_id' => $id,
+            'status' => $orderStatus,
+            'order_id' => $orderId
+        );
+
         $alreadyAssigned = $this->orderEvent->orderAlreadyAssigned($orderId)->first();
         if(!empty($alreadyAssigned)) {
-            return response()->json(['message' => 'Already assigned to other rider. Please refresh', 'status' => false], $this->successStatus);
+            return response()->json(['message' => 'Already assigned. Please refresh', 'status' => false], $this->successStatus);
         }
 
         if($orderStatus == 6) { // // Order rejected by rider
-            $data['reason_id'] = $request->input('reason_id');
-            $data['order_comment'] = $request->input('order_comment');
-            $this->orderEvent->updateStatus($orderId, $data);
+            $dataAccepted['reason_id'] = $request->input('reason_id');
+            $dataAccepted['order_comment'] = $request->input('order_comment');
+
+            if($this->orderEventControl->updateStatus($orderId, $dataAccepted)) {
+                $this->orderEvent->orderEventControlDelete($orderId, $data);
+            } else {
+                $this->orderEvent->orderEventControlDelete($orderId, $data);
+                // return response()->json(['message' => 'You can not reject.', 'status' => false], $this->successStatus);
+            }
+
             // $this->order->updateStatus($orderId, 8); // 8-rider_cancel
         } else if($orderStatus == 5) { // Order delivered
             $this->order->updateStatus($orderId, 9); // 9-received
@@ -169,18 +190,21 @@ class OrderController extends Controller
                 $this->myEarning->updateEarning($earning, $orderId);
             }
 
+            // $this->orderEvent->updateStatus($orderId, $data);
             $this->orderEvent->updateStatus($orderId, $data);
         } else if($orderStatus == 4) { //  On the way
+            // $this->orderEvent->updateStatus($orderId, $data);
             $this->orderEvent->updateStatus($orderId, $data);
             //$this->order->updateStatus($orderId, 12); // 12-rider on the way
 
         } else if($orderStatus == 3) { // Order Picked Up
+            // $this->orderEvent->updateStatus($orderId, $data);
             $this->orderEvent->updateStatus($orderId, $data);
             $this->order->updateStatus($orderId, 7); // 7-rider picked product
 
         } else if($orderStatus == 1) { // Arriving to store
-            $this->orderEvent->updateStatus($orderId, $data);
-            //$this->order->updateStatus($orderId, 11); // 11-assigned to rider
+            // $this->orderEvent->updateStatus($orderId, $data);
+            $this->orderEvent->updateStatus($orderId, $data); // 11-assigned to rider
 
         } else {
             $this->orderEvent->updateStatus($orderId, $data);

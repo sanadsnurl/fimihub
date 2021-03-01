@@ -65,14 +65,16 @@ class order extends Model
         $query = $this;
         if($orderId) {
             $query = $this->where('orders.id', $orderId)
-            ->leftjoin('order_events as oe', 'orders.id', '=', 'oe.order_id')
+            ->leftjoin('order_events as oe',function($query){
+                $query->on('orders.id', '=', 'oe.order_id')->where('oe.user_type', 1);
+            })
             ->where('oe.user_id', Auth::id())
 
             ->select('orders.*');
         } else {
+            //->leftjoin('order_event_controls as oec', 'orders.id', '=', 'oec.order_id')
             $query = $this->leftjoin('order_events as oe',function($query){
-                $query->on('orders.id', '=', 'oe.order_id')
-                ->where('oe.user_type', 1);
+                $query->on('orders.id', '=', 'oe.order_id')->where('oe.user_type', 1);
             })->select('orders.*')
             ->where(function($query) {
                 $query->orWhere('oe.order_status', 1)
@@ -80,6 +82,7 @@ class order extends Model
                 ->orWhere('oe.order_status', 3)
                 ->orWhere('oe.order_status', 4);
             })
+            ->whereNotNull('oe.order_id')
             ->where('oe.user_id', Auth::id())
             ->orderBy('orders.id', 'DESC')->groupBy('orders.id');
         }
@@ -91,15 +94,17 @@ class order extends Model
         $query = $this;
         if($orderId) {
             $query = $this->where('orders.id', $orderId)
-            ->leftjoin('order_events as oe', 'orders.id', '=', 'oe.order_id')
+            ->leftjoin('order_events as oe',function($query){
+                $query->on('orders.id', '=', 'oe.order_id')->where('oe.user_type', 1);
+            })
             ->where('oe.user_id', Auth::id())
             ->select('orders.*');
         } else {
             $query = $this
-            ->rightjoin('order_events as oe',function($query) {
-                $query->on('orders.id', '=', 'oe.order_id')
-                ->where('oe.user_type', 1);
-            })->select('orders.*')
+            ->leftjoin('order_events as oe',function($query){
+                $query->on('orders.id', '=', 'oe.order_id')->where('oe.user_type', 1);
+            })
+            ->select('orders.*')
             ->where('oe.user_id', Auth::id())
             ->where(function($query) {
                 $query->orWhere('orders.order_status', 8)
