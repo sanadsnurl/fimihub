@@ -18,6 +18,17 @@ class user_address extends Model
         return $query_data;
     }
 
+    public function editAddress($data)
+    {
+        $data['updated_at'] = now();
+            unset($data['_token']);
+        $query_data = DB::table('user_address')
+                ->where('user_id', $data['user_id'])
+                ->where('id', $data['id'])
+                ->update($data);
+        return $query_data;
+    }
+
     public function insertUpdateAddress($data)
     {
         $value=DB::table('user_address')->where('user_id', $data['user_id'])

@@ -67,10 +67,10 @@ trait BillingCalculateTraits
                     if (!empty($m_data->variant_data) && count($m_data->variant_data)) {
                         if (!empty($m_data->quantity)  && !empty($m_data->cart_variant_id)) {
                             $var_d = $menu_custom_list->getCustomListPriceWithPer($m_data->cart_variant_id);
-                            $m_data->price = $var_d->price;
+                            $m_data->price = $var_d->price ?? '';
                         } else {
                             $var_d = $menu_custom_list->getCustomListPriceWithPer($var_sin_data->id);
-                            $m_data->price = $var_d->price;
+                            $m_data->price = $var_d->price ?? '';
                         }
                     }
                     if ($m_data->product_add_on_id) {
@@ -92,8 +92,12 @@ trait BillingCalculateTraits
                             $add_ons_cat_select[] = $menu_custom_list->menuCustomCategoryData($m_data->restaurent_id)
                                 ->where('resto_custom_cat_id', $add_on)->first();
                             $var_ds = $menu_custom_list->getCustomListPriceWithPer($add_on_cart);
+                            // dd($var_ds);
                             // $m_data->price = $var_d->price;
-                            $menu_total = $menu_total + (1 * $var_ds->price);
+                            if($var_ds != NULL){
+
+                                $menu_total = $menu_total + (1 * $var_ds->price ?? $var_ds['price']);
+                            }
                         }
                     }
 
@@ -160,7 +164,10 @@ trait BillingCalculateTraits
                 foreach ($m_data->product_adds_id as $add_on_cart) {
                     $var_ds = $menu_custom_list->getCustomListPriceWithPer($add_on_cart);
                     // $m_data->price = $var_d->price;
-                    $total_amount = $total_amount + (1 * $var_ds->price);
+                    if($var_ds != NULL){
+
+                        $total_amount = $total_amount + (1 * $var_ds->price);
+                    }
                 }
             }
 

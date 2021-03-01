@@ -283,8 +283,9 @@ class RestaurentController extends Controller
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
                     $btn = '<a href="editDish?dish_id=' . base64_encode($row->id) . '" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Edit</a>
-                            <a href="deleteDish?dish_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Delete</a>
                         ';
+                        // <a href="deleteDish?dish_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Delete</a>
+
                         if($row->visibility == 1) {
                             $btn .= '<a href="dishVisibility?dish_id=' . base64_encode($row->id) . '&visi='.base64_encode($row->visibility).'" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Enable</a>
                         ';

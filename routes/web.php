@@ -422,7 +422,8 @@ Route::group(['middleware' => ['cors']], function () {
         Route::get('enableResto', 'Web\Admin\RestaurentController@enableResto');
         //Disable Restaurent
         Route::get('disableResto', 'Web\Admin\RestaurentController@disableResto');
-
+        //Delete Order
+        Route::get('deleteOrder', 'Web\Admin\OrderController@deleteCustomOrder');
     });
 
 });

@@ -7,7 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Contracts\Validation\Validator;
 
-class AddToCartRequest extends FormRequest
+class EditAddressRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,11 +27,13 @@ class AddToCartRequest extends FormRequest
     public function rules()
     {
         $validator = [
-            'restaurant_id' => 'required|numeric|exists:restaurent_details,id',
-            'menu_id' => 'required|numeric|exists:menu_list,id',
-            'variant_id' => 'numeric|nullable',
-            'add_on_id' => 'nullable',
-            'action_type' => 'required|numeric|in:1,2,3',
+            'address_id' => 'required|numeric|exists:user_address,id',
+            'address' => 'required|string',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
+            'flat_no' => 'string|nullable',
+            'landmark' => 'string|nullable',
+            'name' => 'required|string|max:150',
         ];
         return $validator;
     }

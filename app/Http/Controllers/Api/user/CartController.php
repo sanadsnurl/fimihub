@@ -152,13 +152,14 @@ class CartController extends Controller
         $menu_id = (request('menu_id'));
         $check_event = (request('action_type'));
         $add_on_id = (request('add_on_id')) ?? [];
+        $add_on_ids = ((array)request('add_on_id')) ?? [];
 
         $custom_data = array();
         $variant_id =  request('variant_id') ?? NULL;
 
         // dd($menu_all_data);
-        if(count($add_on_id)){
-            foreach ($add_on_id as $value) {
+        if(($add_on_ids)){
+            foreach ($add_on_ids as $value) {
                 $custom_data[] = $value;
             }
         }
@@ -221,6 +222,7 @@ class CartController extends Controller
                                     'user_id' =>$cart_submenu_data['user_id'],
                                     'resto_id' =>$restaurant_id
                                     ];
+                                    // dd($billing_data_arary);
                 $billing_balance = $this->getBilling($billing_data_arary);
                 if(isset($billing_balance['menu_data']['0'])){
                     $billing_menu_data =  $billing_balance['menu_data']['0'];
