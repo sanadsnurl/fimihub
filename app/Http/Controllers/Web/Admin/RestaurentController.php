@@ -229,8 +229,13 @@ class RestaurentController extends Controller
             'resto_user_id'=>$resto_user_id]);
         }
         else{
+            // dd($resto_add);
+
+            $users = new User;
+        $user_resto_data = $users->userByIdData($resto_add[0]->user_id);
             return view('admin.editRestaurant')->with(['data'=>$user,
                                                 'resto_data'=>$resto_data,
+                                                'user_resto_data'=>$user_resto_data,
                                                 'resto_user_id'=>$resto_user_id,
                                                 'resto_add'=> $resto_add[0]]);
         }
@@ -243,6 +248,7 @@ class RestaurentController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'string|nullable',
             'user_id' => 'required|exists:users,id',
+            'email' => 'email|nullable',
             'about' => 'string|nullable',
             'other_details' => 'string|nullable',
             'picture' => 'mimes:png,jpg,jpeg|max:3072|nullable',
@@ -305,6 +311,15 @@ class RestaurentController extends Controller
                     unset($data['address_address']);
                     unset($data['address_latitude']);
                     unset($data['address_longitude']);
+                    if ($request->has('email') ) {
+                        $user_update_data = [
+                            'id' => $data['user_id'],
+                            'email' =>$data['email']
+                        ];
+                        $users = new User;
+                        $user =$users->UpdateLogin($user_update_data);
+                    }
+                    unset($data['email']);
                     $resto_id = $restaurent_detail->insertUpdateRestoData($data);
                     Session::flash('message', 'Restaurent Data Updated !');
 

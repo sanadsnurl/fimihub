@@ -49,6 +49,19 @@
                                 </div>
 
                             </div>
+                            <div class="form-group row">
+                                <label for="input-1" class="col-sm-2 col-form-label">Email</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="input-1" name="email"
+                                        value="{{$user_resto_data->email ?? ''}}">
+
+                                    @if($errors->has('email'))
+                                    <div class="error">{{ $errors->first('email') }}</div>
+                                    @endif
+
+                                </div>
+
+                            </div>
 
                             <div class="form-group row">
                                 <label for="input-3" class="col-sm-2 col-form-label">About Us</label>

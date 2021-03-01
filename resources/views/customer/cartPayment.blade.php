@@ -24,6 +24,11 @@
                 <h4 class="error">{{ $errors->first('payment') }}</h4>
             </div>
             @endif
+            @if(Session::has('message'))
+            <div class="error" style="text-align:center;">
+                <h4 class="error">{{ Session::get('message') }}</h4>
+            </div>
+            @endif
             @if($errors->has('delivery_fee'))
             <div class="error" style="text-align:center;">
                 <h4 class="error">{{ $errors->first('delivery_fee') }}</h4>

@@ -38,6 +38,25 @@ class restaurent_detail extends Model
         return $query_data;
     }
 
+    public function checkRestoTimeAvailiability($resto_id)
+    {
+        try {
+        $current_time = date('h:i');
+
+            $restaurent_details=$this
+                ->where('visibility', 0)
+                ->whereTime('restaurent_details.open_time','<=', $current_time)
+                ->whereTime('restaurent_details.close_time','>=', $current_time)
+                ->where('id', $resto_id)
+                ->first();
+
+            return $restaurent_details;
+        }
+        catch (Exception $e) {
+            dd($e);
+        }
+    }
+
     public function getRestoData($userid)
     {
         try {
