@@ -21,6 +21,7 @@ use App\Model\menu_custom_list;
 use App\Model\menu_customization;
 use App\Model\resto_custom_menu_categorie;
 use Response;
+use Carbon\Carbon;
 use Session;
 use File;
 use Illuminate\Validation\Rule;
@@ -132,6 +133,7 @@ class RestaurentController extends Controller
     {
         $user = Auth::user();
 
+        // return  datatables(restaurent_detail::query())->toJson();
 
         $restaurent_detail = new restaurent_detail;
         $resto_data = $restaurent_detail->getRestoData($user->id);
@@ -163,6 +165,12 @@ class RestaurentController extends Controller
         if ($request->ajax()) {
             return Datatables::of($resto_cate_data)
                 ->addIndexColumn()
+
+                ->filterColumn('created_at', function ($query, $keyword){
+                    $query->whereRaw("DATE_FORMAT(resto_menu_categories.created_at,'%d %M %Y') like ?", ["%$keyword%"]);
+                })
+
+
                 ->addColumn('action', function($row){
                     $btn = '<a href="editMainCategory?dish_main_cat_id=' . base64_encode($row->id) . '" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Edit</a>
                     <a href="deleteMainCat?dish_cat_id='.base64_encode($row->id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Delete</a>';
@@ -170,7 +178,8 @@ class RestaurentController extends Controller
                 })
                 ->addColumn('created_at', function ($row) {
 
-                    return date('d F Y', strtotime($row->created_at));
+                    $fu = date('d F Y', strtotime($row->created_at));
+                    return $fu;
                 })
                 ->rawColumns(['action'])
                 ->make(true);
@@ -408,21 +417,27 @@ class RestaurentController extends Controller
             'picture' => 'mimes:png,jpg,jpeg|nullable',
             'about' => 'string|nullable',
             'discount' => 'numeric|nullable',
-            'price' => 'required|numeric|not_in:0',
+            'price' => 'required|numeric',
             'dish_type' => 'required|in:1,2,3|nullable',
             'menu_category_id' => 'required|exists:resto_menu_categories,id|nullable',
-            'visibility' => 'required|in:1,0',
+            'open_time' => 'nullable|date_format:H:i',
+            'close_time' => 'nullable|date_format:H:i|after:open_time',
 
         ]);
         if (!$validator->fails()) {
             $user = Auth::user();
             $id = $user->id;
             $data = $request->toarray();
-
+// dd($data);
             if ($request->has('product_add_on_id') && !empty('product_add_on_id')) {
                 $data['product_add_on_id'] = json_encode($data['product_add_on_id']);
             } else {
                 $data['product_add_on_id'] = json_encode([]);
+            }
+            if ($request->has('open_day') && !empty('open_day')) {
+                $data['open_day'] = json_encode($data['open_day']);
+            }else{
+                $data['open_day'] = NULL;
             }
             if ($request->hasfile('picture')) {
                 $profile_pic = $request->file('picture');
@@ -467,6 +482,8 @@ class RestaurentController extends Controller
             'dish_type' => 'required|in:1,2,3|nullable',
             'menu_category_id' => 'required|exists:resto_menu_categories,id|nullable',
             'product_variant_id' => 'integer|nullable',
+            'open_time' => 'nullable|date_format:H:i',
+            'close_time' => 'nullable|date_format:H:i|after:open_time',
             'visibility' => 'required|in:1,0',
 
         ]);
@@ -480,6 +497,12 @@ class RestaurentController extends Controller
             if ($request->has('product_variant_id') && !empty('product_variant_id')&& request('product_variant_id')!=NULL) {
                 $data['price'] = 0;
             }
+            if ($request->has('open_day') && !empty('open_day')) {
+                $data['open_day'] = json_encode($data['open_day']);
+            }else{
+                $data['open_day'] = NULL;
+            }
+
             if ($request->hasfile('picture')) {
                 $profile_pic = $request->file('picture');
                 $input['imagename'] = $data['name'] . time() . '.' . $profile_pic->getClientOriginalExtension();

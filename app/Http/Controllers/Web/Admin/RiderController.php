@@ -287,4 +287,23 @@ class RiderController extends Controller
 
         return redirect()->back();
     }
+
+    public function nearByRider(){
+        $user = Auth::user();
+        $users = new User;
+        $rider_list = $users->allUserPaginateListRiderData(2)->with(['userAddress'])->get();
+        $location = array();
+        $locations = array();
+        $i = 1;
+        foreach($rider_list as $r_list){
+
+
+            $locations[] = [(string)$r_list['userAddress'][0]->address, (float)$r_list['userAddress'][0]->latitude, (float)$r_list['userAddress'][0]->longitude, $i];
+        $i+=1;
+        }
+        $location =  json_encode($locations);
+        // var_dump($location);
+        // die();
+        return view('admin.nearByRiders')->with(['data'=>$user,'rider_list'=>$rider_list,'location'=>$location]);
+    }
 }

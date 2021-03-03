@@ -81,6 +81,7 @@
                                 List</a></li>
                         <li><a href="{{url('adminfimihub/pendingRider')}}"><i class="fa fa-circle-o"></i>New
                                 Request</a></li>
+                        <li><a href="{{url('adminfimihub/nearByRider')}}"><i class="fa fa-circle-o"></i>Rider Location</a></li>
                     </ul>
                 </li>
                 @endif

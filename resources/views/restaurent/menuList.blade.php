@@ -14,7 +14,7 @@
 
         <!-- End Breadcrumb-->
         <div class="row">
-            <div class="col-lg-10">
+            <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
                         <form role="form" method="POST" action="{{ url('Restaurent/addMenu')}}" id="personal-info"
@@ -134,7 +134,69 @@
                                 <div class="error">{{ $errors->first('dish_type') }}</div>
                                 @endif
                             </div>
+                            <div class="form-group row">
+                                <label for="input-2" class="col-sm-2 col-form-label">Dish Open Day</label>
+                                <div class=" row col-sm-9 ml-4">
+                                    <div class="demo-checkbox">
+                                        <input type="checkbox" id="user-checkboxday" class="filled-in chk-col-primary" value="Monday"
+                                            name="open_day[]">
+                                        <label for="user-checkboxday">Monday</label>
+                                    </div>
+                                    <div class="demo-checkbox">
+                                        <input type="checkbox" id="user-checkboxday1" class="filled-in chk-col-primary" value="Tuesday"
+                                            name="open_day[]">
+                                        <label for="user-checkboxday1">Tuesday</label>
+                                    </div>
+                                    <div class="demo-checkbox">
+                                        <input type="checkbox" id="user-checkboxday2" class="filled-in chk-col-primary" value="Wednesday"
+                                            name="open_day[]">
+                                        <label for="user-checkboxday2">Wednesday</label>
+                                    </div>
+                                    <div class="demo-checkbox">
+                                        <input type="checkbox" id="user-checkboxday3" class="filled-in chk-col-primary" value="Thursday"
+                                            name="open_day[]">
+                                        <label for="user-checkboxday3">Thursday</label>
+                                    </div>
+                                    <div class="demo-checkbox">
+                                        <input type="checkbox" id="user-checkboxday4" class="filled-in chk-col-primary" value="Friday"
+                                            name="open_day[]">
+                                        <label for="user-checkboxday4">Friday</label>
+                                    </div>
+                                    <div class="demo-checkbox">
+                                        <input type="checkbox" id="user-checkboxday5" class="filled-in chk-col-primary" value="Saturday"
+                                            name="open_day[]">
+                                        <label for="user-checkboxday5">Saturday</label>
+                                    </div>
+                                    <div class="demo-checkbox">
+                                        <input type="checkbox" id="user-checkboxday6" class="filled-in chk-col-primary" value="Sunday"
+                                            name="open_day[]">
+                                        <label for="user-checkboxday6">Sunday</label>
+                                    </div>
+                                    @if($errors->has('open_day'))
+                                    <div class="error">{{ $errors->first('open_day') }}</div>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="input-1" class="col-sm-2 col-form-label">Open Time</label>
+                                <div class="col-sm-10">
+                                    <input type="time" class="form-control" name="open_time">
+                                    @if($errors->has('open_time'))
+                                    <div class="error">{{ $errors->first('open_time') }}</div>
+                                    @endif
+                                </div>
 
+                            </div>
+                            <div class="form-group row">
+                                <label for="input-1" class="col-sm-2 col-form-label">Close Time</label>
+                                <div class="col-sm-10">
+                                    <input type="time" class="form-control" name="close_time">
+                                    @if($errors->has('close_time'))
+                                    <div class="error">{{ $errors->first('close_time') }}</div>
+                                    @endif
+                                </div>
+
+                            </div>
                             <div class="form-group row">
                                 <label for="input-1" class="col-sm-2 col-form-label">Price ($)</label>
                                 <div class="col-sm-10">

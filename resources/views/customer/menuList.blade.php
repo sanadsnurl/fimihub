@@ -145,125 +145,167 @@
                     <h5>{{$m_cat->cat_name}}</h5>
                     @foreach($menu_data as $m_data)
                     @if($m_data->cat_name == $m_cat->cat_name)
-                    <form action="" id="menu_form-{{$m_data->id ?? ''}}">
-                        <div class="card-wrap">
-                            <div class="inner-row">
-                                <div class="img-wrap">
-                                    <img src="{{$m_data->picture ?? url('asset/customer/assets/images/food_thumb2.png')}}"
-                                        alt="food1">
-                                </div>
-                                <div class="text-wrap">
-                                    <h6 class="price">
-                                        @if($m_data->price == 0 || $m_data->price == NULL)
-                                        Free
-                                        @else
-                                        {{$user_data->currency ?? ''}}
-                                        {{$m_data->price ?? '' }}
-                                        @endif
-                                    </h6>
-                                    @if($m_data->dish_type == 2)
-                                    <h4 class="green_dot"><i class="fa fa-stop-circle-o"
-                                            style="font-size:18px;color:green"></i>
-                                        {{$m_data->name ?? ''}}</h5>
-                                        @else
-                                        <h5 class="red_dot"><i class="fa fa-stop-circle-o"
-                                                style="font-size:18px;color:red"></i>
-                                            {{$m_data->name ?? ''}}</h5>
-                                        @endif
-                                        <p>{{$m_data->about ?? ''}}</p>
-                                </div>
-                                <ul class="add-to-cart">
-                                    <div onClick="increment_quantity('{{base64_encode($m_data->id)}}',1)">
-                                        <li>-</li>
+                    @php
+                    $restrict_time_menu = 0;
+                    $message_time_menu = 1;
+                    $open_day = json_decode($m_data->open_day) ?? [];
+                    if(count($open_day) && !empty($m_data->open_time) && !empty($m_data->close_time)){
+                    $restrict_time_menu = 1;
+                    $message_time_menu = 0;
+                    $current_day = date('l');
+                    $current_time = strtotime(date('H:i'));
+                    $open_time = strtotime($m_data->open_time);
+                    $close_time = strtotime($m_data->close_time);
+                    if(in_array($current_day,$open_day)){
+                    if($open_time <= $current_time && $close_time>= $current_time){
+                        $restrict_time_menu = 0;
+                        $message_time_menu = 1;
+                        }
+                        }
+                        }
+                        // dd($open_day);
+
+                        @endphp
+                        <form action="" id="menu_form-{{$m_data->id ?? ''}}">
+                            <div class="card-wrap">
+                                <div class="inner-row">
+                                    <div class="img-wrap">
+                                        <img src="{{$m_data->picture ?? url('asset/customer/assets/images/food_thumb2.png')}}"
+                                            alt="food1">
                                     </div>
-                                    <li class="product_qty" id="input-quantity-{{$m_data->id}}">{{$m_data->quantity ?? '0'}}</li>
-                                    <div onClick="increment_quantity('{{base64_encode($m_data->id)}}',2)">
-                                        <li>+</li>
-                                    </div>
-                                </ul>
-
-                            </div>
-
-                            <div class="dropdown-grp">
-                                {{-- Product variant --}}
-
-                                @if(count($m_data->variant_data) )
-                                <div class="opt-dropdown">
-                                    <span class="selected">
-                                        {!! $m_data->variant_data_cat->cat_name ?? 'Select' !!}
-                                    </span>
-                                    <div class="menu">
-                                        <fieldset id="{{$m_data->name ?? ''}}">
-                                            @if(count($m_data->variant_data))
-                                            @foreach($m_data->variant_data as $v_data)
-                                            <label class="size" for="small-{{$m_data->id ?? ''}}-{{$v_data->id ?? ''}}">
-                                                <input type="radio" class="small-{{$m_data->id ?? ''}}"
-                                                    onClick="increment_quantity('{{base64_encode($m_data->id)}}')"
-                                                    id="small-{{$m_data->id ?? ''}}-{{$v_data->id ?? ''}}"
-                                                    name="{{$m_data->id ?? ''}}-variant" value="{{$v_data->id ?? ''}}"
-                                                    @if(!empty($m_data->cart_variant_id))
-                                                {{$v_data->id == $m_data->cart_variant_id ? 'checked' : ''}}
-                                                @elseif($loop->index==0)
-                                                checked
-                                                @endif
-                                                >
-                                                {{$v_data->name ?? '' }} <span class="price">
-                                                    @if($v_data->price == 0 || $v_data->price == NULL)
-                                                    Free
-                                                    @else
-                                                    {{$user_data->currency ?? ''}}
-                                                    {{$v_data->price ?? '' }}
-                                                    @endif
-                                                </span>
-                                            </label>
+                                    <div class="text-wrap">
+                                        <h6 class="price">
+                                            @if($m_data->price == 0 || $m_data->price == NULL)
+                                            Free
+                                            @else
+                                            {{$user_data->currency ?? ''}}
+                                            {{$m_data->price ?? '' }}
+                                            @endif
+                                        </h6>
+                                        <h6 class="price">
+                                            @if($message_time_menu == 0 )
+                                            Availiable Time : {{date('h:i A',strtotime($m_data->open_time)) ?? ''}} -
+                                            {{date('h:i A',strtotime($m_data->close_time)) ?? ''}}
+                                            <br>
+                                            Availiable Days :
+                                            @foreach ($open_day as $o_day)
+                                            @if($loop->iteration == 1)
+                                            {{$o_day ?? ''}}
+                                            @else
+                                            , {{$o_day ?? ''}}
+                                            @endif
                                             @endforeach
                                             @endif
-                                        </fieldset>
+                                        </h6>
+                                        @if($m_data->dish_type == 2)
+                                        <h4 class="green_dot"><i class="fa fa-stop-circle-o"
+                                                style="font-size:18px;color:green"></i>
+                                            {{$m_data->name ?? ''}}</h5>
+                                            @else
+                                            <h5 class="red_dot"><i class="fa fa-stop-circle-o"
+                                                    style="font-size:18px;color:red"></i>
+                                                {{$m_data->name ?? ''}}</h5>
+                                            @endif
+                                            <p>{{$m_data->about ?? ''}}</p>
                                     </div>
+                                    @if($restrict_time_menu == 0)
+                                    <ul class="add-to-cart">
+                                        <div onClick="increment_quantity('{{base64_encode($m_data->id)}}',1)">
+                                            <li>-</li>
+                                        </div>
+                                        <li class="product_qty" id="input-quantity-{{$m_data->id}}">
+                                            {{$m_data->quantity ?? '0'}}</li>
+                                        <div onClick="increment_quantity('{{base64_encode($m_data->id)}}',2)">
+                                            <li>+</li>
+                                        </div>
+                                    </ul>
+                                    @endif
                                 </div>
-                                @endif
-                                {{-- Customization --}}
-                                @php
-                                $flag = 0;
-                                foreach($m_data->add_ons_cat as $add_cat){
+                                @if($restrict_time_menu == 0)
+
+                                <div class="dropdown-grp">
+                                    {{-- Product variant --}}
+
+                                    @if(count($m_data->variant_data) )
+                                    <div class="opt-dropdown">
+                                        <span class="selected">
+                                            {!! $m_data->variant_data_cat->cat_name ?? 'Select' !!}
+                                        </span>
+                                        <div class="menu">
+                                            <fieldset id="{{$m_data->name ?? ''}}">
+                                                @if(count($m_data->variant_data))
+                                                @foreach($m_data->variant_data as $v_data)
+                                                <label class="size"
+                                                    for="small-{{$m_data->id ?? ''}}-{{$v_data->id ?? ''}}">
+                                                    <input type="radio" class="small-{{$m_data->id ?? ''}}"
+                                                        onClick="increment_quantity('{{base64_encode($m_data->id)}}')"
+                                                        id="small-{{$m_data->id ?? ''}}-{{$v_data->id ?? ''}}"
+                                                        name="{{$m_data->id ?? ''}}-variant"
+                                                        value="{{$v_data->id ?? ''}}"
+                                                        @if(!empty($m_data->cart_variant_id))
+                                                    {{$v_data->id == $m_data->cart_variant_id ? 'checked' : ''}}
+                                                    @elseif($loop->index==0)
+                                                    checked
+                                                    @endif
+                                                    >
+                                                    {{$v_data->name ?? '' }} <span class="price">
+                                                        @if($v_data->price == 0 || $v_data->price == NULL)
+                                                        Free
+                                                        @else
+                                                        {{$user_data->currency ?? ''}}
+                                                        {{$v_data->price ?? '' }}
+                                                        @endif
+                                                    </span>
+                                                </label>
+                                                @endforeach
+                                                @endif
+                                            </fieldset>
+                                        </div>
+                                    </div>
+                                    @endif
+                                    {{-- Customization --}}
+                                    @php
+                                    $flag = 0;
+                                    foreach($m_data->add_ons_cat as $add_cat){
                                     if(!empty($add_cat)){
-                                        $flag = 1;
+                                    $flag = 1;
 
                                     }
-                                }
+                                    }
 
                                     // var_dump($m_data->add_ons_cat);
-                                @endphp
-                                @if(isset($m_data->add_ons_cat) && $flag ==1)
-                                <div class="opt-dropdown " style="dislay:none;">
-                                    <span class="selected djsonu2">
-                                        Popular Add-Ons
-                                    </span>
-                                    <div class="menu">
-                                        <div class="accordion djsonu" id="accordionExample">
-                                            {{-- @if(count($m_data->add_ons_cat)) --}}
-                                            @foreach($m_data->add_ons_cat as $add_cat)
-                                            @if(!empty($add_cat))
-                                            <div class="card">
-                                                <div class="card-header" id="heading-{{$m_data->id}}-{{$add_cat->cats_id}}">
-                                                    <h2 class="mb-0">
-                                                        <a class="btn btn-link  @if($add_cat->is_required == 1)
+                                    @endphp
+                                    @if(isset($m_data->add_ons_cat) && $flag ==1)
+                                    <div class="opt-dropdown " style="dislay:none;">
+                                        <span class="selected djsonu2">
+                                            Popular Add-Ons
+                                        </span>
+                                        <div class="menu">
+                                            <div class="accordion djsonu" id="accordionExample">
+                                                {{-- @if(count($m_data->add_ons_cat)) --}}
+                                                @foreach($m_data->add_ons_cat as $add_cat)
+                                                @if(!empty($add_cat))
+                                                <div class="card">
+                                                    <div class="card-header"
+                                                        id="heading-{{$m_data->id}}-{{$add_cat->cats_id}}">
+                                                        <h2 class="mb-0">
+                                                            <a class="btn btn-link  @if($add_cat->is_required == 1)
                                                             active_required
                                                             @else
                                                         not_active_required
                                                              @endif" data-toggle="collapse"
-                                                            data-target="#collapse-{{$m_data->id}}-{{$add_cat->cats_id}}"
-                                                            aria-expanded="true"
-                                                            aria-controls="collapse-{{$m_data->id}}-{{$add_cat->cats_id}}">
-                                                            {{$add_cat->cat_name ?? ''}}
-                                                            @if($add_cat->is_required == 1)
-                                                            <span class="error">(*required)</span>
-                                                            @endif
-                                                        </a>
-                                                    </h2>
-                                                </div>
+                                                                data-target="#collapse-{{$m_data->id}}-{{$add_cat->cats_id}}"
+                                                                aria-expanded="true"
+                                                                aria-controls="collapse-{{$m_data->id}}-{{$add_cat->cats_id}}">
+                                                                {{$add_cat->cat_name ?? ''}}
+                                                                @if($add_cat->is_required == 1)
+                                                                <span class="error">(*required)</span>
+                                                                @endif
+                                                            </a>
+                                                        </h2>
+                                                    </div>
 
-                                                <div id="collapse-{{$m_data->id}}-{{$add_cat->cats_id}}" class="collapse
+                                                    <div id="collapse-{{$m_data->id}}-{{$add_cat->cats_id}}" class="collapse
                                                 @if($loop->index == 0)
                                                 shows
                                                 @endif
@@ -273,65 +315,67 @@
 
                                                          @endif
                                                 " aria-labelledby="heading-{{$m_data->id}}-{{$add_cat->cats_id}}"
-                                                    data-parent="#accordionExample">
-                                                    <div class="card-body @if($add_cat->is_required == 1)
+                                                        data-parent="#accordionExample">
+                                                        <div class="card-body @if($add_cat->is_required == 1)
                                                         active_required_vij
 
                                                          @endif">
-                                                        @foreach($m_data->add_on as $add_onss)
-                                                        @if(count($add_onss))
-                                                        @foreach($add_onss as $add_ons)
-                                                        @if($add_cat->cat_name == $add_ons->cat_name)
-                                                        <label for="cheese-{{$m_data->id}}-{{$add_ons->id ?? ''}}">
-                                                            @if($add_cat->multiple_select == 1)
-                                                            <input type="checkbox"
-                                                                onClick="increment_quantity('{{base64_encode($m_data->id)}}')"
-                                                                id="cheese-{{$m_data->id}}-{{$add_ons->id ?? ''}}"
-                                                                name="custom_data[]" value="{{$add_ons->id ?? ''}}"
-                                                                class="extras"
-
-                                                                @if(in_array($add_ons->id,($m_data->product_adds_id) ??
-                                                            [],FALSE)) checked @endif>
-                                                            @else
-                                                            <input type="radio"
-                                                                onClick="increment_quantity('{{base64_encode($m_data->id)}}')"
-                                                                id="cheese-{{$m_data->id}}-{{$add_ons->id ?? ''}}"
-                                                                name="custom_data[{{$add_cat->cats_id ?? '1'}}]" value="{{$add_ons->id ?? ''}}"
-                                                                class="extras"
-                                                                @if(in_array($add_ons->id,($m_data->product_adds_id) ??
-                                                            [],FALSE)) checked @endif>
-                                                            @endif
-
-                                                            {{$add_ons->name ?? '' }}
-                                                            <span class="price">
-                                                                @if($add_ons->price == 0 || $add_ons->price == NULL)
-                                                                Free
+                                                            @foreach($m_data->add_on as $add_onss)
+                                                            @if(count($add_onss))
+                                                            @foreach($add_onss as $add_ons)
+                                                            @if($add_cat->cat_name == $add_ons->cat_name)
+                                                            <label for="cheese-{{$m_data->id}}-{{$add_ons->id ?? ''}}">
+                                                                @if($add_cat->multiple_select == 1)
+                                                                <input type="checkbox"
+                                                                    onClick="increment_quantity('{{base64_encode($m_data->id)}}')"
+                                                                    id="cheese-{{$m_data->id}}-{{$add_ons->id ?? ''}}"
+                                                                    name="custom_data[]" value="{{$add_ons->id ?? ''}}"
+                                                                    class="extras"
+                                                                    @if(in_array($add_ons->id,($m_data->product_adds_id)
+                                                                ??
+                                                                [],FALSE)) checked @endif>
                                                                 @else
-                                                                {{$user_data->currency ?? ''}}
-                                                                {{$add_ons->price ?? '' }}
+                                                                <input type="radio"
+                                                                    onClick="increment_quantity('{{base64_encode($m_data->id)}}')"
+                                                                    id="cheese-{{$m_data->id}}-{{$add_ons->id ?? ''}}"
+                                                                    name="custom_data[{{$add_cat->cats_id ?? '1'}}]"
+                                                                    value="{{$add_ons->id ?? ''}}" class="extras"
+                                                                    @if(in_array($add_ons->id,($m_data->product_adds_id)
+                                                                ??
+                                                                [],FALSE)) checked @endif>
                                                                 @endif
-                                                            </span>
-                                                        </label>
-                                                        @endif
-                                                        @endforeach
-                                                        @endif
-                                                        @endforeach
+
+                                                                {{$add_ons->name ?? '' }}
+                                                                <span class="price">
+                                                                    @if($add_ons->price == 0 || $add_ons->price == NULL)
+                                                                    Free
+                                                                    @else
+                                                                    {{$user_data->currency ?? ''}}
+                                                                    {{$add_ons->price ?? '' }}
+                                                                    @endif
+                                                                </span>
+                                                            </label>
+                                                            @endif
+                                                            @endforeach
+                                                            @endif
+                                                            @endforeach
+                                                        </div>
                                                     </div>
                                                 </div>
+                                                @endif
+                                                @endforeach
+                                                {{-- @endif --}}
                                             </div>
-                                            @endif
-                                            @endforeach
-                                            {{-- @endif --}}
                                         </div>
                                     </div>
+                                    @endif
                                 </div>
                                 @endif
                             </div>
-                        </div>
-                    </form>
+                        </form>
 
-                    @endif
-                    @endforeach
+                        @endif
+                        @endforeach
                 </div>
                 @endforeach
                 <input type="hidden" class="input-quantity" id="input-quantity"
@@ -343,25 +387,23 @@
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script>
     function increment_quantity(menu_id, click_type = false) {
-
         var resto_id = $("#input-quantity").val();
         var menu_decode_id = atob(menu_id);
         var inputQuantityElement = $("#input-quantity-" + menu_decode_id);
         var isSendRequest = 0;
-        inputQuantityElement.parents(".card-wrap").find(".active_required_vij input").each(function( index, value) {
-           console.log("dszx");
-            if($(this).prop('checked') == true) {
+        inputQuantityElement.parents(".card-wrap").find(".active_required_vij input").each(function(index, value) {
+            console.log("dszx");
+            if ($(this).prop('checked') == true) {
                 isSendRequest = 1;
             }
-            if(isSendRequest == 0) {
+            if (isSendRequest == 0) {
                 // $("#accordionExample").style.display = 'block';
-            // $(this).parents('.card-wrap').find('.djsonu').style.display = 'block';
-
-            // $(".order-block .order-menu-row .card-wrap .opt-dropdown .selected").click(function() {
-            //     $(this).parent().toggleClass("open");
-            //     $(this).next(".menu").slideToggle();
-            // })
-            $(this).parents('.card-wrap').find('.opt-dropdown .djsonu2').each(function( index, value) {
+                // $(this).parents('.card-wrap').find('.djsonu').style.display = 'block';
+                // $(".order-block .order-menu-row .card-wrap .opt-dropdown .selected").click(function() {
+                //     $(this).parent().toggleClass("open");
+                //     $(this).next(".menu").slideToggle();
+                // })
+                $(this).parents('.card-wrap').find('.opt-dropdown .djsonu2').each(function(index, value) {
                     // $(this).trigger( "click" );
                     $(this).parent().addClass("open");
                     $(this).next(".menu").slideDown();
@@ -379,18 +421,13 @@
                     //     $(this).parents('.accordion').find('.ninja').removeClass("show");
                     // });
                     // console.log('checking')
-             });
-            alert("Please select atleast one required Addon");
-
-            // console.log('request not sended');
-            return false;
-        }
+                });
+                alert("Please select atleast one required Addon");
+                // console.log('request not sended');
+                return false;
+            }
         });
-
-
         // console.log('request sended');
-
-
         var variant_menu = $(".small-" + menu_decode_id).val();
         var menu_form_data = JSON.stringify($('#menu_form-' + menu_decode_id).serializeArray());
         var item_count = $("#item_count");
@@ -461,40 +498,32 @@
             }
         });
     };
-
-
     $(document).ready(function() {
         $('.js-star-rating').makeStars();
-    //     setTimeout(()=> {
-    //     $('.col-order .category-block .active_required_vij').each(function( index, value) {
-
-    //         $(this).find("input").each(function(newIndex,NewValue) {
-    //             if(newIndex == 0) {
-    //                 $(this).prop('checked',true)
-    //             }
-
-    //             });
-    //         });
-
-    //  },100)
-
-    //         $('.col-order .category-block .active_required_vij input').click(function() {
-    //     let elm = $(this).prev('input')
-    //     setTimeout(()=> {
-    //         if(elm.is(':checked')) {
-    //             $('.custom_card_bdy .demo_checkbox input').prop('checked',true);
-    //         }else {
-    //             $('.custom_card_bdy .demo_checkbox input').prop('checked',false);
-    //         }
-    //     },100)
-    // });
-
+        //     setTimeout(()=> {
+        //     $('.col-order .category-block .active_required_vij').each(function( index, value) {
+        //         $(this).find("input").each(function(newIndex,NewValue) {
+        //             if(newIndex == 0) {
+        //                 $(this).prop('checked',true)
+        //             }
+        //             });
+        //         });
+        //  },100)
+        //         $('.col-order .category-block .active_required_vij input').click(function() {
+        //     let elm = $(this).prev('input')
+        //     setTimeout(()=> {
+        //         if(elm.is(':checked')) {
+        //             $('.custom_card_bdy .demo_checkbox input').prop('checked',true);
+        //         }else {
+        //             $('.custom_card_bdy .demo_checkbox input').prop('checked',false);
+        //         }
+        //     },100)
+        // });
         // $(".active_required").each(function(){
         //     if($(this).parents(".card-wrap").find(".product_qty").text() == 0) {
         //         $(this).parents(".card").find(".extras").first().prop("checked", true);
         //     }
         // })
-
         // $(".active_required").parents(".card").find(".card-body").each(function(){
         //     let checkbox = $(this).find(".extras");
         //     let checkboxLength = checkbox.length;

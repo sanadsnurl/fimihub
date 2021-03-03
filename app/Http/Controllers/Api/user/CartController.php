@@ -116,6 +116,60 @@ class CartController extends Controller
                 'resto_id' =>$quant_details['restaurent_id']
                 ];
                 $billing_balance = ($this->getBilling($billing_data_arary));
+                if(count($cart_menu_data)){
+                    foreach($cart_menu_data as $m_data){
+                        // return $m_data;
+                        // $m_data->variant_data_cat->variant_menu = array();
+                        $variant_menu = array();
+                        // return ( $m_data->variant_data_cat->variant_menu );
+                        if(count($m_data->variant_data)){
+                            foreach($m_data->variant_data as $variant_d){
+                                if($m_data->variant_data_cat->cats_id == $variant_d->resto_custom_cat_id){
+                                    $variant_menu[] = $variant_d;
+                                }
+                                $m_data->variant_data_cat->variant_menu = $variant_menu;
+                            }
+                        }
+                        if(count($m_data->add_ons_cat)){
+                            $add_on_menu_cat = array();
+                            foreach($m_data->add_ons_cat as $add_cat_loop_data){
+                                if( $add_cat_loop_data != NULL){
+                                    $add_cat_loop_data->add_on_menu = array();
+                                    $add_on_menu = array();
+                                    // $add_on_menu_cat[] = $add_cat_loop_data;
+                                    // return ($add_cat_loop_data);
+                                    if(count($m_data->add_on)){
+                                        foreach($m_data->add_on as $add_loop_data){
+                                            if(count($add_loop_data)){
+                                                foreach($add_loop_data as $add_loop_data_m){
+                                                // return ($add_loop_data_m);
+                                                if($add_cat_loop_data->cats_id == $add_loop_data_m->resto_custom_cat_id){
+                                                    $add_on_menu[] = $add_loop_data_m;
+                                                }
+                                            }
+                                            $add_cat_loop_data->add_on_menu = $add_on_menu;
+                                            }
+                                        }
+                                        $add_on_menu_cat[] = $add_cat_loop_data;
+                                    }
+                                }
+                                $m_data->add_ons_cat = $add_on_menu_cat;
+                            }
+                        }
+
+                        unset($m_data->variant_data);
+                        unset($m_data->add_on);
+                        if(!isset($m_data->product_adds_id)){
+                            $m_data->product_adds_id = NULL;
+                        }
+                        if(!isset($m_data->quantity)){
+                            $m_data->quantity = NULL;
+                        }
+                        if(!isset($m_data->cart_variant_id)){
+                            $m_data->cart_variant_id = NULL;
+                        }
+                    }
+            }
                 $user->currency = $this->currency;
                 return response()->json([
                     'cart_menu_data' => $cart_menu_data,

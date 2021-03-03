@@ -424,6 +424,8 @@ Route::group(['middleware' => ['cors']], function () {
         Route::get('disableResto', 'Web\Admin\RestaurentController@disableResto');
         //Delete Order
         Route::get('deleteOrder', 'Web\Admin\OrderController@deleteCustomOrder');
+         //Delete Order
+         Route::get('nearByRider', 'Web\Admin\RiderController@nearByRider');
     });
 
 });

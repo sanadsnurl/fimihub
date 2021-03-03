@@ -5,6 +5,7 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Model;
 //custom import
 use Illuminate\Support\Facades\DB;
+use App\Model\custom_menu_categorie;
 use Auth;
 
 class resto_custom_menu_categorie extends Model
@@ -69,5 +70,13 @@ class resto_custom_menu_categorie extends Model
             ->update(['visibility'=> 2,'deleted_at' => $data['deleted_at']]);
 
         return $query_data;
+    }
+
+    public function customCat() {
+        return $this->belongsTo(custom_menu_categorie::class, 'custom_cat_id', 'id');
+    }
+
+    public function productVariant() {
+        return $this->belongsTo(custom_menu_categorie::class, 'custom_cat_id', 'id');
     }
 }

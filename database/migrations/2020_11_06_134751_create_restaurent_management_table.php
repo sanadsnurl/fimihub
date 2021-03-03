@@ -113,6 +113,9 @@ class CreateRestaurentManagementTable extends Migration
             //rest attributes
             $table->string('name');
             $table->string('picture')->nullable();
+            $table->string('open_day')->nullable();
+            $table->string('open_time')->nullable();
+            $table->string('close_time')->nullable();
             $table->text('about')->nullable();
             $table->integer('product_variant_id')->nullable();
             $table->json('product_add_on_id')->nullable();
