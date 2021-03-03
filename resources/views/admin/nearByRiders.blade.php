@@ -36,11 +36,16 @@
             var infowindow = new google.maps.InfoWindow();
 
             var marker, i;
-
+    //         let url = "http://maps.google.com/mapfiles/ms/icons/";
+    //   url += color + "-dot.png";
             for (i = 0; i < locations.length; i++) {
                 marker = new google.maps.Marker({
                     position: new google.maps.LatLng(locations[i][1], locations[i][2]),
-                    map: map
+                    map: map,
+        //             icon: {
+        //   url: url,
+        //   //scaledSize: new google.maps.Size(38, 38)
+        // }
                 });
 
                 google.maps.event.addListener(marker, 'click', (function (marker, i) {

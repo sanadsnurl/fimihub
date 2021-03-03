@@ -10,6 +10,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/12.1.6/css/intlTelInput.css">
     <link rel="stylesheet" href="{{asset('asset/customer/dist/main.css')}}">
     <link rel="icon" href="{{asset('asset/customer/assets/images/logo.png')}}">
+    <!-- Start of HubSpot Embed Code -->
+    <script type="text/javascript" id="hs-script-loader" async defer src="//js.hs-scripts.com/9482503.js"></script>
+    <!-- End of HubSpot Embed Code -->
     <title>Fimihub</title>
 </head>
 
