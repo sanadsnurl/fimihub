@@ -167,10 +167,21 @@
                                 {{-- <b>Created At</b>
                                 <span>{{$order_data->created_at ?? ''}}</span> --}}
                                 <div class="col-md-3">
-                                    <b>Created At</b>
+                                    <b>Order Date</b>
                                 </div>
                                 <div class="col-md-9">
-                                    <span>{{$event_data->created_at ?? '--'}}</span>
+                                    <span>{{$order_data->created_at ?? '--'}}</span>
+                                </div>
+                            </li>
+
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                {{-- <b>Created At</b>
+                                <span>{{$order_data->created_at ?? ''}}</span> --}}
+                                <div class="col-md-3">
+                                    <b>Order time</b>
+                                </div>
+                                <div class="col-md-9">
+                                    <span>{{$order_data->created_at ?? '--'}}</span>
                                 </div>
                             </li>
 

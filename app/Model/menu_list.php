@@ -119,6 +119,25 @@ class menu_list extends Model
 
     }
 
+    public function menuListByIdWithBlock($data)
+    {
+        $menu_list=$this
+        ->join('resto_menu_categories as mc', 'mc.id', '=', 'menu_list.menu_category_id')
+        ->leftJoin('menu_categories', function($join) use ($data)
+                        {
+                            $join->on('menu_categories.id', '=', 'mc.menu_category_id');
+
+                        })
+        ->whereIn('menu_list.visibility', [0,1])
+        ->where('menu_list.id', $data)
+        ->select('menu_list.*','menu_categories.name as cat_name','mc.id as cat_id')
+        ->orderBy('cat_name')
+        ->first();
+
+        return $menu_list;
+
+    }
+
     public function orderMenuListById($data)
     {
         $menu_list=$this
