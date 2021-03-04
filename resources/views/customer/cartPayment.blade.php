@@ -43,14 +43,20 @@
             </div>
             <form role="form" method="POST" action="{{ url('/addPaymentMethod') }}">
                 @csrf
-
                 {{-- @foreach($payment_method_data as $pm_type)
-                <input type="radio" name="payment" id="stripe" value="1">
-                <label for="stripe" id="bank_transfer">
-                    <img src="{{asset($pm_type->logo) ?? ''}}" class="mr-2" style="height: 25px;"
-                        alt="cash on delivery">
-                    {{$pm_type->payment_methods ?? ''}}
-                </label>
+                    <input type="radio" name="payment" id="payment_{{$pm_type->payment_id ?? ''}}" value="{{$pm_type->payment_id ?? ''}}"
+                    @if ($pm_type->web_active == 1 || $pm_type->status == 1)
+                        disabled
+                    @endif>
+                    <label for="payment_{{$pm_type->payment_id ?? ''}}" id="bank_transfer">
+                        <img src="{{asset($pm_type->logo) ?? ''}}" class="mr-2" style="height: 25px;"
+                            alt="cash on delivery">
+                        {{$pm_type->payment_methods ?? ''}} <span>
+                            @if ($pm_type->status == 1)
+                                (Comming Soon)
+                            @endif
+                        </span>
+                    </label>
                 @endforeach --}}
 
                 <input type="radio" name="payment" id="stripe" value="1">
@@ -84,7 +90,7 @@
                 <label for="paypal">
                     <img src="{{asset('asset/customer/assets/images/paypal.svg')}}" alt="paypal"> (Currency Conversion -> comming soon)
                 </label>
-                <input type="radio" name="payment" id="paypal" value="5" disabled>
+                <input type="radio" name="payment" id="paypal" value="2" disabled>
                 <label for="paypal">
                     <img src="https://media.glassdoor.com/sqll/903157/quisk-squarelogo-1476479951808.png" alt="paypal" height="30px" width="30px"> Quisk (comming soon)
                 </label>
