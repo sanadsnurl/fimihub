@@ -77,6 +77,10 @@
                             <div class="form-footer">
                                 <input type="submit" class="btn btn-primary" value="Add category"></input>
 
+                                <a href="{{url()->previous()}}" >
+                                    <span class="btn btn-danger">Back</span>
+                                </a>
+
                             </div>
                         </form>
                     </div>

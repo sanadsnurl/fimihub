@@ -25,8 +25,10 @@ use Carbon\Carbon;
 use Session;
 use File;
 use Illuminate\Validation\Rule;
+use stdClass;
 use Yajra\DataTables\DataTables;
 
+use function GuzzleHttp\json_decode;
 
 class RestaurentController extends Controller
 {
@@ -397,10 +399,14 @@ class RestaurentController extends Controller
             ->get();
 
         $menu_lists = new menu_list;
-        $menu_data = $menu_lists->menuListById($dish_id);
-
-        $menu_data->product_add_on_id = json_decode($menu_data->product_add_on_id);
+        $menu_data = $menu_lists->menuListByIdWithBlock($dish_id);
         // dd($menu_data);
+
+        if(isset($menu_data->product_add_on_id)){
+            $menu_data->product_add_on_id = json_decode($menu_data->product_add_on_id);
+        } else {
+            $menu_data->product_add_on_id = [];
+        }
         return view('restaurent.editMenu')->with([
             'data' => $user,
             'menu_data' => $menu_data,

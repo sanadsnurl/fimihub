@@ -22,6 +22,11 @@
                         </div>
 
                         @endif
+
+                        <a href="{{url('adminfimihub/customerOrder')}}" >
+                            <span class="btn btn-danger" style="float: right;">Refresh</span>
+
+                        </a>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">

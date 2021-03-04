@@ -36,7 +36,7 @@
 
 
                                         <th>S.No.</th>
-                                        <th>Create At</th>
+                                        <th>Order date</th>
                                         <th>Order Time</th>
                                         <th>Order Id</th>
                                         <th>Customer Mobile</th>

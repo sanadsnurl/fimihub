@@ -259,6 +259,7 @@ class RestaurentController extends Controller
             'close_time' => 'string|nullable',
             'address_address' => 'required|string',
             'pincode' => 'string|nullable',
+            'password' => 'min:6|nullable',
             'resto_type' => 'in:1,2,3|nullable',
 
         ]);
@@ -316,10 +317,15 @@ class RestaurentController extends Controller
                             'id' => $data['user_id'],
                             'email' =>$data['email']
                         ];
+
+                        if(!empty($data['password'])){
+                            $user_update_data['password'] =\Hash::make($data['password']);
+                        }
                         $users = new User;
                         $user =$users->UpdateLogin($user_update_data);
                     }
                     unset($data['email']);
+                    unset($data['password']);
                     $resto_id = $restaurent_detail->insertUpdateRestoData($data);
                     Session::flash('message', 'Restaurent Data Updated !');
 

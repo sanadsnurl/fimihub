@@ -10,6 +10,11 @@
             <div class="col-lg-10">
                 <div class="card">
                     <div class="card-body">
+
+                        <a href="{{url()->previous()}}" style="float:right;">
+                            <span class="btn btn-danger">Back</span>
+                        </a>
+
                         <form role="form" method="POST" action="{{ url('Restaurent/addRestaurentDetails')}}"
                             id="personal-info" enctype="multipart/form-data">
                             @csrf
