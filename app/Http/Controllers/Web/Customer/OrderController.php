@@ -29,6 +29,7 @@ use App\Model\cart_customization;
 use App\Model\menu_custom_list;
 use App\Model\menu_customization;
 use App\Model\payment_gateway_txn;
+use App\Model\payment_method;
 use App\Model\saved_card;
 use Illuminate\Support\Facades\DB;
 use Response;
@@ -53,6 +54,10 @@ class OrderController extends Controller
         $user_address = new user_address();
         $user_default_add = $user_address->getDefaultAddress($user->id);
 
+        $payment_methods = new payment_method();
+        $payment_method_data = $payment_methods->getPaymentMethodList($user->id)->get();
+
+// dd($payment_method_data);
         if ($user_default_add != NULL) {
 
             $user_address = new user_address();
@@ -137,6 +142,7 @@ class OrderController extends Controller
                     $user->currency = $this->currency;
                     return view('customer.cartPayment')->with([
                         'user_data' => $user,
+                        'payment_method_data' => $payment_method_data,
                         'menu_data' => $cart_menu_data,
                         'card_data' => $card_data,
                         'user_add_def' => $user_add_def,
@@ -201,10 +207,10 @@ class OrderController extends Controller
             if ($cart_menu_data != NULL) {
                 $restaurent_detail = new restaurent_detail;
                 $resto_data_with_time = $restaurent_detail->checkRestoTimeAvailiability($cart_avail->restaurent_id);
-                if ($resto_data_with_time == NULL) {
-                    Session::flash('message', 'Restaurant Currently Closed !');
-                    return redirect()->back();
-                }
+                // if ($resto_data_with_time == NULL) {
+                //     Session::flash('message', 'Restaurant Currently Closed !');
+                //     return redirect()->back();
+                // }
                 foreach ($cart_menu_data as $m_data) {
 
                     $add_ons = array();

@@ -116,6 +116,7 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
         Route::get('getCartDetails', 'Api\user\CartController@getCartDetails');
         //Get cart details
         Route::post('addToCart', 'Api\user\CartController@addToCart');
-
+        //Get Payment method
+        Route::get('getPaymentMethod', 'Api\user\OrderController@getPaymentMethod');
     });
 });

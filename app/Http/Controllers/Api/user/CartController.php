@@ -54,9 +54,8 @@ class CartController extends Controller
             $restaurent_detail = new restaurent_detail;
             $resto_data = $restaurent_detail->getRestoDataOnId($cart_avail->restaurent_id);
 
-            $user_add_def = $user_address->getDefaultAddress($user->id) ?? '';
-            $resto_add_def = $user_address->getUserAddress($resto_data->user_id) ?? '';
-
+            $user_add_def = $user_address->getDefaultAddress($user->id) ?? null;
+            $resto_add_def = $user_address->getUserAddress($resto_data->user_id) ?? null;
 
             $cart_submenu = new cart_submenu();
             $quant_details = array();
@@ -116,13 +115,112 @@ class CartController extends Controller
                 'resto_id' =>$quant_details['restaurent_id']
                 ];
                 $billing_balance = ($this->getBilling($billing_data_arary));
+                if(count($cart_menu_data)){
+                    foreach($cart_menu_data as $m_data){
+                        // return $m_data;
+                        // $m_data->variant_data_cat->variant_menu = array();
+                        $variant_menu = array();
+                        // return ( $m_data->variant_data_cat->variant_menu );
+                        if(count($m_data->variant_data)){
+                            foreach($m_data->variant_data as $variant_d){
+                                if($m_data->variant_data_cat->cats_id == $variant_d->resto_custom_cat_id){
+                                    $variant_menu[] = $variant_d;
+                                }
+                                $m_data->variant_data_cat->variant_menu = $variant_menu;
+                            }
+                        }
+                        if(count($m_data->add_ons_cat)){
+                            $add_on_menu_cat = array();
+                            foreach($m_data->add_ons_cat as $add_cat_loop_data){
+                                if( $add_cat_loop_data != NULL){
+                                    $add_cat_loop_data->add_on_menu = array();
+                                    $add_on_menu = array();
+                                    // $add_on_menu_cat[] = $add_cat_loop_data;
+                                    // return ($add_cat_loop_data);
+                                    if(count($m_data->add_on)){
+                                        foreach($m_data->add_on as $add_loop_data){
+                                            if(count($add_loop_data)){
+                                                foreach($add_loop_data as $add_loop_data_m){
+                                                // return ($add_loop_data_m);
+                                                if($add_cat_loop_data->cats_id == $add_loop_data_m->resto_custom_cat_id){
+                                                    $add_on_menu[] = $add_loop_data_m;
+                                                }
+                                            }
+                                            $add_cat_loop_data->add_on_menu = $add_on_menu;
+                                            }
+                                        }
+                                        $add_on_menu_cat[] = $add_cat_loop_data;
+                                    }
+                                }
+                                $m_data->add_ons_cat = $add_on_menu_cat;
+                            }
+                        }
+
+                        unset($m_data->variant_data);
+                        unset($m_data->add_on);
+                        if(!isset($m_data->product_adds_id)){
+                            $m_data->product_adds_id = [];
+                        }
+                        if(!isset($m_data->quantity)){
+                            $m_data->quantity = 0;
+                        }else{
+                            $m_data->quantity = (int)$m_data->quantity;
+                        }
+                        if(!isset($m_data->cart_variant_id)){
+                            $m_data->cart_variant_id = 0;
+                        }
+
+                    }
+            }
+
+            $delivery_charge = 0;
+            if(!empty($user_add_def)){
+                $delivery_distance = $this->getDistanceBetweenPointsNew($user_add_def->latitude,
+                                $user_add_def->longitude,
+                                $resto_add_def[0]->latitude,
+                                $resto_add_def[0]->longitude
+                            ) ?? -1;
+            }else{
+                $delivery_charge = 0;
+            }
+            if($delivery_distance == -1){
+                return response()->json([
+                    'message' => 'Invalid Address !',
+                    'status' => false
+                ], $this->invalidStatus);
+            }else{
+                // dd($billing_balance['service_data']);
+                $delivery_distance = (float)str_replace('', 'km', $delivery_distance);
+                if ($delivery_distance <= 10000) {
+                    if ($delivery_distance <= $billing_balance['service_data']->on_km) {
+                        $delivery_charge = $billing_balance['service_data']->flat_delivery_charge;
+                    } else if ($delivery_distance > $billing_balance['service_data']->on_km) {
+                        $extra_km = $delivery_distance - $billing_balance['service_data']->on_km;
+                        $delivery_charge = $billing_balance['service_data']->flat_delivery_charge + $extra_km * $billing_balance['service_data']->after_flat_delivery_charge;
+
+                    } else {
+                        return response()->json([
+                            'message' => 'Invalid Address !',
+                            'status' => false
+                        ], $this->invalidStatus);
+
+                    }
+                } else {
+                    return response()->json([
+                        'message' => 'No Nearby Restaurant Located !',
+                        'status' => true
+                    ], $this->successStatus);
+                }
+            }
+            // dd($delivery_charge);
                 $user->currency = $this->currency;
                 return response()->json([
                     'cart_menu_data' => $cart_menu_data,
                     'user_default_address' => $user_add_def,
                     'resto_default_address' => $resto_add_def,
                     'total_amount' => $billing_balance['total_amount'],
-                    'grand_total_amount' =>$billing_balance['total_amount_last'],
+                    'delivery_charge' => (float)$delivery_charge ?? 0,
+                    'grand_total_amount' =>$billing_balance['total_amount_last'] + (float)$delivery_charge ?? 0,
                     'item' => $billing_balance['item'],
                     'service_data' => $billing_balance['service_data'],
                     'sub_total_without_commision' => $billing_balance['sub_total'],
