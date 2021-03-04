@@ -48,6 +48,10 @@
                                 <label class="col-lg-3 col-form-label form-control-label"></label>
                                 <div class="col-lg-9">
                                     <button type="submit" class="btn btn-info">Update</button>
+
+                                    <a href="{{url()->previous()}}" >
+                                        <span class="btn btn-danger">Back</span>
+                                    </a>
                                 </div>
 
                             </div>
