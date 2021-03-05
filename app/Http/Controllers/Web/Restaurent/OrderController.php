@@ -61,7 +61,7 @@ class OrderController extends Controller
                         $btn .= '<a href="acceptOrder?odr_id=' . base64_encode($row->id) . '" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Accept</a>
                         <a href="rejectOrderPage?odr_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Reject</a>';
                     }
-                    $btn .= '<a href="deleteOrder?odr_id=' . base64_encode($row->id) . '" class="btn btn-outline-warning btn-sm btn-round waves-effect waves-light ">Delete</a>';
+                    // $btn .= '<a href="deleteOrder?odr_id=' . base64_encode($row->id) . '" class="btn btn-outline-warning btn-sm btn-round waves-effect waves-light ">Delete</a>';
                     return $btn;
                 })
                 ->addColumn('created_at', function ($row) {
@@ -102,7 +102,8 @@ class OrderController extends Controller
                     } elseif ($row->order_status == 7) {
                         return "Order Picked";
                     } elseif ($row->order_status == 9) {
-                        return "Order Recieved";
+                        // return "Order Recieved";
+                        return "Order Delivered";
                     } elseif ($row->order_status == 10) {
                         return "Order Refunded";
                     } else {
@@ -559,7 +560,8 @@ class OrderController extends Controller
             } elseif ($order_data->order_status == 7) {
                 $order_data->order_status = "Order Picked";
             } elseif ($order_data->order_status == 9) {
-                $order_data->order_status = "Order Recieved";
+                // $order_data->order_status = "Order Recieved";
+                $order_data->order_status = "Order Delivered";
             } elseif ($order_data->order_status == 10) {
                 $order_data->order_status = "Order Refunded";
             } else {

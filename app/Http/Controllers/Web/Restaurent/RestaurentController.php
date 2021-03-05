@@ -174,8 +174,9 @@ class RestaurentController extends Controller
 
 
                 ->addColumn('action', function($row){
-                    $btn = '<a href="editMainCategory?dish_main_cat_id=' . base64_encode($row->id) . '" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Edit</a>
-                    <a href="deleteMainCat?dish_cat_id='.base64_encode($row->id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Delete</a>';
+                    // $btn = '<a href="editMainCategory?dish_main_cat_id=' . base64_encode($row->id) . '" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Edit</a>
+                    // <a href="deleteMainCat?dish_cat_id='.base64_encode($row->id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Delete</a>';
+                    $btn = '<a href="editMainCategory?dish_main_cat_id=' . base64_encode($row->id) . '" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Edit</a>';
                     return $btn;
                 })
                 ->addColumn('created_at', function ($row) {
@@ -579,8 +580,9 @@ class RestaurentController extends Controller
             return Datatables::of($menu_customization_data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $btn = '<a href="editAddOn?custom_id=' . base64_encode($row->id) . '" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Edit</a>
-                        <a href="deleteAddOn?custom_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Delete</a>';
+                    // $btn = '<a href="editAddOn?custom_id=' . base64_encode($row->id) . '" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Edit</a>
+                    //     <a href="deleteAddOn?custom_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Delete</a>';
+                        $btn = '<a href="editAddOn?custom_id=' . base64_encode($row->id) . '" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Edit</a>';
                     return $btn;
                 })
                 ->addColumn('created_at', function ($row) {

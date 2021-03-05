@@ -12,11 +12,14 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use App\Http\Traits\NotificationTrait;
 use App\Http\Traits\LatLongRadiusScopeTrait;
+use App\Model\cart;
+use App\Model\menu_list;
 use App\Model\restaurent_detail;
 use App\Model\Notification;
 use App\Model\order;
 use App\Model\OrderEvent;
 use App\Model\payment_gateway_txn;
+use App\Model\ServiceCategory;
 use App\Model\user_address;
 use Response;
 use Session;
@@ -66,22 +69,25 @@ class OrderController extends Controller
                 ->addColumn('order_status', function ($row) {
 
                     if ($row->order_status == 3) {
-                        return "Restaurent Approval Needed";
+                        $orderStatus = "Restaurent Approval Needed";
                     } elseif ($row->order_status == 5) {
-                        return "Order Placed";
+                        $orderStatus = "Order Placed";
                     } elseif (in_array($row->order_status, array(2, 4, 8))) {
-                        return "Order Cancelled";
+                        $orderStatus = "Order Cancelled";
                     } elseif ($row->order_status == 6) {
-                        return "Order Packed";
+                        $orderStatus = "Order Packed";
                     } elseif ($row->order_status == 7) {
-                        return "Order Picked";
+                        $orderStatus = "Order Picked";
                     } elseif ($row->order_status == 9) {
-                        return "Order Recieved";
+                        $orderStatus = "Order Recieved";
                     } elseif ($row->order_status == 10) {
-                        return "Order Refunded";
+                        $orderStatus = "Order Refunded";
                     } else {
-                        return "N.A";
+                        $orderStatus = "N.A";
                     }
+                    $btn = $orderStatus.'<p><a href="trackOrder?odr_id=' . base64_encode($row->id) . '" class="btn btn-outline-primary btn-sm btn-round waves-effect waves-light ">Track Order</a></p>';
+                    return $btn;
+
                 })
                 ->addColumn('ordered_menu', function ($row) {
                     $order_menu = "";
@@ -173,7 +179,7 @@ class OrderController extends Controller
                     }
                     return $order_menu;
                 })
-                ->rawColumns(['action', 'ordered_menu'])
+                ->rawColumns(['action', 'ordered_menu', 'order_status'])
                 ->make(true);
         }
         $user['currency'] = $this->currency;
@@ -326,6 +332,23 @@ class OrderController extends Controller
                 if ($o_event->user_type == 2) {
                     $event_data['restaurant'] = $o_event;
                 } elseif ($o_event->user_type == 1) {
+
+                    if ($o_event->order_status == 1) {
+                        $o_event->order_status = "Arriving to store";
+                    } elseif ($o_event->order_status == 2) {
+                        $o_event->order_status = "Arrived at store";
+                    } elseif ($o_event->order_status == 3) {
+                        $o_event->order_status = "Order Picked Up";
+                    } elseif ($o_event->order_status == 4) {
+                        $o_event->order_status = "On the way";
+                    } elseif ($o_event->order_status == 5) {
+                        $o_event->order_status = "Order Delivered";
+                    } elseif ($o_event->order_status == 6) {
+                        $o_event->order_status = "Order Rejected";
+                    } else {
+                        $o_event->order_status = "N.A";
+                    }
+
                     $event_data['rider'] = $o_event;
                     $ride_event_data = auth()->user()->userByIdData($o_event->user_id);
                     $event_data['rider_details'] = $ride_event_data;
@@ -415,5 +438,117 @@ class OrderController extends Controller
         Session::flash('message', 'Order Deleted Successfully !');
 
         return redirect()->back();
+    }
+
+
+
+    public function trackOrder(Request $request)
+    {
+        $user = Auth::user();
+        // $user = $this->getBasicCount($user);
+
+        $order_id = base64_decode(request('odr_id'));
+        $orders = new order;
+        $order_data = $orders->getOrderData($order_id);
+        $menu_order = json_decode($order_data->ordered_menu);
+        if ($menu_order == NULL) {
+        }
+        $menu_data = array();
+        $menu_data_list = array();
+        $add_on_data = array();
+
+        $item = 0;
+        $custom_count = 0;
+        $custom_total = 0;
+        $total_cart_value = 0;
+        foreach ($menu_order as $m_data) {
+            $menu_list = new menu_list;
+            $menu_data_list = $menu_list->orderMenuListById($m_data->id);
+
+            if ($menu_data_list != null) {
+
+                $item = $item + $m_data->quantity;
+                $menu_data_list->quantity = $m_data->quantity;
+                $menu_data_list->price = $m_data->price;
+                $total_cart_value = $total_cart_value + $m_data->price * $m_data->quantity;
+                // dd($m_data->add_on);
+                $add_on_data = array();
+                if ($m_data->add_on) {
+                    foreach ($m_data->add_on as $add_data) {
+
+                        // $total_cart_value = $total_cart_value + $add_data->price * $add_data->quantity;
+                        $add_on_data[] = $add_data;
+                    }
+                }
+
+                $menu_data_list->add_on_data = $add_on_data;
+                $menu_data[] = $menu_data_list;
+            }
+        }
+        // dd($add_on_data);
+        $restaurent_detail = new restaurent_detail;
+        $resto_data = $restaurent_detail->getRestoDataOnIdNotDel($order_data->restaurent_id);
+
+        $resto_data->delivery_fee = $order_data->delivery_fee;
+        $cart = new cart;
+        $cart_data = $cart->getCartData($order_data->id);
+
+        $service_data = array();
+        $service_data['tax'] = $order_data->service_tax;
+        $service_data['commission'] = $order_data->service_commission;
+        $service_data = json_encode($service_data);
+        $service_data = json_decode($service_data);
+        // $total_amount = ($total_amount - $resto_data->discount) + $resto_data->delivery_charge + $resto_data->tax
+        $service_tax = $order_data->total_amount;
+        $service_data->service_tax = $service_tax;
+        $sub_total = $total_cart_value;
+        $user['currency'] = $this->currency;
+
+        if ($order_data != NULL) {
+            $OrderEvents = new OrderEvent;
+            $order_event_data = $OrderEvents->getOrderEvent($order_id);
+            $event_data = array();
+            foreach ($order_event_data as $o_event) {
+                if ($o_event->user_type == 2) {
+                    $event_data['restaurant'] = $o_event;
+                } elseif ($o_event->user_type == 1) {
+                    $event_data['rider'] = $o_event;
+                    $ride_event_data = auth()->user()->userByIdData($o_event->user_id);
+                    $event_data['rider_details'] = $ride_event_data;
+                }
+            }
+            $total_amount = abs($order_data->total_amount - $order_data->delivery_fee);
+            $ServiceCategories = new ServiceCategory();
+            $service_data = $ServiceCategories->getServiceById(1);
+
+            $sub_total = $total_amount / (1 + ($order_data->service_tax / 100));
+
+            $service_tax = (($order_data->service_tax / 100) * $sub_total);
+            $service_data->service_tax = $service_tax;
+
+            $event_data = json_encode($event_data);
+            $event_data = json_decode($event_data);
+            $order_data->delivery_time = strtotime("+40 minutes", strtotime($order_data->created_at));
+            $order_data->delivery_time = date('h:i', $order_data->delivery_time);
+            // dd($order_data->delivery_time);
+
+            return view('admin.trackOrder')->with([
+                'user_data' => $user,
+                'order_data' => $order_data,
+                'add_on_data' => ($add_on_data),
+                'menu_data' => json_decode($order_data->ordered_menu),
+                'resto_data' => $resto_data,
+                'total_amount_last' => $order_data->total_amount,
+                'order_event_data' => $event_data,
+                'sub_total' => $sub_total,
+                'service_data' => $service_data,
+                'total_amount' => $sub_total,
+                'item' => $item,
+                'data' => $user
+            ]);
+        } else {
+            Session::flash('message', 'Order Details Found !');
+            return redirect()->back();
+        }
     }
 }

@@ -39,6 +39,7 @@
                                         <th>S.No.</th>
                                         <th>Order Id</th>
                                         <th>Restaurant Name</th>
+                                        <th>Restaurant Mobile</th>
                                         <th>Customer Mobile</th>
                                         <th>Customer Name</th>
                                         <th>Order Status</th>
@@ -115,6 +116,16 @@
                     render: function(data, type, row) {
                         if (row.restaurent_details) {
                             return row.restaurent_details.name;
+                        }
+                        return 'N.A';
+                    },
+                },
+                {
+                    data: 'restaurent_details.official_number',
+                    render: function(data, type, row) {
+                        if (row.restaurent_details) {
+                            console.log( row.restaurent_details);
+                            return row.restaurent_details.official_number;
                         }
                         return 'N.A';
                     },
