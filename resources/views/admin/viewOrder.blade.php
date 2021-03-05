@@ -88,8 +88,12 @@
                                 <span >{{$data->currency ?? ''}} {{$order_data->total_amount ?? ''}}</span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <b>Created At</b>
-                                <span >{{$order_data->created_at ?? ''}}</span>
+                                <b>Order Date</b>
+                                <span >{{date('d F Y', strtotime($order_data->created_at)) ?? '--'}}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <b>Order time</b>
+                                <span >{{date('h:i A', strtotime($order_data->created_at)) ?? '--'}}</span>
                             </li>
 
                         </ul>
