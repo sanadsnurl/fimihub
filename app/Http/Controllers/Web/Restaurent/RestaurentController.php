@@ -835,8 +835,9 @@ class RestaurentController extends Controller
             return Datatables::of($menu_data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $btn = '<a href="editCustomMenu?custom_menu_id=' . base64_encode($row->id) . '" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Edit</a>
-                    <a href="deleteCustomMenu?custom_menu_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Delete</a>';
+                    // $btn = '<a href="editCustomMenu?custom_menu_id=' . base64_encode($row->id) . '" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Edit</a>
+                    // <a href="deleteCustomMenu?custom_menu_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Delete</a>';
+                    $btn = '<a href="editCustomMenu?custom_menu_id=' . base64_encode($row->id) . '" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Edit</a>';
                     return $btn;
                 })
                 ->addColumn('created_at', function ($row) {
