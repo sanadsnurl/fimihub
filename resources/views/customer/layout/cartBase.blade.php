@@ -244,7 +244,19 @@
 
                                     @endif
                                     <p>
-                                        {{$order_event_data->rider_details->vehicleDetails->color ?? ''}}
+                                        Color : {{$order_event_data->rider_details->vehicle_details->color ?? ''}}
+                                    </p>
+                                    <p>
+                                        Model Name : {{$order_event_data->rider_details->vehicle_details->model_name ?? ''}}
+                                    </p>
+                                    <p>
+                                        Vehicle Plate # : {{$order_event_data->rider_details->vehicle_details->vehicle_number ?? ''}}
+                                    </p>
+                                    <p>
+                                        Completed Order : {{$order_event_data->rider_rating_data->rating_count ?? '0'}}
+                                    </p>
+                                    <p>
+                                       Working Started Year : {{date('Y',strtotime($order_event_data->rider_details->vehicle_details->created_at)) ?? '0'}}
                                     </p>
                                     <div class="img-wrap">
 
