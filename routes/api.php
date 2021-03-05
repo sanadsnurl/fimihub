@@ -118,5 +118,19 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
         Route::post('addToCart', 'Api\user\CartController@addToCart');
         //Get Payment method
         Route::get('getPaymentMethod', 'Api\user\OrderController@getPaymentMethod');
+        //Make Payment
+        Route::post('makeOrder', 'Api\user\OrderController@setPaymentMethod');
+        //Track Order
+        Route::get('trackOrder', 'Api\user\OrderController@trackOrder');
+        //Get Past Order
+        Route::get('getPastOrder', 'Api\user\UserController@getMyPastOrder');
+        //Get Current Order
+        Route::get('getCurrentOrder', 'Api\user\UserController@getMyCurrentOrder');
+        //Order Feedback
+        Route::post('orderFeedback', 'Api\user\OrderController@orderFeedback');
+        //Update Profile
+        Route::post('updateProfile', 'Api\user\UserController@updateProfile');
+        //Contact Us
+        Route::post('contactUs', 'Api\user\UserController@contactUs');
     });
 });

@@ -80,7 +80,7 @@
                             </div>
 
                             <div class="form-footer">
-                                <input type="submit" class="btn btn-primary" value="Add category"></input>
+                                <input type="submit" class="btn btn-primary" value="Update category"></input>
 
                             </div>
                         </form>

@@ -83,24 +83,24 @@
                                                                             Name :
                                                                         </th>
                                                                         <td>
-                                                                            {{$data->name}}
+                                                                            {{$data->name ?? 'suresh'}}
                                                                         </td>
 
                                                                     </tr>
                                                                     <tr>
                                                                         <th>Email-Id</th>
-                                                                        <td>{{$data->email}}</td>
+                                                                        <td>{{$data->email ?? 'suresh'}}</td>
 
 
                                                                     </tr>
                                                                     <tr>
                                                                         <th>Contact Number</th>
-                                                                        <td>{{$data->mobile}}</td>
+                                                                        <td>{{$data->mobile ?? 'suresh'}}</td>
 
                                                                     </tr>
                                                                     <tr>
                                                                         <th>Message</th>
-                                                                        <td>{{$data->message}}</td>
+                                                                        <td>{{$data->message ?? 'suresh'}}</td>
                                                                     </tr>
                                                                 </table>
                                                             </td>

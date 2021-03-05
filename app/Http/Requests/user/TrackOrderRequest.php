@@ -7,8 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Contracts\Validation\Validator;
 
-
-class SetPaymentMethod extends FormRequest
+class TrackOrderRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,14 +27,8 @@ class SetPaymentMethod extends FormRequest
     public function rules()
     {
         $validator = [
-        'payment' => 'required|exists:payment_methods,payment_id',
-        'cvv' => 'required_if:payment,4|digits:3|nullable',
-        'card_expiry_date' => 'required_if:payment,4|nullable',
-        'card_number' => 'required_if:payment,4|nullable',
-        'person_name' => 'required_if:payment,4|string|nullable',
-        'remember_card' => 'integer|nullable',
-        'address_id' => 'required|integer|exists:user_address,id'
-        ];
-        return $validator;
+            'order_id' => 'required|numeric|exists:orders,id',
+            ];
+            return $validator;
     }
 }

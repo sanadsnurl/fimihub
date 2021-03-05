@@ -174,12 +174,12 @@ class CartController extends Controller
             }
 
             $delivery_charge = 0;
+            $delivery_distance = 0;
             if(!empty($user_add_def)){
                 $delivery_distance = $this->getDistanceBetweenPointsNew($user_add_def->latitude,
                                 $user_add_def->longitude,
                                 $resto_add_def[0]->latitude,
-                                $resto_add_def[0]->longitude
-                            ) ?? -1;
+                                $resto_add_def[0]->longitude) ?? -1;
             }else{
                 $delivery_charge = 0;
             }

@@ -486,8 +486,17 @@ class OrderController extends Controller
                     $event_data['restaurant'] = $o_event;
                 } elseif ($o_event->user_type == 1) {
                     $event_data['rider'] = $o_event;
-                    $ride_event_data = auth()->user()->userByIdData($o_event->user_id);
+                    $users = new User();
+                    $ride_event_data = $users->userIdData($o_event->user_id)->with(['riderBankDetails','vehicleDetails'])->first();
                     $event_data['rider_details'] = $ride_event_data;
+                    $order_events = new OrderEvent();
+                    $rating_array = ['user_id'=> $event_data['rider_details']['id'],
+                                    'user_type'=>1
+                                ];
+                    $rating_data = $order_events->getOrderEventRatingData($rating_array)->first();
+                    $event_data['rider_rating_data'] = $rating_data;
+
+
                 }
             }
             $total_amount = abs($order_data->total_amount - $order_data->delivery_fee);
@@ -503,8 +512,8 @@ class OrderController extends Controller
             $event_data = json_decode($event_data);
             $order_data->delivery_time = strtotime("+40 minutes", strtotime($order_data->created_at));
             $order_data->delivery_time = date('h:i', $order_data->delivery_time);
-            // dd($order_data->delivery_time);
-
+            // dd($event_data);
+// dd($event_data->rider->vehicleDetails->color);
             return view('customer.trackOrder')->with([
                 'user_data' => $user,
                 'order_data' => $order_data,

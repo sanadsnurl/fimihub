@@ -223,14 +223,31 @@
                                 <div>
 
                                     <p>{{$order_event_data->rider_details->name ?? '---'}}</p>
+                                    @if($order_event_data->rider_rating_data->rating_count >10)
+                                    <h5>{{$order_event_data->rider_rating_data->rating_count ?? '--'}} Rating</h5>
                                     <div class="img-wrap">
-                                        {{-- <span class="js-star-rating rating_star" data-rating="4.5">
-                                                <span class="fa fa-star-o"></span>
-                                                <span class="fa fa-star-o"></span>
-                                                <span class="fa fa-star-o"></span>
-                                                <span class="fa fa-star-o"></span>
-                                                <span class="fa fa-star-o"></span>
-                                            </span> --}}
+                                        <span class="js-star-rating rating_star"
+                                            data-rating="{{$order_event_data->rider_rating_data->rating ?? '4'}}">
+                                            <span class="fa fa-star-o"></span>
+                                            <span class="fa fa-star-o"></span>
+                                            <span class="fa fa-star-o"></span>
+                                            <span class="fa fa-star-o"></span>
+                                            <span class="fa fa-star-o"></span>
+                                        </span>
+                                    </div>
+                                    @else
+                                    <span class="js-star-rating rating_star"
+                                        data-rating="{{$order_event_data->rider_rating_data->rating ?? '4'}}">
+                                        New <span class="fa fa-star-o"></span>
+
+                                    </span>
+
+                                    @endif
+                                    <p>
+                                        {{$order_event_data->rider_details->vehicleDetails->color ?? ''}}
+                                    </p>
+                                    <div class="img-wrap">
+
                                     </div>
                                 </div>
 
