@@ -38,6 +38,13 @@
                                 </thead>
                                 <tbody>
                                 </tbody>
+                                <th>TOTAL</th>
+                                <th> -- </th>
+                                <th>{{$total_earning->order_earning ?? 0}}</th>
+                                <th>--</th>
+                                <th>--</th>
+                                <th>--</th>
+
 
                             </table>
                         </div>

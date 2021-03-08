@@ -19,6 +19,9 @@
                         <a href="{{url('Restaurent/customerOrder')}}" style="float:right;">
                             <span class="btn btn-danger">Back</span>
                         </a>
+                        <a href="{{url(Request::fullUrl())}}" style="float:right;">
+                            <span class="btn btn-info">Refresh</span>
+                        </a>
 
                     </div>
                     <div class="card-body">

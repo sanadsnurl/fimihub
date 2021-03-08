@@ -10,6 +10,7 @@ use App\Model\cart;
 use App\Model\cart_submenu;
 use App\Model\menu_list;
 use App\Model\menu_custom_list;
+use App\Model\restaurent_detail;
 use App\Model\ServiceCategory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -181,10 +182,13 @@ trait BillingCalculateTraits
                 $total_amount = $total_amount + ($m_data->quantity * $m_data->price);
             }
         }
-
+        $restaurent_detail = new restaurent_detail;
+        $resto_data = $restaurent_detail->getRestoDataOnId($quant_details['restaurent_id']);
         $ServiceCategories = new ServiceCategory();
         $service_data = $ServiceCategories->getServiceById(1);
-
+        if($resto_data->resto_tax_status == 2) {
+            $service_data->tax = 0;
+        }
         $sub_total = $total_amount / (1 + ($service_data->tax / 100));
 
         $service_tax = (($service_data->tax / 100) * $total_amount);

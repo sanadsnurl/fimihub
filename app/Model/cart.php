@@ -37,7 +37,7 @@ class cart extends Model
     public function getCartData($data)
     {
         try {
-            $carts=DB::table('carts')
+            $carts=$this
                 ->where('id', $data)
                 ->first();
 
@@ -51,7 +51,7 @@ class cart extends Model
     public function updateCart($data)
     {
         try {
-            $carts=DB::table('carts')
+            $carts=$this
                 ->where('visibility', 0)
                 ->where('id', $data['id'])
                 ->update($data);

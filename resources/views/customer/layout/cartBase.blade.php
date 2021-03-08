@@ -52,6 +52,7 @@
                                 </div>
                                 <div class="col-md-8">
                                     <h4>{{$resto_data->name ?? ''}}</h4>
+                                    <h4>{{$resto_data->name ?? ''}}</h4>
                                     <p>{{$resto_data->address ?? ''}}</p>
                                 </div>
                             </div>
@@ -268,6 +269,8 @@
                         </div>
                         <a href="tel:{{$order_event_data->rider_details->mobile ?? '---'}}" class="call_btn">Call</a>
                     </div>
+
+
                     @endif
 
                     @else
