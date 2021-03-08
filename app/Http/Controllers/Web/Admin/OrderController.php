@@ -385,7 +385,7 @@ class OrderController extends Controller
     public function orderPaidProcess(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'txn_id' => 'required|string',
+            'txn_id' => 'required|string|unique:payment_gateway_txns,txn_id',
 
         ]);
         if (!$validator->fails()) {
