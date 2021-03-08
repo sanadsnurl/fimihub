@@ -291,14 +291,14 @@ class RiderController extends Controller
     public function nearByRider(){
         $user = Auth::user();
         $users = new User;
-        $rider_list = $users->allUserPaginateListRiderData(2)->with(['userAddress'])->get();
+        $rider_list = $users->allUserPaginateListRiderData(2)->where('users.status',1)->with(['userAddress'])->get();
         $location = array();
         $locations = array();
         $i = 1;
         foreach($rider_list as $r_list){
+            $map_text = $r_list->name."<br>".$r_list->country_code." ".$r_list->mobile."<br>".(string)$r_list['userAddress'][0]->address;
 
-
-            $locations[] = [(string)$r_list['userAddress'][0]->address, (float)$r_list['userAddress'][0]->latitude, (float)$r_list['userAddress'][0]->longitude, $i];
+            $locations[] = [$map_text, (float)$r_list['userAddress'][0]->latitude, (float)$r_list['userAddress'][0]->longitude, $i];
         $i+=1;
         }
         $location =  json_encode($locations);

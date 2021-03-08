@@ -267,4 +267,41 @@ class order extends Model
 
         return $query_data;
     }
+
+    public function allUserOrderPastDataApp($user_id)
+    {
+        try {
+            $order_data=$this
+                ->join('restaurent_details as rd', 'rd.id', '=', 'orders.restaurent_id')
+                ->where('orders.visibility', 0)
+                ->whereIn('orders.order_status', [1,2,4,8,9,10])
+                ->where('orders.user_id', $user_id)
+                ->select('orders.*','rd.name as resto_name','rd.address as resto_address','rd.picture as resto_picture')
+                ->orderBy('orders.created_at' ,'DESC');
+
+            return $order_data;
+        }
+        catch (Exception $e) {
+            dd($e);
+        }
+    }
+
+    public function allUserCurrentAppOrderData($user_id)
+    {
+        try {
+            $order_data=$this
+                ->join('restaurent_details as rd', 'rd.id', '=', 'orders.restaurent_id')
+                ->where('orders.visibility', 0)
+                ->whereIn('orders.order_status', [3,5,6,7])
+                ->where('orders.user_id', $user_id)
+                ->select('orders.*','rd.name as resto_name','rd.address as resto_address','rd.picture as resto_picture')
+                ->orderBy('orders.created_at' ,'DESC');
+
+            return $order_data;
+        }
+        catch (Exception $e) {
+            dd($e);
+        }
+
+    }
 }

@@ -24,18 +24,19 @@ class EarningController extends Controller
         $restaurent_detail = new restaurent_detail();
         $resto_data = $restaurent_detail->getRestoData($user->id);
         $MyEarnings = new MyEarning();
-
         if ($resto_data == NULL) {
             $orders = new order;
             $order_data = $orders->customerOrderPaginationData(0);
         } else {
             $orders = new order;
             $order_data = $orders->customerOrderPaginationData($resto_data->id)
-                            ->whereIn('orders.order_status',[9,10]);
+            ->whereIn('orders.order_status',[9,10]);
         }
         $resto_id = $resto_data->id ?? 0;
         $resto_order_data = $MyEarnings->getMyEarningOnOrderResto($resto_id);
         $resto_order_data_sum = $MyEarnings->getMyTotalEarningResto($resto_id);
+        // dd($resto_order_data_sum);
+        $tax_sums = 0;
 // dd($resto_id);
         if ($request->ajax()) {
             return Datatables::of($resto_order_data)
@@ -98,6 +99,8 @@ class EarningController extends Controller
                     return round($total_earning,2);
                 })
                 ->addColumn('total_tax', function ($row) {
+                    $tax_sums = 1;
+                    $row->tax_sums = 1;
                     $delivery_fee = $row->delivery_fee;
                     $total_amount = round(abs($row->total_amount - $delivery_fee),2);
                     $tax = $row->service_tax;
@@ -105,6 +108,7 @@ class EarningController extends Controller
                     $total_tax = round(abs($total_amount - $sub_total),2);
 
                     return $total_tax;
+                    // dd($row);
                 })
                 ->addColumn('total_commission', function ($row) {
                     $delivery_fee = $row->delivery_fee;
@@ -119,7 +123,6 @@ class EarningController extends Controller
                 ->make(true);
         }
         $user['currency'] = $this->currency;
-
-        return view('restaurent.myEarnings')->with(['data' => $user,'total_earning'=>$resto_order_data_sum]);
+        return view('restaurent.myEarnings')->with(['data' => $user,'total_earning'=>$resto_order_data_sum,' tax_sums'=> 1 ]);
     }
 }

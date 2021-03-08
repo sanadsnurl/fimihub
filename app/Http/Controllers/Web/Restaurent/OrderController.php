@@ -61,7 +61,7 @@ class OrderController extends Controller
                         $btn .= '<a href="acceptOrder?odr_id=' . base64_encode($row->id) . '" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Accept</a>
                         <a href="rejectOrderPage?odr_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Reject</a>';
                     }
-                    $btn .= '<a href="deleteOrder?odr_id=' . base64_encode($row->id) . '" class="btn btn-outline-warning btn-sm btn-round waves-effect waves-light ">Delete</a>';
+                    // $btn .= '<a href="deleteOrder?odr_id=' . base64_encode($row->id) . '" class="btn btn-outline-warning btn-sm btn-round waves-effect waves-light ">Delete</a>';
                     return $btn;
                 })
                 ->addColumn('created_at', function ($row) {
@@ -89,6 +89,24 @@ class OrderController extends Controller
                         return "N.A";
                     }
                 })
+                ->filterColumn('payment_type', function ($query, $keyword) {
+                    $orderStatus = collect(array(
+                        1 => "Bank Transfer",
+                        2 => "Paypal",
+                        3 => "COD",
+                        4 => "Credit/Debit Card",
+                    ));
+                    $keys  = array();
+                    foreach($orderStatus as $key => $value) {
+                        if(!empty(strstr($value, $keyword))) {
+                            $keys[] = $key;
+                        }
+                    }
+
+                    if (count($keys)) {
+                        $query->whereIn("orders.payment_type", $keys);
+                    }
+                })
                 ->addColumn('order_status', function ($row) {
 
                     if ($row->order_status == 3) {
@@ -102,11 +120,36 @@ class OrderController extends Controller
                     } elseif ($row->order_status == 7) {
                         return "Order Picked";
                     } elseif ($row->order_status == 9) {
-                        return "Order Recieved";
+                        // return "Order Recieved";
+                        return "Order Delivered";
                     } elseif ($row->order_status == 10) {
                         return "Order Refunded";
                     } else {
                         return "N.A";
+                    }
+                })
+
+                ->filterColumn('order_status', function ($query, $keyword) {
+                    $orderStatus = collect(array(
+                        3 => "Restaurent Approval Needed",
+                        5 => "Order Placed",
+                        2 => "Order Cancelled",
+                        4 => "Order Cancelled",
+                        8 => "Order Cancelled",
+                        6 => "Order Packed",
+                        7 => "Order Picked",
+                        9 => "Order Delivered",
+                        10 => "Order Refunded",
+                    ));
+                    $keys  = array();
+                    foreach($orderStatus as $key => $value) {
+                        if(!empty(strstr($value, $keyword))) {
+                            $keys[] = $key;
+                        }
+                    }
+
+                    if (count($keys)) {
+                        $query->whereIn("orders.order_status", $keys);
                     }
                 })
 
@@ -559,7 +602,8 @@ class OrderController extends Controller
             } elseif ($order_data->order_status == 7) {
                 $order_data->order_status = "Order Picked";
             } elseif ($order_data->order_status == 9) {
-                $order_data->order_status = "Order Recieved";
+                // $order_data->order_status = "Order Recieved";
+                $order_data->order_status = "Order Delivered";
             } elseif ($order_data->order_status == 10) {
                 $order_data->order_status = "Order Refunded";
             } else {

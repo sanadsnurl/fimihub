@@ -182,13 +182,15 @@ class RestaurentManageController extends Controller
                 unset($m_data->variant_data);
                 unset($m_data->add_on);
                 if(!isset($m_data->product_adds_id)){
-                    $m_data->product_adds_id = NULL;
+                    $m_data->product_adds_id = [];
                 }
                 if(!isset($m_data->quantity)){
-                    $m_data->quantity = NULL;
+                    $m_data->quantity = 0;
+                }else{
+                    $m_data->quantity = (int)$m_data->quantity;
                 }
                 if(!isset($m_data->cart_variant_id)){
-                    $m_data->cart_variant_id = NULL;
+                    $m_data->cart_variant_id = 0;
                 }
             }
     }

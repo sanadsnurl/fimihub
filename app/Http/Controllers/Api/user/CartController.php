@@ -54,9 +54,8 @@ class CartController extends Controller
             $restaurent_detail = new restaurent_detail;
             $resto_data = $restaurent_detail->getRestoDataOnId($cart_avail->restaurent_id);
 
-            $user_add_def = $user_address->getDefaultAddress($user->id) ?? '';
-            $resto_add_def = $user_address->getUserAddress($resto_data->user_id) ?? '';
-
+            $user_add_def = $user_address->getDefaultAddress($user->id) ?? null;
+            $resto_add_def = $user_address->getUserAddress($resto_data->user_id) ?? null;
 
             $cart_submenu = new cart_submenu();
             $quant_details = array();
@@ -160,23 +159,68 @@ class CartController extends Controller
                         unset($m_data->variant_data);
                         unset($m_data->add_on);
                         if(!isset($m_data->product_adds_id)){
-                            $m_data->product_adds_id = NULL;
+                            $m_data->product_adds_id = [];
                         }
                         if(!isset($m_data->quantity)){
-                            $m_data->quantity = NULL;
+                            $m_data->quantity = 0;
+                        }else{
+                            $m_data->quantity = (int)$m_data->quantity;
                         }
                         if(!isset($m_data->cart_variant_id)){
-                            $m_data->cart_variant_id = NULL;
+                            $m_data->cart_variant_id = 0;
                         }
+
                     }
             }
+
+            $delivery_charge = 0;
+            $delivery_distance = 0;
+            if(!empty($user_add_def)){
+                $delivery_distance = $this->getDistanceBetweenPointsNew($user_add_def->latitude,
+                                $user_add_def->longitude,
+                                $resto_add_def[0]->latitude,
+                                $resto_add_def[0]->longitude) ?? -1;
+            }else{
+                $delivery_charge = 0;
+            }
+            if($delivery_distance == -1){
+                return response()->json([
+                    'message' => 'Invalid Address !',
+                    'status' => false
+                ], $this->invalidStatus);
+            }else{
+                // dd($billing_balance['service_data']);
+                $delivery_distance = (float)str_replace('', 'km', $delivery_distance);
+                if ($delivery_distance <= 10000) {
+                    if ($delivery_distance <= $billing_balance['service_data']->on_km) {
+                        $delivery_charge = $billing_balance['service_data']->flat_delivery_charge;
+                    } else if ($delivery_distance > $billing_balance['service_data']->on_km) {
+                        $extra_km = $delivery_distance - $billing_balance['service_data']->on_km;
+                        $delivery_charge = $billing_balance['service_data']->flat_delivery_charge + $extra_km * $billing_balance['service_data']->after_flat_delivery_charge;
+
+                    } else {
+                        return response()->json([
+                            'message' => 'Invalid Address !',
+                            'status' => false
+                        ], $this->invalidStatus);
+
+                    }
+                } else {
+                    return response()->json([
+                        'message' => 'No Nearby Restaurant Located !',
+                        'status' => true
+                    ], $this->successStatus);
+                }
+            }
+            // dd($delivery_charge);
                 $user->currency = $this->currency;
                 return response()->json([
                     'cart_menu_data' => $cart_menu_data,
                     'user_default_address' => $user_add_def,
                     'resto_default_address' => $resto_add_def,
                     'total_amount' => $billing_balance['total_amount'],
-                    'grand_total_amount' =>$billing_balance['total_amount_last'],
+                    'delivery_charge' => (float)$delivery_charge ?? 0,
+                    'grand_total_amount' =>$billing_balance['total_amount_last'] + (float)$delivery_charge ?? 0,
                     'item' => $billing_balance['item'],
                     'service_data' => $billing_balance['service_data'],
                     'sub_total_without_commision' => $billing_balance['sub_total'],

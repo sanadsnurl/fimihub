@@ -134,7 +134,8 @@ class MyEarning extends Model
                         $join->where('orders.restaurent_id', $userId);
                         })
                     ->where('is_active', 1)
-                    ->select(DB::raw('SUM(my_earnings.resto_commission) as resto_earning'))
+                    ->select(DB::raw('SUM(my_earnings.resto_commission) as resto_earning'),
+                    DB::raw('SUM((orders.total_amount - orders.delivery_fee) - ((orders.total_amount - orders.delivery_fee)/ (1 + (orders.service_tax / 100)))) as cgt_tax'))
                     ->first();
                     return $query;
     }

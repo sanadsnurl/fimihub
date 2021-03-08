@@ -21,6 +21,11 @@
                         </div>
 
                         @endif
+
+                        <a href="{{url()->previous()}}" style="float: right" >
+                            <span class="btn btn-danger">Back</span>
+                        </a>
+
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">

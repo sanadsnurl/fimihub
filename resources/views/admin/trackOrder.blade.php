@@ -1,24 +1,31 @@
-@extends('customer.layout.cartBase')
+@include('admin.include.sideNav')
+@include('admin.include.header')
+{{-- @extends('customer.layout.myAccountBase') --}}
 
-@section('title', 'My Account')
+{{-- @section('title', 'My Account')
 
-@section('content')
-<div class="col-md-7 padd_rht">
-    <a href="{{url('myOrder')}}" class="d">
+@section('content') --}}
+<div class="content-wrapper">
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-lg-12">
+<div class="col-md-12 padd_rht">
+    {{-- <a href="{{url('myOrder')}}" class="d">
         <span class="btn_purple ml-4" style="padding: 10px;">Back To Order</span>
-    </a>
+    </a> --}}
     <div class="card_lft card card_track" style="margin-top: 12px;">
-        <div class="track_map">
+        {{-- <div class="track_map">
             <img src="{{asset('asset/customer/assets/images/trackmap.png')}}" class="w-100" alt="map">
-        </div>
+        </div> --}}
         <div class="track_addrs_strip d-flex">
             <div>
                 <p>{{$resto_data->name ?? ''}}</p>
                 <p>Order ID- {{$order_data->order_id ?? ''}}</p>
             </div>
-            @if(in_array($order_data->order_status,array(5,6,7,11,12)))
+            {{-- @if(in_array($order_data->order_status,array(5,6,7,11,12)))
             <p>Arriving Today at {{$order_data->delivery_time ?? '--'}}</p>
-            @endif
+            @endif --}}
         </div>
 
         <div class="order_progress">
@@ -57,20 +64,20 @@
                                 restaurant</li>
                             <li
                                 class="{{ in_array($order_data->order_status,array(6,7,8,9,10,11,12)) ? 'active' : ''}}">
-                                <span></span> Order Accepted by Restaurant</li>
+                                <span></span> Order packed</li>
                                 <li
                                 class="{{ in_array($order_data->order_status,array(8)) ? 'order_cancel' : 'order_status_hide'}} ">
                                 <span></span> Cancelled</li>
                             <li class="{{ in_array($order_data->order_status,array(7,8,9,10,11,12)) ? 'active' : ''}}">
                                 <span></span> Order has been picked up by
                                 {{$order_event_data->rider_details->name ?? '---'}}</li>
-                                <li class="{{ in_array($order_event_data->rider->order_status,array(4,5)) ?? 1 ? 'active' : ''}}">
+                                <li class="{{ in_array($order_data->order_status,array(7,8,9,10,11,12)) ? 'active' : ''}}">
                                     <span></span> Order Has Arrived</li>
                             @elseif(isset($order_event_data->rider->order_status) &&
                             $order_event_data->rider->order_status >= 1 && $order_data->order_status >= 6)
                             <li
                                 class="{{ in_array($order_data->order_status,array(6,7,8,9,10,11,12)) ? 'active' : ''}}">
-                                <span></span> Order Accepted by Restaurant</li>
+                                <span></span> Order packed</li>
                             <li
                                 class="{{ in_array($order_event_data->rider->order_status,array(1,2,3,4,5)) ? 'active' : ''}}">
                                 <span></span> Order has been accepted by
@@ -88,12 +95,12 @@
                             <li class="{{ in_array($order_data->order_status,array(7,8,9,10,11,12)) ? 'active' : ''}}">
                                 <span></span> Order has been picked up by
                                 {{$order_event_data->rider_details->name ?? '---'}}</li>
-                                <li class="{{ in_array($order_event_data->rider->order_status,array(4,5)) ?? 1 ? 'active' : ''}}">
+                                <li class="{{ in_array($order_data->order_status,array(7,8,9,10,11,12)) ? 'active' : ''}}">
                                     <span></span> Order Has Arrived</li>
                             @else
                             <li
                                 class="{{ in_array($order_data->order_status,array(6,7,8,9,10,11,12)) ? 'active' : ''}}">
-                                <span></span> Order Accepted by Restaurant</li>
+                                <span></span> Order packed</li>
                                 <li
                                 >
                                 <span></span> --- is on its way to the
@@ -107,7 +114,7 @@
                             <li class="{{ in_array($order_data->order_status,array(7,8,9,10,11,12)) ? 'active' : ''}}">
                                 <span></span> Order has been picked up by
                                 {{$order_event_data->rider_details->name ?? '---'}}</li>
-                                <li class="{{ in_array($order_event_data->rider->order_status ?? 1,array(4,5)) ? 'active' : ''}}">
+                                <li class="{{ in_array($order_data->order_status,array(7,8,9,10,11,12)) ? 'active' : ''}}">
                                     <span></span> Order Has Arrived</li>
                             @endif
 
@@ -115,11 +122,17 @@
                                 <span></span> Order delivered</li>
                     </ul>
                 </div>
-                <div class="col-md-3">
+                {{-- <div class="col-md-3">
                     <img src="{{asset('asset/customer/assets/images/burger_image.png')}}" class="w-100" alt="burger">
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>
 </div>
-@endsection
+</div>
+</div>
+</div>
+</div>
+{{-- @endsection --}}
+
+{{-- @include('admin.include.footer') --}}

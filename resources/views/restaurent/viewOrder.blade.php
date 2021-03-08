@@ -19,6 +19,9 @@
                         <a href="{{url('Restaurent/customerOrder')}}" style="float:right;">
                             <span class="btn btn-danger">Back</span>
                         </a>
+                        <a href="{{url(Request::fullUrl())}}" style="float:right;">
+                            <span class="btn btn-info">Refresh</span>
+                        </a>
 
                     </div>
                     <div class="card-body">
@@ -50,8 +53,8 @@
                                                             @endforeach
                                                         @endif
                                                     @if(!empty($ordered_menu->add_on))
-                                                        @foreach ($ordered_menu->add_on as $add_datas)
-                                                            @foreach ($add_datas as $add_data)
+                                                        @foreach ($ordered_menu->add_on as $add_datasa)
+                                                            @foreach ($add_datasa as $add_data)
                                                             @if (in_array($add_data->id, ($ordered_menu->product_adds_id) ?? [], FALSE))
                                                                 <p><strong>{{ucFirst($add_data->cat_name)}}</strong>: {{$add_data->name}}</p>
                                                             @endif
@@ -112,6 +115,27 @@
                                     <span>{{$order_data->order_status ?? ''}}</span>
                                 </div>
                             </li>
+
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                {{-- <b>Customer Name</b>
+                                <span >{{$order_data->customer_name ?? ''}}</span> --}}
+                                <div class="col-md-3">
+                                    <b>Customer Name.</b>
+                                </div>
+                                <div class="col-md-9">
+                                    <span>{{ $order_data->customer_name ?? '--'}}</span>
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                {{-- <b>Customer Mobile</b>
+                                <span >{{$order_data->mobile ?? ''}}</span> --}}
+                                <div class="col-md-3">
+                                    <b>Customer Mobile.</b>
+                                </div>
+                                <div class="col-md-9">
+                                    <span>{{ $order_data->mobile ?? '--'}}</span>
+                                </div>
+                            </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 {{-- <b>Flat No.</b>
                                 <span>{{$add_datas->flat_no ?? '--'}} </span> --}}
@@ -119,7 +143,7 @@
                                     <b>Flat No.</b>
                                 </div>
                                 <div class="col-md-9">
-                                    <span>{{$order_data->flat_no ?? ''}}</span>
+                                    <span>{{ $add_datas->flat_no ?? '--'}}</span>
                                 </div>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -129,7 +153,7 @@
                                     <b>Landmark.</b>
                                 </div>
                                 <div class="col-md-9">
-                                    <span>{{$order_data->landmark ?? ''}}</span>
+                                    <span>{{$add_datas->landmark ?? ''}}</span>
                                 </div>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -140,7 +164,7 @@
                                     <b>Delivery Address</b>
                                 </div>
                                 <div class="col-md-9">
-                                    <span>{{$order_data->address ?? ''}}</span>
+                                    <span>{{$add_datas->address ?? ''}}</span>
                                 </div>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -167,10 +191,21 @@
                                 {{-- <b>Created At</b>
                                 <span>{{$order_data->created_at ?? ''}}</span> --}}
                                 <div class="col-md-3">
-                                    <b>Created At</b>
+                                    <b>Order Date</b>
                                 </div>
                                 <div class="col-md-9">
-                                    <span>{{$event_data->created_at ?? '--'}}</span>
+                                    <span>{{date('d F Y', strtotime($order_data->created_at)) ?? '--'}}</span>
+                                </div>
+                            </li>
+
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                {{-- <b>Created At</b>
+                                <span>{{$order_data->created_at ?? ''}}</span> --}}
+                                <div class="col-md-3">
+                                    <b>Order time</b>
+                                </div>
+                                <div class="col-md-9">
+                                    <span>{{ date('h:i A', strtotime($order_data->created_at)) ?? '--'}}</span>
                                 </div>
                             </li>
 

@@ -33,7 +33,7 @@ class ServiceCategory extends Model
     public function getAllServices() {
         $order_data=DB::table('service_catagories')
                 ->where('visibility', 0);
-            
+
             return $order_data;
     }
 
@@ -42,7 +42,7 @@ class ServiceCategory extends Model
                 ->where('visibility', 0)
                 ->where('id', $id)
                 ->first();
-            
+
             return $order_data;
     }
 
@@ -57,4 +57,6 @@ class ServiceCategory extends Model
 
         return $query_data;
     }
+
+
 }

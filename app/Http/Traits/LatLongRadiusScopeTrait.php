@@ -4,6 +4,7 @@ namespace App\Http\Traits;
 use Illuminate\Support\Facades\DB;
 use App\Model\order;
 use App\Model\restaurent_detail;
+use App\Model\ServiceCategory;
 use App\User;
 use Illuminate\Pagination\Paginator;
 
@@ -279,7 +280,7 @@ trait LatLongRadiusScopeTrait
         // dd();
         $current_time = date('h:i');
         $disctance_select = sprintf(
-                "null as dis,null as dis_new,restaurent_details.*,ua.latitude,ua.longitude,ua.id as addres_id,COUNT(DISTINCT ml.id) AS dish_count,
+                "null as delivery_charge,null as dis,null as dis_new,restaurent_details.*,ua.latitude,ua.longitude,ua.id as addres_id,COUNT(DISTINCT ml.id) AS dish_count,
                 COUNT(DISTINCT oe.id) AS rating_count,Round(AVG(oe.order_feedback),1) AS rating,(( %d * acos( cos( radians(%s) ) " .
                         " * cos( radians( ua.latitude ) ) " .
                         " * cos( radians( ua.longitude ) - radians(%s) ) " .
@@ -349,6 +350,38 @@ trait LatLongRadiusScopeTrait
                     $distance = $response_all->routes[0]->legs[0]->distance->text ?? null;
                     $distance = str_replace('', ',',str_replace('', ' km',$distance));
                     return ($distance ?? null);
+
+   }
+
+   public function calculateDelivery($delivery_distance){
+    $delivery_charge = 0 ;
+    if($delivery_distance == -1){
+        return 0;
+    }else{
+        // dd($billing_balance['service_data']);
+        $ServiceCategories = new ServiceCategory();
+        $service_data = $ServiceCategories->getServiceById(1);
+
+        $delivery_distance = (float)str_replace('', 'km', $delivery_distance);
+        // dd($delivery_distance);
+        if ($delivery_distance <= 10000) {
+            if ($delivery_distance <= $service_data->on_km) {
+                $delivery_charge = $service_data->flat_delivery_charge;
+            } else if ($delivery_distance > $service_data->on_km) {
+                $extra_km = $delivery_distance - $service_data->on_km;
+                $delivery_charge = $service_data->flat_delivery_charge + $extra_km * $service_data->after_flat_delivery_charge;
+
+            } else {
+                return 0;
+
+
+            }
+        } else {
+            return 0;
+
+        }
+    }
+    return $delivery_charge;
 
    }
 

@@ -25,8 +25,10 @@ use Carbon\Carbon;
 use Session;
 use File;
 use Illuminate\Validation\Rule;
+use stdClass;
 use Yajra\DataTables\DataTables;
 
+use function GuzzleHttp\json_decode;
 
 class RestaurentController extends Controller
 {
@@ -70,6 +72,7 @@ class RestaurentController extends Controller
             'avg_time' => 'string|nullable',
             'open_time' => 'required|date_format:H:i',
             'close_time' => 'required|date_format:H:i|after:open_time',
+            'resto_tax_status' => 'required|in:1,2',
             'address_address' => 'required|string',
             'pincode' => 'string|nullable',
             'resto_type' => 'in:1,2,3|nullable',
@@ -172,8 +175,9 @@ class RestaurentController extends Controller
 
 
                 ->addColumn('action', function($row){
-                    $btn = '<a href="editMainCategory?dish_main_cat_id=' . base64_encode($row->id) . '" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Edit</a>
-                    <a href="deleteMainCat?dish_cat_id='.base64_encode($row->id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Delete</a>';
+                    // $btn = '<a href="editMainCategory?dish_main_cat_id=' . base64_encode($row->id) . '" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Edit</a>
+                    // <a href="deleteMainCat?dish_cat_id='.base64_encode($row->id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Delete</a>';
+                    $btn = '<a href="editMainCategory?dish_main_cat_id=' . base64_encode($row->id) . '" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Edit</a>';
                     return $btn;
                 })
                 ->addColumn('created_at', function ($row) {
@@ -397,10 +401,14 @@ class RestaurentController extends Controller
             ->get();
 
         $menu_lists = new menu_list;
-        $menu_data = $menu_lists->menuListById($dish_id);
-
-        $menu_data->product_add_on_id = json_decode($menu_data->product_add_on_id);
+        $menu_data = $menu_lists->menuListByIdWithBlock($dish_id);
         // dd($menu_data);
+
+        if(isset($menu_data->product_add_on_id)){
+            $menu_data->product_add_on_id = json_decode($menu_data->product_add_on_id);
+        } else {
+            $menu_data->product_add_on_id = [];
+        }
         return view('restaurent.editMenu')->with([
             'data' => $user,
             'menu_data' => $menu_data,
@@ -573,8 +581,9 @@ class RestaurentController extends Controller
             return Datatables::of($menu_customization_data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $btn = '<a href="editAddOn?custom_id=' . base64_encode($row->id) . '" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Edit</a>
-                        <a href="deleteAddOn?custom_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Delete</a>';
+                    // $btn = '<a href="editAddOn?custom_id=' . base64_encode($row->id) . '" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Edit</a>
+                    //     <a href="deleteAddOn?custom_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Delete</a>';
+                        $btn = '<a href="editAddOn?custom_id=' . base64_encode($row->id) . '" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Edit</a>';
                     return $btn;
                 })
                 ->addColumn('created_at', function ($row) {
@@ -689,7 +698,9 @@ class RestaurentController extends Controller
             return Datatables::of($resto_cate_data)
                 ->addIndexColumn()
                 ->addColumn('action', function($row){
-                    $btn = '<a href="deleteCustomCat?custom_cat_id='.base64_encode($row->id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Delete</a>';
+                    // $btn = '<a href="deleteCustomCat?custom_cat_id='.base64_encode($row->id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Delete</a>
+                    // <a href="editCustomCat?custom_cat_id='.base64_encode($row->id).'" class="btn btn-outline-primary btn-sm btn-round waves-effect waves-light m-0">Edit</a>';
+                    $btn = '<a href="editCustomCat?custom_cat_id='.base64_encode($row->id).'" class="btn btn-outline-primary btn-sm btn-round waves-effect waves-light m-0">Edit</a>';
                     return $btn;
                 })
                 ->addColumn('customization_variant', function ($row) {
@@ -827,8 +838,9 @@ class RestaurentController extends Controller
             return Datatables::of($menu_data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $btn = '<a href="editCustomMenu?custom_menu_id=' . base64_encode($row->id) . '" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Edit</a>
-                    <a href="deleteCustomMenu?custom_menu_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Delete</a>';
+                    // $btn = '<a href="editCustomMenu?custom_menu_id=' . base64_encode($row->id) . '" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Edit</a>
+                    // <a href="deleteCustomMenu?custom_menu_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Delete</a>';
+                    $btn = '<a href="editCustomMenu?custom_menu_id=' . base64_encode($row->id) . '" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Edit</a>';
                     return $btn;
                 })
                 ->addColumn('created_at', function ($row) {

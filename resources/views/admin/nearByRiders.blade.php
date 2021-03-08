@@ -76,7 +76,12 @@
       <div class="row" onload="InitMaps();">
         <div class="col-lg-12">
             <div class="card">
-                <div class="card-header text-uppercase">Simple Basic Map</div>
+                <div class="card-header text-uppercase">Simple Basic Map
+
+                    <a href="{{url()->previous()}}" style="float: right" >
+                        <span class="btn btn-danger">Back</span>
+                    </a>
+                </div>
                 <body onload="InitMap();">
                     <div id="map" style="height: 500px; width: auto;">
                     </div>

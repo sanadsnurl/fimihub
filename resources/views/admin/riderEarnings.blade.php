@@ -15,9 +15,14 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-header"><i class="fa fa-money"></i> My Earnings
+                        <a href="{{url()->previous()}}" style="float: right" >
+                            <span class="btn btn-danger" style="float: right;font-weight: bold;font-size: medium;">Back</span>
+                        </a>
                         <span class="btn btn-success mr-5"
                             style="float: right;font-weight: bold;font-size: medium;">Total Earning :
                             {{$total_earning->order_earning ?? 0}}</span>
+
+
 
                     </div>
                     <div class="card-body">
@@ -38,6 +43,13 @@
                                 </thead>
                                 <tbody>
                                 </tbody>
+                                <th>TOTAL</th>
+                                <th> -- </th>
+                                <th>{{$total_earning->order_earning ?? 0}}</th>
+                                <th>--</th>
+                                <th>--</th>
+                                <th>--</th>
+
 
                             </table>
                         </div>

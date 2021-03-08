@@ -166,7 +166,33 @@
                                     @endif
                                 </div>
                             </div>
+                            <div class="form-group row">
+                                <label for="input-4" class="col-sm-2 col-form-label">Tax</label>
+                                <div class="demo-checkbox ml-4">
+                                    <input type="radio" id="user-checkboxtax" class="filled-in chk-col-primary" value="1"
+                                        name="resto_tax_status" @if(isset($resto_data->resto_tax_status))
+                                    {{$resto_data->resto_tax_status == 1 ? 'checked' : ''}}
+                                    @else
+                                    {{old('resto_tax_status') == 1 ? 'checked':''}}
+                                    @endif
+                                    >
+                                    <label for="user-checkboxtax">On</label>
+                                </div>
+                                <div class="demo-checkbox">
+                                    <input type="radio" id="user-checkbox1tax" class="filled-in chk-col-primary" value="2"
+                                        name="resto_tax_status" @if(isset($resto_data->resto_tax_status))
+                                    {{$resto_data->resto_tax_status == 2 ? 'checked' : ''}}
+                                    @else
+                                    {{old('resto_tax_status') == 2 ? 'checked':''}}
+                                    @endif
+                                    >
+                                    <label for="user-checkbox1tax">Off</label>
+                                </div>
 
+                                @if($errors->has('resto_tax_status'))
+                                <div class="error">{{ $errors->first('resto_tax_status') }}</div>
+                                @endif
+                            </div>
                             <div class="form-group row">
                                 <label for="input-4 address_address" class="col-sm-2 col-form-label">Address</label>
                                 <div class="col-sm-8">
@@ -202,10 +228,22 @@
                                     @endif
                                 </div>
                             </div>
+                            <div class="form-group row">
+                                <label for="input-4" class="col-sm-2 col-form-label">Password</label>
+                                <div class="col-sm-10">
+                                    <input type="password" class="form-control" id="input-4" name="password">
+                                    @if($errors->has('password'))
+                                    <div class="error">{{ $errors->first('password') }}</div>
+                                    @endif
+                                </div>
+                            </div>
 
                             <div class="form-footer">
                                 <input type="submit" class="btn btn-primary" value="Save Data"></input>
 
+                                <a href="{{url()->previous()}}" >
+                                    <span class="btn btn-danger">Back</span>
+                                </a>
                             </div>
                         </form>
                     </div>
