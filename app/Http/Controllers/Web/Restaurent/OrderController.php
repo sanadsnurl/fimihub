@@ -89,6 +89,24 @@ class OrderController extends Controller
                         return "N.A";
                     }
                 })
+                ->filterColumn('payment_type', function ($query, $keyword) {
+                    $orderStatus = collect(array(
+                        1 => "Bank Transfer",
+                        2 => "Paypal",
+                        3 => "COD",
+                        4 => "Credit/Debit Card",
+                    ));
+                    $keys  = array();
+                    foreach($orderStatus as $key => $value) {
+                        if(!empty(strstr($value, $keyword))) {
+                            $keys[] = $key;
+                        }
+                    }
+
+                    if (count($keys)) {
+                        $query->whereIn("orders.payment_type", $keys);
+                    }
+                })
                 ->addColumn('order_status', function ($row) {
 
                     if ($row->order_status == 3) {
@@ -108,6 +126,30 @@ class OrderController extends Controller
                         return "Order Refunded";
                     } else {
                         return "N.A";
+                    }
+                })
+
+                ->filterColumn('order_status', function ($query, $keyword) {
+                    $orderStatus = collect(array(
+                        3 => "Restaurent Approval Needed",
+                        5 => "Order Placed",
+                        2 => "Order Cancelled",
+                        4 => "Order Cancelled",
+                        8 => "Order Cancelled",
+                        6 => "Order Packed",
+                        7 => "Order Picked",
+                        9 => "Order Delivered",
+                        10 => "Order Refunded",
+                    ));
+                    $keys  = array();
+                    foreach($orderStatus as $key => $value) {
+                        if(!empty(strstr($value, $keyword))) {
+                            $keys[] = $key;
+                        }
+                    }
+
+                    if (count($keys)) {
+                        $query->whereIn("orders.order_status", $keys);
                     }
                 })
 
