@@ -374,6 +374,8 @@ Route::group(['middleware' => ['cors']], function () {
         Route::get('customerOrder', 'Web\Admin\OrderController@getCustomerOrderList');
         //View Customer Order
         Route::get('viewOrder', 'Web\Admin\OrderController@viewOrder');
+        //Track Customer Order
+        Route::get('trackOrder', 'Web\Admin\OrderController@trackOrder');
         //View Order Set Txn Page
         Route::get('orderPaid', 'Web\Admin\OrderController@viewOrderPaid');
         //Set Txn Process

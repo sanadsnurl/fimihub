@@ -36,7 +36,17 @@
 <script src="{{asset('asset/admin/assets/plugins/Chart.js/Chart.min.js')}}"></script>
 <!-- Index js -->
 <script src="{{asset('asset/admin/assets/js/index.js')}}"></script>
+@if (request()->segment(2) == 'trackOrder')
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.15.0/jquery.validate.min.js"></script>
 
+
+    <script type="text/javascript" src="{{asset('asset/customer/assets/scripts/mapInput.js')}}"></script>
+    <script type="text/javascript" src="{{asset('asset/customer/assets/scripts/searchMap.js')}}"></script>
+    <script type="text/javascript" src="{{asset('asset/customer/assets/scripts/mapDistance.js')}}"></script>
+@endif
 </body>
 
 <!-- Mirrored from codervent.com/rocker/color-version/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 21 Sep 2018 19:46:25 GMT -->
