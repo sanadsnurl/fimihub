@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web\Restaurent;
 
 use App\Http\Controllers\Controller;
+use App\Http\Traits\BillingCalculateTraits;
 use Illuminate\Http\Request;
 //custom import
 use App\User;
@@ -25,7 +26,7 @@ use DataTables;
 
 class OrderController extends Controller
 {
-    use NotificationTrait, LatLongRadiusScopeTrait;
+    use NotificationTrait, LatLongRadiusScopeTrait, BillingCalculateTraits;
 
     public function getCustomerOrderList(Request $request)
     {
@@ -641,7 +642,15 @@ class OrderController extends Controller
         $event_data = json_encode($event_data);
         $event_data = json_decode($event_data);
 
-        // dd($order_data->address_id);
+        $get_dish_total_array = [
+                'total_amount' => $order_data->total_amount,
+                'service_tax' => $order_data->service_tax,
+                'delivery_fee' => $order_data->delivery_fee,
+                'resto_data' => $resto_data,
+                'service_commission' => $order_data->service_commission
+                ];
+        $order_data->product_total = $this->getTotalWithDishTaxAddOnWithoutCommission($get_dish_total_array) ?? 0;
+
         return view('restaurent.viewOrder')->with([
             'data' => $user,
             'order_data' => $order_data,

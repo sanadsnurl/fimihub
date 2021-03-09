@@ -48,17 +48,17 @@
                                 <tr>
                                     <!-- <th>S.no</th> -->
 
-                                    <th>TOTAL</th>
+                                    <th>TOTAL (in $)</th>
                                     <th> -- </th>
                                     <th>{{$total_earning->resto_earning ?? 0}}</th>
                                     <th>--</th>
                                     <th>--</th>
+                                    <th> -- </th>
                                     <th>{{round($total_earning->cgt_tax,2) ?? 0}}</th>
 
 
                                     <th> -- </th>
-                                    <th> -- </th>
-                                    <th> -- </th>
+                                    <th> {{round($total_earning->total_com,2) ?? 0}} </th>
                                     <th> -- </th>
 
                                 </tr>

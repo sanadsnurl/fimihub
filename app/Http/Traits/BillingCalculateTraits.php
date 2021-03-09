@@ -218,4 +218,18 @@ trait BillingCalculateTraits
 
         return $response;
     }
+
+    public function getTotalWithDishTaxAddOnWithoutCommission($get_dish_total_array){
+
+        $product_total = $get_dish_total_array['total_amount'] - $get_dish_total_array['delivery_fee'];
+
+        $tax = $get_dish_total_array['service_tax'];
+        $sub_total = $product_total / (1 + ($tax / 100));
+        $total_tax = $product_total - $product_total / (1 + ($tax / 100));
+
+        $commission = $get_dish_total_array['service_commission'];
+        $product_total = $sub_total / (1 + ($commission / 100)) ;
+        // dd($total_tax);
+        return  round(($product_total + $total_tax),2) ?? 0;
+    }
 }

@@ -212,13 +212,13 @@
                         <button type="button">Help</button>
                         <button type="button" data-toggle="modal" data-target="#review">Rate and Review</button>
                     </div>
-                    @elseif(in_array($order_data->order_status,array(7)))
+                    @elseif(in_array($order_event_data->rider->order_status ?? -1,array(1,2,3,4)))
 
                     <div class="to_pay_box d-flex align-items-center">
                         <div class="d-flex align-items-start">
                             <div class="d-flex align-items-center">
                                 <div>
-                                    <img src="{{$order_event_data->rider_details->picture ?? asset('asset/customer/assets/images/user_dp.png')}}"
+                                    <img src="{{$order_event_data->rider_details->vehicle_details->id_proof ?? asset('asset/customer/assets/images/user_dp.png')}}"
                                         alt="user">
                                 </div>
                                 <div>
