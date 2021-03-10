@@ -61,7 +61,7 @@
                                 <li
                                 class="{{ in_array($order_data->order_status,array(8)) ? 'order_cancel' : 'order_status_hide'}} ">
                                 <span></span> Cancelled</li>
-                            <li class="{{ in_array($order_data->order_status,array(7,8,9,10,11,12)) ? 'active' : ''}}">
+                            <li class="{{ in_array($order_event_data->rider->order_status ?? 1,array(3,4,5)) ? 'active' : ''}}">
                                 <span></span> Order has been picked up by
                                 {{$order_event_data->rider_details->name ?? '---'}}</li>
                                 <li class="{{ in_array($order_event_data->rider->order_status,array(4,5)) ?? 1 ? 'active' : ''}}">
@@ -85,7 +85,7 @@
                                 <li
                                 class="{{ in_array($order_data->order_status,array(8)) ? 'order_cancel' : 'order_status_hide'}} ">
                                 <span></span> Cancelled</li>
-                            <li class="{{ in_array($order_data->order_status,array(7,8,9,10,11,12)) ? 'active' : ''}}">
+                            <li class="{{ in_array($order_event_data->rider->order_status ?? 1,array(3,4,5)) ? 'active' : ''}}">
                                 <span></span> Order has been picked up by
                                 {{$order_event_data->rider_details->name ?? '---'}}</li>
                                 <li class="{{ in_array($order_event_data->rider->order_status,array(4,5)) ?? 1 ? 'active' : ''}}">
@@ -104,7 +104,7 @@
                                     <li
                                 class="{{ in_array($order_data->order_status,array(8)) ? 'order_cancel' : 'order_status_hide'}} ">
                                 <span></span> Cancelled</li>
-                            <li class="{{ in_array($order_data->order_status,array(7,8,9,10,11,12)) ? 'active' : ''}}">
+                            <li class="{{ in_array($order_event_data->rider->order_status ?? 1,array(3,4,5)) ? 'active' : ''}}">
                                 <span></span> Order has been picked up by
                                 {{$order_event_data->rider_details->name ?? '---'}}</li>
                                 <li class="{{ in_array($order_event_data->rider->order_status ?? 1,array(4,5)) ? 'active' : ''}}">

@@ -117,10 +117,18 @@
                 @if($data->role == NULL)
                 <li>
                     <a href="{{url('adminfimihub/serviceList')}}" class="waves-effect">
-                        <i class="icon-home"></i> <span>Services</span>
+                        <i class="icon-grid"></i> <span>Services</span>
 
                     </a>
                 </li>
+                @endif
+                @if($data->role == NULL)
+                {{-- <li>
+                    <a href="{{url('adminfimihub/paymentMethod')}}" class="waves-effect">
+                        <i class="icon-credit-card"></i> <span>Payment</span>
+
+                    </a>
+                </li> --}}
                 @endif
                 @if($data->role == NULL)
                 <li>

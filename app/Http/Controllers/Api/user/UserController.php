@@ -113,7 +113,7 @@ class UserController extends Controller
                     $user_update_data['picture'] = $file_url;
                 } else {
                     $error_file_not_required[] = "Profile Picture Have Some Issue";
-                    $user_update_data['picture'] = "";
+                    $user_update_data['picture'] = NULL;
                 }
             }
             $user = auth()->user()->UpdateLogin($user_update_data);
@@ -122,6 +122,7 @@ class UserController extends Controller
             unset($user_data->password);
             return response()->json([
                 'message' => 'Profile Updated',
+                'picture' => $user_update_data['picture'],
                 'status' => true
             ], $this->successStatus);
 

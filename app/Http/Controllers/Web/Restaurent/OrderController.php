@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web\Restaurent;
 
 use App\Http\Controllers\Controller;
+use App\Http\Traits\BillingCalculateTraits;
 use Illuminate\Http\Request;
 //custom import
 use App\User;
@@ -25,7 +26,7 @@ use DataTables;
 
 class OrderController extends Controller
 {
-    use NotificationTrait, LatLongRadiusScopeTrait;
+    use NotificationTrait, LatLongRadiusScopeTrait, BillingCalculateTraits;
 
     public function getCustomerOrderList(Request $request)
     {
@@ -63,6 +64,15 @@ class OrderController extends Controller
                     }
                     // $btn .= '<a href="deleteOrder?odr_id=' . base64_encode($row->id) . '" class="btn btn-outline-warning btn-sm btn-round waves-effect waves-light ">Delete</a>';
                     return $btn;
+                })
+                ->addColumn('total_tax', function ($row) {
+                    $delivery_fee = $row->delivery_fee;
+                    $total_amount = round(abs($row->total_amount - $delivery_fee),2);
+                    $tax = $row->service_tax;
+                    $sub_total = $total_amount / (1 + ($tax / 100));
+                    $total_tax = round(abs($total_amount - $sub_total),2);
+
+                    return $total_tax ?? 0;
                 })
                 ->addColumn('created_at', function ($row) {
                     return date('d F Y', strtotime($row->created_at));
@@ -641,7 +651,15 @@ class OrderController extends Controller
         $event_data = json_encode($event_data);
         $event_data = json_decode($event_data);
 
-        // dd($order_data->address_id);
+        $get_dish_total_array = [
+                'total_amount' => $order_data->total_amount,
+                'service_tax' => $order_data->service_tax,
+                'delivery_fee' => $order_data->delivery_fee,
+                'resto_data' => $resto_data,
+                'service_commission' => $order_data->service_commission
+                ];
+        $order_data->product_total = $this->getTotalWithDishTaxAddOnWithoutCommission($get_dish_total_array) ?? 0;
+
         return view('restaurent.viewOrder')->with([
             'data' => $user,
             'order_data' => $order_data,

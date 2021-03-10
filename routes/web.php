@@ -426,8 +426,12 @@ Route::group(['middleware' => ['cors']], function () {
         Route::get('disableResto', 'Web\Admin\RestaurentController@disableResto');
         //Delete Order
         Route::get('deleteOrder', 'Web\Admin\OrderController@deleteCustomOrder');
-         //Delete Order
-         Route::get('nearByRider', 'Web\Admin\RiderController@nearByRider');
+        //Delete Order
+        Route::get('nearByRider', 'Web\Admin\RiderController@nearByRider');
+        //Get Payment method
+        Route::get('paymentMethod', 'Web\Admin\PaymentController@getPaymentMethod');
+        //Update Payment method
+        Route::get('changePaymentStatus', 'Web\Admin\PaymentController@changePaymentStatus');
     });
 
 });

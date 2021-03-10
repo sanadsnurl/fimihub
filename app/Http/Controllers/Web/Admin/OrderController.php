@@ -47,7 +47,7 @@ class OrderController extends Controller
                     if ($row->payment_type == 1 && $row->payment_status == 1) {
                         $btn .= '<a href="orderPaid?odr_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Make Order Paid</a>';
                     }
-                    $btn .= '<a href="deleteOrder?odr_id=' . base64_encode($row->id) . '" class="btn btn-outline-primary btn-sm btn-round waves-effect waves-light ">Delete</a>';
+                    $btn .= '<a href="deleteOrder?delete_status=' . base64_encode(1) . '&odr_id=' . base64_encode($row->id) . '" class="btn btn-outline-primary btn-sm btn-round waves-effect waves-light ">Delete</a>';
                     return $btn;
                 })
                 ->addColumn('created_at', function ($row) {
@@ -428,8 +428,16 @@ class OrderController extends Controller
     public function deleteCustomOrder(Request $request)
     {
         $user = Auth::user();
+        $delete_status = base64_decode(request('delete_status'));
+        $delete_url = $request->fullUrl();
+        $delete_url = str_replace('delete_status=MQ%3D%3D','delete_status=Mg%3D%3D',  $delete_url);
+
+        if($delete_status == 1){
+            Session::flash('popup_delete', $delete_url);
+
+            return redirect()->back();
+        }
         $odr_id = base64_decode(request('odr_id'));
-// dd($odr_id);
         $orders = new order();
         $delete_menu = array();
         $delete_menu['id'] = $odr_id;

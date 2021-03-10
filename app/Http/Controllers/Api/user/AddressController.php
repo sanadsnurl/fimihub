@@ -129,5 +129,5 @@ class AddressController extends Controller
             return response()->json(['message' => 'Address Updated !', 'status' => true], $this->successStatus);
 
         }
-}
+    }
 }
