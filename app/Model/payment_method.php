@@ -21,4 +21,16 @@ class payment_method extends Model
             return asset($value);
         }
     }
+
+    public function updatePaymentMethod($data){
+        $data['updated_at'] = now();
+        unset($data['_token']);
+
+        $query_data = $this
+            ->where('id', $data['id'])
+            ->update($data);
+
+        return $query_data;
+    }
+
 }

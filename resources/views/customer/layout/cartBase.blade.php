@@ -211,13 +211,13 @@
                         <button type="button">Help</button>
                         <button type="button" data-toggle="modal" data-target="#review">Rate and Review</button>
                     </div>
-                    @elseif(in_array($order_data->order_status,array(7)))
+                    @elseif(in_array($order_event_data->rider->order_status ?? -1,array(1,2,3,4)))
 
                     <div class="to_pay_box d-flex align-items-center">
                         <div class="d-flex align-items-start">
                             <div class="d-flex align-items-center">
                                 <div>
-                                    <img src="{{$order_event_data->rider_details->picture ?? asset('asset/customer/assets/images/user_dp.png')}}"
+                                    <img src="{{$order_event_data->rider_details->vehicle_details->id_proof ?? asset('asset/customer/assets/images/user_dp.png')}}"
                                         alt="user">
                                 </div>
                                 <div>
@@ -244,7 +244,19 @@
 
                                     @endif
                                     <p>
-                                        {{$order_event_data->rider_details->vehicleDetails->color ?? ''}}
+                                        Color : {{$order_event_data->rider_details->vehicle_details->color ?? ''}}
+                                    </p>
+                                    <p>
+                                        Model Name : {{$order_event_data->rider_details->vehicle_details->model_name ?? ''}}
+                                    </p>
+                                    <p>
+                                        Vehicle Plate # : {{$order_event_data->rider_details->vehicle_details->vehicle_number ?? ''}}
+                                    </p>
+                                    <p>
+                                        Completed Order : {{$order_event_data->rider_rating_data->rating_count ?? '0'}}
+                                    </p>
+                                    <p>
+                                       Working Started Year : {{date('Y',strtotime($order_event_data->rider_details->vehicle_details->created_at)) ?? '0'}}
                                     </p>
                                     <div class="img-wrap">
 
@@ -256,6 +268,8 @@
                         </div>
                         <a href="tel:{{$order_event_data->rider_details->mobile ?? '---'}}" class="call_btn">Call</a>
                     </div>
+
+
                     @endif
 
                     @else

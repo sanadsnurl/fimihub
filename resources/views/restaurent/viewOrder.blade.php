@@ -19,8 +19,12 @@
                         <a href="{{url('Restaurent/customerOrder')}}" style="float:right;">
                             <span class="btn btn-danger">Back</span>
                         </a>
+                        <a href="{{url(Request::fullUrl())}}" style="float:right;">
+                            <span class="btn btn-info">Refresh</span>
+                        </a>
 
                     </div>
+
                     <div class="card-body">
                         <ul class="list-group">
 
@@ -86,22 +90,13 @@
                                 {{-- <b>Total Amount</b>
                                 <span>{{$data->currency ?? ''}} {{$order_data->total_amount ?? ''}}</span> --}}
                                 <div class="col-md-3">
-                                    <b>Total Amount</b>
+                                    <b>Dish Total</b>
                                 </div>
                                 <div class="col-md-9">
-                                    <span>{{$data->currency ?? ''}} {{$order_data->total_amount ?? ''}}</span>
+                                    <span>{{$data->currency ?? ''}} {{$order_data->product_total ?? ''}}</span>
                                 </div>
                             </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                {{-- <b>Payment Method</b>
-                                <span>{{$order_data->payment_type ?? ''}}</span> --}}
-                                <div class="col-md-3">
-                                    <b>Payment Method</b>
-                                </div>
-                                <div class="col-md-9">
-                                    <span>{{$order_data->payment_type ?? ''}}</span>
-                                </div>
-                            </li>
+
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 {{-- <b>Order Status</b>
                                 <span>{{$order_data->order_status ?? ''}}</span> --}}

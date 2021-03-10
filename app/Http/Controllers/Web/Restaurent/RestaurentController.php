@@ -72,6 +72,7 @@ class RestaurentController extends Controller
             'avg_time' => 'string|nullable',
             'open_time' => 'required|date_format:H:i',
             'close_time' => 'required|date_format:H:i|after:open_time',
+            'resto_tax_status' => 'required|in:1,2',
             'address_address' => 'required|string',
             'pincode' => 'string|nullable',
             'resto_type' => 'in:1,2,3|nullable',

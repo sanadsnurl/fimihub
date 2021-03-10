@@ -50,7 +50,7 @@ class CartController extends Controller
         } else {
             $restaurent_detail = new restaurent_detail;
             $resto_data = $restaurent_detail->getRestoDataOnId($cart_avail->restaurent_id);
-
+// dd($resto_data);
             $user_add_def = $user_address->getDefaultAddress($user->id) ?? '';
             $resto_add_def = $user_address->getUserAddress($resto_data->user_id) ?? '';
 
