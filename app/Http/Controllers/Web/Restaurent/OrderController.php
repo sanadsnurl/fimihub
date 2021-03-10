@@ -65,6 +65,15 @@ class OrderController extends Controller
                     // $btn .= '<a href="deleteOrder?odr_id=' . base64_encode($row->id) . '" class="btn btn-outline-warning btn-sm btn-round waves-effect waves-light ">Delete</a>';
                     return $btn;
                 })
+                ->addColumn('total_tax', function ($row) {
+                    $delivery_fee = $row->delivery_fee;
+                    $total_amount = round(abs($row->total_amount - $delivery_fee),2);
+                    $tax = $row->service_tax;
+                    $sub_total = $total_amount / (1 + ($tax / 100));
+                    $total_tax = round(abs($total_amount - $sub_total),2);
+
+                    return $total_tax ?? 0;
+                })
                 ->addColumn('created_at', function ($row) {
                     return date('d F Y', strtotime($row->created_at));
                 })

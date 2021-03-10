@@ -177,7 +177,7 @@ class UserManageController extends Controller
                 ->addIndexColumn()
                 ->addColumn('action', function($row){
                     $btn = '
-                        <a href="deleteUser?user_id='.base64_encode($row->id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Delete</a>';
+                        <a href="deleteUser?delete_status=' . base64_encode(1) . '&user_id='.base64_encode($row->id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Delete</a>';
                     return $btn;
                 })
                 ->addColumn('created_at', function($row){
@@ -286,6 +286,15 @@ class UserManageController extends Controller
 
     public function deleteUser(Request $request){
         $user = Auth::user();
+        $delete_status = base64_decode(request('delete_status'));
+        $delete_url = $request->fullUrl();
+        $delete_url = str_replace('delete_status=MQ%3D%3D','delete_status=Mg%3D%3D',  $delete_url);
+
+        if($delete_status == 1){
+            Session::flash('popup_delete', $delete_url);
+
+            return redirect()->back();
+        }
         $user_id = base64_decode(request('user_id'));
 
         $delete_user = array();

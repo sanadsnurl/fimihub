@@ -90,7 +90,7 @@
                                 {{-- <b>Total Amount</b>
                                 <span>{{$data->currency ?? ''}} {{$order_data->total_amount ?? ''}}</span> --}}
                                 <div class="col-md-3">
-                                    <b>Total Amount</b>
+                                    <b>Dish Total</b>
                                 </div>
                                 <div class="col-md-9">
                                     <span>{{$data->currency ?? ''}} {{$order_data->product_total ?? ''}}</span>

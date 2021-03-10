@@ -42,8 +42,8 @@
                                         <th>Customer Mobile</th>
                                         <th>Customer Name</th>
                                         <th>Dish</th>
-                                        <th>Total Amount</th>
-                                        <th>Payment Method</th>
+                                        <th>Dish Total</th>
+                                        <th>Total Tax</th>
                                         <th>Order Status</th>
 
                                     </tr>
@@ -133,8 +133,8 @@
                     name: 'total_amount'
                 },
                 {
-                    data: 'payment_type',
-                    name: 'payment_type'
+                    data: 'total_tax',
+                    name: 'total_tax'
                 },
                 {
                     data: 'order_status',

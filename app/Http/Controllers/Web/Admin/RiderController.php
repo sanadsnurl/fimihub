@@ -33,11 +33,11 @@ class RiderController extends Controller
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
                     if($row->visibility == 3){
-                        $btn = '<a href="deleteRider?rider_user_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light mt-1">Delete</a>
+                        $btn = '<a href="deleteRider?delete_status=' . base64_encode(1) . '&rider_user_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light mt-1">Delete</a>
                         <a href="riderEarnings?rider_user_id='.base64_encode($row->id).'" class="btn btn-outline-secondary btn-sm btn-round waves-effect waves-light m-0">Earnings</a>
                         <a href="enableRider?rider_user_id=' . base64_encode($row->id) . '" class="btn btn-outline-success btn-sm btn-round waves-effect waves-light mt-1">Enable</a>';
                     }else{
-                        $btn = '<a href="deleteRider?rider_user_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light mt-1">Delete</a>
+                        $btn = '<a href="deleteRider?delete_status=' . base64_encode(1) . '&rider_user_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light mt-1">Delete</a>
                         <a href="riderEarnings?rider_user_id='.base64_encode($row->id).'" class="btn btn-outline-secondary btn-sm btn-round waves-effect waves-light m-0">Earnings</a>
                         <a href="disableRider?rider_user_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light mt-1">Disable</a>';
                     }
@@ -247,6 +247,15 @@ class RiderController extends Controller
 
     public function deleteRider(Request $request){
         $user = Auth::user();
+        $delete_status = base64_decode(request('delete_status'));
+        $delete_url = $request->fullUrl();
+        $delete_url = str_replace('delete_status=MQ%3D%3D','delete_status=Mg%3D%3D',  $delete_url);
+
+        if($delete_status == 1){
+            Session::flash('popup_delete', $delete_url);
+
+            return redirect()->back();
+        }
         $rider_user_id = base64_decode(request('rider_user_id'));
 
         $users = new User;

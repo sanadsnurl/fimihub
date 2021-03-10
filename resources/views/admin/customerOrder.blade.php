@@ -46,7 +46,7 @@
                                         <th>Dish</th>
                                         <th>Total Amount</th>
                                         <th>Payment Method</th>
-                                        <th>Create At</th>
+                                        <th>Order Date</th>
 
                                     </tr>
                                 </thead>
