@@ -432,6 +432,12 @@ Route::group(['middleware' => ['cors']], function () {
         Route::get('paymentMethod', 'Web\Admin\PaymentController@getPaymentMethod');
         //Update Payment method
         Route::get('changePaymentStatus', 'Web\Admin\PaymentController@changePaymentStatus');
+        //Delete Main Category
+        Route::get('deleteCat', 'Web\Admin\RestaurentController@deleteMainCategory');
+         //Edit Main Category
+         Route::get('editCategory', 'Web\Admin\RestaurentController@editCategory');
+          //Edit Main Category Process
+        Route::post('editCategory', 'Web\Admin\RestaurentController@editCategoryProcess');
     });
 
 });

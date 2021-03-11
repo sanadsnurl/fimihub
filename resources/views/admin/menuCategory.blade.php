@@ -101,6 +101,7 @@
                             <table id="example" class="table table-bordered">
                                 <thead>
                                     <tr>
+                                        <th>Action</th>
                                         <th>S.No.</th>
                                         <th>Category Name</th>
                                         <th>Service</th>
@@ -161,7 +162,13 @@ $(document).ready(function() {
         dom: 'lBfrtip',
         buttons: ['copy', 'excel', 'pdf', 'print'],
         ajax: "{{url('adminfimihub/menuCategory')}}",
-        columns: [{
+        columns: [  {
+                    data: 'action',
+                    name: 'action',
+                    orderable: true,
+                    searchable: false
+                },
+            {
                 data: 'DT_RowIndex',
                 name: 'id'
             },
@@ -178,9 +185,6 @@ $(document).ready(function() {
                 data: 'created_at',
                 name: 'created_at'
             },
-
-
-
         ]
     });
 

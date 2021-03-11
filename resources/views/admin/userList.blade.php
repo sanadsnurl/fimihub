@@ -95,12 +95,10 @@
                     data: 'email',
                     name: 'email'
                 },
-
                 {
                     data: 'created_at',
                     name: 'created_at'
                 },
-
                 {
                     data: 'action',
                     name: 'action',

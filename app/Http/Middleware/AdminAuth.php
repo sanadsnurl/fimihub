@@ -2,9 +2,11 @@
 
 namespace App\Http\Middleware;
 
+use App\Model\order;
 use Closure;
 use Session;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class AdminAuth
 {
@@ -65,6 +67,13 @@ class AdminAuth
                             return redirect('adminfimihub/notfound');
                         }
                     }
+                    $orders = new order();
+                    $order_data = $orders->allOrderPaginationData()
+                        ->whereDate('created_at', date('Y-m-d'))
+                        ->with('userAddress.userDetails', 'restaurentDetails.restroAddress', 'cart.cartItems.menuItems', 'orderEvent.reason');
+                    $order_data = $order_data->limit(10)->get();
+
+                    $_COOKIE['order_notification'] = $order_data;
                 } else {
                     Session::flash('message', 'Please Login Again!');
                     return redirect('/adminfimihub/login');

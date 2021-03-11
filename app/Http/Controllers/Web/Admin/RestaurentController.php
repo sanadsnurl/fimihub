@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Model\custom_menu_categorie;
 use Illuminate\Http\Request;
 //custom import
 use App\User;
@@ -109,11 +110,11 @@ class RestaurentController extends Controller
         if ($request->ajax()) {
             return Datatables::of($cat_data)
                 ->addIndexColumn()
-                // ->addColumn('action', function($row){
-                //     $btn = '
-                //         <a href="deleteCat?cat_id='.base64_encode($row->id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Delete</a>';
-                //     return $btn;
-                // })
+                ->addColumn('action', function($row){
+                    $btn = '<a href="editCategory?cat_id='.base64_encode($row->id).'" class="btn btn-outline-primary btn-sm btn-round waves-effect waves-light m-0">Edit</a>
+                        <a href="deleteCat?delete_status=' . base64_encode(1) . '&cat_id='.base64_encode($row->id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Delete</a>';
+                    return $btn;
+                })
                 ->addColumn('service_catagory_id', function($row){
                     if($row->service_catagory_id == 1){
                         return "Food";
@@ -393,5 +394,65 @@ class RestaurentController extends Controller
         Session::flash('message', 'Restaurent Disabled !');
 
         return redirect()->back();
+    }
+
+
+    public function deleteMainCategory(Request $request){
+        $user = Auth::user();
+        $delete_status = base64_decode(request('delete_status'));
+        $delete_url = $request->fullUrl();
+        $delete_url = str_replace('delete_status=MQ%3D%3D','delete_status=Mg%3D%3D',  $delete_url);
+        // dd($delete_url);
+
+        if($delete_status == 1){
+            Session::flash('popup_delete', $delete_url);
+
+            return redirect()->back();
+        }
+        $cat_id = base64_decode(request('cat_id'));
+        $menu_categories = new menu_categories();
+        $delete_resto = array();
+        $delete_resto['id'] = $cat_id;
+        $delete_resto = $menu_categories->deleteMainCategory($delete_resto);
+        Session::flash('message', 'Category Deleted Successfully !');
+
+        return redirect()->back();
+    }
+
+    public function editCategory(Request $request)
+    {
+        $user = Auth::user();
+        $cat_id = base64_decode(request('cat_id'));
+        $menu_categories = new menu_categories;
+        $cat_data = $menu_categories->restaurentCategoryPaginationData()->first();
+
+        $user['currency']=$this->currency;
+        $ServiceCategories = new ServiceCategory;
+        $service_list = $ServiceCategories->getAllServices()->get();
+        return view('admin.editCategory')->with(['data'=>$user,'cat_data'=>$cat_data,'service_list'=>$service_list]);
+
+    }
+    public function editCategoryProcess(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string',
+            'id' => 'required|numeric',
+
+
+        ]);
+        if(!$validator->fails()){
+            $user = Auth::user();
+            $data = $request->toarray();
+            $menu_categories = new menu_categories;
+            $cate_id = $menu_categories->editMenuCategory($data);
+            Session::flash('message', 'Category Updated Successfully!');
+
+            return redirect()->back();
+
+        }
+        else{
+        	return redirect()->back()->withInput()->withErrors($validator);
+        }
+
     }
 }
