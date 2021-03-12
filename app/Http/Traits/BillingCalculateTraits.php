@@ -186,10 +186,10 @@ trait BillingCalculateTraits
         $resto_data = $restaurent_detail->getRestoDataOnId($quant_details['restaurent_id']);
         $ServiceCategories = new ServiceCategory();
         $service_data = $ServiceCategories->getServiceById(1);
+        $sub_total = $total_amount / (1 + ($service_data->tax / 100));
         if($resto_data->resto_tax_status == 2) {
             $service_data->tax = 0;
         }
-        $sub_total = $total_amount / (1 + ($service_data->tax / 100));
 
         $service_tax = (($service_data->tax / 100) * $total_amount);
         $service_data->service_tax = $service_tax;

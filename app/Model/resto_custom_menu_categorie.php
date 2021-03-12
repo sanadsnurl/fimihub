@@ -24,6 +24,7 @@ class resto_custom_menu_categorie extends Model
         $menu_categories=DB::table('resto_custom_menu_categories')
         ->join('custom_menu_categories as mc', 'mc.id', '=', 'resto_custom_menu_categories.custom_cat_id')
         ->where('resto_custom_menu_categories.visibility', 0)
+        ->where('mc.visibility', 0)
         ->where('resto_custom_menu_categories.restaurent_id', $data)
         ->select('resto_custom_menu_categories.*','mc.name as cat_name','mc.id as cat_id','resto_custom_menu_categories.id as cats_id');
 

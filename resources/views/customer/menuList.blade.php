@@ -392,7 +392,7 @@
         var inputQuantityElement = $("#input-quantity-" + menu_decode_id);
         var isSendRequest = 0;
         inputQuantityElement.parents(".card-wrap").find(".active_required_vij input").each(function(index, value) {
-            console.log("dszx");
+            // console.log("dszx");
             if ($(this).prop('checked') == true) {
                 isSendRequest = 1;
             }

@@ -173,7 +173,7 @@ class OrderController extends Controller
 
         $validator = Validator::make($request->all(), [
             'payment' => 'required|in:1,2,3,4',
-            'delivery_fee' => 'required|not_in:0',
+            'delivery_fee' => 'required',
             'cvv' => 'required_if:payment,4|digits:3|nullable',
             'card_expiry_date' => 'required_if:payment,4|nullable',
             'card_number' => 'required_if:payment,4|nullable',

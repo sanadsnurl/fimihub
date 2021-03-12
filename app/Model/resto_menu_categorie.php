@@ -24,6 +24,7 @@ class resto_menu_categorie extends Model
 
         ->join('menu_categories as mc', 'mc.id', '=', 'resto_menu_categories.menu_category_id')
         ->where('resto_menu_categories.visibility', 0)
+        ->where('mc.visibility', 0)
         ->where('resto_menu_categories.restaurent_id', $data)
         ->select('resto_menu_categories.*','mc.name as cat_name','mc.id as cat_id','resto_menu_categories.id as cats_id');
 

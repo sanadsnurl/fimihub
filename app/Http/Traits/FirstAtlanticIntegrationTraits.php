@@ -159,6 +159,7 @@ trait FirstAtlanticIntegrationTraits
          *
          * Final 3DS auth data will be sent to your MerchantResponseURL
          */
+        dd($AuthorizeRequest);
             echo 'Please Wait, Transaction Processing .....';
             echo  "<span style='display:none;'>" . print_r($result, true);
             echo $result->Authorize3DSResult->HTMLFormData . "</span>";

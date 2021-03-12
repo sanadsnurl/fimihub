@@ -311,13 +311,16 @@
                 $("#loading-overlay").show();
             },
             success: function(response) {
-                // alert("something went wrong");
                 var delivery_charge = parseFloat($("#delivery_charge").text());
                 var total_amnt = (response.total_amount + response.service_data.service_tax);
                 total_amnt = total_amnt.toFixed(2);
                 var service_taxs = response.service_data.service_tax.toFixed(2);
                 var sub_totals = response.sub_total.toFixed(2);
-                if (isNaN(delivery_charge)) {} else {
+                if (isNaN(delivery_charge)) {
+                    $("#loading-overlay").hide();
+                    alert("Please Select Valid Address !");
+
+                } else {
                     total_amnt = parseFloat(total_amnt) + delivery_charge;
                 }
                 total_amnt = total_amnt.toFixed(2);

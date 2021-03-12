@@ -54,6 +54,10 @@ class menu_categories extends Model
             ->where('menu_category_id', $data['id'])
             ->update(['visibility'=> 2,'deleted_at' => $data['deleted_at']]);
 
+        // $query_data = DB::table('menu_list')
+        //     ->where('menu_category_id', $data['id'])
+        //     ->update(['visibility'=> 2,'deleted_at' => $data['deleted_at']]);
+
         return $query_data;
     }
 

@@ -7,6 +7,7 @@ use App\Http\Requests\user\orderFeedBack;
 use App\Http\Requests\user\SetPaymentMethod;
 use App\Http\Requests\user\TrackOrderRequest;
 use App\Http\Traits\BillingCalculateTraits;
+use App\Http\Traits\FirstAtlanticIntegrationTraits;
 use App\Http\Traits\LatLongRadiusScopeTrait;
 use App\Http\Traits\NotificationTrait;
 use Illuminate\Http\Request;
@@ -19,33 +20,38 @@ use Illuminate\Support\Str;
 use App\Http\Traits\OtpGenerationTrait;
 use App\Model\cart;
 use App\Model\cart_submenu;
+use App\Model\EnvSetting;
 use App\Model\menu_custom_list;
 use App\Model\menu_list;
 use App\Model\Notification;
 use App\Model\oauth_access_token;
 use App\Model\order;
 use App\Model\OrderEvent;
+use App\Model\payment_gateway_txn;
 use App\Model\payment_method;
 use App\Model\restaurent_detail;
+use App\Model\saved_card;
 use App\Model\ServiceCategory;
 use App\Model\user_address;
 use Response;
 use File;
+use Illuminate\Support\Facades\DB;
 
 use function GuzzleHttp\json_decode;
 
 class OrderController extends Controller
 {
-    use LatLongRadiusScopeTrait, BillingCalculateTraits, NotificationTrait;
+    use LatLongRadiusScopeTrait, BillingCalculateTraits, NotificationTrait, FirstAtlanticIntegrationTraits;
     public function getPaymentMethod(Request $request)
     {
         $user = Auth::user();
 
         $payment_methods = new payment_method();
         $payment_method_data = $payment_methods->getPaymentMethodList()->get();
-
+        $envSettings = EnvSetting::all();
         return response()->json([
             'payment_method_data' => $payment_method_data,
+            'env_settings' => $envSettings,
             'message' => 'success',
             'status' => true
         ], $this->successStatus);
@@ -200,7 +206,6 @@ class OrderController extends Controller
                 }
                 $make_order_id = $orders->makeOrder($add_order) ?? 0;
 
-                // $order_id = base64_encode($make_order_id);
                 $order_data = $orders->getOrderData($make_order_id);
                 // cash on delivery
                 if (in_array(request('payment'), [3])) {
@@ -262,6 +267,126 @@ class OrderController extends Controller
                         'message' => 'Order pending !',
                         'status' => true
                     ], $this->successStatus);
+                } elseif (in_array(request('payment'), [4])) {
+                    $make_payment_array = [
+                        'order_id' => $order_data->order_id,
+                        'order_unique_id' => $make_order_id,
+                        '_token' => request('_token'),
+                        'amount' => $billing_balance['total_amount_last'] + (float)$delivery_charge ?? 0,
+                        'card_ccv' => $data['cvv'],
+                        'card_expiry_date' => $data['card_expiry_date'],
+                        'card_number' => $data['card_number'],
+                        'issue_number' => '',
+                        'start_date' => '',
+                    ];
+                    // save card details
+                    if ($request->has('remember_card') && request('remember_card') == 1) {
+                        $saved_cards = new saved_card();
+                        $card_array  =  [
+                            'card_number' => base64_encode($data['card_number']),
+                            'card_expiry_date' => $data['card_expiry_date'],
+                            'person_name' => $data['person_name'],
+                            'user_id' => $user->id
+                        ];
+
+                        $save_insert = $saved_cards->makeSaveCards($card_array);
+                    }
+                    $payment = $this->makeFirstAtlanticPayment($make_payment_array);
+                    $payment = (json_decode(json_encode($payment)));
+                    $payment_auth_result = $payment->AuthorizeResult;
+                    $payment_result = $payment_auth_result->CreditCardTransactionResults;
+                    $order_number_bank = $payment_auth_result->OrderNumber;
+                    $response_code = $payment_result->ReasonCode;
+                    $txn_array = [
+                        'txn_id' => $order_number_bank,
+                        'user_id' => $user->id,
+                        'order_id' => $make_order_id,
+                        'txn_type' => 1,
+                        'amount' => $billing_balance['total_amount_last']  + request('delivery_fee') ?? 0,
+                        'status' => 1,
+                        'payment_type' => 4,
+                        'bank_response' => json_encode($payment)
+                    ];
+                    // Start transaction
+                    DB::beginTransaction();
+                    if ($response_code == 1) {
+                        // Success
+                        $cart_delete = $cart->deleteCart($user->id);
+                        $orders = new order();
+                        $payment_status = 2;
+                        $order_status_update = $orders->updatePaymentStatus($make_order_id, $payment_status);
+                        $payment_gateway_txns = new payment_gateway_txn();
+                        $txn_done = $payment_gateway_txns->insertUpdateTxn($txn_array);
+                    } else {
+                        // Failed
+                        $orders = new order();
+                        $payment_status = 3;
+                        $order_status_update = $orders->updatePaymentStatus($make_order_id, $payment_status);
+                        $txn_array['status'] = 2;
+                        $payment_gateway_txns = new payment_gateway_txn();
+                        $txn_done = $payment_gateway_txns->insertUpdateTxn($txn_array);
+                    }
+                    if ($order_status_update && $txn_done) {
+                        //Commit
+                        DB::commit();
+                        $order_statuss = "Order Confirmed";
+                        $order_message = "Your order was successfully placed \n and being prepared for delivery.";
+                        // ============================================= PUSH NOTIFICATION=======================================
+                        $sender_data = Auth::user();
+                        if (isset($sender_data->device_token)) {
+                            $push_notification_sender = array();
+                            $push_notification_sender['device_token'] = $sender_data->device_token;
+                            $push_notification_sender['title'] = 'Order Confirmed';
+                            $push_notification_rider['page_token'] = $make_order_id;
+                            $push_notification_sender['notification'] = 'Waiting For Restaurant Approval';
+                            $push_notification_sender_result = $this->pushNotification($push_notification_sender);
+                        }
+
+                        $notification_sender = array();
+                        $notification_sender['user_id'] = $sender_data->id;
+                        $notification_sender['txn_id'] = $order_data->order_id;
+                        $notification_sender['title'] = 'Order Confirmed';
+                        $notification_sender['notification'] = 'Waiting For Restaurant Approval';
+                        $notification = new Notification();
+                        $notification_id = $notification->makeNotifiaction($notification_sender);
+                        // ==========================================================================================================
+
+                        return response()->json([
+                            'order_id' => $make_order_id,
+                            'message' => $order_message,
+                            'status' => true
+                        ], $this->successStatus);
+                    } else {
+                        //rollback
+                        DB::rollBack();
+                        $order_statuss = "Order Failed";
+                        $order_message = "Your order was Failed ,\n tansaction declined.";
+                        // ============================================= PUSH NOTIFICATION=======================================
+                        $sender_data = Auth::user();
+                        if (isset($sender_data->device_token)) {
+                            $push_notification_sender = array();
+                            $push_notification_sender['device_token'] = $sender_data->device_token;
+                            $push_notification_sender['title'] = 'Order Failed';
+                            $push_notification_rider['page_token'] = $make_order_id;
+                            $push_notification_sender['notification'] = 'Order Has been failed';
+                            $push_notification_sender_result = $this->pushNotification($push_notification_sender);
+                        }
+
+                        $notification_sender = array();
+                        $notification_sender['user_id'] = $sender_data->id;
+                        $notification_sender['txn_id'] = $order_data->order_id;
+                        $notification_sender['title'] = 'Order Failed';
+                        $notification_sender['notification'] = 'Order Has been failed';
+                        $notification = new Notification();
+                        $notification_id = $notification->makeNotifiaction($notification_sender);
+                        // ==========================================================================================================
+
+                        return response()->json([
+                            'order_id' => $make_order_id,
+                            'message' => $order_message,
+                            'status' => false
+                        ], $this->successStatus);
+                    }
                 } else {
                     // ============================================= PUSH NOTIFICATION=======================================
                     $sender_data = Auth::user();
@@ -377,12 +502,13 @@ class OrderController extends Controller
                 } elseif ($o_event->user_type == 1) {
                     $event_data['rider'] = $o_event;
                     $users = new User();
-                    $ride_event_data = $users->userIdData($o_event->user_id)->with(['riderBankDetails','vehicleDetails'])->first();
+                    $ride_event_data = $users->userIdData($o_event->user_id)->with(['riderBankDetails', 'vehicleDetails'])->first();
                     $event_data['rider_details'] = $ride_event_data;
                     $order_events = new OrderEvent();
-                    $rating_array = ['user_id'=> $event_data['rider_details']['id'],
-                                    'user_type'=>1
-                                ];
+                    $rating_array = [
+                        'user_id' => $event_data['rider_details']['id'],
+                        'user_type' => 1
+                    ];
                     $rating_data = $order_events->getOrderEventRatingData($rating_array)->first();
                     $event_data['rider_rating_data'] = $rating_data;
                 }
