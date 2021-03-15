@@ -198,20 +198,20 @@ class Handler extends ExceptionHandler
             }
         }
         else{
-            // if (in_array(request()->segment(1), ['Restaurent'])) {
-            //     Session::flash('message', 'Method Not Allowed');
-            //     return redirect('Restaurent/notfound');
-            // } elseif (in_array(request()->segment(1), ['api'])) {
-            //     return response()->json([
-            //         'message' => 'Method Not Allowed', 'status' => false
-            //     ], 401);
-            // } elseif (in_array(request()->segment(1), ['adminfimihub'])) {
-            //     Session::flash('message', 'Method Not Allowed');
-            //     return redirect('adminfimihub/notfound');
-            // } else {
-            //     Session::flash('message', 'Method Not Allowed');
-            //     return redirect('accessDenied');
-            // }
+            if (in_array(request()->segment(1), ['Restaurent'])) {
+                Session::flash('message', 'Method Not Allowed');
+                return redirect('Restaurent/notfound');
+            } elseif (in_array(request()->segment(1), ['api'])) {
+                return response()->json([
+                    'message' => 'Method Not Allowed', 'status' => false
+                ], 401);
+            } elseif (in_array(request()->segment(1), ['adminfimihub'])) {
+                Session::flash('message', 'Method Not Allowed');
+                return redirect('adminfimihub/notfound');
+            } else {
+                Session::flash('message', 'Method Not Allowed');
+                return redirect('accessDenied');
+            }
         }
         return parent::render($request, $exception);
     }

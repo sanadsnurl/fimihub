@@ -49,9 +49,12 @@ class OrderController extends Controller
         $payment_methods = new payment_method();
         $payment_method_data = $payment_methods->getPaymentMethodList()->get();
         $envSettings = EnvSetting::all();
+        $saved_cards = new saved_card();
+        $card_data = $saved_cards->getUserCardList($user->id);
         return response()->json([
             'payment_method_data' => $payment_method_data,
             'env_settings' => $envSettings,
+            'card_data' => $card_data,
             'message' => 'success',
             'status' => true
         ], $this->successStatus);

@@ -218,7 +218,7 @@
                             <div class="form-footer">
                                 <input type="submit" class="btn btn-primary" value="Save Dish"></input>
 
-                                <a href="{{url()->previous()}}" >
+                                <a href="{{url('Restaurent/menuList')}}" >
                                     <span class="btn btn-danger">Back</span>
                                 </a>
                             </div>

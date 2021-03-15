@@ -92,11 +92,12 @@
                             </button>
                             <div class="dropdown-menu notification_dropdown">
                                 <div class="notification_head d-flex align-items-center justify-content-between">
-                                    <h4>NOTIFICATION</h4>
+                                    <h4>NOTIFICATION </h4>              <button type="button" class="close">&times;</button>
 
                                 </div>
                                 <div class="notification_body">
                                     <div class="nofication_content">
+
                                         <ul>
                                             @if(isset($user_data->notification_data) &&
                                             !empty($user_data->notification_data))

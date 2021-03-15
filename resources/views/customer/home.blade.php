@@ -11,7 +11,7 @@
             <div class="content-wrap">
                 <div class="container">
                     <div class="inner-wrap">
-                        <div class="text-wrap">
+                        <div class="text-wrap ">
                             <h1>{{$s_data->text1 ?? ''}}</h1>
                             <p>{{$s_data->text2 ?? ''}}</p>
                         </div>
@@ -95,7 +95,7 @@
                                     @if($r_data->rating_count <10) NEW @else {{$r_data->rating ?? 'NEW'}}
                                         ({{$r_data->rating_count ?? ''}}) @endif </span> </div> <div class="text-wrap">
                                         <h6>{{$r_data->name ?? ''}}</h6>
-                                        <span class="distance">{{round($r_data->delivery_charge,2) ?? 0 }} $</span>
+                                        <span class="distance no-icon">{{round($r_data->delivery_charge,2) ?? 0 }} $</span>
                                         <span class="eta">{{$r_data->avg_time ?? '--'}} Min</span>
                                         <span class="distance">{{round($r_data->dis,2) ?? round($r_data->distance,2)}} KM</span>
                                         <p>{{$r_data->about ?? ''}}</p>
@@ -130,7 +130,7 @@
                                 </div>
                                 <div class="text-wrap">
                                     <h6>{{$r_data->name ?? ''}}</h6>
-                                    <span class="distance">{{round($r_data->delivery_charge,2) ?? 0 }} $</span>
+                                    <span class="distance no-icon">{{round($r_data->delivery_charge,2) ?? 0 }} $ </span>
                                     <span class="eta">{{$r_data->avg_time ?? '--'}} Min</span>
                                     <span class="distance">{{round($r_data->dis,2) ?? round($r_data->distance,2)}} KM</span>
 
@@ -167,7 +167,7 @@
                                 </div>
                                 <div class="text-wrap">
                                     <h6>{{$r_data->name ?? ''}}</h6>
-                                    <span class="distance">{{round($r_data->delivery_charge,2) ?? 0 }} $</span>
+                                    <span class="distance no-icon">{{round($r_data->delivery_charge,2) ?? 0 }} $</span>
                                     <span class="eta">{{$r_data->avg_time ?? '--'}} Min</span>
                                     <span class="distance">{{round($r_data->dis,2) ?? round($r_data->distance,2)}} KM</span>
                                     <p>{{$r_data->about ?? ''}}</p>

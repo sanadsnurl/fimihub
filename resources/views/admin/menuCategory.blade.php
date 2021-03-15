@@ -57,32 +57,9 @@
 
                             </div>
 
-                            <div class="form-group row">
-                                <label for="input-1" class="col-sm-2 col-form-label">About Category</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="input-1" name="about"
-                                        value="{{old('about')}}">
-                                    @if($errors->has('about'))
-                                    <div class="error">{{ $errors->first('about') }}</div>
-                                    @endif
-                                </div>
-
-                            </div>
-                            <!-- <div class="form-group row">
-                                <label for="input-1" class="col-sm-2 col-form-label">Discount (%)</label>
-                                <div class="col-sm-10">
-                                    <input type="number" class="form-control" id="input-1" name="discount"
-                                        value="{{old('discount')}}  ">
-                                    @if($errors->has('discount'))
-                                    <div class="error">{{ $errors->first('discount') }}</div>
-                                    @endif
-                                </div>
-
-                            </div> -->
-
                             <div class="form-footer">
                                 <input type="submit" class="btn btn-primary" value="Save category"></input>
-                                <a href="{{url()->previous()}}" >
+                                <a href="{{url('menuCategory')}}" >
                                     <span class="btn btn-danger">Back</span>
                                 </a>
                             </div>

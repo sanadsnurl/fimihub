@@ -35,7 +35,8 @@ class menu_categories extends Model
     public function restaurentCategoryPaginationData()
     {
         $menu_categories=DB::table('menu_categories')
-        ->where('visibility', 0);
+        ->where('visibility', 0)
+        ->orderBy('created_at', 'DESC');
 
 
         return $menu_categories;
