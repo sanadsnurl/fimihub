@@ -178,6 +178,22 @@ class User extends Authenticatable
         }
     }
 
+    public function getAdminDataForPush()
+    {
+        try {
+            $data = "3";
+            $user_data=$this
+                ->where('user_type',1)
+                ->Where('role',NULL)
+                ->orWhereRaw('json_contains(role, \'["' . $data . '"]\')')
+                ->get();
+            return $user_data;
+        }
+        catch (Exception $e) {
+            dd($e);
+        }
+    }
+
     public function allUserList($user_type)
     {
         try {

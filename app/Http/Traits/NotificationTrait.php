@@ -32,7 +32,9 @@ trait NotificationTrait
                     "notification" : {
                         "title":"'.$title.'",
                         "body" : "'.strip_tags($notifications).'",
-                        "page_token" : "'.$page_token.'"
+                        "page_token" : "'.$page_token.'",
+                        "icon" : "https://fimihub.com/public/asset/customer/assets/images/logo.png",
+                        "url" : "https://fimihub.com"
                     },
                 "data" : {
                     "id" : 1,
@@ -41,7 +43,6 @@ trait NotificationTrait
                     "page_token" : "'.$page_token.'"
                 }
             }';
-
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -52,7 +53,8 @@ trait NotificationTrait
         $result = curl_exec($ch);
         curl_close($ch);
 
-        //var_dump($result) ;
+        // var_dump($result) ;
+        // die();
     }
 
 }

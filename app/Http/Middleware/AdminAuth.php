@@ -10,9 +10,9 @@ use Illuminate\Support\Facades\DB;
 
 class AdminAuth
 {
-    public $riderAllowedRoutes = ['dashboard', 'login', 'logout', 'notfound', 'resetPassword', 'disableRider', 'enableRider', 'riderEarnings', 'resetPasswordProcess', 'riderList', 'deleteUser', 'pendingRider', 'approveRider', 'deleteRider','nearByRider'];
-    public $restoAllowedRoutes = ['dashboard', 'login', 'logout', 'notfound', 'resetPassword', 'resetPasswordProcess', 'retaurantList', 'deleteUser', 'addRestaurent', 'pendingRetaurant', 'approveResto', 'editResto', 'editRestoProcess', 'deleteResto', 'lookupResto', 'restoEarnings','trackOrder','deleteOrder','menuCategory','addCategory','deleteCat','editCategory'];
-    public $orderAllowedRoutes = ['dashboard', 'login', 'logout', 'notfound', 'resetPassword', 'resetPasswordProcess', 'changePaidStatus', 'orderPaid', 'viewOrder', 'customerOrder'];
+    public $riderAllowedRoutes = ['dashboard', 'login', 'logout', 'notfound', 'resetPassword', 'disableRider', 'enableRider', 'riderEarnings', 'resetPasswordProcess', 'riderList', 'deleteUser', 'pendingRider', 'approveRider', 'deleteRider','nearByRider','savetokenadmin'];
+    public $restoAllowedRoutes = ['dashboard', 'login', 'logout', 'notfound', 'resetPassword', 'resetPasswordProcess', 'retaurantList', 'deleteUser', 'addRestaurent', 'pendingRetaurant', 'approveResto', 'editResto', 'editRestoProcess', 'deleteResto', 'lookupResto', 'restoEarnings','menuCategory','addCategory','deleteCat','editCategory','savetokenadmin'];
+    public $orderAllowedRoutes = ['dashboard', 'login', 'logout', 'notfound', 'resetPassword', 'resetPasswordProcess', 'changePaidStatus', 'orderPaid', 'viewOrder', 'customerOrder','trackOrder','deleteOrder','savetokenadmin'];
     /**
      * Handle an incoming request.
      *
