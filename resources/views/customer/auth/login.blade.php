@@ -140,10 +140,10 @@
                     @endif
                     <form role="form" method="POST" action="{{ url('/verifyAccount') }}">
                         @csrf
-                        <input type="number" maxlength="1" name="num1">
-                        <input type="number" maxlength="1" name="num2">
-                        <input type="number" maxlength="1" name="num3">
-                        <input type="number" maxlength="1" name="num4" class="mr-0">
+                        <input type="number" maxlength="1" name="num1" >
+                        <input type="number" maxlength="1" name="num2" >
+                        <input type="number" maxlength="1" name="num3" >
+                        <input type="number" maxlength="1" name="num4" class="mr-0" >
 
                         <p class="text-right"><a href="javascript:void(0);" class="resend_link">Resend OTP </a> <span
                                 class="timer">0:00</span></p>
@@ -213,7 +213,7 @@
                     @if(Session::has('error_message'))
                     <div class="error" style="text-align:center;">
                         <b>
-                            <h4 class="error">{{ Session::get('error_message') }}</h4>
+                            <h4 class="error"  id="error_otp">{{ Session::get('error_message') }}</h4>
                         </b>
                     </div>
                     <br>
@@ -232,14 +232,14 @@
                     @endif
                     <form role="form" method="POST" action="{{ url('/verifyOtpLogin') }}">
                         @csrf
-                        <input type="number" maxlength="1" name="num1">
-                        <input type="number" maxlength="1" name="num2">
-                        <input type="number" maxlength="1" name="num3">
-                        <input type="number" maxlength="1" name="num4" class="mr-0">
+                        <input type="number" maxlength="1" name="num1" id="input_1">
+                        <input type="number" maxlength="1" name="num2"id="input_2">
+                        <input type="number" maxlength="1" name="num3"id="input_3">
+                        <input type="number" maxlength="1" name="num4" class="mr-0"id="input_4">
 
                         <p class="text-right"><a href="javascript:void(0);" class="resend_link">Resend OTP </a> <span
                                 class="timer">0:00</span></p>
-                        <input type="submit" value="Verify" class="signup_btn btn_purple hover_effect1 auth_btn">
+                        <input type="submit" value="Verify" class="signup_btn btn_purple hover_effect1 auth_btn" id="verify_btn">
 
                     </form>
                 </div>
