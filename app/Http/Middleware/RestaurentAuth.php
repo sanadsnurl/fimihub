@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Model\order;
+use App\Model\restaurent_detail;
 use Closure;
 use Session;
 use Illuminate\Support\Facades\Auth;
@@ -69,6 +71,19 @@ class RestaurentAuth
                         return redirect('Restaurent/login');;
 
                     }
+                    $restaurent_detail = new restaurent_detail;
+                    $resto_data = $restaurent_detail->getRestoData($user->id);
+                    if ($resto_data == NULL) {
+                        $orders = new order;
+                        $order_data = $orders->customerOrderPaginationData(0);
+                    } else {
+                        $orders = new order;
+                        $order_data = $orders->customerOrderPaginationData($resto_data->id)
+                            ->whereDate('created_at', date('Y-m-d'));
+                    }
+                    $order_data = $order_data->limit(10)->get();
+
+                    $_COOKIE['order_notification'] = $order_data;
                 }else{
                     Session::flash('message', 'Please Login Again!');
                     return redirect('Restaurent/login');
@@ -76,9 +91,6 @@ class RestaurentAuth
             }
 
         }
-
-
-
         return $next($request);
     }
 }

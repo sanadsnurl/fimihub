@@ -12,6 +12,7 @@
     <title>Fimihub - Admin</title>
     <!--favicon-->
     <link rel="icon" href="{{asset('asset/customer/assets/images/logo.png')}}">
+    <meta name="csrf-token" content="{{csrf_token()}}" />
 
     <!-- Vector CSS -->
     <link href="{{asset('asset/admin/assets/plugins/vectormap/jquery-jvectormap-2.0.2.css')}}" rel="stylesheet" />
@@ -173,3 +174,75 @@
 
         </div>
         <!--End sidebar-wrapper-->
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-app.js"></script>
+{{-- <script src="https://www.gstatic.com/firebasejs/7.23.0/firebase.js"></script> --}}
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-analytics.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.23.0/firebase-messaging.js"></script>
+<script>
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  var firebaseConfig = {
+    apiKey: "AIzaSyBJGjRapdLzCQzEHaryirAB6z9AxHv1E2E",
+    authDomain: "fimihub-rider.firebaseapp.com",
+    projectId: "fimihub-rider",
+    storageBucket: "fimihub-rider.appspot.com",
+    messagingSenderId: "325134169313",
+    appId: "1:325134169313:web:27177c09890124edac33a0",
+    measurementId: "G-QS48Z6L0JH"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+    const messaging = firebase.messaging();
+
+    function initFirebaseMessagingRegistration() {
+        messaging
+            .requestPermission()
+            .then(function () {
+                return messaging.getToken()
+            })
+            .then(function(token) {
+                console.log(token);
+
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    url: "{{ route('savetokenadmin') }}",
+                    type: 'POST',
+                    data: {
+                        token: token,
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                    },
+                    // dataType: 'JSON',
+                    success: function (response) {
+                        // console.log(response,'ham hai');
+                        // alert('Token saved successfully.');
+                    },
+                    error: function (err) {
+                        console.log('User Chat Token Error'+ err);
+                    },
+                });
+
+            }).catch(function (err) {
+                console.log('User Chat Token Error'+ err);
+            });
+     }
+
+    messaging.onMessage(function(payload) {
+        const noteTitle = payload.notification.title;
+        const noteOptions = {
+            body: payload.notification.body,
+            icon: payload.notification.icon,
+            url: payload.notification.url,
+        };
+        new Notification(noteTitle, noteOptions);
+    });
+
+
+</script>

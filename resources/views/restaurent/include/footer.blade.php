@@ -27,6 +27,12 @@
 <!-- sidebar-menu js -->
 {{-- <script src="{{asset('asset/admin/assets/js/sidebar-menu.js')}}"></script> --}}
 <!-- Custom scripts -->
+<script>
+
+    $(document).ready(function() {
+        initFirebaseMessagingRegistration();
+    });
+</script>
 <script src="{{asset('asset/admin/assets/js/app-script.js')}}"></script>
 
 <!-- Vector map JavaScript -->
@@ -38,7 +44,6 @@
 <script src="{{asset('asset/admin/assets/js/index.js')}}"></script>
 
 </body>
-
 <!-- Mirrored from codervent.com/rocker/color-version/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 21 Sep 2018 19:46:25 GMT -->
 
 </html>

@@ -7,6 +7,9 @@
     <a href="{{url('myOrder')}}" class="d">
         <span class="btn_purple ml-4" style="padding: 10px;">Back To Order</span>
     </a>
+    <a href="{{request()->fullUrl()}}" class="d">
+        <span class="btn_purple ml-4" style="padding: 10px;">Refresh</span>
+    </a>
     <div class="card_lft card card_track" style="margin-top: 12px;">
         <div class="track_map">
             <img src="{{asset('asset/customer/assets/images/trackmap.png')}}" class="w-100" alt="map">

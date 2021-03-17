@@ -23,7 +23,7 @@ Route::get('/updateorder', function() {
     $response =  DB::statement('update orders set order_status = 3');
     return response()->json( $response);
 });
-
+// Route::post('/save-token', [App\Http\Controllers\HomeController::class, 'saveToken'])->name('save-token');
 Route::group(['middleware' => ['cors']], function () {
 
 //========================================== Customer Routes ===================================================
@@ -45,6 +45,7 @@ Route::group(['middleware' => ['cors']], function () {
     });
     // Customer index Page
     Route::get('/', 'Web\Customer\CmsController@indexHandShake');
+
 
     // Customer Login
     Route::get('/login', function () {
@@ -184,6 +185,7 @@ Route::group(['middleware' => ['cors']], function () {
     });
     // Restaurent Login Process
     Route::post('Restaurent/login', 'Web\Restaurent\LoginRegisterController@login');
+
     // Restaurent Logout
     Route::get('Restaurent/logout', 'Web\Restaurent\LoginRegisterController@logout');
     // Signin Otp Verification
@@ -279,7 +281,8 @@ Route::group(['middleware' => ['cors']], function () {
         Route::get('myEarnings', 'Web\Restaurent\EarningController@earningTrack');
         //Delete Order
         Route::get('deleteOrder', 'Web\Restaurent\OrderController@deleteCustomOrder');
-
+        // Update Device token
+        Route::post('saveToken', 'Web\Restaurent\LoginRegisterController@saveToken')->name('savetoken');
     });
 
 
@@ -432,6 +435,14 @@ Route::group(['middleware' => ['cors']], function () {
         Route::get('paymentMethod', 'Web\Admin\PaymentController@getPaymentMethod');
         //Update Payment method
         Route::get('changePaymentStatus', 'Web\Admin\PaymentController@changePaymentStatus');
+        //Delete Main Category
+        Route::get('deleteCat', 'Web\Admin\RestaurentController@deleteMainCategory');
+         //Edit Main Category
+         Route::get('editCategory', 'Web\Admin\RestaurentController@editCategory');
+          //Edit Main Category Process
+        Route::post('editCategory', 'Web\Admin\RestaurentController@editCategoryProcess');
+        // Update Device token
+        Route::post('saveToken', 'Web\Restaurent\LoginRegisterController@saveToken')->name('savetokenadmin');
     });
 
 });

@@ -2,15 +2,17 @@
 
 namespace App\Http\Middleware;
 
+use App\Model\order;
 use Closure;
 use Session;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class AdminAuth
 {
-    public $riderAllowedRoutes = ['dashboard', 'login', 'logout', 'notfound', 'resetPassword', 'disableRider', 'enableRider', 'riderEarnings', 'resetPasswordProcess', 'riderList', 'deleteUser', 'pendingRider', 'approveRider', 'deleteRider'];
-    public $restoAllowedRoutes = ['dashboard', 'login', 'logout', 'notfound', 'resetPassword', 'resetPasswordProcess', 'retaurantList', 'deleteUser', 'addRestaurent', 'pendingRetaurant', 'approveResto', 'editResto', 'editRestoProcess', 'deleteResto', 'lookupResto', 'restoEarnings'];
-    public $orderAllowedRoutes = ['dashboard', 'login', 'logout', 'notfound', 'resetPassword', 'resetPasswordProcess', 'changePaidStatus', 'orderPaid', 'viewOrder', 'customerOrder'];
+    public $riderAllowedRoutes = ['dashboard', 'login', 'logout', 'notfound', 'resetPassword', 'disableRider', 'enableRider', 'riderEarnings', 'resetPasswordProcess', 'riderList', 'deleteUser', 'pendingRider', 'approveRider', 'deleteRider','nearByRider','savetokenadmin'];
+    public $restoAllowedRoutes = ['dashboard', 'login', 'logout', 'notfound', 'resetPassword', 'resetPasswordProcess', 'retaurantList', 'deleteUser', 'addRestaurent', 'pendingRetaurant', 'approveResto', 'editResto', 'editRestoProcess', 'deleteResto', 'lookupResto', 'restoEarnings','menuCategory','addCategory','deleteCat','editCategory','savetokenadmin'];
+    public $orderAllowedRoutes = ['dashboard', 'login', 'logout', 'notfound', 'resetPassword', 'resetPasswordProcess', 'changePaidStatus', 'orderPaid', 'viewOrder', 'customerOrder','trackOrder','deleteOrder','savetokenadmin'];
     /**
      * Handle an incoming request.
      *
@@ -65,6 +67,13 @@ class AdminAuth
                             return redirect('adminfimihub/notfound');
                         }
                     }
+                    $orders = new order();
+                    $order_data = $orders->allOrderPaginationData()
+                        ->whereDate('created_at', date('Y-m-d'))
+                        ->with('userAddress.userDetails', 'restaurentDetails.restroAddress', 'cart.cartItems.menuItems', 'orderEvent.reason');
+                    $order_data = $order_data->limit(10)->get();
+
+                    $_COOKIE['order_notification'] = $order_data;
                 } else {
                     Session::flash('message', 'Please Login Again!');
                     return redirect('/adminfimihub/login');

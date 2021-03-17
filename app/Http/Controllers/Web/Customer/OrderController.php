@@ -173,7 +173,7 @@ class OrderController extends Controller
 
         $validator = Validator::make($request->all(), [
             'payment' => 'required|in:1,2,3,4',
-            'delivery_fee' => 'required|not_in:0',
+            'delivery_fee' => 'required',
             'cvv' => 'required_if:payment,4|digits:3|nullable',
             'card_expiry_date' => 'required_if:payment,4|nullable',
             'card_number' => 'required_if:payment,4|nullable',
@@ -397,6 +397,38 @@ class OrderController extends Controller
                     $order_statuss = "Order Confirmed";
                     $order_message = "Your order was successfully placed <br> and being prepared for delivery.";
                     $cart_delete = $cart->deleteCart($user->id);
+
+
+                // ============================================= PUSH NOTIFICATION=======================================
+                $restaurent_detail = new restaurent_detail;
+                $resto_data = $restaurent_detail->getRestoDataOnId($cart_avail->restaurent_id);
+                $users = new User();
+                $sender_data = $users->userByIdData($resto_data->user_id);
+
+                $push_notification_sender = array();
+                $push_notification_sender['device_token'] = $sender_data->device_token;
+                $push_notification_sender['title'] = 'New Order Recieved ';
+                $push_notification_sender['notification'] = 'Waiting For Restaurant Approval';
+
+                $push_notification_sender_result = $this->pushNotification($push_notification_sender);
+                // die();
+
+                //=================== Adimi push ===================
+                $users = new User();
+                $admin_data = $users->getAdminDataForPush();
+                foreach($admin_data as $a_data){
+                    $push_notification_sender = array();
+                    $push_notification_sender['device_token'] = $a_data->device_token;
+                    $push_notification_sender['title'] = 'New Order Recieved ';
+                    $push_notification_sender['notification'] = 'Waiting For Restaurant Approval';
+
+                    $push_notification_sender_result = $this->pushNotification($push_notification_sender);
+                }
+
+                // dd($push_notification_sender_result);
+
+                // ==========================================================================================================
+
                 }elseif(in_array(request('payment') ,[1])){
                     $cart = new cart;
                     $order_statuss = "Order Pending";

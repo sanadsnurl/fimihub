@@ -35,6 +35,7 @@ class menu_list extends Model
 
                             })
             ->where('menu_list.visibility', 0)
+            ->where('menu_categories.visibility', 0)
             ->where('menu_list.restaurent_id', $data)
             ->select('menu_list.*','menu_categories.name as cat_name')
             ->orderBy('name');
@@ -53,6 +54,7 @@ class menu_list extends Model
 
                             })
             ->whereIn('menu_list.visibility', [0,1])
+            ->where('menu_categories.visibility', 0)
             ->where('menu_list.restaurent_id', $data)
             ->select('menu_list.*','menu_categories.name as cat_name')
             ->orderBy('name');
@@ -71,6 +73,7 @@ class menu_list extends Model
 
                         })
         ->distinct('menu_list.menu_category_id')
+        ->where('menu_categories.visibility', 0)
         ->where('menu_list.visibility', 0)
         ->where('menu_list.restaurent_id', $data)
         ->select('mc.id as cat_id','menu_categories.name as cat_name')
@@ -91,6 +94,7 @@ class menu_list extends Model
 
                         })
         ->where('menu_list.visibility', 0)
+        ->where('menu_categories.visibility', 0)
         ->where('menu_list.restaurent_id', $data)
         ->select('menu_list.*','menu_categories.name as cat_name')
         ->orderBy('cat_name')
@@ -110,6 +114,7 @@ class menu_list extends Model
 
                         })
         ->where('menu_list.visibility', 0)
+        ->where('menu_categories.visibility', 0)
         ->where('menu_list.id', $data)
         ->select('menu_list.*','menu_categories.name as cat_name','mc.id as cat_id')
         ->orderBy('cat_name')
@@ -129,6 +134,7 @@ class menu_list extends Model
 
                         })
         ->whereIn('menu_list.visibility', [0,1])
+        ->where('menu_categories.visibility', 0)
         ->where('menu_list.id', $data)
         ->select('menu_list.*','menu_categories.name as cat_name','mc.id as cat_id')
         ->orderBy('cat_name')
@@ -148,6 +154,7 @@ class menu_list extends Model
 
                         })
         ->where('menu_list.id', $data)
+        ->where('menu_categories.visibility', 0)
         ->select('menu_list.*','menu_categories.name as cat_name')
         ->orderBy('cat_name')
         ->first();
@@ -173,6 +180,7 @@ class menu_list extends Model
 
                         })
                     ->where('menu_list.visibility', 0)
+                    ->where('menu_categories.visibility', 0)
                     ->where('menu_list.restaurent_id', $data['restaurent_id'])
                     ->select('menu_list.*','menu_categories.name as cat_name')
                     ->orderBy('cat_name')
@@ -200,6 +208,7 @@ class menu_list extends Model
 
                         })
                     ->where('menu_list.visibility', 0)
+                    ->where('menu_categories.visibility', 0)
                     ->select('menu_list.*',
                     'cart_submenus.quantity as quantity',
                     'cart_submenus.product_variant_id as cart_variant_id',
@@ -227,8 +236,10 @@ class menu_list extends Model
                         {
                             $join->on('menu_categories.id', '=', 'mc.menu_category_id');
 
+
                         })
                     ->where('menu_list.visibility', 0)
+                    ->where('menu_categories.visibility', 0)
                     ->where('menu_list.restaurent_id', $data['restaurent_id'])
                     ->select('menu_list.*','menu_categories.name as cat_name')
                     ->orderBy('cat_name')
@@ -257,6 +268,7 @@ class menu_list extends Model
 
                         })
                     ->where('menu_list.visibility', 0)
+                    ->where('menu_categories.visibility', 0)
                     ->select('menu_list.*',
                     'cart_submenus.quantity as quantity',
                     'cart_submenus.product_variant_id as cart_variant_id',
@@ -315,6 +327,7 @@ class menu_list extends Model
     }
     public function getPriceAttribute($value)
     {
+        // dd($value);
         if(in_array(request()->segment(1),['Restaurent', 'admifimihub'])) {
             return $value;
         } else {

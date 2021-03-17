@@ -90,6 +90,17 @@ class LoginRegisterController extends Controller
         return redirect('Restaurent/login');
     }
 
+    public function saveToken(Request $request)
+    {
+        $user = Auth::user();
+        $user_update_data['device_token'] = $request->token;
+        $user_update_data['id'] = $user->id;
+        $users = new User();
+        $user_dev_token = $users->UpdateLogin($user_update_data);
+        // auth()->user()->update(['device_token' => $request->token]);
+        return response()->json(['token saved successfully.']);
+    }
+
     public function resendOtp(Request $request)
     {
         $userid = session('userid');

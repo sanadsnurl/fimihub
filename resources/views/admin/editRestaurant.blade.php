@@ -241,7 +241,7 @@
                             <div class="form-footer">
                                 <input type="submit" class="btn btn-primary" value="Save Data"></input>
 
-                                <a href="{{url()->previous()}}" >
+                                <a href="{{url('adminfimihub/retaurantList')}}" >
                                     <span class="btn btn-danger">Back</span>
                                 </a>
                             </div>

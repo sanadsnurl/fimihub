@@ -391,8 +391,10 @@
         var menu_decode_id = atob(menu_id);
         var inputQuantityElement = $("#input-quantity-" + menu_decode_id);
         var isSendRequest = 0;
+
         inputQuantityElement.parents(".card-wrap").find(".active_required_vij input").each(function(index, value) {
-            console.log("dszx");
+            // console.log("dszx");
+
             if ($(this).prop('checked') == true) {
                 isSendRequest = 1;
             }
@@ -422,11 +424,13 @@
                     // });
                     // console.log('checking')
                 });
+
                 alert("Please select atleast one required Addon");
                 // console.log('request not sended');
                 return false;
             }
         });
+
         // console.log('request sended');
         var variant_menu = $(".small-" + menu_decode_id).val();
         var menu_form_data = JSON.stringify($('#menu_form-' + menu_decode_id).serializeArray());

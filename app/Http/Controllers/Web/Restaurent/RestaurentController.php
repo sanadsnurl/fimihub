@@ -976,6 +976,8 @@ class RestaurentController extends Controller
         'cat_name' => 'unique:custom_menu_categories,name|string|nullable',
         'customization_variant' => 'required|in:1,2',
         'id' => 'required',
+        'is_required' => 'required|in:1,2',
+        'multiple_select' => 'required|in:1,2',
 
     ]);
     if (!$validator->fails()) {
@@ -994,6 +996,8 @@ class RestaurentController extends Controller
         $resto_menu_cat['user_id'] = $user->id;
         $resto_menu_cat['restaurent_id'] = $resto_data->id;
         $resto_menu_cat['customization_variant'] = $data['customization_variant'];
+        $resto_menu_cat['is_required'] = $data['is_required'];
+        $resto_menu_cat['multiple_select'] = $data['multiple_select'];
         $resto_cate_id = $resto_custom_menu_categories->editCustomCat($resto_menu_cat);
 
         Session::flash('message', 'Custom Category Updated Successfully!');

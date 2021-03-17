@@ -91,7 +91,7 @@
 
                             <div class="form-footer">
                                 <input type="submit" class="btn btn-primary" value="Update"></input>
-                                <a href="{{url()->previous()}}" >
+                                <a href="{{url('adminfimihub/getSubAdmin')}}" >
                                     <span class="btn btn-danger">Back</span>
                                 </a>
                             </div>

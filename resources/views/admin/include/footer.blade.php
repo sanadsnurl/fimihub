@@ -27,6 +27,12 @@
 <!-- sidebar-menu js -->
 {{-- <script src="{{asset('asset/admin/assets/js/sidebar-menu.js')}}"></script> --}}
 <!-- Custom scripts -->
+<script>
+
+    $(document).ready(function() {
+        initFirebaseMessagingRegistration();
+    });
+</script>
 <script src="{{asset('asset/admin/assets/js/app-script.js')}}"></script>
 
 <!-- Vector map JavaScript -->

@@ -9,6 +9,7 @@ use Exception;
 
 class saved_card extends Model
 {
+    protected $appends =['person_card_number'];
     public function makeSaveCards($data)
     {
 
@@ -52,10 +53,17 @@ class saved_card extends Model
     {
         return ucfirst($value);
     }
+
     public function getCardNumberAttribute($value)
     {
         $card_explode =  substr(base64_decode($value),0,4);
 
         return $card_explode." XXXX XXXX XXXX";
     }
+    public function getPersonCardNumberAttribute()
+    {
+        // dd($this->attributes['card_number']);
+        return base64_decode($this->attributes['card_number']);
+    }
+
 }

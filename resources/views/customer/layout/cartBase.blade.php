@@ -243,21 +243,25 @@
                                     </span>
 
                                     @endif
-                                    <p>
+                                    {{-- <p>
                                         Color : {{$order_event_data->rider_details->vehicle_details->color ?? ''}}
                                     </p>
                                     <p>
-                                        Model Name : {{$order_event_data->rider_details->vehicle_details->model_name ?? ''}}
+                                        Model Name :
+                                        {{$order_event_data->rider_details->vehicle_details->model_name ?? ''}}
                                     </p>
                                     <p>
-                                        Vehicle Plate # : {{$order_event_data->rider_details->vehicle_details->vehicle_number ?? ''}}
+                                        Vehicle Plate # :
+                                        {{$order_event_data->rider_details->vehicle_details->vehicle_number ?? ''}}
                                     </p>
                                     <p>
                                         Completed Order : {{$order_event_data->rider_rating_data->rating_count ?? '0'}}
                                     </p>
                                     <p>
-                                       Working Started Year : {{date('Y',strtotime($order_event_data->rider_details->vehicle_details->created_at)) ?? '0'}}
-                                    </p>
+                                        Working Started Year :
+                                        {{date('Y',strtotime($order_event_data->rider_details->vehicle_details->created_at)) ?? '0'}}
+                                    </p> --}}
+
                                     <div class="img-wrap">
 
                                     </div>
@@ -266,10 +270,63 @@
                             </div>
 
                         </div>
+
+                        <a href="#" class="call_btn" data-toggle="modal" data-target="#myModalprofile">
+                            View Profile
+                        </a>
                         <a href="tel:{{$order_event_data->rider_details->mobile ?? '---'}}" class="call_btn">Call</a>
                     </div>
 
+                    <!-- The Modal -->
+                    <div class="modal" id="myModalprofile">
+                        <div class="modal-dialog">
 
+                            <div class="profile-card card rounded-lg shadow p-4 p-xl-5 mb-4 text-center">
+
+                                <button type="button" class="close" data-dismiss="modal"><span><i class="fa fa-times"
+                                            aria-hidden="true"></i></span></button>
+
+                                <div class="bannerbg"></div>
+
+                                <img src="{{$order_event_data->rider_details->vehicle_details->id_proof ?? asset('asset/customer/assets/images/user_dp.png')}}"
+                                    alt="user" class="img-circle mx-auto mb-3">
+                                <h3 class="mb-4">{{$order_event_data->rider_details->name ?? '---'}} </h3>
+
+                                <div class="text-left mb-4">
+                                    <p class="mb-2"> <b>Color : </b>
+                                        {{$order_event_data->rider_details->vehicle_details->color ?? ''}}</p>
+                                    <p class="mb-2">
+                                        <b>
+
+                                            Model Name :
+                                        </b>
+                                        {{$order_event_data->rider_details->vehicle_details->model_name ?? ''}}
+                                    </p>
+                                    <p class="mb-2">
+                                        <b>
+
+                                            Vehicle Plate # :
+                                        </b>
+                                        {{$order_event_data->rider_details->vehicle_details->vehicle_number ?? ''}}
+                                    </p>
+                                    <p class="mb-2">
+                                        <b>
+                                            Completed Order :
+                                        </b>
+                                        {{$order_event_data->rider_rating_data->rating_count ?? '0'}}
+                                    </p>
+                                    <p class="mb-2">
+                                        <b>
+
+                                            Working Started Year :
+                                        </b>
+                                        {{date('Y',strtotime($order_event_data->rider_details->vehicle_details->created_at)) ?? '0'}}
+                                    </p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
                     @endif
 
                     @else
@@ -311,13 +368,15 @@
                 $("#loading-overlay").show();
             },
             success: function(response) {
-                // alert("something went wrong");
                 var delivery_charge = parseFloat($("#delivery_charge").text());
                 var total_amnt = (response.total_amount + response.service_data.service_tax);
                 total_amnt = total_amnt.toFixed(2);
                 var service_taxs = response.service_data.service_tax.toFixed(2);
                 var sub_totals = response.sub_total.toFixed(2);
-                if (isNaN(delivery_charge)) {} else {
+                if (isNaN(delivery_charge)) {
+                    $("#loading-overlay").hide();
+                    alert("Please Select Valid Address !");
+                } else {
                     total_amnt = parseFloat(total_amnt) + delivery_charge;
                 }
                 total_amnt = total_amnt.toFixed(2);

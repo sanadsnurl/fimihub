@@ -264,8 +264,10 @@ class OrderController extends Controller
                 ->make(true);
         }
         $user['currency'] = $this->currency;
+
+
         $order_data = $order_data->get();
-        // dd($order_data);
+
         return view('restaurent.customerOrder')->with(['data' => $user, 'order_data' => $order_data]);
     }
 

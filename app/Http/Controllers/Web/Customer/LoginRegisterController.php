@@ -61,6 +61,7 @@ class LoginRegisterController extends Controller
 
         ]);
         if(!$validator->fails()){
+            // dd($request->fcm_token);
             $user_id = $request->input('user_id');
             $password = $request->input('password');
             $country_code = $request->input('country_code');
@@ -92,6 +93,10 @@ class LoginRegisterController extends Controller
                 $userid = $mobile_set;
                 Session::put('userid', $userid);
                 $user_data = auth()->user()->userData($userid);
+                if (isset($request->token)) {
+                    $user_update_data['device_token'] = $device_token;
+                    $user_dev_token = auth()->user()->UpdateLogin($user_update_data);
+                }
                 if($user_data->mobile_verified_at == NULL)
                 {
                     Session::flash('error_message', 'Please verify your Mobile Number !');
