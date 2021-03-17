@@ -278,3 +278,31 @@ $('.telInput2').on('focus', function() {
 
 var jdcode = $('#forgot_psw .selected-dial-code').text()
 $('.country_code2').val(jdcode);
+
+
+// otp validation
+
+let verify = document.getElementById('verify_btn')
+
+verify.addEventListener("click",function(e){
+    e.preventDefault()
+    let btn = document.querySelectorAll("#input_1,#input_2,#input_3,#input_4");
+    let error = document.getElementById("error_otp")
+    for (let i = 0; i < btn.length; i++) {
+        if(btn[0].value != "" &&  btn[1].value != "" && btn[2].value != "" && btn[3].value != ""){
+           
+            error.innerHTML = "Done"
+            error.style.color = "green"
+            btn[i].style.borderColor = "green"
+           
+            
+          
+        }
+        else{
+            error.innerHTML = "Invalid otp"
+            btn[i].style.borderColor = "red"
+           
+        }
+    }
+   
+})

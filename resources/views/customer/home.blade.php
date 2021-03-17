@@ -20,7 +20,7 @@
                         <a href="{{$s_data->link ?? ''}}" class="btn btn-lg btn-white">See More</a>
                         @endif
                         <form role="form" method="GET" action="{{ url('/home') }}" onSubmit="return checkform()"
-                            class="form save_adrs">
+                            class="form save_adrs top_input">
                             @csrf
                             <div class="search-bar">
                                 <div id="address-map-container" style="width:0%;height:0px; margin-bottom: 0px;">
@@ -36,7 +36,7 @@
                                             <div class="address_box_dyn">
                                                 <div class="error">Invalid Location</div>
                                                 <input type="text" data-id="location-input" name="address_address"
-                                                    placeholder="Search Location" id="location-input" class="map-input">
+                                                    placeholder="Delivery Location" id="location-input" class="map-input">
 
                                             </div>
                                             <input type="hidden" name="address_latitude" id="location-latitude"

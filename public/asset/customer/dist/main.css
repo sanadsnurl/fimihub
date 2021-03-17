@@ -56,6 +56,7 @@ body {
     -moz-osx-font-smoothing: grayscale;
     -webkit-text-size-adjust: 100%;
     overflow-x: hidden;
+    
 }
 
 html {
@@ -9109,4 +9110,31 @@ form .form-group label {
 
 .banner .slider-wrap .slide-item .content-wrap .inner-wrap .search-bar .location-selector span::before {
     top: 0;
+}
+
+.address_box_dyn {
+    position: relative;
+    width: 125px;
+    overflow-x: hidden;
+}
+.banner .slider-wrap .slide-item .content-wrap .inner-wrap .search-bar .location-selector input {
+    border: none;
+    border-bottom: 1px solid #ccc;
+    width: 286px;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.width_handaling{
+    width: 100%;
+}
+.top_input{
+    position: absolute;
+    top: -132px;
+    width: 100%;
+    left: 3px;
+    padding: 10px;
+}
+.inner-wrap {
+    padding: 65px 0;
 }
