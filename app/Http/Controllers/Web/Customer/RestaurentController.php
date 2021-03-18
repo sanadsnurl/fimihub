@@ -48,6 +48,7 @@ class RestaurentController extends Controller
         $rating_data = $order_events->getOrderEventRatingData($rating_array)->first();
 
         $menu_cat = $menu_list->menuCategory($resto_id);
+        // dd($menu_cat->toArray());
         $user->currency=$this->currency;
         // dd($billing_balance['menu_data']);
         // dd($billing_balance['menu_data'][0]->add_ons_cat);

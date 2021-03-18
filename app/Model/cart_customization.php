@@ -21,7 +21,6 @@ class cart_customization extends Model
         return $add_on_list;
 
     }
-
     public function getCartCustomDataBySubMenu($data)
     {
         $add_on_list=DB::table('cart_customizations')

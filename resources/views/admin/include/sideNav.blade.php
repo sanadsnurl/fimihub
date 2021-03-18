@@ -240,6 +240,7 @@
             body: payload.notification.body,
             icon: payload.notification.icon,
             url: payload.notification.url,
+            sound: payload.notification.sound
         };
         new Notification(noteTitle, noteOptions);
     });

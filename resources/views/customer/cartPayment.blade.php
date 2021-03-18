@@ -43,29 +43,22 @@
             </div>
             <form role="form" method="POST" action="{{ url('/addPaymentMethod') }}">
                 @csrf
-                {{-- @foreach($payment_method_data as $pm_type)
-                    <input type="radio" name="payment" id="payment_{{$pm_type->payment_id ?? ''}}" value="{{$pm_type->payment_id ?? ''}}"
-                    @if ($pm_type->web_active == 1 || $pm_type->status == 1)
-                        disabled
-                    @endif>
-                    <label for="payment_{{$pm_type->payment_id ?? ''}}" id="bank_transfer">
-                        <img src="{{asset($pm_type->logo) ?? ''}}" class="mr-2" style="height: 25px;"
-                            alt="cash on delivery">
-                        {{$pm_type->payment_methods ?? ''}} <span>
-                            @if ($pm_type->status == 1)
-                                (Comming Soon)
-                            @endif
-                        </span>
-                    </label>
-                @endforeach --}}
-
-                <input type="radio" name="payment" id="stripe" value="1">
-                <label for="stripe" id="bank_transfer">
-                    <img src="{{asset('asset/customer/assets/images/bank.svg')}}" class="mr-2" style="height: 25px;"
+                @foreach($payment_method_data as $pm_type)
+                <input type="radio" name="payment" id="payment_{{$pm_type->payment_id ?? ''}}"
+                    value="{{$pm_type->payment_id ?? ''}}" @if ($pm_type->web_active == 1 || $pm_type->status == 1)
+                disabled
+                @endif>
+                <label for="payment_{{$pm_type->payment_id ?? ''}}" id="bank_transfer">
+                    <img src="{{asset($pm_type->logo) ?? ''}}" class="mr-2" style="height: 25px;"
                         alt="cash on delivery">
-                    Bank Transfer
-                    {{-- <img src="{{asset('asset/customer/assets/images/stripe.svg')}}" alt="stripe"> --}}
+                    {{$pm_type->payment_methods ?? ''}} <span>
+                        @if ($pm_type->status == 1)
+                        (Comming Soon)
+                        @endif
+                    </span>
                 </label>
+                @if($pm_type->payment_id == 1)
+
                 <div class="bank_content content">
                     <p>Please make your Bank Transfer using the following
                         banking details below. When you are through, please
@@ -81,48 +74,24 @@
                         <li><strong> Account # USD:</strong> 544509470</li>
                     </ul>
                 </div>
-
-                {{-- <input type="radio" name="payment" id="paypal" value="2">
-                <label for="paypal">
-                    <img src="{{asset('asset/customer/assets/images/paypal.svg')}}" alt="paypal">
-                </label> --}}
-                <input type="radio" name="payment" id="paypal" value="2" disabled>
-                <label for="paypal">
-                    <img src="{{asset('asset/customer/assets/images/paypal.svg')}}" alt="paypal"> (Currency Conversion -> comming soon)
-                </label>
-                <input type="radio" name="payment" id="paypal" value="2" disabled>
-                <label for="paypal">
-                    <img src="https://media.glassdoor.com/sqll/903157/quisk-squarelogo-1476479951808.png" alt="paypal" height="30px" width="30px"> Quisk (comming soon)
-                </label>
-                <input type="radio" name="payment" id="cash" value="3">
-                <label for="cash" id="cashondelivery">
-                    <img src="{{asset('asset/customer/assets/images/cash-delivery.svg')}}" class="mr-2"
-                alt="cash on delivery">
-                CASH ON DELIVERY
-                </label>
-
-                <input type="radio" name="payment" id="atlantic" value="4">
-                <label for="atlantic" id="atlantic">
-                    <img src="{{asset('asset/customer/assets/images/bank.svg')}}" class="mr-2" style="height: 25px;"
-                        alt="cash on delivery">
-                    Pay with Credit/Debit Card
-                </label>
-
+                @endif
+                @if($pm_type->payment_id == 4)
                 <div class="content">
                     <div class="col-md-12">
                         <div class="dropdown">
                             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width: -webkit-fill-available;
-                                padding: 8px;
-                                background-color: #7D3B8A;
-                                margin-bottom: 10px;">
+                                    padding: 8px;
+                                    background-color: #7D3B8A;
+                                    margin-bottom: 10px;">
                                 Select From Saved Cards
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton"
                                 style="width: -webkit-fill-available">
                                 @if(count($card_data))
                                 @foreach($card_data as $user_card)
-                                <a class="dropdown-item" href="#" onclick="return setCardDetails({{$user_card->id ?? ''}})">
+                                <a class="dropdown-item" href="#"
+                                    onclick="return setCardDetails({{$user_card->id ?? ''}})">
                                     <span class="name"> {{$user_card->person_name ?? ''}} </span> &nbsp; <b>|</b> &nbsp;
                                     <span class="address">{{$user_card->card_number ?? ''}}
                                     </span>
@@ -137,9 +106,9 @@
                             <div class="first-row form-group">
                                 <div class="col-12 col-sm-8 controls">
                                     <label class="control-label">Card Number</label>
-                                    <input class="number credit-card-number form-control card_number" type="text" name="card_number"
-                                        inputmode="numeric" autocomplete="cc-number" autocompletetype="cc-number"
-                                        id="da " x-autocompletetype="cc-number"
+                                    <input class="number credit-card-number form-control card_number" type="text"
+                                        name="card_number" inputmode="numeric" autocomplete="cc-number"
+                                        autocompletetype="cc-number" id="da " x-autocompletetype="cc-number"
                                         placeholder="&#149;&#149;&#149;&#149; &#149;&#149;&#149;&#149; &#149;&#149;&#149;&#149; &#149;&#149;&#149;&#149;">
                                     @if($errors->has('card_number'))
                                     <div class="error">{{ $errors->first('card_number') }}</div>
@@ -157,8 +126,8 @@
                             <div class="second-row form-group">
                                 <div class="col-12 col-sm-8 controls">
                                     <label class="control-label">Name on Card</label>
-                                    <input class="billing-address-name form-control" type="text" name="person_name" id="person_name"
-                                        placeholder="Enter Name on Card">
+                                    <input class="billing-address-name form-control" type="text" name="person_name"
+                                        id="person_name" placeholder="Enter Name on Card">
                                     @if($errors->has('person_name'))
                                     <div class="error">{{ $errors->first('person_name') }}</div>
                                     @endif
@@ -182,10 +151,10 @@
                                 </div>
                             </div>
                             <div style="text-align-last: center;
-                            border: #7D3B8A double;
-                            padding: 13px;
-                            border-radius: 8px;
-                            margin-top: -27px;">
+                                border: #7D3B8A double;
+                                padding: 13px;
+                                border-radius: 8px;
+                                margin-top: -27px;">
                                 <img width="45" height="30" alt="Visa Logo"
                                     src="{{asset('asset/customer/assets/images/visa-logo.jpg')}}">&nbsp;&nbsp;
                                 <img width="45" height="30" alt="MC Logo"
@@ -200,6 +169,9 @@
                         </div>
                     </div>
                 </div>
+                <br>
+                @endif
+                @endforeach
                 <input type="hidden" name="delivery_fee" id="delivery_charge_input" value="">
                 <input type="submit" class="btn_purple auth_btn hover_effect1 paynow_btn" value="Pay Now">
             </form>
@@ -209,10 +181,10 @@
 <script>
     function setCardDetails(card_id) {
         $.ajax({
-            url:"setCard",
-            data:"card_id=" + card_id,
-            type:"get",
-            beforeSend: function(){
+            url: "setCard",
+            data: "card_id=" + card_id,
+            type: "get",
+            beforeSend: function() {
                 $("#loading-overlay").show();
             },
             success: function(response) {

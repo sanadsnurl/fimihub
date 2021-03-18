@@ -151,7 +151,10 @@ class OtpManagerController extends Controller
                         $user_data->updated_at = now();
                         $user_data->verification_code = NULL;
                         $user_data->save();
-
+                        if ($request->has('device_token')) {
+                            $user_update_data['device_token'] = $request->input('device_token');
+                            $user = auth()->user()->UpdateLogin($user_update_data);
+                        }
                         $accessToken = $user_data->createToken('teckzy')->accessToken;
 
                         $user_data->access_token=$accessToken;
@@ -165,7 +168,12 @@ class OtpManagerController extends Controller
                         $user_data->updated_at = now();
                         $user_data->verification_code = NULL;
                         $user_data->save();
-
+                        if ($request->has('device_token')) {
+                            $user_update_data['device_token'] = $request->input('device_token');
+                            $user_update_data['id'] = $user_data->id;
+                            $users = new User();
+                            $user = $users->UpdateLogin($user_update_data);
+                        }
                         $rememberPasswordToken = $user_data->createToken('teckzy')->token;
                         $remember_password_token = $rememberPasswordToken->id;
                         return response()->json(['remember_password_token'=>$remember_password_token,'status' => true,'message'=>'OTP Verified Successfully'], $this->successStatus);

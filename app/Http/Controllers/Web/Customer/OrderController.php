@@ -57,7 +57,7 @@ class OrderController extends Controller
         $payment_methods = new payment_method();
         $payment_method_data = $payment_methods->getPaymentMethodList($user->id)->get();
 
-// dd($payment_method_data);
+        // dd($payment_method_data);
         if ($user_default_add != NULL) {
 
             $user_address = new user_address();
@@ -332,12 +332,14 @@ class OrderController extends Controller
                         'start_date' => '',
                     ];
                     // save card details
-                    if ($request->has('remember_card') && request('remember_card')==1) {
+                    if ($request->has('remember_card') && request('remember_card') == 1) {
                         $saved_cards = new saved_card();
-                        $card_array  =  ['card_number' => base64_encode($data['card_number']),
-                                        'card_expiry_date' => $data['card_expiry_date'],
-                                        'person_name' => $data['person_name'],
-                                        'user_id' => $user->id];
+                        $card_array  =  [
+                            'card_number' => base64_encode($data['card_number']),
+                            'card_expiry_date' => $data['card_expiry_date'],
+                            'person_name' => $data['person_name'],
+                            'user_id' => $user->id
+                        ];
 
                         $save_insert = $saved_cards->makeSaveCards($card_array);
                     }
@@ -381,6 +383,35 @@ class OrderController extends Controller
                         DB::commit();
                         $order_statuss = "Order Confirmed";
                         $order_message = "Your order was successfully placed <br> and being prepared for delivery.";
+                        // ============================================= PUSH NOTIFICATION=======================================
+                        $restaurent_detail = new restaurent_detail;
+                        $resto_data = $restaurent_detail->getRestoDataOnId($cart_avail->restaurent_id);
+                        $users = new User();
+                        $sender_data = $users->userByIdData($resto_data->user_id);
+
+                        $push_notification_sender = array();
+                        $push_notification_sender['device_token'] = $sender_data->device_token;
+                        $push_notification_sender['title'] = 'New Order Recieved ';
+                        $push_notification_sender['notification'] = 'Waiting For Restaurant Approval';
+                        $push_notification_sender['page_url'] = url('Restaurent/customerOrder');
+
+                        $push_notification_sender_result = $this->pushNotification($push_notification_sender);
+
+                        //=================== Adimi push ===================
+                        $users = new User();
+                        $admin_data = $users->getAdminDataForPush();
+                        foreach ($admin_data as $a_data) {
+                            $push_notification_sender = array();
+                            $push_notification_sender['device_token'] = $a_data->device_token;
+                            $push_notification_sender['title'] = 'New Order Recieved ';
+                            $push_notification_sender['notification'] = 'Waiting For Restaurant Approval';
+                            $push_notification_sender['page_url'] = url('adminfimihub/customerOrder');
+
+                            $push_notification_sender_result = $this->pushNotification($push_notification_sender);
+                        }
+
+                        // ==========================================================================================================
+
                     } else {
                         //rollback
                         DB::rollBack();
@@ -392,48 +423,64 @@ class OrderController extends Controller
                         return redirect()->back();
                     }
                 }
-                if(in_array(request('payment') ,[3])){
+                if (in_array(request('payment'), [3])) {
                     $cart = new cart;
                     $order_statuss = "Order Confirmed";
                     $order_message = "Your order was successfully placed <br> and being prepared for delivery.";
                     $cart_delete = $cart->deleteCart($user->id);
 
 
-                // ============================================= PUSH NOTIFICATION=======================================
-                $restaurent_detail = new restaurent_detail;
-                $resto_data = $restaurent_detail->getRestoDataOnId($cart_avail->restaurent_id);
-                $users = new User();
-                $sender_data = $users->userByIdData($resto_data->user_id);
+                    // ============================================= PUSH NOTIFICATION=======================================
+                    $restaurent_detail = new restaurent_detail;
+                    $resto_data = $restaurent_detail->getRestoDataOnId($cart_avail->restaurent_id);
+                    $users = new User();
+                    $sender_data = $users->userByIdData($resto_data->user_id);
 
-                $push_notification_sender = array();
-                $push_notification_sender['device_token'] = $sender_data->device_token;
-                $push_notification_sender['title'] = 'New Order Recieved ';
-                $push_notification_sender['notification'] = 'Waiting For Restaurant Approval';
-
-                $push_notification_sender_result = $this->pushNotification($push_notification_sender);
-                // die();
-
-                //=================== Adimi push ===================
-                $users = new User();
-                $admin_data = $users->getAdminDataForPush();
-                foreach($admin_data as $a_data){
                     $push_notification_sender = array();
-                    $push_notification_sender['device_token'] = $a_data->device_token;
+                    $push_notification_sender['device_token'] = $sender_data->device_token;
                     $push_notification_sender['title'] = 'New Order Recieved ';
                     $push_notification_sender['notification'] = 'Waiting For Restaurant Approval';
+                    $push_notification_sender['page_url'] = url('Restaurent/customerOrder');
 
                     $push_notification_sender_result = $this->pushNotification($push_notification_sender);
-                }
 
-                // dd($push_notification_sender_result);
+                    //=================== Adimi push ===================
+                    $users = new User();
+                    $admin_data = $users->getAdminDataForPush();
+                    foreach ($admin_data as $a_data) {
+                        $push_notification_sender = array();
+                        $push_notification_sender['device_token'] = $a_data->device_token;
+                        $push_notification_sender['title'] = 'New Order Recieved ';
+                        $push_notification_sender['notification'] = 'Waiting For Restaurant Approval';
+                        $push_notification_sender['page_url'] = url('adminfimihub/customerOrder');
 
-                // ==========================================================================================================
+                        $push_notification_sender_result = $this->pushNotification($push_notification_sender);
+                    }
 
-                }elseif(in_array(request('payment') ,[1])){
+                    // ==========================================================================================================
+
+                } elseif (in_array(request('payment'), [1])) {
                     $cart = new cart;
                     $order_statuss = "Order Pending";
                     $order_message = "Your order was pending <br> admin approval needed.";
                     $cart_delete = $cart->deleteCart($user->id);
+
+                    // ============================================= PUSH NOTIFICATION=======================================
+                    //=================== Adimi push ===================
+                    $users = new User();
+                    $admin_data = $users->getAdminDataForPush();
+                    foreach ($admin_data as $a_data) {
+                        $push_notification_sender = array();
+                        $push_notification_sender['device_token'] = $a_data->device_token;
+                        $push_notification_sender['title'] = 'New Order Recieved ';
+                        $push_notification_sender['notification'] = 'Waiting For Payment Confirmation';
+                        $push_notification_sender['page_url'] = url('adminfimihub/customerOrder');
+
+                        $push_notification_sender_result = $this->pushNotification($push_notification_sender);
+                    }
+
+                    // ==========================================================================================================
+
                 }
                 Session::flash('modal_check_order', 'open');
                 Session::flash('order_statuss', $order_statuss ?? '');
@@ -519,16 +566,15 @@ class OrderController extends Controller
                 } elseif ($o_event->user_type == 1) {
                     $event_data['rider'] = $o_event;
                     $users = new User();
-                    $ride_event_data = $users->userIdData($o_event->user_id)->with(['riderBankDetails','vehicleDetails'])->first();
+                    $ride_event_data = $users->userIdData($o_event->user_id)->with(['riderBankDetails', 'vehicleDetails'])->first();
                     $event_data['rider_details'] = $ride_event_data;
                     $order_events = new OrderEvent();
-                    $rating_array = ['user_id'=> $event_data['rider_details']['id'],
-                                    'user_type'=>1
-                                ];
+                    $rating_array = [
+                        'user_id' => $event_data['rider_details']['id'],
+                        'user_type' => 1
+                    ];
                     $rating_data = $order_events->getOrderEventRatingData($rating_array)->first();
                     $event_data['rider_rating_data'] = $rating_data;
-
-
                 }
             }
             $total_amount = abs($order_data->total_amount - $order_data->delivery_fee);
@@ -545,7 +591,7 @@ class OrderController extends Controller
             $order_data->delivery_time = strtotime("+40 minutes", strtotime($order_data->created_at));
             $order_data->delivery_time = date('h:i', $order_data->delivery_time);
             // dd($event_data);
-// dd($event_data->rider_details);
+            // dd($event_data->rider_details);
             return view('customer.trackOrder')->with([
                 'user_data' => $user,
                 'order_data' => $order_data,
@@ -607,6 +653,34 @@ class OrderController extends Controller
             $order_message = "Your order was successfully placed <br> and being prepared for delivery.";
             $cart = new cart;
             $cart_delete = $cart->deleteCart($order_data->user_id);
+            // ============================================= PUSH NOTIFICATION=======================================
+            $restaurent_detail = new restaurent_detail;
+            $resto_data = $restaurent_detail->getRestoDataOnId($order_data->restaurent_id);
+            $users = new User();
+            $sender_data = $users->userByIdData($resto_data->user_id);
+
+            $push_notification_sender = array();
+            $push_notification_sender['device_token'] = $sender_data->device_token;
+            $push_notification_sender['title'] = 'New Order Recieved ';
+            $push_notification_sender['notification'] = 'Waiting For Restaurant Approval';
+            $push_notification_sender['page_url'] = url('Restaurent/customerOrder');
+
+            $push_notification_sender_result = $this->pushNotification($push_notification_sender);
+
+            //=================== Adimi push ===================
+            $users = new User();
+            $admin_data = $users->getAdminDataForPush();
+            foreach ($admin_data as $a_data) {
+                $push_notification_sender = array();
+                $push_notification_sender['device_token'] = $a_data->device_token;
+                $push_notification_sender['title'] = 'New Order Recieved ';
+                $push_notification_sender['notification'] = 'Waiting For Restaurant Approval';
+                $push_notification_sender['page_url'] = url('adminfimihub/customerOrder');
+
+                $push_notification_sender_result = $this->pushNotification($push_notification_sender);
+            }
+
+            // ==========================================================================================================
 
             $order_status_update = $orders->updatePaymentStatus($order_check_token, $payment_status);
             Session::flash('order_statuss', $order_statuss ?? '');
@@ -671,6 +745,35 @@ class OrderController extends Controller
                 $order_status_update = $orders->updatePaymentStatus($make_order_id, $payment_status);
                 $payment_gateway_txns = new payment_gateway_txn();
                 $txn_done = $payment_gateway_txns->insertUpdateTxn($txn_array);
+                // ============================================= PUSH NOTIFICATION=======================================
+                $restaurent_detail = new restaurent_detail;
+                $resto_data = $restaurent_detail->getRestoDataOnId($order_data->restaurent_id);
+                $users = new User();
+                $sender_data = $users->userByIdData($resto_data->user_id);
+
+                $push_notification_sender = array();
+                $push_notification_sender['device_token'] = $sender_data->device_token;
+                $push_notification_sender['title'] = 'New Order Recieved ';
+                $push_notification_sender['notification'] = 'Waiting For Restaurant Approval';
+                $push_notification_sender['page_url'] = url('Restaurent/customerOrder');
+
+                $push_notification_sender_result = $this->pushNotification($push_notification_sender);
+
+                //=================== Adimi push ===================
+                $users = new User();
+                $admin_data = $users->getAdminDataForPush();
+                foreach ($admin_data as $a_data) {
+                    $push_notification_sender = array();
+                    $push_notification_sender['device_token'] = $a_data->device_token;
+                    $push_notification_sender['title'] = 'New Order Recieved ';
+                    $push_notification_sender['notification'] = 'Waiting For Restaurant Approval';
+                    $push_notification_sender['page_url'] = url('adminfimihub/customerOrder');
+
+                    $push_notification_sender_result = $this->pushNotification($push_notification_sender);
+                }
+
+                // ==========================================================================================================
+
             } else {
                 // Failed
                 $order_statuss = "Order Failed";

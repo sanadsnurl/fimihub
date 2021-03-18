@@ -28,6 +28,7 @@ class UserLoginRequest extends FormRequest
     {
         $validator = [
             'userid' => 'required|numeric',
+            'device_token' => 'string|nullable',
             'email'=>'email',
             'country_code'=>'string|nullable',
             'mobile'=>'numeric|digits:10',

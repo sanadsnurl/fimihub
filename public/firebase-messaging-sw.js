@@ -32,8 +32,9 @@ messaging.setBackgroundMessageHandler(function(payload) {
     const notificationTitle = "Background Message Title";
     const notificationOptions = {
         body: "Background Message body.",
-        icon: "/asset/customer/assets/images/logo.png",
-        url: "Background Message url",
+        icon: "asset/customer/assets/images/logo.png",
+        url: payload.notification.url,
+        sound: payload.notification.sound
     };
 
     return self.registration.showNotification(

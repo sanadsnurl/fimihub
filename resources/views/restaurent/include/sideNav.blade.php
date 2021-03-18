@@ -128,8 +128,7 @@
     const messaging = firebase.messaging();
 
     function initFirebaseMessagingRegistration() {
-        messaging
-            .requestPermission()
+        messaging.requestPermission()
             .then(function () {
                 return messaging.getToken()
             })
@@ -169,6 +168,7 @@
             body: payload.notification.body,
             icon: payload.notification.icon,
             url: payload.notification.url,
+            sound: payload.notification.sound
         };
         new Notification(noteTitle, noteOptions);
     });

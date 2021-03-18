@@ -283,6 +283,13 @@ class LoginRegisterController extends Controller
                     $message = "success";
                 }
                 if($user_data->user_type == 2){
+                    if ($request->has('device_token')) {
+                        $user_update_data['device_token'] = $request->input('device_token');
+                        $user_update_data['id'] = $user_data->id;
+                        $users = new User();
+                        $user = $users->UpdateLogin($user_update_data);
+                    }
+
                     if ($user_data->mobile_verified_at == NULL) {
                         $otp = $this->OtpGeneration($user_data->mobile);
                         $user_data->access_token = $accessToken;
