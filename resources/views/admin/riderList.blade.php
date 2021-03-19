@@ -134,7 +134,7 @@
                         name: 'email'
                     },
                     {
-                        data: 'vehicle_details',
+                        data: 'vehicleDetails.vehicle_number',
                         render: function(data, type, row) {
                             if (row.vehicle_details) {
                                 return row.vehicle_details.vehicle_number;
@@ -143,7 +143,7 @@
                         },
                     },
                     {
-                        data: 'vehicle_details',
+                        data: 'vehicleDetails.registration_number',
                         render: function(data, type, row) {
                             if (row.vehicle_details) {
                                 return row.vehicle_details.registration_number;
@@ -158,7 +158,7 @@
                         searchable: false
                     },
                     {
-                        data: 'vehicle_details',
+                        data: 'vehicleDetails.model_name',
                         render: function(data, type, row) {
                             if (row.vehicle_details) {
                                 return row.vehicle_details.model_name;
@@ -167,7 +167,7 @@
                         },
                     },
                     {
-                        data: 'vehicle_details',
+                        data: 'vehicleDetails.color',
                         render: function(data, type, row) {
                             if (row.vehicle_details) {
                                 return row.vehicle_details.color;
@@ -180,7 +180,7 @@
                         name: 'id_proof'
                     },
                     {
-                        data: 'vehicle_details',
+                        data: 'vehicleDetails.address',
                         render: function(data, type, row) {
                             if (row.vehicle_details) {
                                 return row.vehicle_details.address;
@@ -189,7 +189,7 @@
                         },
                     },
                     {
-                        data: 'vehicle_details',
+                        data: 'vehicleDetails.pincode',
                         render: function(data, type, row) {
                             if (row.vehicle_details) {
                                 return row.vehicle_details.pincode;
@@ -210,7 +210,7 @@
                         name: 'food_permit'
                     },
                     {
-                        data: 'vehicle_details',
+                        data: 'vehicleDetails.dl_start_date',
                         render: function(data, type, row) {
                             if (row.vehicle_details) {
                                 return row.vehicle_details.dl_start_date;
@@ -219,7 +219,7 @@
                         },
                     },
                     {
-                        data: 'vehicle_details',
+                        data: 'vehicleDetails.dl_end_date',
                         render: function(data, type, row) {
                             if (row.vehicle_details) {
                                 return row.vehicle_details.dl_end_date;
@@ -228,7 +228,7 @@
                         },
                     },
                     {
-                        data: 'vehicle_details',
+                        data: 'vehicleDetails.policy_company',
                         render: function(data, type, row) {
                             if (row.vehicle_details) {
                                 return row.vehicle_details.policy_company;
@@ -237,7 +237,7 @@
                         },
                     },
                     {
-                        data: 'vehicle_details',
+                        data: 'vehicleDetails.insurance_company',
                         render: function(data, type, row) {
                             if (row.vehicle_details) {
                                 return row.vehicle_details.insurance_company;
@@ -246,7 +246,7 @@
                         },
                     },
                     {
-                        data: 'vehicle_details',
+                        data: 'vehicleDetails.insurance_start_date',
                         render: function(data, type, row) {
                             if (row.vehicle_details) {
                                 return row.vehicle_details.insurance_start_date;
@@ -255,7 +255,7 @@
                         },
                     },
                     {
-                        data: 'vehicle_details',
+                        data: 'vehicleDetails.insurance_end_date',
                         render: function(data, type, row) {
                             if (row.vehicle_details) {
                                 return row.vehicle_details.insurance_end_date;
@@ -264,7 +264,7 @@
                         },
                     },
                     {
-                        data: 'vehicle_details',
+                        data: 'vehicleDetails.registraion_start_date',
                         render: function(data, type, row) {
                             if (row.vehicle_details) {
                                 return row.vehicle_details.registraion_start_date;
@@ -273,7 +273,7 @@
                         },
                     },
                     {
-                        data: 'vehicle_details',
+                        data: 'vehicleDetails.registraion_end_date',
                         render: function(data, type, row) {
                             if (row.vehicle_details) {
                                 return row.vehicle_details.registraion_end_date;
@@ -282,7 +282,7 @@
                         },
                     },
                     {
-                        data: 'rider_bank_details',
+                        data: 'riderBankDetails.bank_name',
                         render: function(data, type, row) {
                             if (row.rider_bank_details) {
                                 return row.rider_bank_details.bank_name;
@@ -291,7 +291,7 @@
                         },
                     },
                     {
-                        data: 'rider_bank_details',
+                        data: 'riderBankDetails.account_number',
                         render: function(data, type, row) {
                             if (row.rider_bank_details) {
                                 return row.rider_bank_details.account_number;
@@ -300,7 +300,7 @@
                         },
                     },
                     {
-                        data: 'rider_bank_details',
+                        data: 'riderBankDetails.holder_name',
                         render: function(data, type, row) {
                             if (row.rider_bank_details) {
                                 return row.rider_bank_details.holder_name;
@@ -309,7 +309,7 @@
                         },
                     },
                     {
-                        data: 'rider_bank_details',
+                        data: 'riderBankDetails.branch_name',
                         render: function(data, type, row) {
                             if (row.rider_bank_details) {
                                 return row.rider_bank_details.branch_name;
@@ -318,7 +318,7 @@
                         },
                     },
                     {
-                        data: 'rider_bank_details',
+                        data: 'riderBankDetails.ifsc_code',
                         render: function(data, type, row) {
                             if (row.rider_bank_details) {
                                 return row.rider_bank_details.ifsc_code;
@@ -328,7 +328,7 @@
                     },
                     {
                         data: 'created_at',
-                        name: 'created_at'
+                        name: 'users.created_at'
                     },
                 ]
             });

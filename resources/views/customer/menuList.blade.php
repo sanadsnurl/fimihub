@@ -447,6 +447,11 @@
                 $("#loading-overlay").show();
             },
             success: function(response) {
+                if (response == -1) {
+                    var url = window.location.protocol + '//' + window.location.host + '/login';
+                    console.log(url);
+                    window.location.href = url;
+                }
                 // alert("something went wrong");
                 console.log(response);
                 if (response.items > 0) {

@@ -39,7 +39,7 @@ class OrderController extends Controller
             ->with('userAddress.userDetails', 'restaurentDetails.restroAddress', 'cart.cartItems.menuItems', 'orderEvent.reason');
 // dd($order_data->get());
         if ($request->ajax()) {
-            return Datatables::of($order_data)
+            return Datatables::eloquent($order_data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
                     $btn = '';
@@ -53,6 +53,15 @@ class OrderController extends Controller
                 ->addColumn('created_at', function ($row) {
                     return date('d F Y', strtotime($row->created_at));
                 })
+                ->filterColumn('created_at', function ($query, $keyword){
+                    $query->whereRaw("DATE_FORMAT(orders.created_at,'%d %M %Y') like ?", ["%$keyword%"]);
+                })
+                ->filterColumn('order_time', function ($query, $keyword){
+                    $query->whereRaw("TIME_FORMAT(orders.created_at,'%h:%i %p') like ?", ["%$keyword%"]);
+                })
+                ->addColumn('order_time', function ($row) {
+                    return date('h:i A', strtotime($row->created_at));
+                })
                 ->addColumn('payment_type', function ($row) {
                     if ($row->payment_type == 1) {
                         return "Bank Transfer";
@@ -64,6 +73,24 @@ class OrderController extends Controller
                         return  "Credit/Debit Card";
                     } else {
                         return "N.A";
+                    }
+                })
+                ->filterColumn('payment_type', function ($query, $keyword) {
+                    $orderStatus = collect(array(
+                        1 => "Bank Transfer",
+                        2 => "Paypal",
+                        3 => "COD",
+                        4 => "Credit/Debit Card",
+                    ));
+                    $keys  = array();
+                    foreach($orderStatus as $key => $value) {
+                        if(!empty(stristr($value, $keyword))) {
+                            $keys[] = $key;
+                        }
+                    }
+
+                    if (count($keys)) {
+                        $query->whereIn("orders.payment_type", $keys);
                     }
                 })
                 ->addColumn('order_status', function ($row) {
@@ -88,6 +115,29 @@ class OrderController extends Controller
                     $btn = $orderStatus.'<p><a href="trackOrder?odr_id=' . base64_encode($row->id) . '" class="btn btn-outline-primary btn-sm btn-round waves-effect waves-light ">Track Order</a></p>';
                     return $btn;
 
+                })
+                ->filterColumn('order_status', function ($query, $keyword) {
+                    $orderStatus = collect(array(
+                        3 => "Restaurent Approval Needed",
+                        5 => "Order Placed",
+                        2 => "Order Cancelled",
+                        4 => "Order Cancelled",
+                        8 => "Order Cancelled",
+                        6 => "Order Packed",
+                        7 => "Order Picked",
+                        9 => "Order Delivered",
+                        10 => "Order Refunded",
+                    ));
+                    $keys  = array();
+                    foreach($orderStatus as $key => $value) {
+                        if(!empty(stristr($value, $keyword))) {
+                            $keys[] = $key;
+                        }
+                    }
+
+                    if (count($keys)) {
+                        $query->whereIn("orders.order_status", $keys);
+                    }
                 })
                 ->addColumn('ordered_menu', function ($row) {
                     $order_menu = "";

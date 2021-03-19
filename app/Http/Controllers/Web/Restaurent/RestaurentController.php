@@ -172,8 +172,6 @@ class RestaurentController extends Controller
                 ->filterColumn('created_at', function ($query, $keyword){
                     $query->whereRaw("DATE_FORMAT(resto_menu_categories.created_at,'%d %M %Y') like ?", ["%$keyword%"]);
                 })
-
-
                 ->addColumn('action', function($row){
                     $btn = '<a href="editMainCategory?dish_main_cat_id=' . base64_encode($row->id) . '" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Edit</a>
                     <a href="deleteMainCat?dish_cat_id='.base64_encode($row->id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Delete</a>';
@@ -309,14 +307,32 @@ class RestaurentController extends Controller
                     return $btn;
                 })
                 ->addColumn('created_at', function ($row) {
-
                     return date('d F Y', strtotime($row->created_at));
+                })
+                ->filterColumn('created_at', function ($query, $keyword){
+                    $query->whereRaw("DATE_FORMAT(orders.created_at,'%d %M %Y') like ?", ["%$keyword%"]);
                 })
                 ->addColumn('visibility', function ($row) {
                     if ($row->visibility == 1) {
                         return 'Disable';
                     } else {
                         return 'Enable';
+                    }
+                })
+                ->filterColumn('visibility', function ($query, $keyword) {
+                    $orderStatus = collect(array(
+                        1 => "Disable",
+                        0 => "Enable",
+                    ));
+                    $keys  = array();
+                    foreach($orderStatus as $key => $value) {
+                        if(!empty(stristr($value, $keyword))) {
+                            $keys[] = $key;
+                        }
+                    }
+
+                    if (count($keys)) {
+                        $query->whereIn("menu_list.visibility", $keys);
                     }
                 })
                 ->addColumn('dish_type', function ($row) {
@@ -326,6 +342,23 @@ class RestaurentController extends Controller
                         return "Beverage";
                     } else {
                         return "Veg";
+                    }
+                })
+                ->filterColumn('dish_type', function ($query, $keyword) {
+                    $orderStatus = collect(array(
+                        1 => "Non-Veg",
+                        2 => "Veg",
+                        3 => "Beverage",
+                    ));
+                    $keys  = array();
+                    foreach($orderStatus as $key => $value) {
+                        if(!empty(stristr($value, $keyword))) {
+                            $keys[] = $key;
+                        }
+                    }
+
+                    if (count($keys)) {
+                        $query->whereIn("menu_list.dish_type", $keys);
                     }
                 })
                 ->rawColumns(['action'])
@@ -449,7 +482,7 @@ class RestaurentController extends Controller
             }
             if ($request->hasfile('picture')) {
                 $profile_pic = $request->file('picture');
-                $input['imagename'] = $data['name'] . time() . '.' . $profile_pic->getClientOriginalExtension();
+                $input['imagename'] = 'DishImage' . time() . '.' . $profile_pic->getClientOriginalExtension();
 
                 $path = public_path('uploads/' . $id . '/images');
                 File::makeDirectory($path, $mode = 0777, true, true);
@@ -513,7 +546,7 @@ class RestaurentController extends Controller
 
             if ($request->hasfile('picture')) {
                 $profile_pic = $request->file('picture');
-                $input['imagename'] = $data['name'] . time() . '.' . $profile_pic->getClientOriginalExtension();
+                $input['imagename'] = 'DishImage' . time() . '.' . $profile_pic->getClientOriginalExtension();
 
                 $path = public_path('uploads/' . $id . '/images');
                 File::makeDirectory($path, $mode = 0777, true, true);
@@ -710,6 +743,22 @@ class RestaurentController extends Controller
                         return 'ADD-ON';
                     }
                 })
+                ->filterColumn('customization_variant', function ($query, $keyword) {
+                    $orderStatus = collect(array(
+                        2 => "Menu Variant",
+                        1 => "ADD-ON",
+                    ));
+                    $keys  = array();
+                    foreach($orderStatus as $key => $value) {
+                        if(!empty(stristr($value, $keyword))) {
+                            $keys[] = $key;
+                        }
+                    }
+
+                    if (count($keys)) {
+                        $query->whereIn("customization_variant", $keys);
+                    }
+                })
                 ->addColumn('is_required', function ($row) {
                     if ($row->is_required == 1) {
                         return "Yes";
@@ -717,6 +766,22 @@ class RestaurentController extends Controller
                         return "No";
                     }
 
+                })
+                ->filterColumn('is_required', function ($query, $keyword) {
+                    $orderStatus = collect(array(
+                        2 => "No",
+                        1 => "Yes",
+                    ));
+                    $keys  = array();
+                    foreach($orderStatus as $key => $value) {
+                        if(!empty(stristr($value, $keyword))) {
+                            $keys[] = $key;
+                        }
+                    }
+
+                    if (count($keys)) {
+                        $query->whereIn("is_required", $keys);
+                    }
                 })
                 ->addColumn('multiple_select', function ($row) {
                     if ($row->multiple_select == 1) {
@@ -726,9 +791,27 @@ class RestaurentController extends Controller
                     }
 
                 })
-                ->addColumn('created_at', function ($row) {
+                ->filterColumn('multiple_select', function ($query, $keyword) {
+                    $orderStatus = collect(array(
+                        2 => "No",
+                        1 => "Yes",
+                    ));
+                    $keys  = array();
+                    foreach($orderStatus as $key => $value) {
+                        if(!empty(stristr($value, $keyword))) {
+                            $keys[] = $key;
+                        }
+                    }
 
+                    if (count($keys)) {
+                        $query->whereIn("multiple_select", $keys);
+                    }
+                })
+                ->addColumn('created_at', function ($row) {
                     return date('d F Y', strtotime($row->created_at));
+                })
+                ->filterColumn('created_at', function ($query, $keyword){
+                    $query->whereRaw("DATE_FORMAT(orders.created_at,'%d %M %Y') like ?", ["%$keyword%"]);
                 })
                 ->rawColumns(['action'])
                 ->make(true);
@@ -844,8 +927,10 @@ class RestaurentController extends Controller
                     return $btn;
                 })
                 ->addColumn('created_at', function ($row) {
-
                     return date('d F Y', strtotime($row->created_at));
+                })
+                ->filterColumn('created_at', function ($query, $keyword){
+                    $query->whereRaw("DATE_FORMAT(orders.created_at,'%d %M %Y') like ?", ["%$keyword%"]);
                 })
                 ->addColumn('dish_type', function ($row) {
                     if ($row->dish_type == 1) {
@@ -854,7 +939,23 @@ class RestaurentController extends Controller
                         return "Veg";
                     }
                 })
+                ->filterColumn('dish_type', function ($query, $keyword) {
+                    $orderStatus = collect(array(
+                        1 => "Non-Veg",
+                        2 => "Veg",
+                        3 => "Beverage",
+                    ));
+                    $keys  = array();
+                    foreach($orderStatus as $key => $value) {
+                        if(!empty(stristr($value, $keyword))) {
+                            $keys[] = $key;
+                        }
+                    }
 
+                    if (count($keys)) {
+                        $query->whereIn("menu_custom_list.dish_type", $keys);
+                    }
+                })
                 ->rawColumns(['action'])
                 ->make(true);
             //dd($user_data);

@@ -145,6 +145,10 @@ class CartController extends Controller
 
     public function addToCart(Request $request)
     {
+        if(!Auth::check()){
+            return -1;
+            // return view('customer.auth.login');
+        }
         $user = Auth::user();
         $variant_id = NULL;
         $resto_id = base64_decode(request('resto_id'));

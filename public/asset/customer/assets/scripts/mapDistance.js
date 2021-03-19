@@ -89,9 +89,15 @@ function kilomiter(dakota, frick, service_data, total_amount) {
                     var total = total.toFixed(2);
                     var deliveryCharge = deliveryCharge.toFixed(2);
                     // console.log(total_amount);
+                    if (deliveryCharge == 0) {
+                        var deliveryCharges = 'Free';
+                        $('#icon_dollar').html(deliveryCharges);
+
+                    }
                     $('#delivery_charge').html(deliveryCharge);
                     $('#delivery_charge_input').val(deliveryCharge);
                     $("#total_amount").html(total);
+
 
                 }
             }

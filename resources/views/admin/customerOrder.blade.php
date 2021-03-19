@@ -112,7 +112,7 @@
                     name: 'order_id'
                 },
                 {
-                    data: 'restaurent_details',
+                    data: 'restaurentDetails.name',
                     render: function(data, type, row) {
                         if (row.restaurent_details) {
                             return row.restaurent_details.name;
@@ -121,7 +121,7 @@
                     },
                 },
                 {
-                    data: 'restaurent_details.official_number',
+                    data: 'restaurentDetails.official_number',
                     render: function(data, type, row) {
                         if (row.restaurent_details) {
                             console.log( row.restaurent_details);

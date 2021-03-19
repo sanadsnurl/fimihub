@@ -45,7 +45,7 @@ trait BillingCalculateTraits
         // $quant_details['cart_exist_id']=$billing_data_arary['cart_id'];
         $menu_total = 0;
 
-        if ($billing_data_arary['menu_id']) {
+        if ($billing_data_arary['menu_id'] && Auth::check()) {
             $menu_datass = $menu_list->menuListByQuantityById($quant_details);
             $menu_total = 0;
             $item = 0;
@@ -152,7 +152,7 @@ trait BillingCalculateTraits
                     $m_data->price = $var_d->price;
                 }
             }
-            if ($m_data->product_add_on_id) {
+            if ($m_data->product_add_on_id ) {
                 foreach ($m_data->product_add_on_id as $add_on) {
                     $add_ons[] = $menu_custom_list->menuCustomPaginationData($m_data->restaurent_id)
                         ->where('resto_custom_cat_id', $add_on)->get();
@@ -160,7 +160,7 @@ trait BillingCalculateTraits
                         ->where('resto_custom_cat_id', $add_on)->first();
                 }
             }
-            if ($m_data->product_adds_id) {
+            if ($m_data->product_adds_id ) {
                 $m_data->product_adds_id = json_decode($m_data->product_adds_id);
                 foreach ($m_data->product_adds_id as $add_on_cart) {
                     $var_ds = $menu_custom_list->getCustomListPriceWithPer($add_on_cart);

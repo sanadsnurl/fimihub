@@ -332,7 +332,7 @@
                 },
                 {
                     data: 'cat_name',
-                    name: 'cat_name'
+                    name: 'menu_categories.name'
                 },
                 {
                     data: 'price',
@@ -348,7 +348,7 @@
                 },
                 {
                     data: 'created_at',
-                    name: 'created_at'
+                    name: 'menu_list.created_at'
                 },
             ]
         });

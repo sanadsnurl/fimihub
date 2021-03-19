@@ -32,11 +32,12 @@ class DashboardController extends Controller
     {
         $near_by_radius = config('RESTAURANT_NEAR_USER');
         $near_by_radius = (int)$near_by_radius;
-// dd($_COOKIE["lat"]."--".$_COOKIE["long"]);
-        $user = Auth::user();
-        $user_data = auth()->user()->userByIdData($user->id);
-        $user_data = $this->getBasicCount($user);
-
+        $user = '';
+        if(Auth::check()){
+            $user = Auth::user();
+            $user_data = auth()->user()->userByIdData($user->id);
+            $user_data = $this->getBasicCount($user);
+        }
 
         // dd($user_data);
         if ($request->has('address_latitude')) {
@@ -153,7 +154,7 @@ class DashboardController extends Controller
         }
         // dd($resto_data);
         return view('customer.home')->with([
-            'user_data' => $user_data,
+            'user_data' => $user_data ?? '',
             'resto_data' => $resto_data,
             'nonveg' => $nonveg_resto_data,
             'slider_data' => $sl_data,

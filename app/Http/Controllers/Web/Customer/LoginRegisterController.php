@@ -24,7 +24,7 @@ class LoginRegisterController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:150',
             'password' => 'required|confirmed|string|min:6',
-            'mobile' => 'required|numeric|unique:users',
+            'mobile' => 'required|numeric|unique:users|digits:7',
             'country_code' => 'required|string',
             'terms'=> 'required',
         ]);
@@ -56,7 +56,8 @@ class LoginRegisterController extends Controller
 
         $validator = Validator::make($request->all(), [
             'password' => 'required|string|min:6',
-            'user_id' => 'required|numeric',
+            // 'user_id' => 'required|numeric',
+            'user_id' => 'required|numeric|digits:7',
             'country_code' => 'required|string',
 
         ]);

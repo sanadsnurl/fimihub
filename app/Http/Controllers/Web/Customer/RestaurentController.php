@@ -26,9 +26,11 @@ class RestaurentController extends Controller
     use GetBasicPageDataTraits,BillingCalculateTraits;
     public function getRestaurentDetails(Request $request)
     {
-        $user = Auth::user();
+        if(Auth::check()){
+            $user = Auth::user();
+            $user = $this->getBasicCount($user);
+        }
 
-        $user = $this->getBasicCount($user);
         $resto_id = base64_decode(request('resto_id'));
         $restaurent_detail = new restaurent_detail;
         $resto_data = $restaurent_detail->getRestoDataOnId($resto_id);
@@ -37,7 +39,7 @@ class RestaurentController extends Controller
 
         $billing_data_arary = ['menu_id' =>false,
         'order_id' =>false,
-        'user_id' =>$user->id,
+        'user_id' =>$user->id ?? 0,
         'resto_id' =>$resto_id
         ];
         $billing_balance = $this->getBilling($billing_data_arary);
@@ -49,11 +51,14 @@ class RestaurentController extends Controller
 
         $menu_cat = $menu_list->menuCategory($resto_id);
         // dd($menu_cat->toArray());
+        if(Auth::check()){
+
         $user->currency=$this->currency;
+        }
         // dd($billing_balance['menu_data']);
         // dd($billing_balance['menu_data'][0]->add_ons_cat);
 
-        return view('customer.menuList')->with(['user_data'=>$user,
+        return view('customer.menuList')->with(['user_data'=>$user ?? NULL,
                                                 'menu_data'=>$billing_balance['menu_data'],
                                                 'menu_cat'=>$menu_cat,
                                                 'rating_data'=>$rating_data,

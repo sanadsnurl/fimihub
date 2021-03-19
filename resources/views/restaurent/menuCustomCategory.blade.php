@@ -214,7 +214,7 @@
                 },
                 {
                     data: 'cat_name',
-                    name: 'cat_name'
+                    name: 'mc.name'
                 },
                 {
                     data: 'customization_variant',
@@ -230,7 +230,7 @@
                 },
                 {
                     data: 'created_at',
-                    name: 'created_at'
+                    name: 'resto_custom_menu_categories.created_at'
                 },
             ]
         });

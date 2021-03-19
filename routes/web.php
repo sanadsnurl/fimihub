@@ -110,14 +110,21 @@ Route::group(['middleware' => ['cors']], function () {
     //Contact Us Process
     Route::get('makePaypalOrder', 'Web\Customer\OrderController@changePaypalOrderStatus');
 
+
+    //Customer dashboard
+    Route::get('/home', 'Web\Customer\DashboardController@index');
+    //Restaurant Menu List
+    Route::get('restaurentDetails', 'Web\Customer\RestaurentController@getRestaurentDetails');
+    //Add Menu Item To Cart
+    Route::get('addMenuItem', 'Web\Customer\CartController@addToCart');
+
     Route::group(['middleware' => 'gotoafterauth'], function () {
     });
     //========================================== Session Customer Auth Routes ===================================================
 
     Route::group(['middleware' => 'customerauth'], function () {
 
-        //Customer dashboard
-        Route::get('/home', 'Web\Customer\DashboardController@index');
+
         //Cart Page
         Route::get('/cart', 'Web\Customer\CartController@index');
         // Save Addresss
@@ -145,10 +152,8 @@ Route::group(['middleware' => ['cors']], function () {
         Route::get('legalInformation', 'Web\Customer\UserController@getLegalInformationPage');
         //AboutUs Page
         Route::get('aboutUs', 'Web\Customer\UserController@getAboutUsPage');
-        //AboutUs Page
-        Route::get('restaurentDetails', 'Web\Customer\RestaurentController@getRestaurentDetails');
-        //Add Menu Item To Cart
-        Route::get('addMenuItem', 'Web\Customer\CartController@addToCart');
+
+
         //Subtract Menu Item To Cart
         Route::get('subtractMenuItem', 'Web\Customer\CartController@removeFromCart');
         //Add Custom Menu Item To Cart

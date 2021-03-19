@@ -108,7 +108,7 @@ class OrderController extends Controller
                     ));
                     $keys  = array();
                     foreach($orderStatus as $key => $value) {
-                        if(!empty(strstr($value, $keyword))) {
+                        if(!empty(stristr($value, $keyword))) {
                             $keys[] = $key;
                         }
                     }
@@ -153,7 +153,7 @@ class OrderController extends Controller
                     ));
                     $keys  = array();
                     foreach($orderStatus as $key => $value) {
-                        if(!empty(strstr($value, $keyword))) {
+                        if(!empty(stristr($value, $keyword))) {
                             $keys[] = $key;
                         }
                     }

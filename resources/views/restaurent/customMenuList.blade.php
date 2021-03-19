@@ -189,7 +189,7 @@
                 },
                 {
                     data: 'cat_name',
-                    name: 'cat_name'
+                    name: 'custom_menu_categories.name'
                 },
                 {
                     data: 'price',
@@ -197,7 +197,7 @@
                 },
                 {
                     data: 'created_at',
-                    name: 'created_at'
+                    name: 'menu_custom_list.created_at'
                 },
             ]
         });

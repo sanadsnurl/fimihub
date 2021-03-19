@@ -3,6 +3,7 @@
 namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 //custom import
 use Illuminate\Support\Facades\DB;
 
@@ -165,12 +166,16 @@ class menu_list extends Model
 
     public function menuListByQuantity($data)
     {
-        $cart_exist = DB::table('carts')
-        ->where('carts.restaurent_id', $data['restaurent_id'])
-        ->where('carts.user_id', $data['user_id'])
-        ->where('carts.visibility', 0);
+        if(Auth::check()){
+            $cart_exist = DB::table('carts')
+            ->where('carts.restaurent_id', $data['restaurent_id'])
+            ->where('carts.user_id', $data['user_id'])
+            ->where('carts.visibility', 0);
+        }else{
+            $cart_exist = DB::table('carts')->where('carts.visibility', 5);
+        }
 
-        if($cart_exist->count() == 0)
+        if($cart_exist->count() == 0 || !Auth::check())
         {
             $menu_list=$this
             ->join('resto_menu_categories as mc', 'mc.id', '=', 'menu_list.menu_category_id')

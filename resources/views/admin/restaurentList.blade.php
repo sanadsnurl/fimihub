@@ -99,7 +99,7 @@
                     },
                     {
                         data: 'prop_name',
-                        name: 'prop_name'
+                        name: 'users.name'
                     },
                     {
                         data: 'name',
@@ -107,32 +107,32 @@
                     },
                     {
                         data: 'about',
-                        name: 'about'
+                        name: 'restaurent_details.about'
                     },
                     {
                         data: 'user_email',
-                        name: 'user_email'
+                        name: 'users.email'
                     },
                     {
                         data: 'user_mobile',
-                        name: 'user_mobile'
+                        name: 'users.mobile'
                     },
                     {
                         data: 'address',
-                        name: 'address'
+                        name: 'restaurent_details.address'
                     },
                     {
                         data: 'open_time',
-                        name: 'open_time'
+                        name: 'restaurent_details.open_time'
                     },
                     {
                         data: 'close_time',
-                        name: 'close_time'
+                        name: 'restaurent_details.close_time'
                     },
 
                     {
                         data: 'user_created_at',
-                        name: 'user_created_at'
+                        name: 'users.created_at'
                     },
                 ]
             });

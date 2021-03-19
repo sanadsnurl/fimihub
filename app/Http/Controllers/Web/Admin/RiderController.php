@@ -108,9 +108,27 @@ class RiderController extends Controller
                     }
                     return $type;
                 })
-                ->addColumn('created_at', function ($row) {
+                ->filterColumn('role', function ($query, $keyword) {
+                    $orderStatus = collect(array(
+                        1 => "Driver",
+                        2 => "Runner",
+                    ));
+                    $keys  = array();
+                    foreach($orderStatus as $key => $value) {
+                        if(!empty(stristr($value, $keyword))) {
+                            $keys[] = $key;
+                        }
+                    }
 
+                    if (count($keys)) {
+                        $query->whereIn("users.role", $keys);
+                    }
+                })
+                ->addColumn('created_at', function ($row) {
                     return date('d F Y', strtotime($row->created_at));
+                })
+                ->filterColumn('created_at', function ($query, $keyword){
+                    $query->whereRaw("DATE_FORMAT(orders.created_at,'%d %M %Y') like ?", ["%$keyword%"]);
                 })
                 ->addColumn('mobile', function ($row) {
                     if($row->country_code != NULL){

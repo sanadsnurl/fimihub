@@ -186,8 +186,19 @@
                             <span>FiMi Hub Delivery
                                 fee <img src="{{asset('asset/customer/assets/images/info_icon.svg')}}"
                                     alt="info"></span>
-                            <span>{{$user_data->currency ?? ''}}
+
+                            @if (isset($order_data->delivery_fee))
+                            @if ($order_data->delivery_fee == 0)
+                            <span>Free</span>
+                            @else
+                            <span id="icon_dollar">{{$user_data->currency ?? ''}}
                                 <span id="delivery_charge">{{$order_data->delivery_fee ?? '--'}}</span></span>
+                            @endif
+                            @else
+                            <span id="icon_dollar">{{$user_data->currency ?? ''}}
+                                <span id="delivery_charge">{{$order_data->delivery_fee ?? '--'}}</span></span>
+                            @endif
+
                         </div>
                     </div>
                     <input type="hidden" class="input-quantity" id="input-quantity"
