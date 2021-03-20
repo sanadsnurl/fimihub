@@ -10,10 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-use App\Model\qbeez_wallet;
 use Response;
 use Session;
-use App\Model\merchant_detail;
 
 
 class LoginRegisterController extends Controller
@@ -25,14 +23,14 @@ class LoginRegisterController extends Controller
         $validator = Validator::make($request->all(), [
             'password' => 'required|string|min:6',
             'user_id' => 'required',
-            
+
         ]);
         if(!$validator->fails()){
             $user_id = $request->input('user_id');
             $password = $request->input('password');
             $mobile_set = "";
             $email_set = "";
-            
+
             if(is_numeric($user_id))
             {
                 $loginData =["mobile"=>$user_id,"password"=>$password];
@@ -45,7 +43,7 @@ class LoginRegisterController extends Controller
 
             if(!auth()->attempt($loginData))
             {
-                Session::flash('message', 'Invalid Credentials !'); 
+                Session::flash('message', 'Invalid Credentials !');
                 return redirect()->back()->withInput();
             }
             else{
@@ -58,33 +56,18 @@ class LoginRegisterController extends Controller
                 $userid = $mobile_set;
                 Session::put('userid', $userid);
                 $user_data = auth()->user()->userData($userid);
-                if($user_data->mobile_verified_at == NULL)
-                {
-                    
-                    return redirect('adminQbeez/dashboard');
-                }
-                else
-                {
-                    return redirect('adminQbeez/dashboard');
-                }
+                return redirect('adminfimihub/dashboard');
             }
             else
             {
                 $userid = $email_set;
                 Session::put('userid', $userid);
                 $user_data = auth()->user()->userData($userid);
-                if($user_data->email_verified_at == NULL)
-                {
-                    return redirect('adminQbeez/dashboard');
-                }
-                else
-                {
-                    return redirect('adminQbeez/dashboard');
-                }
+                return redirect('adminfimihub/dashboard');
             }
         }
         else{
-        	return redirect()->back()->withInput()->withErrors($validator);  
+        	return redirect()->back()->withInput()->withErrors($validator);
         }
     }
 
@@ -92,7 +75,38 @@ class LoginRegisterController extends Controller
     {
         Auth::logout();
         Session::flush(['admin_data','userid']);
-        return redirect('/adminQbeez/login');
+        return redirect('/adminfimihub/login');
+    }
+
+    public function resetPassword(Request $request){
+        $user = Auth::user();
+        return view('admin.resetPassword')->with(['data' => $user]);
+    }
+
+    public function resetPasswordProcess(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'password' => 'required|string|confirmed|min:6',
+            'current_password' => 'required|string|min:6',
+        ]);
+        if (!$validator->fails()) {
+            $user = Auth::user();
+            $data = $request->toarray();
+            $data['userid'] = $user->mobile;
+            if (Hash::check($data['current_password'], $user->password)) {
+                $user = new User();
+                $user->changePassword($data);
+                Session::flash('message', 'Password Changed');
+
+
+                return redirect()->back();
+            } else {
+                Session::flash('message', 'Invalid Current Password');
+                return redirect()->back();
+            }
+        } else {
+            return redirect()->back()->withInput()->withErrors($validator);
+        }
     }
 
 

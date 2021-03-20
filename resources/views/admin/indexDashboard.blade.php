@@ -8,13 +8,15 @@
         <!--Start Dashboard Content-->
 
         <div class="row mt-3">
+            @if($data->role == NULL)
+
             <div class="col-12 col-lg-6 col-xl-3">
                 <div class="card bg-pattern-primary">
                     <div class="card-body">
                         <div class="media">
                             <div class="media-body text-left">
-                                <h4 class="text-white">{{$data->user_count}}</h4>
-                                <span class="text-white">Total Users</span>
+                                <h4 class="text-white">{{$data->user_count ?? '0'}}</h4>
+                                <span class="text-white">Total Customer's</span>
                             </div>
                             <div class="align-self-center w-circle-icon rounded-circle bg-contrast">
                                 <i class="icon-people text-white"></i>
@@ -23,13 +25,16 @@
                     </div>
                 </div>
             </div>
+            @endif
+            @if($data->role == NULL || in_array(2,$data->role))
+
             <div class="col-12 col-lg-6 col-xl-3">
                 <div class="card bg-pattern-danger">
                     <div class="card-body">
                         <div class="media">
                             <div class="media-body text-left">
-                                <h4 class="text-white">{{$data->merchant_count}}</h4>
-                                <span class="text-white">Total Merchants</span>
+                                <h4 class="text-white">{{$data->merchant_count ?? '0'}}</h4>
+                                <span class="text-white">Total Restaurant's</span>
                             </div>
                             <div class="align-self-center w-circle-icon rounded-circle bg-contrast">
                                 <i class="icon-user-following text-white"></i>
@@ -38,28 +43,32 @@
                     </div>
                 </div>
             </div>
+            @endif
+            @if($data->role == NULL || in_array(1,$data->role))
             <div class="col-12 col-lg-6 col-xl-3">
-                <div class="card bg-pattern-success">
+                <div class="card bg-pattern-primary">
                     <div class="card-body">
                         <div class="media">
                             <div class="media-body text-left">
-                                <h4 class="text-white">87.5%</h4>
-                                <span class="text-white">Total Revenue</span>
+                                <h4 class="text-white">{{$data->rider_count ?? '0'}}</h4>
+                                <span class="text-white">Total Rider's</span>
                             </div>
                             <div class="align-self-center w-circle-icon rounded-circle bg-contrast">
-                                <i class="icon-pie-chart text-white"></i>
+                                <i class="icon-user-following text-white"></i>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            @endif
+            @if($data->role == NULL || in_array(3,$data->role))
             <div class="col-12 col-lg-6 col-xl-3">
                 <div class="card bg-pattern-warning">
                     <div class="card-body">
                         <div class="media">
                             <div class="media-body text-left">
-                                <h4 class="text-white">8400</h4>
-                                <span class="text-white">Total categories</span>
+                                <h4 class="text-white">{{$data->order_count ?? '0'}}</h4>
+                                <span class="text-white">Total Order's</span>
                             </div>
                             <div class="align-self-center w-circle-icon rounded-circle bg-contrast">
                                 <i class="icon-user text-white"></i>
@@ -68,12 +77,13 @@
                     </div>
                 </div>
             </div>
+            @endif
         </div>
         <!--End Row-->
 
 
         <div class="row">
-            <div class="col-12 col-lg-4 col-xl-4">
+            <!-- <div class="col-12 col-lg-4 col-xl-4">
                 <div class="card bg-pattern-dark">
                     <div class="card-header bg-transparent text-white border-light">
                         Last Week Revenue
@@ -147,7 +157,7 @@
                         <canvas id="dashboard-chart-5" height="240"></canvas>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
         <!--End Row-->
 

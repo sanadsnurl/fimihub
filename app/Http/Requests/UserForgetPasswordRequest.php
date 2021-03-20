@@ -29,10 +29,11 @@ class UserForgetPasswordRequest extends FormRequest
         $validator = [
             'userid' => 'required',
             'email'=>'email',
+            'country_code'=>'string|nullable',
             'mobile'=>'numeric|digits:10',
-            'verification_code'=>'required|digits:6',
+            'verification_code'=>'required|digits:4',
             'password'=>'required|min:6'
-            
+
         ];
         return $validator;
     }

@@ -6,7 +6,7 @@
         <div class="card-body">
             <div class="card-content p-2">
                 <div class="text-center">
-                    <img src="../asset/merchant/assets/images/logo-pink.png">
+                    <img src="{{asset('asset/customer/assets/images/logo.png')}}">
                 </div>
                 <div class="card-title text-uppercase text-center py-3">Sign In
                     @if(Session::has('message'))
@@ -14,7 +14,7 @@
                         {{ Session::get('message') }}</div>
                     @endif
                 </div>
-                <form role="form" method="POST" action="{{ url('/adminQbeez/login') }}">
+                <form role="form" method="POST" action="{{ url('/adminfimihub/login') }}">
                     @csrf
                     <div class="form-group">
                         <div class="position-relative has-icon-right">
@@ -42,14 +42,14 @@
                         <div class="error">{{ $errors->first('password') }}</div>
                         @endif
                     </div>
-                    <div class="form-row mr-0 ml-0">
+                    {{-- <div class="form-row mr-0 ml-0">
                         <div class="form-group col-6">
 
                         </div>
                         <div class="form-group col-6 text-right">
                             <a href="authentication-reset-password.html">Reset Password</a>
                         </div>
-                    </div>
+                    </div> --}}
                     <input type="submit"
                         class="btn btn-primary shadow-primary btn-round btn-block waves-effect waves-light" value="Log
                         In">

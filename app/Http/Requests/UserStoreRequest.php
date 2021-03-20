@@ -26,22 +26,46 @@ class UserStoreRequest extends FormRequest
      */
     public function rules()
     {
-    
+
         $validator = [
             'name' => 'required|string|max:150',
             'password' => 'required|string|min:6',
-            'mobile' => 'required|numeric|unique:users|digits:10',
-            'user_type' => 'required|in:1,2,3', //1-Admin,2-Merchant,3-User	
-            'country_code' => 'string|nullable', //1-Admin,2-Merchant,3-User	
-            'email' => 'email|unique:users',
+            'mobile' => 'required|numeric|unique:users',
+            'country_code' => 'string|nullable',
+            'email' => 'email|unique:users|nullable',
             'device_token' => 'required|string',
-            
-            
+            'role' => 'required|in:1,2',
+            'vehicle_number' => 'required_if:role,1|string',
+            'model_name' => 'required_if:role,1|string',
+            'vehicle_image' => 'mimes:png,jpg,jpeg|max:8192|nullable',
+            'color' => 'required_if:role,1|string',
+            'id_proof' => 'required|mimes:png,jpg,jpeg|max:8192|nullable',
+            'address' => 'required|string',
+            'pincode' => 'numeric|nullable',
+            'driving_license' => 'required_if:role,1|mimes:png,jpg,jpeg|max:8192|nullable',
+            'background_check' => 'mimes:png,jpg,jpeg,pdf|max:8192|nullable',
+            'food_permit' => 'mimes:png,jpg,jpeg,pdf|max:8192|nullable',
+            'dl_start_date' => 'required_if:role,1|string',
+            'dl_end_date' => 'required_if:role,1|string',
+            'registraion_start_date' => 'required_if:role,1|string',
+            'registraion_end_date' => 'required_if:role,1|string',
+            'account_number' => 'required|string',
+            'holder_name' => 'required|string|max:150',
+            'branch_name' => 'required|string|max:150',
+            'bank_name' => 'required|string|max:150',
+            'ifsc_code' => 'string|nullable',
+            'lat' => 'required|numeric',
+            'lng' => 'required|numeric',
+            'registration_number' => 'string|nullable',
+            'policy_company	' => 'string|nullable',
+            'insurance_company' => 'string|nullable',
+            'insurance_start_date' => 'string|nullable',
+            'insurance_end_date' => 'string|nullable',
+
         ];
         return $validator;
 
-        
     }
-    
-    
+
+
 }

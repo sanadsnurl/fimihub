@@ -18,27 +18,30 @@ trait NotificationTrait
 		$firebase_token = $notification_data['device_token'];
         $title = $notification_data['title'];
         $notifications = $notification_data['notification'];
+        $page_token = $notification_data['page_token'] ?? '-1';
 		//server key
-        $your_project_id_as_key = 'AAAAcsjec0w:APA91bH7EFy5uBHYsSGqPq9wRDTxVdFlSUgNHqwzCuvjP_TNNLMuEUm9aroesnJBC9jCCuCq_ylm9NF9Vg_VrqKF2E2R5r-WMlBV2p090MM4jHa8FTGp-ok6rJDnnXKzgOA7cfIgoutz'; 
-        $url = "https://fcm.googleapis.com/fcm/send";       
+        $your_project_id_as_key = 'AAAAS7OBtOE:APA91bGi-xdLFihiaQrTEmlXedX_QDWDxNZVVqrHaMxV82cpeK_wEP_lucI8HaCtCM9bSCJvMJ2JHUE9u-B6mRpj3aVkfGUi3-wqC3Y-cUPSg3h9avqCOqCHaS7xWW-m0xmz6OVwh8tL';
+        $url = "https://fcm.googleapis.com/fcm/send";
         $header = [
         'authorization: key=' . $your_project_id_as_key,
         'content-type: application/json'
-        ];    
+        ];
 
         $postdata = '{
                 "to" : "'.$firebase_token.'",
                     "notification" : {
                         "title":"'.$title.'",
-                        "text" : "'.strip_tags($notifications).'"
+                        "body" : "'.strip_tags($notifications).'",
+                        "page_token" : "'.$page_token.'"
                     },
                 "data" : {
                     "id" : 1,
                     "title":"'.$title.'",
-                    "description" : "'.strip_tags($notifications).'"
+                    "description" : "'.strip_tags($notifications).'",
+                    "page_token" : "'.$page_token.'"
                 }
             }';
-        
+
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -46,10 +49,10 @@ trait NotificationTrait
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
         curl_setopt($ch, CURLOPT_POSTFIELDS, $postdata);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
-        $result = curl_exec($ch); 	
-        curl_close($ch); 
-        
+        $result = curl_exec($ch);
+        curl_close($ch);
+
         //var_dump($result) ;
     }
-	
+
 }

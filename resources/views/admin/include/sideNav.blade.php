@@ -9,23 +9,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Qbeez - Admin</title>
+    <title>Fimihub - Admin</title>
     <!--favicon-->
-    <link rel="icon" href="{{url('asset/merchant/assets/images/logo-pink.png')}}">
+    <link rel="icon" href="{{asset('asset/customer/assets/images/logo.png')}}">
+
     <!-- Vector CSS -->
-    <link href="{{url('asset/admin/assets/plugins/vectormap/jquery-jvectormap-2.0.2.css')}}" rel="stylesheet" />
+    <link href="{{asset('asset/admin/assets/plugins/vectormap/jquery-jvectormap-2.0.2.css')}}" rel="stylesheet" />
     <!-- simplebar CSS-->
-    <link href="{{url('asset/admin/assets/plugins/simplebar/css/simplebar.css')}}" rel="stylesheet" />
+    <link href="{{asset('asset/admin/assets/plugins/simplebar/css/simplebar.css')}}" rel="stylesheet" />
     <!-- Bootstrap core CSS-->
-    <link href="{{url('asset/admin/assets/css/bootstrap.min.css')}}" rel="stylesheet" />
+    <link href="{{asset('asset/admin/assets/css/bootstrap.min.css')}}" rel="stylesheet" />
     <!-- animate CSS-->
-    <link href="{{url('asset/admin/assets/css/animate.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('asset/admin/assets/css/animate.css')}}" rel="stylesheet" type="text/css" />
     <!-- Icons CSS-->
-    <link href="{{url('asset/admin/assets/css/icons.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('asset/admin/assets/css/icons.css')}}" rel="stylesheet" type="text/css" />
     <!-- Sidebar CSS-->
-    <link href="{{url('asset/admin/assets/css/sidebar-menu.css')}}" rel="stylesheet" />
+    <link href="{{asset('asset/admin/assets/css/sidebar-menu.css')}}" rel="stylesheet" />
     <!-- Custom Style-->
-    <link href="{{url('asset/admin/assets/css/app-style.css')}}" rel="stylesheet" />
+    <link href="{{asset('asset/admin/assets/css/app-style.css')}}" rel="stylesheet" />
 
 </head>
 
@@ -37,78 +38,119 @@
         <!--Start sidebar-wrapper-->
         <div id="sidebar-wrapper" data-simplebar="" data-simplebar-auto-hide="true">
             <div class="brand-logo">
-                <a href="index.html">
-                    <img src="{{url('asset/merchant/assets/images/logo.png')}}" class="logo-icon" alt="logo icon" height="35px"
-                        width="25px">
-                    <h5 class="logo-text">Qbeez Admin</h5>
+                <a href="{{url('adminfimihub/dashboard')}}">
+                    <img src="{{asset('asset/customer/assets/images/logo.png')}}" class="logo-icon" alt="logo icon"
+                        height="35px" width="25px">
+                    <h5 class="logo-text">Fimihub Admin</h5>
                 </a>
             </div>
             <ul class="sidebar-menu do-nicescrol">
                 <li class="sidebar-header">MAIN NAVIGATION</li>
                 <li>
-                    <a href="{{url('adminQbeez/dashboard')}}" class="waves-effect">
+                    <a href="{{url('adminfimihub/dashboard')}}" class="waves-effect">
                         <i class="icon-home"></i> <span>Dashboard</span>
 
                     </a>
                 </li>
+                @if($data->role == NULL || in_array(2,$data->role))
                 <li>
                     <a href="#" class="waves-effect">
-                        <i class="icon-people"></i> <span>User </span> <i class="fa fa-angle-right pull-right"></i>
-                    </a>
-                    <ul class="sidebar-submenu">
-                        <li><a href="{{url('adminQbeez/userList')}}"><i class="fa fa-circle-o"></i> User List</a></li>
-                        <li><a href="{{url('adminQbeez/userWalletList')}}"><i class="fa fa-circle-o"></i> User Wallet</a></li>
-
-                    </ul>
-                </li>
-                <li>
-                    <a href="#" class="waves-effect">
-                        <i class="icon-user-following"></i> <span>Merchant </span> <i
+                        <i class="icon-user-following"></i> <span>Restaurant </span> <i
                             class="fa fa-angle-right pull-right"></i>
                     </a>
                     <ul class="sidebar-submenu">
-                        <li><a href="{{url('adminQbeez/merchantList')}}"><i class="fa fa-circle-o"></i> Merchant List</a></li>
-                        <li><a href="{{url('adminQbeez/merchantWalletList')}}"><i class="fa fa-circle-o"></i> Merchant Wallet</a></li>
-                        <!-- <li><a href="#"><i class="fa fa-circle-o"></i> Merchant Wallet</a></li> -->
+                        <li><a href="{{url('adminfimihub/addRestaurent')}}"><i class="fa fa-circle-o"></i>Add
+                                Restaurant</a></li>
+                        <li><a href="{{url('adminfimihub/retaurantList')}}"><i class="fa fa-circle-o"></i>Restaurant
+                                List</a></li>
+                        <li><a href="{{url('adminfimihub/pendingRetaurant')}}"><i class="fa fa-circle-o"></i>New
+                                Request</a></li>
+                        <li><a href="{{url('adminfimihub/menuCategory')}}"><i class="fa fa-circle-o"></i>Category</a>
+                        </li>
 
                     </ul>
                 </li>
+                @endif
+                @if($data->role == NULL || in_array(1,$data->role))
                 <li>
                     <a href="#" class="waves-effect">
-                        <i class="icon-notebook"></i> <span>Voucher </span> <i class="fa fa-angle-right pull-right"></i>
+                        <i class="icon-disc"></i> <span>Rider </span> <i class="fa fa-angle-right pull-right"></i>
                     </a>
                     <ul class="sidebar-submenu">
-                        <li><a href="{{url('adminQbeez/voucherList')}}"><i class="fa fa-circle-o"></i> Voucher List</a></li>
-                        <!-- <li><a href="{{url('adminQbeez/userList')}}"><i class="fa fa-circle-o"></i> Voucher List</a></li> -->
-
+                        <li><a href="{{url('adminfimihub/riderList')}}"><i class="fa fa-circle-o"></i>Rider
+                                List</a></li>
+                        <li><a href="{{url('adminfimihub/pendingRider')}}"><i class="fa fa-circle-o"></i>New
+                                Request</a></li>
                     </ul>
                 </li>
+                @endif
+                @if($data->role == NULL)
                 <li>
                     <a href="#" class="waves-effect">
-                        <i class="icon-wrench"></i> <span>Transactions </span> <i class="fa fa-angle-right pull-right"></i>
+                        <i class="icon-user"></i> <span>Customer </span> <i
+                            class="fa fa-angle-right pull-right"></i>
                     </a>
                     <ul class="sidebar-submenu">
-                        <li><a href="{{url('adminQbeez/userList')}}"><i class="fa fa-circle-o"></i> User List</a></li>
-                        <li><a href="{{url('adminQbeez/userList')}}"><i class="fa fa-circle-o"></i> User Wallet</a></li>
+                        <li><a href="{{url('adminfimihub/userList')}}"><i class="fa fa-circle-o"></i>Customer List</a>
+                        </li>
 
                     </ul>
                 </li>
+                @endif
+                @if($data->role == NULL || in_array(3,$data->role))
+                <li>
+                    <a href="{{url('adminfimihub/customerOrder')}}" class="waves-effect">
+                        <i class="icon-list"></i> <span>Order's</span>
+
+                    </a>
+                </li>
+                @endif
+                @if($data->role == NULL)
+                <li>
+                    <a href="{{url('adminfimihub/serviceList')}}" class="waves-effect">
+                        <i class="icon-home"></i> <span>Services</span>
+
+                    </a>
+                </li>
+                @endif
+                @if($data->role == NULL)
                 <li>
                     <a href="#" class="waves-effect">
-                        <i class="icon-user"></i> <span>Admin </span> <i class="fa fa-angle-right pull-right"></i>
+                        <i class="icon-magic-wand"></i> <span>CMS </span> <i class="fa fa-angle-right pull-right"></i>
                     </a>
                     <ul class="sidebar-submenu">
-                        <li><a href="#"><i class="fa fa-circle-o"></i> Change Password</a></li>
+                        <li><a href="{{url('adminfimihub/getFaq')}}"><i class="fa fa-circle-o"></i>FAQ's</a></li>
+                        <li><a href="{{url('adminfimihub/tnc')}}"><i class="fa fa-circle-o"></i>T&C</a></li>
+                        <li><a href="{{url('adminfimihub/aboutUs')}}"><i class="fa fa-circle-o"></i>About Us</a></li>
+                        <li><a href="{{url('adminfimihub/legalInfo')}}"><i class="fa fa-circle-o"></i>Legal Info</a>
+                        </li>
+                        <li><a href="{{url('adminfimihub/slider')}}"><i class="fa fa-circle-o"></i>Slider</a></li>
 
                     </ul>
                 </li>
+                @endif
+                @if($data->role == NULL)
                 <li>
-                    <a href="{{url('adminQbeez/logout')}}" class="waves-effect">
+                    <a href="{{url('adminfimihub/envSetting')}}" class="waves-effect">
+                        <i class="icon-wrench"></i> <span>Config</span>
+
+                    </a>
+                </li>
+                @endif
+                @if($data->role == NULL)
+                <li>
+                    <a href="{{url('adminfimihub/getSubAdmin')}}" class="waves-effect">
+                        <i class="icon-wrench"></i> <span>Sub-Admin</span>
+
+                    </a>
+                </li>
+                @endif
+                <li>
+                    <a href="{{url('adminfimihub/logout')}}" class="waves-effect">
                         <i class="icon-logout"></i> <span>Logout</span>
 
                     </a>
                 </li>
-
 
             </ul>
 

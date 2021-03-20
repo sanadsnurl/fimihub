@@ -1,0 +1,881 @@
+.MainBgColor
+{
+	background-color: lightyellow;
+	margin: 0 5 0 5;
+}
+
+.HeadingBackgroundColour
+{
+	background-color: #564b99;
+}
+.HeaderEntity
+{
+	font-weight: bold;
+	font-size: 16px;
+	color: silver;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	background-color: #564b99;
+	text-align: left;
+}	
+.HeaderText
+{
+	font-weight: normal;
+	font-size: 12px;
+	color: white;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	background-color: #564b99;
+	text-align: left;
+}	
+.HeaderLbl
+{
+	font-weight: normal;
+	font-size: 12px;
+	color: silver;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	background-color: #564b99;
+	text-align: left;
+}	
+.Heading
+{
+	font-weight: bold;
+	font-size: 12px;
+	color: white;
+	border: 1;
+	border-top-style: none;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	border-right-style: none;
+	border-left-style: none;
+	background-color: #6699cc;
+	text-align: left;
+	border-bottom-style: none;
+}
+.SentryHeading
+{
+	font-weight: bold;
+	font-size: 12px;
+	color: white;
+	border: 1;
+	border-top-style: none;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	border-right-style: none;
+	border-left-style: none;
+	background-color: #6699cc;
+	text-align: right;
+	border-bottom-style: none;
+}
+.PrimeTable
+{
+	border-right: 0;
+	table-layout: auto;
+	padding-right: 5px;
+	border-top: 0;
+	padding-left: 5px;
+	padding-bottom: 5px;
+	border-left: 0;
+	padding-top: 5px;
+	border-bottom: 0;
+	background-color: lightyellow;
+	width: 100%;
+}
+.tcc
+{
+	background-color: #6699cc;
+}
+.tcc_bridge
+{
+	FONT-SIZE: 12px; 
+	COLOR: white; 
+	FONT-FAMILY: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	TEXT-DECORATION: none;
+	background-color: #6982B2;
+	font-weight: bold;	
+}
+.cursorhand
+{
+	cursor: hand;
+}
+.cursornormal
+{
+	cursor: default;
+}
+
+.HeadingBlue
+{
+	font-weight: normal ;
+	font-size: 12px;
+	color: silver;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	background-color: #6699cc;
+	text-align: left;
+}
+.OnlineHeaderblack
+{
+	font-size: 12pt;
+	color: black;
+	border-top-style: none;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	border-right-style: none;
+	border-left-style: none;
+	background-color: transparent;
+	text-align: left;
+	border-bottom-style: none;
+}
+.OnlineHeaderblue
+{
+	font-size: 12pt;
+	color: #133376;
+	border-top-style: none;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	border-right-style: none;
+	border-left-style: none;
+	background-color: transparent;
+	text-align: left;
+	border-bottom-style: none;
+}
+
+.TrxnTextlblheader
+{
+	font-weight: bold;
+	font-size: 12px;
+	color: white;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	background-color: navy;
+	text-decoration: none;
+}
+.Textlblheaderblue
+{
+	font-weight: bold;
+	font-size: 12px;
+	color: navy;
+	text-decoration: none;
+}
+
+.InfoTextboxlabel
+{
+	font-size: 8pt;
+	color: black;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	width: 100%;
+}
+.InfoTextboxlabelbold
+{
+	font-size: 8px;
+	width: 100%;
+	color: black;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	font-weight: bold;
+}
+.WhiteLabel
+{
+	font-size: 10pt;
+	width: 100%;
+	color: white;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	font-weight: bold;
+}
+.InfoTextboxlabelblue
+{
+	border-right: black 1px inset;
+	border-top: black 1px inset;
+	font-size: 8pt;
+	border-left: black 1px inset;
+	width: 100%;
+	color: navy;
+	border-bottom: black 1px inset;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+}
+.InfoTextBoxLabelRed_10pt
+{
+	font-size: 10pt;
+	width: 100%;
+	color: red;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+}
+.EditText
+{
+	border-right: black 1px inset;
+	border-top: black 1px inset;
+	font-size: 8pt;
+	border-left: black 1px inset;
+	width: 100%;
+	color: navy;
+	border-bottom: black 1px inset;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	background-color: #f1f1f1;
+}
+
+.InfoTextboxlabelblue100pc
+{
+	font-size: 8pt;
+	width: 100%;
+	color: navy;
+	border-top-style: none;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	border-right-style: none;
+	border-left-style: none;
+	background-color: white;
+	border-bottom-style: none;
+}
+.TrxnTextboxlabelblue
+{
+	font-size: 8pt;
+	width: 100%;
+	color: navy;
+	border-top-style: none;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	border-right-style: none;
+	border-left-style: none;
+	background-color: white;
+	border-bottom-style: none;
+}
+.DropDownList
+{
+	font-weight: normal;
+	font-size: 10px;
+	background: white;
+	color: black;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	text-decoration: none;
+}
+
+.GridHeader
+{
+font-size: 12px;
+font-weight:bold;
+color: white;
+font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+background-color: #133376;
+}
+.GridNormalItem
+{
+	font-size: 8pt;
+	color: black;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	background-color: #d3d3d3;
+}
+.GridAlternateItem
+{
+	font-size: 8pt;
+	color: navy;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	background-color: white;
+}
+.GridSelectedItem
+{
+	font-size: 8pt;
+	color: white;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	background-color: gray;
+}
+
+.TableHeader
+{
+	font-weight: bold;
+	font-size: 12px;
+	color: white;
+	border-top-style: none;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	border-right-style: none;
+	border-left-style: none;
+	background-color: #6699cc;
+	text-align: left;
+	border-bottom-style: none;
+}
+.TableNormalItem
+{
+	font-size: 8pt;
+	color: black;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	background-color: white;
+}
+.TableAlternateItem
+{
+	font-size: 8pt;
+	color: black;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	background-color: lightcyan;
+}
+.TableSelectedItem
+{
+	font-size: 8pt;
+	color: white;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	background-color: gray;
+}
+.MenuTable
+{
+	border-right: white 1pt solid;
+	border-top: white 1pt solid;
+	font-size: 8pt;
+	border-left: white 1pt solid;
+	color: white;
+	text-indent: 2px;
+	border-bottom: white 1pt solid;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	background-color: #6982B2;
+	text-align: center;
+	width: 100%;
+}
+.MenuTableBtn
+{
+	border-right: white 1px solid;
+	border-top: white 1px solid;
+	font-size: 8pt;
+	border-left: white 1px solid;
+	width: 100%;
+	color: white;
+	text-indent: 1px;
+	border-bottom: white 1px solid;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	background-color: #6982b2;
+	text-align: center;
+	cursor: default;
+}
+.MenuTableBtnHighlight
+{
+	border-right: #133376 1px solid;
+	border-top: #133376 1px solid;
+	font-size: 8pt;
+	border-left: #133376 1px solid;
+	width: 100%;
+	cursor: hand;
+	color: #133376;
+	text-indent: 1px;
+	border-bottom: #133376 1px solid;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	background-color: #6982b2;
+	text-align: center;
+}
+.InfoTabStrip
+{
+	font-weight: bold;
+	font-size: 10pt;
+	color: white;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	background-color: #133376;
+	font-variant: small-caps;
+	text-decoration: none;
+}
+.InfoMultiPage
+{
+	border-right: black 1px solid;
+	border-left: black 1px solid;
+	border-bottom: black 1px solid;
+	border-top: black 1px solid;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	background-color: white;
+	text-decoration: none;
+}
+.100%button
+{
+	border-right: black 1px solid;
+	border-top: black 1px solid;
+	font-size: 8pt;
+	border-left: black 1px solid;
+	width: 100%;
+	color: black;
+	border-bottom: black 1px solid;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	height: 100%;
+	background-color: #eaeaea;
+	text-align: center;
+}
+.primebutton
+{
+	border-right: black 1px solid;
+	border-top: black 1px solid;
+	font-size: 8pt;
+	border-left: black 1px solid;
+	width: 120px;
+	color: black;
+	border-bottom: black 1px solid;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	height: 30px;
+	background-color: #eaeaea;
+	text-align: center;
+}
+.TrxnTable
+{
+	table-layout: auto;
+	padding-right: 5px;
+	padding-left: 5px;
+	padding-bottom: 1px;
+	width: 100%;
+	padding-top: 1px;
+	border-collapse: collapse;
+}
+
+.Browse
+{
+	border-right: black 1px solid;
+	border-top: black 1px solid;
+	font-size: 8pt;
+	border-left: black 1px solid;
+	color: black;
+	border-bottom: black 1px solid;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	text-align: center;
+}
+
+.ButtonFace
+{
+	border-right: white 1px solid;
+	padding-right: 5px;
+	border-top: white 1px solid;
+	padding-left: 5px;
+	font-weight: normal;
+	font-size: 10px;
+	padding-bottom: 3px;
+	margin-left: 3px;
+	border-left: white 1px solid;
+	color: white;
+	margin-right: 3px;
+	padding-top: 3px;
+	border-bottom: white 1px solid;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	background-color: #9494b0;
+	text-align: center;
+	text-decoration: none;
+	cursor: pointer;
+	behavior: url(ButtonBehavior.htc);
+	
+}
+
+.ButtonFace_WO_Disable
+{
+	border-right: white 1px solid;
+	padding-right: 5px;
+	border-top: white 1px solid;
+	padding-left: 5px;
+	font-weight: normal;
+	font-size: 10px;
+	padding-bottom: 3px;
+	margin-left: 3px;
+	border-left: white 1px solid;
+	color: white;
+	margin-right: 3px;
+	padding-top: 3px;
+	border-bottom: white 1px solid;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	background-color: #9494b0;
+	text-align: center;
+	text-decoration: none;
+	behavior: url(ButtonBehavior_WO_Disable.htc);
+	CURSOR: pointer;
+}
+
+.ButtonFace:hover
+{
+	background-color: #cccccc;
+}
+.ButtonHighLight
+{
+	border-right: white 1px solid;
+	padding-right: 5px;
+	border-top: white 1px solid;
+	padding-left: 5px;
+	font-weight: normal;
+	font-size: 10px;
+	padding-bottom: 3px;
+	margin-left: 3px;
+	border-left: white 1px solid;
+	color: white;
+	margin-right: 3px;
+	padding-top: 3px;
+	border-bottom: white 1px solid;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	background-color: #cccccc;
+	text-align: center;
+	text-decoration: none;
+}
+.ButtonFaceTakeAction
+{
+	border-right: #8c8e8c 1px solid;
+	border-top: #8c8e8c 1px solid;
+	border-left: #8c8e8c 1px solid;
+	border-bottom: #8c8e8c 1px solid;
+	background-color: "#dedbd6";
+	color: "#8c8e8c";
+	cursor: hand;
+	text-align: center;
+	font-size: 12px;
+	font-weight: bold;
+	font-family: Verdana;
+	text-decoration: none;
+	height: 2em;
+	width: 200px;
+}
+.ButtonHighLightTakeAction
+{
+	border-right: #08246b 1px solid;
+	border-top: #08246b 1px solid;
+	border-left: #08246b 1px solid;
+	border-bottom: #08246b 1px solid;
+	background-color: "#b5bed6";
+	color: "#000000";
+	cursor: hand;
+	text-align: center;
+	font-size: 12px;
+	font-weight: bold;
+	font-family: Verdana;
+	text-decoration: none;
+	height: 2em;
+	width: 200px;
+}
+.TextHidden
+{
+	font-weight: normal;
+	font-size: 9px;
+	color: #000000;
+	font-family: Helv, Verdana;
+	text-align: left;
+	visibility: hidden;
+}
+.panelvisible
+{
+	clear: both;
+	border-right: black 1px outset;
+	border-top: black 1px;
+	font-size: 10px;
+	visibility: visible;
+	overflow: auto;
+	border-left: black 1px outset;
+	width: 200px;
+	color: white;
+	border-bottom: black 1px outset;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	position: absolute;
+	background-color: #9494b0;
+	text-align:justify ;
+}
+.panelinvisible
+{
+	visibility: hidden;
+	position: absolute;
+}
+.tablevisible
+{
+	visibility: visible;
+}
+.tableinvisible
+{
+	visibility: hidden;
+}
+.MainFramePanel
+{
+	border-right: #cccccc thin ridge;
+	border-top: #cccccc thin ridge;
+	border-left: #cccccc thin ridge;
+	border-bottom: #cccccc thin ridge;
+	background-color: white;
+}
+.selection
+{
+	font-size: 15px;
+	color: #333399;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	text-decoration: none;
+	text-align: center;
+}
+
+.textboxlabel
+{
+	font-size: 10px;
+	color: black;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	text-decoration: none;
+}
+.Textboxlabel:hover
+{
+	color: Blue;
+}
+
+.textboxlabelblue
+{
+	border-top-width: thin;
+	border-left-width: thin;
+	font-size: 10px;
+	border-left-color: navy;
+	border-bottom-width: thin;
+	border-bottom-color: navy;
+	color: navy;
+	border-top-color: navy;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	border-right-width: thin;
+	text-decoration: none;
+	border-right-color: navy;
+}
+.ControlTableText
+{
+	border-right: 0px;
+	padding-right: 0px;
+	border-top: 0px;
+	padding-left: 0px;
+	font-size: 10px;
+	padding-bottom: 0px;
+	margin-left: 4px;
+	border-left: 0px;
+	color: black;
+	margin-right: 0px;
+	padding-top: 0px;
+	border-bottom: 0px;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	border-collapse: collapse;
+	text-align: left;
+	width:95%;
+}
+.ControlBoldTableText
+{
+	font-size: 10px;
+	font-weight: bold;
+	color: black;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	text-align: left;
+}
+.Textlbl
+{
+	font-size: 10px;
+	color: red;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	text-align: left;
+}
+
+.Textlblheader
+{
+	font-size: 12px;
+	font-weight:bold;
+	color: navy;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	text-decoration:none;
+    margin-right: 0px;
+}
+
+.TextlblheaderWhite
+{
+	font-size: 16px;
+	font-weight:bold;
+	color: white;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	text-decoration:none;
+}
+
+.Textlblheader2
+{
+	font-size: 14px;
+	font-weight:bold;
+	color: navy;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	text-decoration:none;
+}
+
+.TextQuickView
+{
+	font-size: 12px;
+	font-weight: bolder;
+	color: Black;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	text-decoration:none;
+}
+
+.Textlblheader:hover
+{
+	color: blue;
+}
+
+.TextlblBold
+{
+	font-weight: bold;
+	font-size: 10px;
+	color: black;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	text-align: left;
+}
+.Panelstyle
+{
+	border: Border-Width=1px, Border-Style=Groove, Border-Color=Black;
+}
+.Panelboldstyle
+{
+	border: border-width= 5px;
+	border: border-style= Solid;
+}
+.TreeView
+{
+	font-weight: bold;
+	font-size: 10pt;
+	color: white;
+	line-height: 10px;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+}
+.TreeViewNodeDefault
+{
+    font-size: 9pt;
+    color: white;
+    font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+    text-align: left;   
+}
+.TreeViewNodeSelected
+{
+    font-size: 9pt;
+    font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+    font-weight: bold;
+    background-color: #133376;
+    color: #fec65a;    
+}
+.TreeViewNodeHovered
+{
+    font-size: 9pt;
+    font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+    font-weight: bold;
+    background-color: #133376;
+    color: #e2eeff;
+}
+			
+.textboxinput
+{
+	font-size: 12px;
+	width: 150px;
+	color: black;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	height: 20px;
+}
+
+.DropDownList
+{
+	font-size: 10px;
+	background: white;
+	color: black;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	text-decoration: none;
+}
+
+.toplabel
+{
+	font-weight: bold;
+	font-size: 12px;
+	color: red;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	text-decoration: none;
+	text-align: left;
+}
+
+.ErrorLabel
+{
+	font-weight: bold;
+	font-size: 12px;
+	color: red;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	text-decoration: none;
+}
+
+.ErrorBox
+{
+	font-weight: bold;
+	font-size: 8px;
+	color: Black;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	text-decoration: none;
+	text-align: left;
+}
+
+.SearchPageinput
+{
+	font-weight: bold;
+	font-size: 14px;
+	color: #333399;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	text-decoration: none;
+}
+.LeftPanel
+{
+	font-size: 8pt;
+	color: white;
+	border-top-style: none;
+	font-family: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	background-color: #6699cc;
+	text-align: left;
+}
+
+.spanMenu {	
+           container: positioned;	
+           position: absolute;	
+           top: 80px;	      
+           
+}
+
+.primebodyclass
+{
+ margin-left :0;
+ margin-bottom :0;
+ margin-bottom :0;
+ margin-top :0;
+ background-color: lightyellow; 
+}
+
+.DefaultLabel
+{
+	font-weight: bold;
+	font-size: 8pt;
+	color: black;
+	font-family: Verdana;
+}
+
+.DefaultTextbox
+{
+	border-right: #336699 1px solid;
+	border-top: #336699 1px solid;
+	font-size: 8pt;
+	border-left: #336699 1px solid;
+	width: 200px;
+	color: black;
+	border-bottom: #336699 1px solid;
+	font-family: Verdana;
+	height: 20px;
+}
+
+.DefaultGroupHeader
+{
+	font-weight: bold;
+	font-size: 10pt;
+	color: black;
+	font-family: Verdana;
+}
+
+.DefaultButton
+{
+	border-right: black 1px solid;
+	border-top: black 1px solid;
+	font-size: 8pt;
+	border-left: black 1px solid;
+	width: 120px;
+	color: black;
+	border-bottom: black 1px solid;
+	font-family: Verdana;
+	height: 30px;
+	background-color: #eaeaea;
+	text-align: center;
+}
+
+.SmallNav 
+{
+	FONT-SIZE: 10px; 
+	COLOR: white; 
+	FONT-FAMILY: Verdana, 'Microsoft Sans Serif' , Arial, Sans-Serif;
+	TEXT-DECORATION: none;
+	background-color: #6699cc;
+	font-weight: bold;	
+}
+
+.divLoadCont
+{
+	
+	width:100%; 
+	height:98%; 
+	top:0; 
+	left:0; 
+	background-color:white; 
+	layer-background-color:white; 
+	font-family:arial,helvetica; 
+	z-index:100
+}
+

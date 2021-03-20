@@ -22,10 +22,10 @@ use Illuminate\Support\Facades\Log;
 
 Route::group(['middleware' => ['cors', 'json.response']], function () {
 
-  
-    //Merchant Registration
+
+    //Rider Registration
     Route::post('/register' , 'Api\LoginRegisterController@register');
-    //Merchant Login
+    //Rider Login
     Route::post('/login' , 'Api\LoginRegisterController@login');
     //Generate And Send OTP
     Route::post('/SendOtp', 'Api\OtpManagerController@OtpGeneration');
@@ -33,44 +33,78 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
     Route::post('/VerifyOtp', 'Api\OtpManagerController@OtpVerification');
     //Forget password
     Route::post('/forgetPassword', 'Api\LoginRegisterController@forgetPassword');
-    //Get Support Question details
-    Route::get('/supportQuestion', 'Api\ManageSupportRequestController@getSupportQuestion');
-    
-    //========================================== Bearer Api's===================================================
-    
-    Route::group(['middleware' => 'auth:api'], function(){
-        //Merchant Details
-        Route::get('/details', 'Api\LoginRegisterController@details');
-        //Merchant logout
-        Route::get('/logout', 'Api\LoginRegisterController@logout');
-        //User Login details updation
-        Route::post('/profileUpdate', 'Api\LoginRegisterController@updateLogin');
-        //Merchant Business details Create And Update
-        Route::post('/businessDetails', 'Api\BusinessDetailsController@createUpdateMerchantDetails');
-        //Merchant GET Business details 
-        Route::get('/businessDetails', 'Api\BusinessDetailsController@businessDetails');
-        //Get Sender Wallet Details
-        Route::get('/qrDetails', 'Api\WalletTransactionController@qrDetails');
-        //Pay money through wallet
-        Route::post('/payMoney', 'Api\WalletTransactionController@payMoney');
-        //get all Transactions details
-        Route::get('/getTransactions', 'Api\WalletTransactionController@getTransactionsData');
-        //wallet details
-        Route::get('/getWallet', 'Api\WalletTransactionController@getWalletData');
-        //wallet Add Money
-        Route::post('/addWalletMoney', 'Api\WalletTransactionController@addMoney');
-        //Create Support Query
-        Route::post('/supportQuery', 'Api\ManageSupportRequestController@createSupportQueries');
-        //Merchant GET Qr 
-        Route::get('/qr', 'Api\BusinessDetailsController@imageQrCode');
-        //User Device token updation
-        Route::post('/updateDeviceToken', 'Api\LoginRegisterController@updateDeviceToken');
-        //User Device token updation
-        Route::get('/getNotifications', 'Api\NotificationManageController@getNotifications');
-        //wallet Voucher Add Money
-        Route::post('/voucherAddMoney', 'Api\WalletTransactionController@voucherAddMoney');
+    //CMS About us, Term And Condition, FAQ
+    Route::get('/getcms/{type?}', 'Api\CmsController@getCms');
 
-        
+    //========================================== Bearer Api's===================================================
+
+    Route::group(['middleware' => 'auth:api'], function(){
+        //Rider Details
+        Route::get('/details', 'Api\LoginRegisterController@details');
+        //Rider Online Status Update
+        Route::get('/dutyStatus', 'Api\LoginRegisterController@updateOnlineStatus');
+        //Rider logout
+        Route::get('/logout', 'Api\LoginRegisterController@logout');
+        //Rider Device token updation
+        Route::post('/updateDeviceToken', 'Api\LoginRegisterController@updateDeviceToken');
+        //Rider change password
+        Route::post('/changePassword', 'Api\LoginRegisterController@changePassword');
+        //Rider Login details updation
+        Route::post('/profileUpdate', 'Api\LoginRegisterController@updateLogin');
+        //Rider Profile picture updation
+        Route::post('/updateprofilepicture', 'Api\LoginRegisterController@updateProfilePicture');
+
+        // Notifications
+        //Get all Read and Unread notification
+        Route::get('/getnotifications/{type?}', 'Api\NotificationController@getAllNotifications');
+        //Get singale notification
+        Route::get('/getnotificationbyid/{id}', 'Api\NotificationController@getNotificationById');
+        //Mark as read notification
+        Route::get('/markasread/{id?}', 'Api\NotificationController@markAsRead');
+        // get reasons
+        Route::get('/getreasons/{id}', 'Api\CmsController@getReasons');
+        // get Service Category
+        Route::get('/getservicecategory/{id?}', 'Api\ServiceCategoryController@getServiceCategory');
+
+    });
+
+    Route::group(['middleware' => 'auth:api', 'prefix'=>'rider'], function() {
+        //Rider Details
+        Route::get('/testingnotification', 'Api\Rider\OrderController@testingNotification');
+        Route::get('/getorders/{id?}/{type?}', 'Api\Rider\OrderController@getOrders');
+        Route::get('/getmypreviusorder/{id?}', 'Api\Rider\OrderController@getMyPreviusOrders');
+        Route::get('/getactiveorder/{id?}', 'Api\Rider\OrderController@getActiveOrder');
+        Route::post('/updatestatus', 'Api\Rider\OrderController@updateEventOrderStatus');
+        Route::get('/getmyearning/{id?}', 'Api\Rider\MyEarningController@getMyEarning');
+        Route::post('/getmyearningbyweekmonthyear', 'Api\Rider\MyEarningController@getMyEarningByWeekMonthYear');
+        Route::get('/getOrderedData', 'Api\Rider\OrderController@getOrderedData');
+
     });
     // ...
+
+
+    //========================================== User Api's===================================================
+
+    //User Registration
+    Route::post('user/register', 'Api\user\AuthController@userRegister');
+    //User Login
+    Route::post('user/login', 'Api\user\AuthController@login');
+    //Forget password
+    Route::post('user/forgetPassword', 'Api\user\AuthController@forgetPassword');
+
+    //========================================== User Bearer Api's===================================================
+
+    Route::group(['middleware' => 'auth:api', 'prefix' => 'user'], function () {
+        //User Details
+        Route::get('details', 'Api\user\UserAuthController@userDetails');
+        //Customer dashboard
+        Route::get('getRestaurantByCat', 'Api\user\RestaurentManageController@getRestaurentList');
+        //Customer Menu List
+        Route::get('getMenuByRestaurant', 'Api\user\RestaurentManageController@getRestaurentMenuDetails');
+        //Get cart details
+        Route::get('getCartDetails', 'Api\user\CartController@getCartDetails');
+        //Get cart details
+        Route::post('addToCart', 'Api\user\CartController@addToCart');
+
+    });
 });
