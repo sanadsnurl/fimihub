@@ -34,14 +34,17 @@
                                         <!-- <th>S.no</th> -->
                                         <th>Action</th>
 
+
                                         <th>S.No.</th>
+                                        <th>Order date</th>
+                                        <th>Order Time</th>
                                         <th>Order Id</th>
+                                        <th>Customer Mobile</th>
                                         <th>Customer Name</th>
                                         <th>Dish</th>
-                                        <th>Total Amount</th>
-                                        <th>Payment Method</th>
+                                        <th>Dish Total</th>
+                                        <th>Total Tax</th>
                                         <th>Order Status</th>
-                                        <th>Create At</th>
 
                                     </tr>
                                 </thead>
@@ -102,8 +105,20 @@
                     name: 'id'
                 },
                 {
+                    data: 'created_at',
+                    name: 'created_at'
+                },
+                {
+                    data: 'order_time',
+                    name: 'order_time'
+                },
+                {
                     data: 'order_id',
                     name: 'order_id'
+                },
+                {
+                    data: 'mobile',
+                    name: 'mobile'
                 },
                 {
                     data: 'customer_name',
@@ -118,17 +133,14 @@
                     name: 'total_amount'
                 },
                 {
-                    data: 'payment_type',
-                    name: 'payment_type'
+                    data: 'total_tax',
+                    name: 'total_tax'
                 },
                 {
                     data: 'order_status',
                     name: 'order_status'
                 },
-                {
-                    data: 'created_at',
-                    name: 'created_at'
-                },
+
             ]
         });
         table.buttons().container()

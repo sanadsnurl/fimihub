@@ -8,9 +8,13 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
+
                     <div class="card-header text-uppercase">Order Id - {{$order_data->order_id ?? ''}}
                         <a href="{{url('adminfimihub/customerOrder')}}" style="float:right;">
                             <span class="btn btn-danger">Back</span>
+                        </a>
+                        <a href="{{url(Request::fullUrl())}}" style="float:right;">
+                            <span class="btn btn-info">Refresh</span>
                         </a>
                     </div>
                     <div class="card-body">
@@ -24,7 +28,6 @@
                                 <b>Dish</b>
                                 <span >{!! $order_data->ordered_menu ?? '' !!}</span>
                             </li>
-
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 <b>Payment Method</b>
                                 <span >{{$order_data->payment_type ?? ''}}</span>
@@ -32,6 +35,14 @@
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 <b>Order Status</b>
                                 <span >{{$order_data->order_status ?? ''}}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <b>Customer Name</b>
+                                <span >{{$order_data->customer_name ?? ''}}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <b>Customer Mobile</b>
+                                <span >{{$order_data->mobile ?? ''}}</span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 <b>Flat No.</b>
@@ -50,12 +61,22 @@
                                 <span >{{$order_data->restaurentDetails->name ?? ''}}</span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <b>Restaurant number</b>
+                                <span >{{$order_data->restaurentDetails->official_number ?? ''}}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
                                 <b>Rider Name</b>
                                 <span >{{$event_data->rider_details->name ?? 'Not Alloted Yet'}} </span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 <b>Rider Mobile</b>
                                 <span >{{$event_data->rider_details->mobile ?? '--'}} </span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <b>Rider order status </b>
+                                {{-- @if (!empty($event_data->rider)) --}}
+                                <span >{{$event_data->rider->order_status ?? '--'}} </span>
+                                {{-- @endif --}}
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 <b>Food Commission</b>
@@ -70,8 +91,12 @@
                                 <span >{{$data->currency ?? ''}} {{$order_data->total_amount ?? ''}}</span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <b>Created At</b>
-                                <span >{{$order_data->created_at ?? ''}}</span>
+                                <b>Order Date</b>
+                                <span >{{date('d F Y', strtotime($order_data->created_at)) ?? '--'}}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <b>Order time</b>
+                                <span >{{date('h:i A', strtotime($order_data->created_at)) ?? '--'}}</span>
                             </li>
 
                         </ul>

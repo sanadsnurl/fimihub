@@ -21,11 +21,14 @@ use App\Model\menu_custom_list;
 use App\Model\menu_customization;
 use App\Model\resto_custom_menu_categorie;
 use Response;
+use Carbon\Carbon;
 use Session;
 use File;
 use Illuminate\Validation\Rule;
+use stdClass;
 use Yajra\DataTables\DataTables;
 
+use function GuzzleHttp\json_decode;
 
 class RestaurentController extends Controller
 {
@@ -69,6 +72,7 @@ class RestaurentController extends Controller
             'avg_time' => 'string|nullable',
             'open_time' => 'required|date_format:H:i',
             'close_time' => 'required|date_format:H:i|after:open_time',
+            'resto_tax_status' => 'required|in:1,2',
             'address_address' => 'required|string',
             'pincode' => 'string|nullable',
             'resto_type' => 'in:1,2,3|nullable',
@@ -132,6 +136,7 @@ class RestaurentController extends Controller
     {
         $user = Auth::user();
 
+        // return  datatables(restaurent_detail::query())->toJson();
 
         $restaurent_detail = new restaurent_detail;
         $resto_data = $restaurent_detail->getRestoData($user->id);
@@ -163,14 +168,22 @@ class RestaurentController extends Controller
         if ($request->ajax()) {
             return Datatables::of($resto_cate_data)
                 ->addIndexColumn()
+
+                ->filterColumn('created_at', function ($query, $keyword){
+                    $query->whereRaw("DATE_FORMAT(resto_menu_categories.created_at,'%d %M %Y') like ?", ["%$keyword%"]);
+                })
+
+
                 ->addColumn('action', function($row){
-                    $btn = '<a href="editMainCategory?dish_main_cat_id=' . base64_encode($row->id) . '" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Edit</a>
-                    <a href="deleteMainCat?dish_cat_id='.base64_encode($row->id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Delete</a>';
+                    // $btn = '<a href="editMainCategory?dish_main_cat_id=' . base64_encode($row->id) . '" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Edit</a>
+                    // <a href="deleteMainCat?dish_cat_id='.base64_encode($row->id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Delete</a>';
+                    $btn = '<a href="editMainCategory?dish_main_cat_id=' . base64_encode($row->id) . '" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Edit</a>';
                     return $btn;
                 })
                 ->addColumn('created_at', function ($row) {
 
-                    return date('d F Y', strtotime($row->created_at));
+                    $fu = date('d F Y', strtotime($row->created_at));
+                    return $fu;
                 })
                 ->rawColumns(['action'])
                 ->make(true);
@@ -277,19 +290,34 @@ class RestaurentController extends Controller
             ->get();
         // dd($resto_cate_variant);
         $menu_list = new menu_list;
-        $menu_data = $menu_list->menuPaginationData($resto_data->id);
+        $menu_data = $menu_list->getMenuPaginationData($resto_data->id);
         if ($request->ajax()) {
             return Datatables::of($menu_data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
                     $btn = '<a href="editDish?dish_id=' . base64_encode($row->id) . '" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Edit</a>
-                        <a href="deleteDish?dish_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Delete</a>
                         ';
+                        // <a href="deleteDish?dish_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Delete</a>
+
+                        if($row->visibility == 1) {
+                            $btn .= '<a href="dishVisibility?dish_id=' . base64_encode($row->id) . '&visi='.base64_encode($row->visibility).'" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Enable</a>
+                        ';
+                        } else {
+                            $btn .= '<a href="dishVisibility?dish_id=' . base64_encode($row->id) . '&visi='.base64_encode($row->visibility).'" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Disable</a>
+                            ';
+                        }
                     return $btn;
                 })
                 ->addColumn('created_at', function ($row) {
 
                     return date('d F Y', strtotime($row->created_at));
+                })
+                ->addColumn('visibility', function ($row) {
+                    if ($row->visibility == 1) {
+                        return 'Disable';
+                    } else {
+                        return 'Enable';
+                    }
                 })
                 ->addColumn('dish_type', function ($row) {
                     if ($row->dish_type == 1) {
@@ -312,6 +340,26 @@ class RestaurentController extends Controller
             'resto_cate_add_on' => $resto_cate_add_on,
             'cat_data' => $resto_cate_data
         ]);
+    }
+
+    public function dishVisibility(Request $request) {
+        $dish_id = base64_decode(request('dish_id'));
+        $visibility = base64_decode(request('visi'));
+        $visibility = $visibility ? 0 : 1;
+        $menu_lists = new menu_list;
+        $delete_menu = array();
+        $delete_menu['id'] = $dish_id;
+
+        $delete_menu = $menu_lists->visibilityOffOnOfDish($delete_menu, $visibility);
+        if ($visibility) {
+            $message = 'Dish Disable !';
+        } else {
+            $message = 'Dish Enable !';
+        }
+
+        Session::flash('menu_message', $message);
+
+        return redirect()->back();
     }
 
     public function deleteMenuList(Request $request)
@@ -353,10 +401,14 @@ class RestaurentController extends Controller
             ->get();
 
         $menu_lists = new menu_list;
-        $menu_data = $menu_lists->menuListById($dish_id);
-
-        $menu_data->product_add_on_id = json_decode($menu_data->product_add_on_id);
+        $menu_data = $menu_lists->menuListByIdWithBlock($dish_id);
         // dd($menu_data);
+
+        if(isset($menu_data->product_add_on_id)){
+            $menu_data->product_add_on_id = json_decode($menu_data->product_add_on_id);
+        } else {
+            $menu_data->product_add_on_id = [];
+        }
         return view('restaurent.editMenu')->with([
             'data' => $user,
             'menu_data' => $menu_data,
@@ -373,20 +425,27 @@ class RestaurentController extends Controller
             'picture' => 'mimes:png,jpg,jpeg|nullable',
             'about' => 'string|nullable',
             'discount' => 'numeric|nullable',
-            'price' => 'required|numeric|not_in:0',
+            'price' => 'required|numeric',
             'dish_type' => 'required|in:1,2,3|nullable',
             'menu_category_id' => 'required|exists:resto_menu_categories,id|nullable',
+            'open_time' => 'nullable|date_format:H:i',
+            'close_time' => 'nullable|date_format:H:i|after:open_time',
 
         ]);
         if (!$validator->fails()) {
             $user = Auth::user();
             $id = $user->id;
             $data = $request->toarray();
-
+// dd($data);
             if ($request->has('product_add_on_id') && !empty('product_add_on_id')) {
                 $data['product_add_on_id'] = json_encode($data['product_add_on_id']);
             } else {
                 $data['product_add_on_id'] = json_encode([]);
+            }
+            if ($request->has('open_day') && !empty('open_day')) {
+                $data['open_day'] = json_encode($data['open_day']);
+            }else{
+                $data['open_day'] = NULL;
             }
             if ($request->hasfile('picture')) {
                 $profile_pic = $request->file('picture');
@@ -431,6 +490,9 @@ class RestaurentController extends Controller
             'dish_type' => 'required|in:1,2,3|nullable',
             'menu_category_id' => 'required|exists:resto_menu_categories,id|nullable',
             'product_variant_id' => 'integer|nullable',
+            'open_time' => 'nullable|date_format:H:i',
+            'close_time' => 'nullable|date_format:H:i|after:open_time',
+            'visibility' => 'required|in:1,0',
 
         ]);
         if (!$validator->fails()) {
@@ -443,6 +505,12 @@ class RestaurentController extends Controller
             if ($request->has('product_variant_id') && !empty('product_variant_id')&& request('product_variant_id')!=NULL) {
                 $data['price'] = 0;
             }
+            if ($request->has('open_day') && !empty('open_day')) {
+                $data['open_day'] = json_encode($data['open_day']);
+            }else{
+                $data['open_day'] = NULL;
+            }
+
             if ($request->hasfile('picture')) {
                 $profile_pic = $request->file('picture');
                 $input['imagename'] = $data['name'] . time() . '.' . $profile_pic->getClientOriginalExtension();
@@ -513,8 +581,9 @@ class RestaurentController extends Controller
             return Datatables::of($menu_customization_data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $btn = '<a href="editAddOn?custom_id=' . base64_encode($row->id) . '" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Edit</a>
-                        <a href="deleteAddOn?custom_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Delete</a>';
+                    // $btn = '<a href="editAddOn?custom_id=' . base64_encode($row->id) . '" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Edit</a>
+                    //     <a href="deleteAddOn?custom_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Delete</a>';
+                        $btn = '<a href="editAddOn?custom_id=' . base64_encode($row->id) . '" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Edit</a>';
                     return $btn;
                 })
                 ->addColumn('created_at', function ($row) {
@@ -629,7 +698,9 @@ class RestaurentController extends Controller
             return Datatables::of($resto_cate_data)
                 ->addIndexColumn()
                 ->addColumn('action', function($row){
-                    $btn = '<a href="deleteCustomCat?custom_cat_id='.base64_encode($row->id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Delete</a>';
+                    // $btn = '<a href="deleteCustomCat?custom_cat_id='.base64_encode($row->id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Delete</a>
+                    // <a href="editCustomCat?custom_cat_id='.base64_encode($row->id).'" class="btn btn-outline-primary btn-sm btn-round waves-effect waves-light m-0">Edit</a>';
+                    $btn = '<a href="editCustomCat?custom_cat_id='.base64_encode($row->id).'" class="btn btn-outline-primary btn-sm btn-round waves-effect waves-light m-0">Edit</a>';
                     return $btn;
                 })
                 ->addColumn('customization_variant', function ($row) {
@@ -767,8 +838,9 @@ class RestaurentController extends Controller
             return Datatables::of($menu_data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $btn = '<a href="editCustomMenu?custom_menu_id=' . base64_encode($row->id) . '" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Edit</a>
-                    <a href="deleteCustomMenu?custom_menu_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Delete</a>';
+                    // $btn = '<a href="editCustomMenu?custom_menu_id=' . base64_encode($row->id) . '" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Edit</a>
+                    // <a href="deleteCustomMenu?custom_menu_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Delete</a>';
+                    $btn = '<a href="editCustomMenu?custom_menu_id=' . base64_encode($row->id) . '" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Edit</a>';
                     return $btn;
                 })
                 ->addColumn('created_at', function ($row) {

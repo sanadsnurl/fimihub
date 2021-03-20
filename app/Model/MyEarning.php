@@ -12,10 +12,10 @@ use Carbon\Carbon;
 class MyEarning extends Model
 {
     /**
-        * The attributes that are mass assignable.
-        *
-        * @var array
-        */
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
         'user_id',
         'order_id',
@@ -25,14 +25,16 @@ class MyEarning extends Model
         'is_active',
     ];
 
-    public function orders() {
+    public function orders()
+    {
         return $this->belongsTo(order::class, 'order_id');
     }
 
-    public function updateEarning($data, $orderId = false) {
+    public function updateEarning($data, $orderId = false)
+    {
         $id = Auth::id();
         $earning = $this->where('order_id', $orderId)->where('user_id', $id)->first();
-        if(empty($earning)) {
+        if (empty($earning)) {
             $earning = $this->create($data);
         } else {
             unset($data['order_id']);
@@ -43,26 +45,26 @@ class MyEarning extends Model
         return $earning;
     }
 
-    public function getMyEarning($userId, $earningId = false) {
+    public function getMyEarning($userId, $earningId = false)
+    {
         $query = $this->where('user_id', $userId)->where('is_active', 1);
-        if($earningId) {
+        if ($earningId) {
             $query = $query->where('id', $earningId);
         }
         return $query;
     }
 
-    public function getMyEarningOnOrder($userId) {
+    public function getMyEarningOnOrder($userId)
+    {
         $query = $this
-                    ->leftJoin('orders', function($join)
-                        {
-                        $join->on('orders.id', '=', 'my_earnings.order_id');
-                        $join->where('orders.visibility', 0);
-
-                        })
-                    ->where('my_earnings.user_id', $userId)
-                    ->where('is_active', 1)
-                    ->select('orders.*', 'my_earnings.ride_price as order_earning');
-                    return $query;
+            ->leftJoin('orders', function ($join) {
+                $join->on('orders.id', '=', 'my_earnings.order_id');
+                $join->where('orders.visibility', 0);
+            })
+            ->where('my_earnings.user_id', $userId)
+            ->where('is_active', 1)
+            ->select('orders.*', 'my_earnings.ride_price as order_earning');
+        return $query;
     }
     /**
      * 1. Week
@@ -72,72 +74,78 @@ class MyEarning extends Model
      * 5. all
      */
 
-    public function getMyEarningByWeekMonthYear($userId, $type = false, $startDate = false, $endDate = false) {
+    public function getMyEarningByWeekMonthYear($userId, $type = false, $startDate = false, $endDate = false)
+    {
         $query = $this->where('is_active', 1);
-        if($userId) {
+        if ($userId) {
             $query = $query->where('user_id', $userId);
         }
 
-        if($type == 1) {
+        if ($type == 1) {
             return $query->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
         } else if ($type == 2) {
             return $query->whereMonth('created_at', date('m'))
-            ->whereYear('created_at', date('Y'));
-        } else if($type == 3) {
+                ->whereYear('created_at', date('Y'));
+        } else if ($type == 3) {
             return $query->whereYear('created_at', date('Y'));
-        } else if($type == 4){
+        } else if ($type == 4) {
             if ($startDate && $endDate) {
                 return $query->whereBetween('created_at', [$startDate,  $endDate]);
             }
-        } else if($type == 6){
+        } else if ($type == 6) {
             return $query->whereDate('created_at', Carbon::today());
         } else {
             return $query;
         }
     }
 
-    public function getMyTotalEarning($userId) {
+    public function getMyTotalEarning($userId)
+    {
         $query = $this
-                    ->leftJoin('orders', function($join)
-                        {
-                        $join->on('orders.id', '=', 'my_earnings.order_id');
-                        $join->where('orders.visibility', 0);
-
-                        })
-                    ->where('my_earnings.user_id', $userId)
-                    ->where('is_active', 1)
-                    ->select(DB::raw('SUM(my_earnings.ride_price) as order_earning'))
-                    ->first();
-                    return $query;
+            ->leftJoin('orders', function ($join) {
+                $join->on('orders.id', '=', 'my_earnings.order_id');
+                $join->where('orders.visibility', 0);
+            })
+            ->where('my_earnings.user_id', $userId)
+            ->where('is_active', 1)
+            ->select(DB::raw('SUM(my_earnings.ride_price) as order_earning'))
+            ->first();
+        return $query;
     }
 
-    public function getMyEarningOnOrderResto($userId) {
+    public function getMyEarningOnOrderResto($userId)
+    {
         $query = $this
-                    ->Join('orders', function($join) use($userId)
-                        {
-                        $join->on('orders.id', '=', 'my_earnings.order_id');
-                        $join->where('orders.visibility', 0);
-                        $join->where('orders.restaurent_id', $userId);
-
-                        })
-                    ->where('is_active', 1)
-                    ->select('orders.*', 'my_earnings.ride_price as order_earning', 'my_earnings.resto_commission as resto_earning');
-                    return $query;
+            ->Join('orders', function ($join) use ($userId) {
+                $join->on('orders.id', '=', 'my_earnings.order_id');
+                $join->where('orders.visibility', 0);
+                $join->where('orders.restaurent_id', $userId);
+            })
+            ->where('is_active', 1)
+            ->select('orders.*', 'my_earnings.ride_price as order_earning', 'my_earnings.resto_commission as resto_earning');
+        return $query;
     }
 
-    public function getMyTotalEarningResto($userId) {
+    public function getMyTotalEarningResto($userId)
+    {
         $query = $this
-                    ->Join('orders', function($join) use($userId)
-                        {
-                        $join->on('orders.id', '=', 'my_earnings.order_id');
-                        $join->where('orders.visibility', 0);
-                        $join->where('orders.restaurent_id', $userId);
-                        })
-                    ->where('is_active', 1)
-                    ->select(DB::raw('SUM(my_earnings.resto_commission) as resto_earning'))
-                    ->first();
-                    return $query;
+            ->Join('orders', function ($join) use ($userId) {
+                $join->on('orders.id', '=', 'my_earnings.order_id');
+                $join->where('orders.visibility', 0);
+                $join->where('orders.restaurent_id', $userId);
+            })
+            ->where('is_active', 1)
+            ->select(
+                DB::raw('SUM(my_earnings.resto_commission) as resto_earning'),
+                DB::raw('SUM((orders.total_amount - orders.delivery_fee) - ((orders.total_amount - orders.delivery_fee)/ (1 + (orders.service_tax / 100)))) as cgt_tax'),
+                DB::raw('SUM(
+                    ((orders.total_amount - orders.delivery_fee)/ (1 + (orders.service_tax / 100))) -
+                        (((orders.total_amount - orders.delivery_fee)/ (1 + (orders.service_tax / 100)))
+                        / (1 + (orders.service_commission / 100)))
+                    )
+                    as total_com')
+            )
+            ->first();
+        return $query;
     }
-
-
 }

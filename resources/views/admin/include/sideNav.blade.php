@@ -28,6 +28,14 @@
     <!-- Custom Style-->
     <link href="{{asset('asset/admin/assets/css/app-style.css')}}" rel="stylesheet" />
 
+    @if (request()->segment(2) == 'trackOrder')
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+            integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/12.1.6/css/intlTelInput.css">
+        <link rel="stylesheet" href="{{asset('asset/customer/dist/main.css')}}">
+        <link rel="icon" href="{{asset('asset/customer/assets/images/logo.png')}}">
+    @endif
 </head>
 
 <body>
@@ -81,6 +89,7 @@
                                 List</a></li>
                         <li><a href="{{url('adminfimihub/pendingRider')}}"><i class="fa fa-circle-o"></i>New
                                 Request</a></li>
+                        <li><a href="{{url('adminfimihub/nearByRider')}}"><i class="fa fa-circle-o"></i>Rider Location</a></li>
                     </ul>
                 </li>
                 @endif
@@ -108,10 +117,18 @@
                 @if($data->role == NULL)
                 <li>
                     <a href="{{url('adminfimihub/serviceList')}}" class="waves-effect">
-                        <i class="icon-home"></i> <span>Services</span>
+                        <i class="icon-grid"></i> <span>Services</span>
 
                     </a>
                 </li>
+                @endif
+                @if($data->role == NULL)
+                {{-- <li>
+                    <a href="{{url('adminfimihub/paymentMethod')}}" class="waves-effect">
+                        <i class="icon-credit-card"></i> <span>Payment</span>
+
+                    </a>
+                </li> --}}
                 @endif
                 @if($data->role == NULL)
                 <li>

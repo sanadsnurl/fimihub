@@ -38,6 +38,25 @@ class restaurent_detail extends Model
         return $query_data;
     }
 
+    public function checkRestoTimeAvailiability($resto_id)
+    {
+        try {
+        $current_time = date('h:i');
+
+            $restaurent_details=$this
+                ->where('visibility', 0)
+                ->whereTime('restaurent_details.open_time','<=', $current_time)
+                ->whereTime('restaurent_details.close_time','>=', $current_time)
+                ->where('id', $resto_id)
+                ->first();
+
+            return $restaurent_details;
+        }
+        catch (Exception $e) {
+            dd($e);
+        }
+    }
+
     public function getRestoData($userid)
     {
         try {
@@ -56,7 +75,7 @@ class restaurent_detail extends Model
     public function getRestoDataOnId($userid)
     {
         try {
-            $restaurent_details=DB::table('restaurent_details')
+            $restaurent_details=$this
                 ->where('visibility', 0)
                 ->where('id', $userid)
                 ->first();
@@ -126,7 +145,7 @@ class restaurent_detail extends Model
     public function getallRestaurantWithMenu()
     {
         try {
-            $restaurent_details=DB::table('restaurent_details')
+            $restaurent_details=$this
                                 ->leftJoin('menu_list', function($join)
                                                 {
                                                 $join->on('menu_list.restaurent_id', '=', 'restaurent_details.id');
@@ -189,6 +208,17 @@ class restaurent_detail extends Model
             return $value +(( DB::table('service_catagories')->where('service_catagories.id', 1)->first()->commission / 100) * $value);
         }
     }
+
+
+
+    // public function getRestoTaxStatusAttribute($value)
+    // {
+    //     dd($this);
+    //     if($value == 2) {
+    //         $g = DB::table('service_catagories')->where('service_catagories.id', 1)->first()->tax = 0;
+    //         return $g;
+    //     }
+    // }
 
     // public function userDistance()
     // {

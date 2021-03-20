@@ -29,6 +29,7 @@ use App\Model\cart_customization;
 use App\Model\menu_custom_list;
 use App\Model\menu_customization;
 use App\Model\payment_gateway_txn;
+use App\Model\payment_method;
 use App\Model\saved_card;
 use Illuminate\Support\Facades\DB;
 use Response;
@@ -53,6 +54,10 @@ class OrderController extends Controller
         $user_address = new user_address();
         $user_default_add = $user_address->getDefaultAddress($user->id);
 
+        $payment_methods = new payment_method();
+        $payment_method_data = $payment_methods->getPaymentMethodList($user->id)->get();
+
+// dd($payment_method_data);
         if ($user_default_add != NULL) {
 
             $user_address = new user_address();
@@ -137,6 +142,7 @@ class OrderController extends Controller
                     $user->currency = $this->currency;
                     return view('customer.cartPayment')->with([
                         'user_data' => $user,
+                        'payment_method_data' => $payment_method_data,
                         'menu_data' => $cart_menu_data,
                         'card_data' => $card_data,
                         'user_add_def' => $user_add_def,
@@ -199,6 +205,12 @@ class OrderController extends Controller
             $cart_menu_data = $cart_submenu->getCartMenuList($quant_details);
 
             if ($cart_menu_data != NULL) {
+                $restaurent_detail = new restaurent_detail;
+                $resto_data_with_time = $restaurent_detail->checkRestoTimeAvailiability($cart_avail->restaurent_id);
+                // if ($resto_data_with_time == NULL) {
+                //     Session::flash('message', 'Restaurant Currently Closed !');
+                //     return redirect()->back();
+                // }
                 foreach ($cart_menu_data as $m_data) {
 
                     $add_ons = array();
@@ -474,8 +486,17 @@ class OrderController extends Controller
                     $event_data['restaurant'] = $o_event;
                 } elseif ($o_event->user_type == 1) {
                     $event_data['rider'] = $o_event;
-                    $ride_event_data = auth()->user()->userByIdData($o_event->user_id);
+                    $users = new User();
+                    $ride_event_data = $users->userIdData($o_event->user_id)->with(['riderBankDetails','vehicleDetails'])->first();
                     $event_data['rider_details'] = $ride_event_data;
+                    $order_events = new OrderEvent();
+                    $rating_array = ['user_id'=> $event_data['rider_details']['id'],
+                                    'user_type'=>1
+                                ];
+                    $rating_data = $order_events->getOrderEventRatingData($rating_array)->first();
+                    $event_data['rider_rating_data'] = $rating_data;
+
+
                 }
             }
             $total_amount = abs($order_data->total_amount - $order_data->delivery_fee);
@@ -491,8 +512,8 @@ class OrderController extends Controller
             $event_data = json_decode($event_data);
             $order_data->delivery_time = strtotime("+40 minutes", strtotime($order_data->created_at));
             $order_data->delivery_time = date('h:i', $order_data->delivery_time);
-            // dd($order_data->delivery_time);
-
+            // dd($event_data);
+// dd($event_data->rider_details);
             return view('customer.trackOrder')->with([
                 'user_data' => $user,
                 'order_data' => $order_data,

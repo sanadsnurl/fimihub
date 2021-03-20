@@ -10,10 +10,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/12.1.6/css/intlTelInput.css">
     <link rel="stylesheet" href="{{asset('asset/customer/dist/main.css')}}">
     <link rel="icon" href="{{asset('asset/customer/assets/images/logo.png')}}">
+
     <title>Fimihub</title>
 </head>
 
 <body>
+ <!-- Start of HubSpot Embed Code -->
+     <script type="text/javascript" id="hs-script-loader" async defer src="//js.hs-scripts.com/9482503.js"></script>
+     <!-- End of HubSpot Embed Code -->
     <div id="loading-overlay">
         <div class="loading-icon"></div>
     </div>
@@ -97,15 +101,23 @@
                                             @if(isset($user_data->notification_data) &&
                                             !empty($user_data->notification_data))
                                             @foreach($user_data->notification_data as $not_data)
-                                            <li class="d-flex align-items-center active">
-                                                <i class="fas fa-user-circle"></i>
-                                                <div>
-                                                    <p>{{$not_data->title ?? ''}} | Order-Id {{$not_data->txn_id ?? ''}}
-                                                    </p>
-                                                    <span
-                                                        class="time">{{date('d F Y',strtotime($not_data->created_at))}}</span>
-                                                </div>
-                                            </li>
+                                            @php
+                                                $str2 = substr($not_data->txn_id, 3);
+                                                $order_id = ($str2 + 1)-1;
+                                            @endphp
+                                            <a href="{{url('/trackOrder')}}{{'?odr_id='}}{{base64_encode($order_id) ?? ''}}" class="g">
+
+                                                <li class="d-flex align-items-center active">
+                                                    <i class="fas fa-user-circle"></i>
+                                                    <div>
+                                                        <p>{{$not_data->title ?? ''}} | Order-Id {{$not_data->txn_id ?? ''}}
+                                                        </p>
+                                                        <span
+                                                            class="time">{{date('d F Y',strtotime($not_data->created_at))}}</span>
+                                                    </div>
+                                                </li>
+
+                                            </a>
                                             @endforeach
                                             @else
                                             <li class="d-flex align-items-center active">

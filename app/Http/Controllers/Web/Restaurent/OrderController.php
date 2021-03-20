@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web\Restaurent;
 
 use App\Http\Controllers\Controller;
+use App\Http\Traits\BillingCalculateTraits;
 use Illuminate\Http\Request;
 //custom import
 use App\User;
@@ -25,7 +26,7 @@ use DataTables;
 
 class OrderController extends Controller
 {
-    use NotificationTrait, LatLongRadiusScopeTrait;
+    use NotificationTrait, LatLongRadiusScopeTrait, BillingCalculateTraits;
 
     public function getCustomerOrderList(Request $request)
     {
@@ -41,6 +42,13 @@ class OrderController extends Controller
             $order_data = $orders->customerOrderPaginationData($resto_data->id);
         }
 
+        // $arrayKeys = collect(array([1 => 'vijay'], [2 => 'Ankur']));
+
+        // $arrayKeys->map(function($value) {
+        //     dd($value);
+        // });
+
+
 
         if ($request->ajax()) {
             return Datatables::of($order_data)
@@ -54,11 +62,29 @@ class OrderController extends Controller
                         $btn .= '<a href="acceptOrder?odr_id=' . base64_encode($row->id) . '" class="btn btn-outline-dark btn-sm btn-round waves-effect waves-light m-0">Accept</a>
                         <a href="rejectOrderPage?odr_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light m-0">Reject</a>';
                     }
-                    $btn .= '<a href="deleteOrder?odr_id=' . base64_encode($row->id) . '" class="btn btn-outline-warning btn-sm btn-round waves-effect waves-light ">Delete</a>';
+                    // $btn .= '<a href="deleteOrder?odr_id=' . base64_encode($row->id) . '" class="btn btn-outline-warning btn-sm btn-round waves-effect waves-light ">Delete</a>';
                     return $btn;
+                })
+                ->addColumn('total_tax', function ($row) {
+                    $delivery_fee = $row->delivery_fee;
+                    $total_amount = round(abs($row->total_amount - $delivery_fee),2);
+                    $tax = $row->service_tax;
+                    $sub_total = $total_amount / (1 + ($tax / 100));
+                    $total_tax = round(abs($total_amount - $sub_total),2);
+
+                    return $total_tax ?? 0;
                 })
                 ->addColumn('created_at', function ($row) {
                     return date('d F Y', strtotime($row->created_at));
+                })
+                ->filterColumn('created_at', function ($query, $keyword){
+                    $query->whereRaw("DATE_FORMAT(orders.created_at,'%d %M %Y') like ?", ["%$keyword%"]);
+                })
+                ->filterColumn('order_time', function ($query, $keyword){
+                    $query->whereRaw("TIME_FORMAT(orders.created_at,'%h:%i %p') like ?", ["%$keyword%"]);
+                })
+                ->addColumn('order_time', function ($row) {
+                    return date('h:i A', strtotime($row->created_at));
                 })
                 ->addColumn('payment_type', function ($row) {
                     if ($row->payment_type == 1) {
@@ -71,6 +97,24 @@ class OrderController extends Controller
                         return "Credit/Debit Card";
                     } else {
                         return "N.A";
+                    }
+                })
+                ->filterColumn('payment_type', function ($query, $keyword) {
+                    $orderStatus = collect(array(
+                        1 => "Bank Transfer",
+                        2 => "Paypal",
+                        3 => "COD",
+                        4 => "Credit/Debit Card",
+                    ));
+                    $keys  = array();
+                    foreach($orderStatus as $key => $value) {
+                        if(!empty(strstr($value, $keyword))) {
+                            $keys[] = $key;
+                        }
+                    }
+
+                    if (count($keys)) {
+                        $query->whereIn("orders.payment_type", $keys);
                     }
                 })
                 ->addColumn('order_status', function ($row) {
@@ -86,13 +130,39 @@ class OrderController extends Controller
                     } elseif ($row->order_status == 7) {
                         return "Order Picked";
                     } elseif ($row->order_status == 9) {
-                        return "Order Recieved";
+                        // return "Order Recieved";
+                        return "Order Delivered";
                     } elseif ($row->order_status == 10) {
                         return "Order Refunded";
                     } else {
                         return "N.A";
                     }
                 })
+
+                ->filterColumn('order_status', function ($query, $keyword) {
+                    $orderStatus = collect(array(
+                        3 => "Restaurent Approval Needed",
+                        5 => "Order Placed",
+                        2 => "Order Cancelled",
+                        4 => "Order Cancelled",
+                        8 => "Order Cancelled",
+                        6 => "Order Packed",
+                        7 => "Order Picked",
+                        9 => "Order Delivered",
+                        10 => "Order Refunded",
+                    ));
+                    $keys  = array();
+                    foreach($orderStatus as $key => $value) {
+                        if(!empty(strstr($value, $keyword))) {
+                            $keys[] = $key;
+                        }
+                    }
+
+                    if (count($keys)) {
+                        $query->whereIn("orders.order_status", $keys);
+                    }
+                })
+
                 ->addColumn('ordered_menu', function ($row) {
                     $order_menu = "";
                     $loop_count = 1;
@@ -183,6 +253,13 @@ class OrderController extends Controller
                     }
                     return $order_menu;
                 })
+
+                // ->editColumn('ordered_menu', function ($row) {
+                //     // return var_dump($row->ordered_menu);
+                //     // return 'Hi ' . $row->name . '!';
+                // })
+
+
                 ->rawColumns(['action', 'ordered_menu'])
                 ->make(true);
         }
@@ -339,6 +416,7 @@ class OrderController extends Controller
 
         // ==========================================================================================================
 
+        Session::flash('message', 'Order Rejected successfully.');
         return redirect('Restaurent/customerOrder');
     }
 
@@ -436,6 +514,8 @@ class OrderController extends Controller
             $loop_count = 1;
             $order_data->ordered_menu = json_decode($order_data->ordered_menu);
 
+            $order_data->ordered_menu_added = $order_data->ordered_menu;
+
             foreach ($order_data->ordered_menu as $ordered_menu) {
                 if ($loop_count == 1) {
                     $order_menu .= "<b>Dish:1 </b>(" . $ordered_menu->name . " x " . $ordered_menu->quantity;
@@ -532,7 +612,8 @@ class OrderController extends Controller
             } elseif ($order_data->order_status == 7) {
                 $order_data->order_status = "Order Picked";
             } elseif ($order_data->order_status == 9) {
-                $order_data->order_status = "Order Recieved";
+                // $order_data->order_status = "Order Recieved";
+                $order_data->order_status = "Order Delivered";
             } elseif ($order_data->order_status == 10) {
                 $order_data->order_status = "Order Refunded";
             } else {
@@ -570,7 +651,15 @@ class OrderController extends Controller
         $event_data = json_encode($event_data);
         $event_data = json_decode($event_data);
 
-        // dd($order_data->address_id);
+        $get_dish_total_array = [
+                'total_amount' => $order_data->total_amount,
+                'service_tax' => $order_data->service_tax,
+                'delivery_fee' => $order_data->delivery_fee,
+                'resto_data' => $resto_data,
+                'service_commission' => $order_data->service_commission
+                ];
+        $order_data->product_total = $this->getTotalWithDishTaxAddOnWithoutCommission($get_dish_total_array) ?? 0;
+
         return view('restaurent.viewOrder')->with([
             'data' => $user,
             'order_data' => $order_data,

@@ -43,6 +43,24 @@ class menu_list extends Model
 
     }
 
+    public function getMenuPaginationData($data)
+    {
+        $menu_list=$this
+            ->join('resto_menu_categories as mc', 'mc.id', '=', 'menu_list.menu_category_id')
+            ->leftJoin('menu_categories', function($join) use ($data)
+                            {
+                                $join->on('menu_categories.id', '=', 'mc.menu_category_id');
+
+                            })
+            ->whereIn('menu_list.visibility', [0,1])
+            ->where('menu_list.restaurent_id', $data)
+            ->select('menu_list.*','menu_categories.name as cat_name')
+            ->orderBy('name');
+
+        return $menu_list;
+
+    }
+
     public function menuCategory($data)
     {
         $menu_list=$this
@@ -92,6 +110,25 @@ class menu_list extends Model
 
                         })
         ->where('menu_list.visibility', 0)
+        ->where('menu_list.id', $data)
+        ->select('menu_list.*','menu_categories.name as cat_name','mc.id as cat_id')
+        ->orderBy('cat_name')
+        ->first();
+
+        return $menu_list;
+
+    }
+
+    public function menuListByIdWithBlock($data)
+    {
+        $menu_list=$this
+        ->join('resto_menu_categories as mc', 'mc.id', '=', 'menu_list.menu_category_id')
+        ->leftJoin('menu_categories', function($join) use ($data)
+                        {
+                            $join->on('menu_categories.id', '=', 'mc.menu_category_id');
+
+                        })
+        ->whereIn('menu_list.visibility', [0,1])
         ->where('menu_list.id', $data)
         ->select('menu_list.*','menu_categories.name as cat_name','mc.id as cat_id')
         ->orderBy('cat_name')
@@ -240,6 +277,18 @@ class menu_list extends Model
         $query_data = $this
             ->where('id', $data['id'])
             ->update(['visibility'=> 2,'deleted_at' => $data['deleted_at']]);
+
+        return $query_data;
+    }
+
+    public function visibilityOffOnOfDish($data, $visibility)
+    {
+        // $data['deleted_at'] = now();
+        unset($data['_token']);
+
+        $query_data = $this
+            ->where('id', $data['id'])
+            ->update(['visibility'=> $visibility]);
 
         return $query_data;
     }

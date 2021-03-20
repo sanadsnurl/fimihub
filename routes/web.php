@@ -220,6 +220,7 @@ Route::group(['middleware' => ['cors']], function () {
         Route::post('addCustomCategory', 'Web\Restaurent\RestaurentController@addCustomCategoryProcess');
         // Menu List
         Route::get('menuList', 'Web\Restaurent\RestaurentController@getMenuList');
+        Route::get('dishVisibility', 'Web\Restaurent\RestaurentController@dishVisibility');
         // Menu Custom List
         Route::get('menuCustomList', 'Web\Restaurent\RestaurentController@getMenuCustomList');
         // Menu Category update or insert
@@ -373,6 +374,8 @@ Route::group(['middleware' => ['cors']], function () {
         Route::get('customerOrder', 'Web\Admin\OrderController@getCustomerOrderList');
         //View Customer Order
         Route::get('viewOrder', 'Web\Admin\OrderController@viewOrder');
+        //Track Customer Order
+        Route::get('trackOrder', 'Web\Admin\OrderController@trackOrder');
         //View Order Set Txn Page
         Route::get('orderPaid', 'Web\Admin\OrderController@viewOrderPaid');
         //Set Txn Process
@@ -421,7 +424,14 @@ Route::group(['middleware' => ['cors']], function () {
         Route::get('enableResto', 'Web\Admin\RestaurentController@enableResto');
         //Disable Restaurent
         Route::get('disableResto', 'Web\Admin\RestaurentController@disableResto');
-
+        //Delete Order
+        Route::get('deleteOrder', 'Web\Admin\OrderController@deleteCustomOrder');
+        //Delete Order
+        Route::get('nearByRider', 'Web\Admin\RiderController@nearByRider');
+        //Get Payment method
+        Route::get('paymentMethod', 'Web\Admin\PaymentController@getPaymentMethod');
+        //Update Payment method
+        Route::get('changePaymentStatus', 'Web\Admin\PaymentController@changePaymentStatus');
     });
 
 });

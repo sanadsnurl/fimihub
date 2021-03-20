@@ -15,6 +15,10 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-header"><i class="fa fa-money"></i> My Earnings
+
+                        <a href="{{url()->previous()}}" style="float: right" >
+                            <span class="btn btn-danger" style="float: right;font-weight: bold;font-size: medium;">Back</span>
+                        </a>
                         <span class="btn btn-success mr-5"
                         style="float: right;font-weight: bold;font-size: medium;">Total Earning :
                         {{$total_earning->resto_earning ?? 0}}</span>
@@ -41,7 +45,23 @@
                                 </thead>
                                 <tbody>
                                 </tbody>
+                                <tr>
+                                    <!-- <th>S.no</th> -->
 
+                                    <th>TOTAL (in $)</th>
+                                    <th> -- </th>
+                                    <th>{{$total_earning->resto_earning ?? 0}}</th>
+                                    <th>--</th>
+                                    <th>--</th>
+                                    <th> -- </th>
+                                    <th>{{round($total_earning->cgt_tax,2) ?? 0}}</th>
+
+
+                                    <th> -- </th>
+                                    <th> {{round($total_earning->total_com,2) ?? 0}} </th>
+                                    <th> -- </th>
+
+                                </tr>
                             </table>
                         </div>
                     </div>

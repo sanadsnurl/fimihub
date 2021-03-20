@@ -24,6 +24,11 @@
                 <h4 class="error">{{ $errors->first('payment') }}</h4>
             </div>
             @endif
+            @if(Session::has('message'))
+            <div class="error" style="text-align:center;">
+                <h4 class="error">{{ Session::get('message') }}</h4>
+            </div>
+            @endif
             @if($errors->has('delivery_fee'))
             <div class="error" style="text-align:center;">
                 <h4 class="error">{{ $errors->first('delivery_fee') }}</h4>
@@ -38,6 +43,22 @@
             </div>
             <form role="form" method="POST" action="{{ url('/addPaymentMethod') }}">
                 @csrf
+                {{-- @foreach($payment_method_data as $pm_type)
+                    <input type="radio" name="payment" id="payment_{{$pm_type->payment_id ?? ''}}" value="{{$pm_type->payment_id ?? ''}}"
+                    @if ($pm_type->web_active == 1 || $pm_type->status == 1)
+                        disabled
+                    @endif>
+                    <label for="payment_{{$pm_type->payment_id ?? ''}}" id="bank_transfer">
+                        <img src="{{asset($pm_type->logo) ?? ''}}" class="mr-2" style="height: 25px;"
+                            alt="cash on delivery">
+                        {{$pm_type->payment_methods ?? ''}} <span>
+                            @if ($pm_type->status == 1)
+                                (Comming Soon)
+                            @endif
+                        </span>
+                    </label>
+                @endforeach --}}
+
                 <input type="radio" name="payment" id="stripe" value="1">
                 <label for="stripe" id="bank_transfer">
                     <img src="{{asset('asset/customer/assets/images/bank.svg')}}" class="mr-2" style="height: 25px;"
@@ -73,12 +94,12 @@
                 <label for="paypal">
                     <img src="https://media.glassdoor.com/sqll/903157/quisk-squarelogo-1476479951808.png" alt="paypal" height="30px" width="30px"> Quisk (comming soon)
                 </label>
-                {{-- <input type="radio" name="payment" id="cash" value="3">
+                <input type="radio" name="payment" id="cash" value="3">
                 <label for="cash" id="cashondelivery">
                     <img src="{{asset('asset/customer/assets/images/cash-delivery.svg')}}" class="mr-2"
                 alt="cash on delivery">
                 CASH ON DELIVERY
-                </label> --}}
+                </label>
 
                 <input type="radio" name="payment" id="atlantic" value="4">
                 <label for="atlantic" id="atlantic">

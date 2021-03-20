@@ -36,6 +36,7 @@ class CreateRestaurentManagementTable extends Migration
             $table->decimal('discount', 8, 2)->nullable();
             $table->decimal('tax', 8, 2)->nullable();
             $table->string('pincode')->nullable();
+            $table->integer('resto_tax_status')->comment('1-On,2-Off')->nullable();
             $table->tinyInteger('payment_method_type')->comment('1-stripe,2-paypal,3-payment_gateway,4-COD')->nullable();
             $table->tinyInteger('resto_type')->comment('1-Non-Veg,2-Veg,3-Both')->nullable();
             $table->tinyInteger('visibility')->default('0');
@@ -113,6 +114,9 @@ class CreateRestaurentManagementTable extends Migration
             //rest attributes
             $table->string('name');
             $table->string('picture')->nullable();
+            $table->string('open_day')->nullable();
+            $table->string('open_time')->nullable();
+            $table->string('close_time')->nullable();
             $table->text('about')->nullable();
             $table->integer('product_variant_id')->nullable();
             $table->json('product_add_on_id')->nullable();

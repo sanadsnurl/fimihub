@@ -106,6 +106,7 @@ class DashboardController extends Controller
             $resto_data = $resto_data_query->get();
             foreach ($resto_data as $value) {
                 $value->dis = $this->getDistanceBetweenPointsNew($lats,$lngs, $value->latitude,$value->longitude);
+                $value->delivery_charge = $this->calculateDelivery($value->dis) ?? 0;
             }
             $resto_data = $resto_data->sortBY('dis', SORT_NATURAL)->where('dis', '<=', $near_by_radius)->values()->all();
 
@@ -119,6 +120,8 @@ class DashboardController extends Controller
             $nonveg_resto_data = $nonveg_resto_data_query->get();
             foreach ($nonveg_resto_data as $value) {
                 $value->dis = $this->getDistanceBetweenPointsNew($lats,$lngs, $value->latitude,$value->longitude);
+                $value->delivery_charge = $this->calculateDelivery($value->dis) ?? 0;
+
             }
             $nonveg_resto_data = $nonveg_resto_data->sortBY('dis', SORT_NATURAL)->where('dis', '<=', $near_by_radius)->values()->all();
 
@@ -131,6 +134,8 @@ class DashboardController extends Controller
             $veg_resto_data = $veg_resto_data_query->get();
             foreach ($veg_resto_data as $value) {
                 $value->dis = $this->getDistanceBetweenPointsNew($lats,$lngs, $value->latitude,$value->longitude);
+                $value->delivery_charge = $this->calculateDelivery($value->dis) ?? 0;
+
             }
             $veg_resto_data = $veg_resto_data->sortBY('dis', SORT_NATURAL)->where('dis', '<=', $near_by_radius)->values()->all();
 

@@ -15,7 +15,19 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
-                    <div class="card-header"><i class="fa fa-table"></i> Order List</div>
+                    <div class="card-header"><i class="fa fa-table"></i> Order List
+                        @if(Session::has('message'))
+                        <div class="error" style="text-align:center;">
+                            <h4 class="error">{{ Session::get('message') }}</h4>
+                        </div>
+
+                        @endif
+
+                        <a href="{{url('adminfimihub/customerOrder')}}" >
+                            <span class="btn btn-danger" style="float: right;">Refresh</span>
+
+                        </a>
+                    </div>
                     <div class="card-body">
                         <div class="table-responsive">
                             <table id="example" class="table table-bordered">
@@ -27,12 +39,14 @@
                                         <th>S.No.</th>
                                         <th>Order Id</th>
                                         <th>Restaurant Name</th>
+                                        <th>Restaurant Mobile</th>
+                                        <th>Customer Mobile</th>
                                         <th>Customer Name</th>
+                                        <th>Order Status</th>
                                         <th>Dish</th>
                                         <th>Total Amount</th>
                                         <th>Payment Method</th>
-                                        <th>Order Status</th>
-                                        <th>Create At</th>
+                                        <th>Order Date</th>
 
                                     </tr>
                                 </thead>
@@ -107,8 +121,26 @@
                     },
                 },
                 {
+                    data: 'restaurent_details.official_number',
+                    render: function(data, type, row) {
+                        if (row.restaurent_details) {
+                            console.log( row.restaurent_details);
+                            return row.restaurent_details.official_number;
+                        }
+                        return 'N.A';
+                    },
+                },
+                {
+                    data: 'mobile',
+                    name: 'mobile'
+                },
+                {
                     data: 'customer_name',
                     name: 'customer_name'
+                },
+                {
+                    data: 'order_status',
+                    name: 'order_status'
                 },
                 {
                     data: 'ordered_menu',
@@ -121,10 +153,6 @@
                 {
                     data: 'payment_type',
                     name: 'payment_type'
-                },
-                {
-                    data: 'order_status',
-                    name: 'order_status'
                 },
                 {
                     data: 'created_at',

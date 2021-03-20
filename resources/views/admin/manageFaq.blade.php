@@ -68,6 +68,10 @@
                             <div class="form-footer">
                                 <input type="submit" class="btn btn-primary" value="Save FAQ's"></input>
 
+                                <a href="{{url()->previous()}}" >
+                                    <span class="btn btn-danger">Back</span>
+                                </a>
+
                             </div>
                         </form>
                     </div>

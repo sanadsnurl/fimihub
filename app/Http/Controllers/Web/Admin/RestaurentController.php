@@ -34,13 +34,13 @@ class RestaurentController extends Controller
                 ->addColumn('action', function($row){
                     if($row->resto_visibility == 3){
                         $btn = '<a href="editResto?resto_user_id='.base64_encode($row->resto_user_id).'" class="btn btn-outline-secondary btn-sm btn-round waves-effect waves-light m-0">Edit</a>
-                        <a href="deleteResto?resto_user_id='.base64_encode($row->resto_user_id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light mt-1">Delete</a>
+                        <a href="deleteResto?delete_status=' . base64_encode(1) . '&resto_user_id='.base64_encode($row->resto_user_id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light mt-1">Delete</a>
                         <a href="restoEarnings?resto_user_id='.base64_encode($row->resto_user_id).'" class="btn btn-outline-secondary btn-sm btn-round waves-effect waves-light m-0">Earnings</a>
                         <a href="lookupResto?resto_user_id='.base64_encode($row->resto_user_id).'" class="btn btn-outline-secondary btn-sm btn-round waves-effect waves-light m-0">Look-Up</a>
                         <a href="enableResto?resto_user_id='.base64_encode($row->resto_user_id).'" class="btn btn-outline-secondary btn-sm btn-round waves-effect waves-light m-0">Enable</a>';
                     }else{
                         $btn = '<a href="editResto?resto_user_id='.base64_encode($row->resto_user_id).'" class="btn btn-outline-secondary btn-sm btn-round waves-effect waves-light m-0">Edit</a>
-                    <a href="deleteResto?resto_user_id='.base64_encode($row->resto_user_id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light mt-1">Delete</a>
+                    <a href="deleteResto?delete_status=' . base64_encode(1) . '&resto_user_id='.base64_encode($row->resto_user_id).'" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light mt-1">Delete</a>
                     <a href="restoEarnings?resto_user_id='.base64_encode($row->resto_user_id).'" class="btn btn-outline-secondary btn-sm btn-round waves-effect waves-light m-0">Earnings</a>
                     <a href="lookupResto?resto_user_id='.base64_encode($row->resto_user_id).'" class="btn btn-outline-secondary btn-sm btn-round waves-effect waves-light m-0">Look-Up</a>
                     <a href="disableResto?resto_user_id='.base64_encode($row->resto_user_id).'" class="btn btn-outline-secondary btn-sm btn-round waves-effect waves-light m-0">Disable</a>';
@@ -229,8 +229,13 @@ class RestaurentController extends Controller
             'resto_user_id'=>$resto_user_id]);
         }
         else{
+            // dd($resto_add);
+
+            $users = new User;
+        $user_resto_data = $users->userByIdData($resto_add[0]->user_id);
             return view('admin.editRestaurant')->with(['data'=>$user,
                                                 'resto_data'=>$resto_data,
+                                                'user_resto_data'=>$user_resto_data,
                                                 'resto_user_id'=>$resto_user_id,
                                                 'resto_add'=> $resto_add[0]]);
         }
@@ -243,6 +248,7 @@ class RestaurentController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'string|nullable',
             'user_id' => 'required|exists:users,id',
+            'email' => 'email|nullable',
             'about' => 'string|nullable',
             'other_details' => 'string|nullable',
             'picture' => 'mimes:png,jpg,jpeg|max:3072|nullable',
@@ -253,6 +259,7 @@ class RestaurentController extends Controller
             'close_time' => 'string|nullable',
             'address_address' => 'required|string',
             'pincode' => 'string|nullable',
+            'password' => 'min:6|nullable',
             'resto_type' => 'in:1,2,3|nullable',
 
         ]);
@@ -305,6 +312,20 @@ class RestaurentController extends Controller
                     unset($data['address_address']);
                     unset($data['address_latitude']);
                     unset($data['address_longitude']);
+                    if ($request->has('email') ) {
+                        $user_update_data = [
+                            'id' => $data['user_id'],
+                            'email' =>$data['email']
+                        ];
+
+                        if(!empty($data['password'])){
+                            $user_update_data['password'] =\Hash::make($data['password']);
+                        }
+                        $users = new User;
+                        $user =$users->UpdateLogin($user_update_data);
+                    }
+                    unset($data['email']);
+                    unset($data['password']);
                     $resto_id = $restaurent_detail->insertUpdateRestoData($data);
                     Session::flash('message', 'Restaurent Data Updated !');
 
@@ -324,6 +345,15 @@ class RestaurentController extends Controller
 
     public function deleteRestaurent(Request $request){
         $user = Auth::user();
+        $delete_status = base64_decode(request('delete_status'));
+        $delete_url = $request->fullUrl();
+        $delete_url = str_replace('delete_status=MQ%3D%3D','delete_status=Mg%3D%3D',  $delete_url);
+
+        if($delete_status == 1){
+            Session::flash('popup_delete', $delete_url);
+
+            return redirect()->back();
+        }
         $resto_user_id = base64_decode(request('resto_user_id'));
 
         $users = new User;

@@ -33,11 +33,11 @@ class RiderController extends Controller
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
                     if($row->visibility == 3){
-                        $btn = '<a href="deleteRider?rider_user_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light mt-1">Delete</a>
+                        $btn = '<a href="deleteRider?delete_status=' . base64_encode(1) . '&rider_user_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light mt-1">Delete</a>
                         <a href="riderEarnings?rider_user_id='.base64_encode($row->id).'" class="btn btn-outline-secondary btn-sm btn-round waves-effect waves-light m-0">Earnings</a>
                         <a href="enableRider?rider_user_id=' . base64_encode($row->id) . '" class="btn btn-outline-success btn-sm btn-round waves-effect waves-light mt-1">Enable</a>';
                     }else{
-                        $btn = '<a href="deleteRider?rider_user_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light mt-1">Delete</a>
+                        $btn = '<a href="deleteRider?delete_status=' . base64_encode(1) . '&rider_user_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light mt-1">Delete</a>
                         <a href="riderEarnings?rider_user_id='.base64_encode($row->id).'" class="btn btn-outline-secondary btn-sm btn-round waves-effect waves-light m-0">Earnings</a>
                         <a href="disableRider?rider_user_id=' . base64_encode($row->id) . '" class="btn btn-outline-danger btn-sm btn-round waves-effect waves-light mt-1">Disable</a>';
                     }
@@ -247,6 +247,15 @@ class RiderController extends Controller
 
     public function deleteRider(Request $request){
         $user = Auth::user();
+        $delete_status = base64_decode(request('delete_status'));
+        $delete_url = $request->fullUrl();
+        $delete_url = str_replace('delete_status=MQ%3D%3D','delete_status=Mg%3D%3D',  $delete_url);
+
+        if($delete_status == 1){
+            Session::flash('popup_delete', $delete_url);
+
+            return redirect()->back();
+        }
         $rider_user_id = base64_decode(request('rider_user_id'));
 
         $users = new User;
@@ -286,5 +295,24 @@ class RiderController extends Controller
         Session::flash('message', 'Rider Disabled !');
 
         return redirect()->back();
+    }
+
+    public function nearByRider(){
+        $user = Auth::user();
+        $users = new User;
+        $rider_list = $users->allUserPaginateListRiderData(2)->where('users.status',1)->with(['userAddress'])->get();
+        $location = array();
+        $locations = array();
+        $i = 1;
+        foreach($rider_list as $r_list){
+            $map_text = $r_list->name."<br>".$r_list->country_code." ".$r_list->mobile."<br>".(string)$r_list['userAddress'][0]->address;
+
+            $locations[] = [$map_text, (float)$r_list['userAddress'][0]->latitude, (float)$r_list['userAddress'][0]->longitude, $i];
+        $i+=1;
+        }
+        $location =  json_encode($locations);
+        // var_dump($location);
+        // die();
+        return view('admin.nearByRiders')->with(['data'=>$user,'rider_list'=>$rider_list,'location'=>$location]);
     }
 }

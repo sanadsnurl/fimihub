@@ -20,6 +20,7 @@ class ContactUs extends Notification
     public function __construct($data)
     {
         $this->data = $data;
+        // dd($data);
     }
 
     /**

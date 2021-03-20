@@ -77,6 +77,10 @@
                             <div class="form-footer">
                                 <input type="submit" class="btn btn-primary" value="Add category"></input>
 
+                                <a href="{{url()->previous()}}" >
+                                    <span class="btn btn-danger">Back</span>
+                                </a>
+
                             </div>
                         </form>
                     </div>
@@ -169,12 +173,12 @@ $(document).ready(function() {
             },
             {
                 data: 'cat_name',
-                name: 'cat_name'
+                name: 'mc.name'
             },
 
             {
                 data: 'created_at',
-                name: 'created_at'
+                name: 'created_at',
             },
 
         ]
